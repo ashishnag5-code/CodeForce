@@ -1,0 +1,709 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} onsectiontoggle={handleSectionToggle}>
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+
+            <lightning-accordion-section name="A" label="Case Summary" class="accordClass">
+            <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Application ID:
+                                <div class="slds-form-element__control">
+                                    <template if:true={renderFromAssignmentRec}>
+                                        <span class="slds-form-element__static"><a href="#" onclick={handleRedirectToLoanApplication}>{opsCategoryWrapper.applicationId}</a></span>
+                                    </template>
+                                    <template if:false={renderFromAssignmentRec}>
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.applicationId}</span>
+                                    </template>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="HUB">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    HUB:
+                                    <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.hub}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Applicant_Name">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Applicant Name:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.applicantName}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="Deal_Approved_By">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Deal Approved By:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.dealApprover}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Delivery_Order_Date">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Delivery Order Date:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.deliveryOrderDate}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Applied_IRR">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Applied IRR:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.irr}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="State">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    State:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.state}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Branch">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Branch:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.branch}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Father_Name">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Father Name:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.fatherName}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="Father_Name">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Spouse Name:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.spouseName}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3" data-id="Credit_Approval_Date">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Credit Approval Date:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.creditApprovalDate}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Loan_Amount">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Loan Amount:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.loanAmount}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        
+
+                        
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="Total_Charges">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Total Charges:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsCategoryWrapper.totalCharges}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <!--1780,82-->
+                    <template if:false={isTractorCommercial}>
+                        <div class="slds-col slds-size_1-of-3" data-id="Ops_Output">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Ops Output
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsCategoryWrapper.opsOutput}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3" data-id="Ops_Output">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Discrepancy Count
+                                    <div class="slds-form-element__control">
+                                        <span
+                                            class="slds-form-element__static">{opsCategoryWrapper.discrepancyCount}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    </template>
+                    <!--1780,82-->
+                </div>
+                <br/>
+                <div class="slds-align--absolute-center">
+                    <lightning-button variant="brand" label="Verify" data-id="isCaseSummaryVerified" 
+                                      onclick={handleVerifyClick} disabled={verificationobject.isCaseSummaryVerified}>
+
+                    </lightning-button>
+                    <template if:true={verificationobject.isCaseSummaryVerified}>
+                        hello
+                        <lightning-icon
+                                        icon-name="action:approval"
+                                        size="large"
+                                        alternative-text="Indicates approval">
+                        </lightning-icon>
+
+                    </template>
+                </div>
+            </lightning-accordion-section>
+            <br>
+
+            <lightning-accordion-section name="B" label="Asset/Collateral Detail" class="accordClass">
+            <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="Product">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Product:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.product}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Manufacturer">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Manufacturer:
+                                <!-- <label class="slds-form-element__label">Manufacturer: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.manufacture}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="make">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Make:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.make}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="Vehicle_Number">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Vehicle Number:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.vehicleNumber}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Asset_Type">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Asset Type:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.loanType}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3" data-id="Manufacturer_Year">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Manufacturer Year:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.year}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="Model">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Model:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.model}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Collateral_Type">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Collateral Type:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsAssetWrapper.collateralType}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-align--absolute-center">
+                    <lightning-button variant="brand" label="Verify" data-id="isAssetDetailsVerified" 
+                                      onclick={handleVerifyClick} disabled={verificationobject.isAssetDetailsVerified}>
+
+                    </lightning-button>
+                    <template if:true={verificationobject.isAssetDetailsVerified}>
+                        <lightning-icon
+                                        icon-name="action:approval"
+                                        size="large"
+                                        alternative-text="Indicates approval">
+                        </lightning-icon>
+
+                    </template>
+                </div>
+            </lightning-accordion-section>
+            <br>
+
+            <lightning-accordion-section name="C" label="Sourcing" class="accordClass">
+            <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="Sourcing_Channel">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Sourcing Channel Category:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.sourceChannel}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="Vehicle_Delivered_By">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Vehicle Delivered By Dealer:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.dealerName}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="RO_Code">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    RO Code:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.roCode}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">                    
+                    <div class="slds-col slds-size_1-of-3" data-id="Physical_File_Custody">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Physical File Custody:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsCategoryWrapper.physicalCustodyName}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-3" data-id="Balance_Transfer">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Balance Transfer:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.balanceTransfer}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Loan_Number">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Loan Number:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.loanNumber}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>                    
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">                    
+                    <div class="slds-col slds-size_1-of-3" data-id="NOC_Status">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                NOC Status(SVSH/SVOH):
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">NA</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-3" data-id="Triggers">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Triggers:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">NA</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-3" data-id="Closer_Amount">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Closer Amount:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">NA</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <!--div class="slds-col slds-size_1-of-3" data-id="Notepad">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Notepad:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">Deal Approved By</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div-->                    
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="psl">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    PSL/BSR:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.psl}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="KYC_Status">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                KYC Status:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.kycStatus}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="dob">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    DOB:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.dob}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="name">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Name:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.applicantName}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="name">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Address:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.applicantAddress}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Bank_Name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Bank/Financier Name:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.repaymentBank}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    
+
+                    <!--div class="slds-col slds-size_1-of-3" data-id="sanction_condition">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Sanction Condition:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">Deal Approved By</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div-->
+                </div>
+                <br/>
+
+                <!--div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="document_status">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Document Status:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">Deal Approved By</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    
+
+                    <div class="slds-col slds-size_1-of-3" data-id="vehicle_document">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Vehicle Document:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">Deal Approved By</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="payment_favouring">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Payment Favouring:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.dob}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div-->
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-3" data-id="repayment_mode">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Repayment Mode:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{opsSourcingWrapper.repaymentMode}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    
+
+                    <div class="slds-col slds-size_1-of-3" data-id="e_sign_status">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                E-sign Status:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.esignStatus}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                        <div class="slds-col slds-size_1-of-3" data-id="sourcing_channel">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Sourcing Channel/ Dealer Name:
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">
+                                            {opsSourcingWrapper.sourceName_DealerName} 
+                                        </span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                </div> 
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3" data-id="scheme_name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Scheme Name:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.schemeName} </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="RO_Name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                RO Name:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.roName} </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="Custodian_Name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Custodian Name:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">
+                                        {opsAssetWrapper.defRegister}
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <!--div class="slds-col slds-size_1-of-3" data-id="Bank_Name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Bank/Financier Name:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">Branch</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div-->
+
+                    <div class="slds-col slds-size_1-of-3" data-id="ENach_SI">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                E-NACH / SI
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{opsSourcingWrapper.nach_si}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3" data-id="External_BT">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                External BT:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">
+                                        <template lwc:if={opsSourcingWrapper.renderBTNOCStatus}>
+                                            <lightning-input type="checkbox" checked={opsSourcingWrapper.exteralNOCStatusBT} disabled></lightning-input>
+                                        </template>
+                                         
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-align--absolute-center">
+                    <lightning-button variant="brand" label="Verify" data-id="isSourcingVerified" 
+                                      onclick={handleVerifyClick} disabled={verificationobject.isSourcingVerified}>
+
+                    </lightning-button>
+                    <template if:true={verificationobject.isSourcingVerified}>
+                        <lightning-icon
+                                        icon-name="action:approval"
+                                        size="large"
+                                        alternative-text="Indicates approval">
+                        </lightning-icon>
+
+                    </template>
+                    
+                </div>
+               
+            </lightning-accordion-section>
+
+        </div>
+    </lightning-accordion>
+</template>

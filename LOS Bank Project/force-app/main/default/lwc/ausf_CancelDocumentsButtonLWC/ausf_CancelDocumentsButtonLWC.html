@@ -1,0 +1,114 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isSending}></c-custom-spinner>
+    <template if:true={isShowModal}>
+        <template if:true={isSmallDevice}>
+            <div class="slds-p-around_small" style="text-align :center;">
+                <div class="slds-grid slds-gutters">
+                    <template if:false={isDisabledSactionLetter}>
+                        <div class="slds-col">
+                            <span>
+                                <lightning-avatar src={cancelDoSanction} size="large"
+                                    onclick={handleSanctionLetterCancellation}></lightning-avatar>
+                            </span><br />
+                            <span>
+                                Cancel Sanction
+                            </span>
+                        </div>
+                    </template>
+                    <template if:false={isDisabledDOLetter}>
+                        <div class="slds-col">
+                            <span>
+                                <lightning-avatar src={cancelDoSanction} size="large" 
+                                    onclick={handleDOLetterCancellation}></lightning-avatar>
+                            </span><br />
+                            <span>
+                                Cancel DO
+                            </span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <template if:true={isLargeDevice}>
+            <div style="text-align :center;">
+                <div class="slds-grid slds-gutters slds-grid_align-end">
+                    <template if:false={isDisabledSactionLetter}>
+                        <span style="margin:0.5%;">
+                            <!-- <lightning-button label="Submit to Ops Maker" name="Submit to Ops Maker"
+                            onclick={handleSubmitToMaker}></lightning-button>  -->
+                            <span>Cancel Sanction</span><br/>
+                            <lightning-avatar src={cancelDoSanction} size="large" title="Cancel Sanction Letter"
+                                        onclick={handleSanctionLetterCancellation}></lightning-avatar>
+                        </span>
+                    </template>
+                    <template if:false={isDisabledDOLetter}>
+                        <span style="margin:0.5%;">
+                            <!-- <lightning-button label="Generate DO/Sanction" name="Generate DO/Sanction"
+                            onclick={handleDocumentGenerate}></lightning-button>  -->
+                            <span>Cancel DO</span><br/>
+                            <lightning-avatar src={cancelDoSanction} size="large" title="Cancel DO Letter"
+                                        onclick={handleDOLetterCancellation}></lightning-avatar>
+                        </span>
+                    </template>
+                </div>
+            </div>
+        </template>
+        <!--
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Cancel DO/Sanction Letter</h2>
+            </header>
+
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <c-custom-spinner spinner-image={spinnerImage} show-spinner={isSending}></c-custom-spinner>
+                <template if:true={isSending}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template>
+                <lightning-layout horizontal-align="space">
+                    <lightning-layout-item size="6">
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label"><strong>SANCTION LETTER</strong></label>
+                            <div class="slds-form-element__control">
+                                <lightning-input type="checkbox" label="SanctionLetter" data-id="sanctionLetter" variant="label-hidden" 
+                                                 checked={selectedLetterTypes.sanctionLetter} 
+                                                 onchange={handleCheckBoxSelect} disabled={isDisabledSactionLetter}> </lightning-input>
+                            </div>
+                        </div>
+                        <lightning-button label="Cancel Sanction Letter" name = "Cancel Sanction Letter" class="slds-p-left--x-large slds-align_absolute-center" 
+                                          onclick = {handleSanctionLetterCancellation} disabled={isDisabledSactionLetter}>
+                        </lightning-button>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6">
+                        <div class="slds-form-element slds-form-element_horizontal">
+                            <label class="slds-form-element__label"><strong>DO LETTER</strong></label>
+                            <div class="slds-form-element__control">
+                                <lightning-input type="checkbox" label="DOLetter" data-id="doletter" variant="label-hidden" 
+                                                 checked={selectedLetterTypes.doletter} 
+                                                 onchange={handleCheckBoxSelect} disabled={isDisabledDOLetter}> </lightning-input>
+                            </div>
+                        </div>
+                        <lightning-button label="Cancel DO Letter" name = "Cancel Sanction Letter" style="padding-left:19%" 
+                                          onclick = {handleDOLetterCancellation} disabled={isDisabledDOLetter}>
+                        </lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+            </footer>
+
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div-->
+    </template>
+    
+</template>

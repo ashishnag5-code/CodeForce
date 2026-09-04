@@ -1,0 +1,199 @@
+<template>
+    <lightning-card>
+        <div slot="footer">
+            <lightning-button variant="brand" label="Update" title="Primary action" onclick={updateAccount} class="slds-m-left_x-small"></lightning-button>
+        </div>
+
+        <lightning-layout multiple-rows class="x-large">
+            <template if:true={isDataLoaded}>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                    <c-generic-custom-lookup selected-record={recordSelected} name="TWDisbursementMakerQueue" existing-value={fieldValues.tWDisbursementMakerQueue} existing-icon={iconname} data-sequence="2"
+                    label="TW Disbursement Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange} onchange={handleNameChange}>
+                    </c-generic-custom-lookup>
+                
+                
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="4WHNewDisbursementMakerQueue" existing-value={fieldValues.fWHNewDisbursementMakerQueue} existing-icon={iconname}  data-sequence="2"
+                    label="T4WH New Disbursement Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="4WHUsedCOWDisbursementMakerQueue" existing-value={fieldValues.fWHUsedCOWDisbursementMakerQueue} existing-icon={iconname}  data-sequence="2"
+                    label="4WH Used/COW Disbursement Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="TractorNewDisbursementMakerQueue" existing-value={fieldValues.tractorNewDisbursementMakerQueue} existing-icon={iconname}  data-sequence="2"
+                    label="Tractor New Disbursement Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange} onchange={handleNameChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="TractorUsedCOWDisburseMakerQueue" existing-value={fieldValues.tractorUsedCOWDisburseMakerQueue} existing-icon={iconname} data-sequence="2"
+                    label="Tractor - Used/COW Disburse Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="CommercialNewDisbursementMakerQueue" existing-value={fieldValues.commercialNewDisbursementMakerQueue} existing-icon={iconname} data-sequence="2"
+                    label="Commercial New Disbursement Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="CommercialUsedCOWDisburseMakerQueue" existing-value={fieldValues.commercialUsedCOWDisburseMakerQueue} existing-icon={iconname} data-sequence="2"
+                    label="Commercial Used/COW Disburse Maker Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="TWDisbursementAuthorQueue" existing-value={fieldValues.tWDisbursementAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="TW Disbursement Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="4WHNewDisbursementAuthorQueue" existing-value={fieldValues.fWHNewDisbursementAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="4WH New Disbursement Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="4WHUsedCOWDisbursementAuthorQueue" existing-value={fieldValues.fWHUsedCOWDisbursementAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="4WH Used/COW Disbursement Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="CommercialNewDisbursementAuthorQueue" existing-value={fieldValues.commercialNewDisbursementAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="Commercial New Disbursement Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="CommercialUsedCOWDisburseAuthorQueue" existing-value={fieldValues.commercialUsedCOWDisburseAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="Commercial UsedCOW Disburse Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="TractorNewDisbursementAuthorQueue" existing-value={fieldValues.tractorNewDisbursementAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="Tractor New Disbursement Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="TractorUsedCOWDisburseAuthorQueue" existing-value={fieldValues.tractorUsedCOWDisburseAuthorQueue} existing-icon={iconname} data-sequence="2"
+                    label="Tractor - Used/COW Disburse Author Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="PDDMakerQueueAllProducts" existing-value={fieldValues.pDDMakerQueueAllProducts} existing-icon={iconname} data-sequence="2"
+                    label="PDD Maker Queue (All Products)" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="PDDAuthorQueueAllProducts" existing-value={fieldValues.pDDAuthorQueueAllProducts} existing-icon={iconname} data-sequence="2"
+                    label="PDD Author Queue (All Products)" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+
+            <!-- <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <c-generic-custom-lookup selected-record={recordSelected} name="CPCQueueLoanDisbursement" existing-value={fieldValues.cPCQueueLoanDisbursement} existing-icon={iconname} data-sequence="2"
+                    label="CPC Queue - Loan Disbursement" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item> -->
+            <!-- <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <c-generic-custom-lookup selected-record={recordSelected} name="CPCQueueFileTrackingRIT" existing-value={fieldValues.cPCQueueFileTrackingRIT} existing-icon={iconname} data-sequence="2"
+                    label="CPC Queue - File Tracking/ RIT" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item> -->
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <c-generic-custom-lookup selected-record={recordSelected} name="rPCFTRITQueue" existing-value={fieldValues.rPCFTRITQueue} existing-icon={iconname} data-sequence="2"
+                    label="RPC - FT/RIT Queue" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+            <lightning-layout-item flexibility="auto" padding="around-small" size="6" small-device-size="12"
+                large-device-size="6">
+                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                <c-generic-custom-lookup selected-record={recordSelected} name="kYCAllProducts" existing-value={fieldValues.kYCAllProducts} existing-icon={iconname} data-sequence="2"
+                    label="KYC (All Products)" record-type-name="" class="validateGenericLookupFld"
+                    search-fields="" stepid="0" fieldapi="Name" object-name="Group" s-object-api-name="Group"
+                    default-record-id="" is-required=true onlookupselect={handleChange}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+        </template>
+        </lightning-layout>
+    </lightning-card>
+
+</template>

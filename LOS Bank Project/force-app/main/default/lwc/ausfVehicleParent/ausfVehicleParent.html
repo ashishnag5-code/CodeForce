@@ -1,0 +1,40 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+        </lightning-spinner>
+   </template>
+    <div class="slds-theme_default"></div>
+    <template if:true={isFourWheeler}>
+        <template if:true={isUsedScreen}>
+            <c-ausf-vehicle-list-used record-id={recordId} loan-application-record={loanAppicationData} onsave={handleSave} state={state} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-used>
+        </template>
+        <template if:true={isNewScreen}>
+            <c-ausf-vehicle-list record-id={recordId} loan-appication-data={loanAppicationData} onnewsave={handleSave} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list>
+        </template>
+    </template>
+    <template if:true={isTwoWheeler}>
+        <template if:true={isUsedScreen}>
+            <c-ausf-vehicle-list-used record-id={recordId} loan-application-record={loanAppicationData} onsave={handleSave} state={state} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-used>
+        </template>
+        <template if:true={isNewScreen}>
+            <c-ausf-vehicle-list record-id={recordId} loan-appication-data={loanAppicationData} onnewsave={handleSave} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list>
+        </template>
+    </template>
+    <template if:true={isTractor}>
+        <template if:true={isUsedScreen}>
+            <c-ausf-vehicle-list-used-tractor record-id={recordId} loan-application-record={loanAppicationData} onsave={handleSave} state={state} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-used-tractor>
+        </template>
+        <template if:true={isNewScreen}>
+            <c-ausf-vehicle-list-tractor record-id={recordId} loan-appication-data={loanAppicationData} onnewsave={handleSave} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-tractor>
+        </template>
+    </template>
+    <template if:true={isCommercial}>
+        <template if:true={isUsedScreen}>
+            <c-ausf-vehicle-list-commercial-used record-id={recordId} loan-application-record={loanAppicationData} onsave={handleSave} state={state} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-commercial-used>
+            <!--<c-ausf-vehicle-list-used-commercial record-id={recordId} loan-application-record={loanAppicationData} onsave={handleSave} state={state} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-used-commercial>-->
+        </template>
+        <template if:true={isNewScreen}>
+            <c-ausf-vehicle-list-commercial record-id={recordId} loan-appication-data={loanAppicationData} onnewsave={handleSave} spinner-image={spinnerImage} onupdateloandetail={handleLoanDetailsSection}></c-ausf-vehicle-list-commercial>
+        </template>
+    </template>
+</template>

@@ -1,0 +1,193 @@
+<template>
+    <lightning-card>
+         <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                    <lightning-accordion-section name='A' label='Commercial Income' class="accordClass">
+                        <template if:true={edit}>
+                            <span slot="actions">
+                                <lightning-icon title="Edit Commercial Income Detail" 
+                                icon-name="action:edit" size="x-small" 
+                                alternative-text="" 
+                                class="slds-m-right_small"
+                                onclick={handleEdit}></lightning-icon>
+                            </span>
+                               <!-- Added in R2-->
+                               <template if:true={isDelete}>
+                               <span slot="actions">
+                                <lightning-icon title="Delete Other Income Detail" 
+                                icon-name="action:delete" size="x-small" 
+                                alternative-text="" 
+                                access-key={index}
+                                class="slds-m-right_small"
+                                onclick={handleDeleteRow}></lightning-icon>
+                                </span>
+                                </template>
+                        </template>
+        
+                        <!--<template if:false={edit}>
+                        <template if:true={displayButtons}>
+                            <span slot="actions">
+                                <lightning-icon title="Close Commercial Income Detail" 
+                                icon-name="action:reject" size="x-small" 
+                                alternative-text="" 
+                                class="slds-m-around_small"
+                                onclick={handleClose}></lightning-icon>
+                            </span>
+                        </template>
+                        </template>-->
+                        <template if:true={showRecordViewForm}>
+                            <div class="slds-form">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Type of Income</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Type_of_Income__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Income Source</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Income_Source__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Unit</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Unit__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Annual Income per Unit</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Annual_Income_Unit_Rs__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Proof</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Proof__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Document Type</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Document_Type__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Net Annual Income</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text" readonly="" value={Net_Annual_Income__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                        </template>
+
+                        <template if:false={showRecordViewForm}>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                    <lightning-combobox name="Type_of_Income__c"
+                                        access-key={index}
+                                        read-only={readOnly}
+                                        label="Type of Income"
+                                        class="component slds-hide" data-id="Type_of_Income__c"
+                                        options={typeOfIncomeOptions}
+                                        value={Type_of_Income__c}
+                                        onchange={handleTypeOfIncomeChange}></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-combobox name="Income_Source__c"
+                                        access-key={index}
+                                        read-only={readOnly}
+                                        class="component slds-hide" data-id="Income_Source__c"
+                                        label="Income Source"
+                                        options={incomeSourceOptions}
+                                        value={Income_Source__c}
+                                        onchange={handleIncomeSourceChange}></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-input type="text" name="Unit__c" label="Unit" class="component slds-hide" data-id="Unit__c"
+                                    value={Unit__c} read-only={readOnly} access-key={index} onchange={handleChange}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-input type="number" readonly name="Annual_Income_Unit_Rs__c"  
+                                    class="component slds-hide" data-id="Annual_Income_Unit_Rs__c"
+                                    label="Annual Income per Unit" value={Annual_Income_Unit_Rs__c} access-key={index}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-combobox name="Proof__c"
+                                                        label="Proof"
+                                                        read-only={readOnly}
+                                                        options={proofOptions}
+                                                        class="component slds-hide" data-id="Proof__c"
+                                                        value={Proof__c}
+                                                        access-key={index}
+                                                        onchange={handleChange}></lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-input type="text" name="Document_Type__c" read-only={readOnly}  
+                                    class="component slds-hide" data-id="Document_Type__c" onchange={handleChange}
+                                    label="Document Type" value={Document_Type__c} access-key={index}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                                    <lightning-input type="number" name="Net_Annual_Income__c" 
+                                    class="component slds-hide" data-id="Net_Annual_Income__c" readonly
+                                    label="Net Annual Income" value={Net_Annual_Income__c} access-key={index}></lightning-input>
+                                </lightning-layout-item>
+            
+                            </lightning-layout>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <c-bank-statement-upload-financials  parent-name='financial' showonly-itr=true
+                                applicant-id={applicantId} document-type='Bank Account Statement'
+                                read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                                 applicant-record-id={applicantId}
+                               ></c-bank-statement-upload-financials>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </template>
+        
+                        <div class="slds-align--absolute-center">
+                            <template if:false={edit}>
+                                <!--<template if:false={displayButtons}>
+                                    <lightning-icon title="Close Commercial Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                                        access-key={index}></lightning-icon> 
+                                </template>
+                                <template if:true={displayButtons}>
+                                    <lightning-icon  title="Delete Income" class="slds-m-around_small" icon-name="action:delete" size="x-small" alternative-text="" id={index} 
+                                        access-key={key} onclick={handleDeleteRow}></lightning-icon>
+                                </template>-->
+                                <lightning-icon title="Close Commercial Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                                        access-key={index}></lightning-icon> 
+                                <lightning-icon title="Save Income" class="slds-m-around_x-small" icon-name="action:approval" size="x-small" alternative-text="" id={index} 
+                                access-key={index} onclick={saveIncome}></lightning-icon>
+                            </template>
+                            
+                        </div>
+        </lightning-accordion-section>
+        </lightning-accordion>
+                
+           
+            
+        
+
+        
+    </lightning-card>
+    
+    
+</template>

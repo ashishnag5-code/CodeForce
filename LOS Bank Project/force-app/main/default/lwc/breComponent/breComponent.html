@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="Eligibility Check" icon-name="standard:account">
+        <!--template if:true={isloading}>
+			<lightning-spinner alternative-text="Loading"></lightning-spinner>
+		</template-->
+
+        <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+        <template if:true={loadPage}>
+            <template if:false={showBreOutput}>
+                <div class="slds-m-around_small slds-m-top_large slds-m-bottom_large setHeight">
+                    <!--lightning-button variant="neutral" label="Run BRE" title="Run BRE" icon-name="utility:play"
+                        class="slds-m-left_small slds-m-bottom_large" onclick={runBRE}></lightning-button-->
+                   <center><img src={breRunIcon} class="slds-m-left_small slds-m-bottom_large" title="Eligibility Check" onclick={runBRE}></img></center>
+                </div>
+            </template>
+        </template>
+    </lightning-card>
+    <template if:true={isAwaitResponse}>
+        <lightning-button variant="neutral" label="REFRESH BRE" title="REFRESH BRE" icon-name="utility:play"
+            class="slds-m-left_small slds-m-bottom_large" onclick={getBRECurrentStatus}></lightning-button>
+    </template> 
+    <template if:true={showBreOutput}>
+        <!--c-generic-data-display onback={showDetails} display-type="BRE Details"></c-generic-data-display-->
+        <template if:true={isMobileScreen}>
+            <c-bre-output-screen is-from-loan-tab="false" requestid={strRequestId} showuwcriteria={showUCCriteria} record-id={recordId} ></c-bre-output-screen>
+        </template>
+        
+       <template if:true={isDesktopScreen}>
+            <c-bre-output-screen-credit is-from-loan-tab="false" requestid={strRequestId} showuwcriteria={showUCCriteria} record-id={recordId} ></c-bre-output-screen-credit>
+        </template>
+    </template>
+</template>

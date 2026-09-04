@@ -1,0 +1,781 @@
+<!--
+    @description       : 
+    @author            : Harshit Goyal | Salesforce
+    @group             : 
+    @last modified on  : 02-14-2023
+    @last modified by  : Harshit Goyal | Salesforce
+  -->
+  <template>
+	<!--<template if:true={isloading}>
+		<lightning-spinner alternative-text="Loading"></lightning-spinner>
+	</template>-->
+	<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+	<template if:false={showOCRDetails}>
+		<lightning-card title="Applicant Details" icon-name="standard:document">
+			<lightning-layout multiple-rows class="slds-p-bottom_small">
+				<template if:true={addNewApplicant}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+						class="slds-p-horizontal_small" flexibility="auto">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required">* </abbr>Customer Type</label>
+						<lightning-combobox name="Customer_Type__c" class="validate checkValidity" label="Customer Type"
+							data-name="Customer_Type__c" variant="label-hidden" value={customerTypeVal} options={customerTypes}
+							onchange={handleValuChange}>
+						</lightning-combobox>
+					</lightning-layout-item>
+					<template if:true={showAppRecType}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+						class="slds-p-horizontal_small" flexibility="auto">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required">* </abbr>Record Type</label>
+						<lightning-combobox name="RecordTypeId" class="validate checkValidity" label="Customer Type"
+							data-name="RecordTypeId" variant="label-hidden" value={appRecTypeVal} options={appRecTypes}
+							onchange={handleApplicantType}>
+						</lightning-combobox>
+					</lightning-layout-item>
+					</template>
+					
+					<lightning-layout-item if:true={showMobile} size="12" small-device-size="12" large-device-size="6"
+						class="slds-p-horizontal_small" flexibility="auto">
+						<div class="slds-is-relative ">
+							<label class="slds-form-element__label">
+								<abbr class="slds-required" title="required">* </abbr>Mobile</label>
+							<div class="buttonIn">
+								<lightning-input type="tel" data-id="mobileinput" name="Mobile_Number__c"
+									class="validate input mobilebutton" value={mobileNumber} variant="label-hidden"
+									onchange={handleChangePhoneNumber} max-length="10" pattern="[6-9]{1}[0-9]{9}"
+									disabled={isVerifiedNumber} read-only={isReadOnly}
+									message-when-pattern-mismatch="Please enter a valid phone number">
+								</lightning-input>
+								<template if:true={boolSendOtp}>
+									<lightning-button variant="base" label="Send Confirmation Code" disabled={boolCheckMobileNumber}
+										title="Looks like a link" onclick={handleSendOTP} class="button">
+									</lightning-button>
+								</template>
+								<template if:true={boolResendOtp}>
+									<lightning-button variant="base" label="Resend Confirmation Code" title="Looks like a link"
+										onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button">
+									</lightning-button>
+								</template>
+								<template if:true={isVerified}>
+									<lightning-icon size="small" variant="success" class="button"
+										icon-name="utility:success" title="Mobile"></lightning-icon>
+								</template>
+							</div>
+
+						</div>
+						<div class="slds-m-top_medium">
+							<template if:true={isEnterOtp}>
+								<div class="slds-is-relative">
+
+									<label class="slds-form-element__label">
+										<abbr class="slds-required" title="required">* </abbr>Enter Confirmation Code</label>
+									<div class="buttonIn">
+										<lightning-input type="text" max-length="4" pattern="[0-9]{4}"
+											class="validate checkValidity" placeholder="Enter Confirmation Code here"
+											value={enterOTPValue} variant="label-hidden" onchange={handleChangeOtp}
+											message-when-pattern-mismatch="Please enter a valid Code." label="Enter Confirmation Code">
+										</lightning-input>
+										<lightning-button variant="base" label="VERIFY" title="Looks like a link"
+											onclick={handleVerify} disabled={boolVerify} class="button">
+										</lightning-button>
+									</div>
+								</div>
+								<div class="slds-align_absolute-center slds-m-top_small">
+									<template if:true={boolRequestOtp}>
+										Request OTP in&nbsp;<b>{increse1Second}</b>s
+									</template>
+								</div>
+							</template>
+						</div>
+					</lightning-layout-item>
+				</template>
+				
+				<template if:false={hidekycFields}>
+					<template if:true={showBO}>
+						<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+							class="slds-p-horizontal_small" flexibility="auto">
+							<label class="slds-form-element__label">Is BO</label>
+							<lightning-input disabled={isBoDisabled} data-name="Is_BO__c" data-id="Is_BO__c" name="Is_BO__c" type="checkbox" variant="label-hidden" onchange={handleValuChange} value={ApplicantRecord.Is_BO__c} checked={ApplicantRecord.Is_BO__c} ></lightning-input>
+						</lightning-layout-item>
+					</template>
+				<lightning-layout-item  size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Aadhaar_Number__c" flexibility="auto">
+
+					<div class="slds-is-relative slds-m-bottom_medium">
+						<label class="slds-form-element__label">Aadhaar Number/VID</label>
+						<div class="buttonIn">                             
+							<lightning-input data-id="Aadhaar" type="text" variant="label-hidden" onchange={handleValuChange} onblur={handleOnBlur} onfocusout={handleOnFocusOut}
+								class="input aadhaar kyc" label="Aadhaar Card" name="Aadhaar_Number__c"
+								max-length="16" min-length="12" pattern="(([*]|\d){8}[0-9]{4})|(([*]|\d){12}[0-9]{4})"
+								message-when-pattern-mismatch="Enter Valid Aadhaar or VID"
+								value={aadhaarNumberOnUi} disabled={isStageNotQDE}>
+							</lightning-input>
+
+							<div class="button slds-align_absolute-center">
+								<template if:true={showPreview}>
+									<template if:true={mask}>
+										<lightning-button-icon style="float: right;" icon-name="utility:unlock"
+											alternative-text="unlock" title="Unlock" onclick={handleMasking}>
+										</lightning-button-icon>
+									</template>
+									<template if:false={mask}>
+										<lightning-button-icon style="float: right;" icon-name="utility:lock"
+											alternative-text="lock" title="Lock" onclick={handleMasking}>
+										</lightning-button-icon>
+									</template>
+								</template>
+								<template if:true={isMobile}>
+									<lightning-button-icon style="float: right;" class="slds-hide"
+										icon-name="utility:cases" alternative-text="ocr" title="ocr"
+										data-id={label.DocumentAadhaar} data-name={label.DocumentAadhaar}
+										onclick={hanldeOcrClick}>
+									</lightning-button-icon>
+								</template>
+								<lightning-icon size="small" icon-name="utility:preview"
+									data-id={DocumentAadhaarPreview} class="slds-m-right_x-small kyc" alternative-text="preview"
+									title="Preview" onclick={unMaskNumber}></lightning-icon>
+								<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+									alternative-text="upload" title="Upload" data-name={label.DocumentAadhaar}
+									onclick={hanldeUploadClick}>
+								</lightning-button-icon>
+							</div>
+						</div>
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item  size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="PAN__c" flexibility="auto">
+					<div class="slds-is-relative">
+						<template if:false={isHtmlPanMandatorty}>
+							<label class="slds-form-element__label">PAN</label>
+							<div class="buttonIn">
+								<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} onblur={handleOnBlur}
+									class="input checkValidity kyc" label="PAN" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}"  data-id="PAN"
+									max-length="10" name="PAN__c" message-when-pattern-mismatch="Enter valid Pan number"
+									value={ApplicantRecord.PAN__c} disabled={isStageNotQDE}>
+								</lightning-input>
+								<div class="button slds-align_absolute-center">
+									<template if:true={isMobile}>
+										<lightning-button-icon style="float: right;" class="slds-hide"
+											icon-name="utility:cases" alternative-text="ocr" title="ocr"
+											data-id={label.DocumentPan} data-name={label.DocumentPan}
+											onclick={hanldeOcrClick}>
+										</lightning-button-icon>
+									</template>
+									<lightning-icon size="small" icon-name="utility:preview"
+										data-id={DocumentPanPreview} class="slds-hide" alternative-text="preview"
+										title="Preview" onclick={handlePreviewClick}></lightning-icon>
+									<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+										alternative-text="upload" title="Upload" data-name={label.DocumentPan}
+										onclick={hanldeUploadClick}>
+									</lightning-button-icon>
+								</div>
+							</div>
+						</template>
+						<template if:true={isHtmlPanMandatorty}>
+							<label class="slds-form-element__label">
+								<abbr class="slds-required" title="required">* </abbr>PAN</label>
+							<div class="buttonIn">
+								<lightning-input required type="text" variant="label-hidden" onchange={handleValuChange} onblur={handleOnBlur}
+									class="input validate checkValidity kyc" label="PAN"
+									pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" max-length="10" name="PAN__c"
+									message-when-pattern-mismatch="Enter valid Pan number" data-id="PAN"
+									value={ApplicantRecord.PAN__c} disabled={isStageNotQDE}>
+								</lightning-input>
+								<div class="button slds-align_absolute-center">
+									<template if:true={isMobile}>
+										<lightning-button-icon style="float: right;" class="slds-hide"
+											icon-name="utility:cases" alternative-text="ocr" title="ocr"
+											data-id={label.DocumentPan} data-name={label.DocumentPan}
+											onclick={hanldeOcrClick}>
+										</lightning-button-icon>
+									</template>
+									<lightning-icon size="small" icon-name="utility:preview"
+										data-id={DocumentPanPreview} class="slds-hide" alternative-text="preview"
+										title="Preview" onclick={handlePreviewClick}></lightning-icon>
+									<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+										alternative-text="upload" title="Upload" data-name={label.DocumentPan}
+										onclick={hanldeUploadClick}>
+									</lightning-button-icon>
+								</div>
+							</div>
+						</template>
+
+					</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide slds-m-top_small" data-id="CIF_No__c" flexibility="auto">
+					<label class="slds-form-element__label">CIF No</label>
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} min-length="8" 
+						pattern="[0-9]{8}" message-when-pattern-mismatch="Please enter valid cif no" class="validate"
+						max-length="8" label="CIF No" name="CIF_No__c" value={ApplicantRecord.CIF_No__c} disabled={disableCIF}>
+					</lightning-input> <!-- SFAU-5538 -->
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+					<div class="slds-m-top_medium">
+				<template if:true={isCommercial}>
+					<div class="slds-is-relative ">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required"> </abbr>Driving Licence</label>
+						<div class="buttonIn">
+							<lightning-input type="text" variant="label-hidden"
+								onchange={handleValuChange} class="validate checkValidity input kyc"
+								label="Driving Licence" name="Driving_License_Id__c" min-length="6"
+								max-length="25" pattern="[a-zA-Z0-9]*"
+								message-when-pattern-mismatch="Enter valid DL number"
+								value={ApplicantRecord.Driving_License_Id__c} disabled={isStageNotQDE}>
+							</lightning-input>
+							<div class="button slds-align_absolute-center">
+
+								<template if:true={isMobile}>
+									<lightning-button-icon style="float: right;" class="slds-hide"
+										icon-name="utility:cases" alternative-text="ocr" title="ocr"
+										data-id={label.DocumentDL} data-name={label.DocumentDL}
+										onclick={hanldeOcrClick}>
+									</lightning-button-icon>
+								</template>
+								<lightning-icon size="small" icon-name="utility:preview"
+									data-id={DocumentDLPreview} class="slds-hide" alternative-text="preview"
+									title="Preview" onclick={handlePreviewClick}></lightning-icon>
+								<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+									alternative-text="upload" title="Upload" data-name={label.DocumentDL}
+									onclick={hanldeUploadClick}>
+								</lightning-button-icon>
+							</div>
+						</div>
+					</div>
+				</template>
+				</div>
+			</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Constitution_Type__c"
+					flexibility="auto">
+					<label class="slds-form-element__label">
+						<abbr class="slds-required" title="required">* </abbr>Constitution Type</label>
+					<lightning-combobox class="validate checkValidity" variant="label-hidden"
+						name="Constitution_Type__c" label="Constitution Type"
+						value={ApplicantRecord.Constitution_Type__c} placeholder="Select Constitution type"
+						options={constitutionTypeOptions} onchange={handleValuChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				<!--
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Reg_No__c" flexibility="auto">
+					<label class="slds-form-element__label">Reg No</label>
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Reg No"
+						name="Reg_No__c" max-length="16" min-length="12" value={ApplicantRecord.Reg_No__c}>
+					</lightning-input>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="GST_NO__c" flexibility="auto">
+					<label class="slds-form-element__label">GST No</label>
+					<lightning-input class="validationForMix" type="text" required="false" variant="label-hidden" onchange={handleValuChange} label="GST No"
+						pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
+						message-when-pattern-mismatch="Please enter a valid GST No" name="GST_NO__c" max-length="15"
+						value={ApplicantRecord.GST_NO__c}>
+					</lightning-input>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="UDYAM_Registration_Number__c"
+					flexibility="auto">
+					<label class="slds-form-element__label">UDYAM Registration Number</label>
+					<div class="buttonIn">
+					<lightning-input class="validationForMix" required="false" type="text" variant="label-hidden" onchange={handleValuChange}
+						pattern="^UDYAM[A-Z]{2}[0-9]{9}" message-when-pattern-mismatch="Please enter a valid UDYAM Registration Number"
+						label="UDYAM Registration Number" name="UDYAM_Registration_Number__c" max-length="16"
+						value={ApplicantRecord.UDYAM_Registration_Number__c}>
+					</lightning-input>
+					<div class="button slds-align_absolute-center">
+						 <template if:true={isMobile}>
+							<lightning-button-icon style="float: right;" class="slds-hide"
+								icon-name="utility:cases" alternative-text="ocr" title="ocr"
+								data-id={label.DocumentUdyam} data-name={label.DocumentUdyam}
+								onclick={hanldeOcrClick}>
+							</lightning-button-icon>
+						</template> -->
+						<!--<lightning-icon size="small" icon-name="utility:preview"
+							data-id={DocumentUdyamPreview} class="slds-hide" alternative-text="preview"
+						title="Preview" onclick={handlePreviewClick}></lightning-icon>
+						<lightning-button-icon style="float: right;" icon-name="utility:upload"
+							alternative-text="upload" title="Upload" data-name={label.DocumentUdyam}
+							onclick={hanldeUploadClick}>
+						</lightning-button-icon>
+					</div>
+				</div>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="TIN__c" flexibility="auto">
+					<label class="slds-form-element__label">TIN</label>
+					<lightning-input required="false" class="validationForMix" type="text" variant="label-hidden" onchange={handleValuChange} label="TIN"
+						pattern="^(?![-])(?!.*[-]$)(?!.*[-]{2})[0-9-]+$" message-when-pattern-mismatch="Please enter a valid TIN No"
+						name="TIN__c" min-length="11" max-length="11" message-when-too-short="Please Enter 11 digit TIN No" value={ApplicantRecord.TIN__c}>
+					</lightning-input>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="CIN__c" flexibility="auto">
+					<label class="slds-form-element__label">CIN</label>
+					<lightning-input required="false" class="validationForMix" type="text" variant="label-hidden" onchange={handleValuChange} label="CIN"
+						pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
+						message-when-pattern-mismatch="Please enter a valid CIN" name="CIN__c" max-length="21"
+						value={ApplicantRecord.CIN__c}>
+					</lightning-input>
+				</lightning-layout-item>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="CKYC__c" flexibility="auto">
+					<label class="slds-form-element__label">CKYC</label>
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="CKYC"
+						name="CKYC__c" value={ApplicantRecord.CKYC__c}>
+					</lightning-input>
+				</lightning-layout-item>-->
+				<template if:true={isRegNoVisible}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Reg_No__c" flexibility="auto">
+					<label class="slds-form-element__label">Reg No</label>
+					<lightning-input type="text" variant="label-hidden" message-when-too-long="Reg no should be alphanumeric and between 12 to 16 characters." message-when-too-short ="Reg no should be alphanumeric and between 12 to 16 characters." onchange={handleValuChange} label="Reg No"
+						name="Reg_No__c" max-length="16" min-length="12" value={ApplicantRecord.Reg_No__c}>
+					</lightning-input>
+				</lightning-layout-item>
+			</template>
+			<template if:true={isGSTNoVisible}>
+			<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+				class="slds-p-horizontal_small component slds-hide" data-id="GST_NO__c" flexibility="auto">
+				<label class="slds-form-element__label">GST No</label>
+				<div class="buttonIn">
+				<lightning-input class="validationForMix" type="text" required="false" variant="label-hidden" onchange={handleValuChange} label="GST No"
+					pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
+					message-when-pattern-mismatch="Please enter a valid GST No" name="GST_NO__c" max-length="15"
+					value={ApplicantRecord.GST_NO__c}>
+				</lightning-input>
+				<div class="button slds-align_absolute-center">
+					<lightning-icon size="small" icon-name="utility:preview"
+						data-id={DocumentGSTPreview} class="slds-hide" alternative-text="preview"
+					title="Preview" onclick={handlePreviewClick}></lightning-icon>
+					<lightning-button-icon style="float: right;" icon-name="utility:upload"
+						alternative-text="upload" title="Upload" data-name={label.DocumentGST}
+						onclick={hanldeUploadClick}>
+					</lightning-button-icon>
+				</div>
+			</div>
+			</lightning-layout-item>
+			</template>
+			<template if:true={isUdyamNoVisible}>
+			<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+				class="slds-p-horizontal_small component slds-hide" data-id="UDYAM_Registration_Number__c"
+				flexibility="auto">
+				<label class="slds-form-element__label">UDYAM Registration Number</label>
+				<div class="buttonIn">
+				<lightning-input class="validationForMix" required="false" type="text" variant="label-hidden" onchange={handleValuChange}
+					pattern="[U]{1}[D]{1}[Y]{1}[A]{1}[M]{1}-[A-Z]{2}-[0-9]{2}-[0-9]{7}" message-when-pattern-mismatch="Please enter a valid UDYAM Registration Number"
+					label="UDYAM Registration Number" name="UDYAM_Registration_Number__c" 
+					value={ApplicantRecord.UDYAM_Registration_Number__c}>
+				</lightning-input>
+				<div class="button slds-align_absolute-center">
+					<lightning-icon size="small" icon-name="utility:preview"
+						data-id={DocumentUdyamPreview} class="slds-hide" alternative-text="preview"
+					title="Preview" onclick={handlePreviewClick}></lightning-icon>
+					<lightning-button-icon style="float: right;" icon-name="utility:upload"
+						alternative-text="upload" title="Upload" data-name={label.DocumentUdyam}
+						onclick={hanldeUploadClick}>
+					</lightning-button-icon>
+				</div>
+			</div>
+			</lightning-layout-item>
+			</template>
+			<template if:true={isTrustDeedVisible}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Trust_Deed__c" flexibility="auto">
+					<label class="slds-form-element__label">Trust Deed</label>
+					<lightning-input required="false" type="text" variant="label-hidden" onchange={handleValuChange} label="Trust Deed"
+						name="Trust_Deed__c" value={ApplicantRecord.Trust_Deed__c}>
+					</lightning-input>
+				</lightning-layout-item>
+			</template>	
+			<template if:true={isHUFDeedVisible}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="HUF_Deed__c" flexibility="auto">
+					<label class="slds-form-element__label">HUF Deed</label>
+					<lightning-input required="false" type="text" variant="label-hidden" onchange={handleValuChange} label="HUF Deed"
+						name="HUF_Deed__c" value={ApplicantRecord.HUF_Deed__c}>
+					</lightning-input>
+				</lightning-layout-item>
+			</template>	
+			<template if:true={isLLPVisible}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="LLP_Agreement__c" flexibility="auto">
+					<label class="slds-form-element__label">LLP Agreement</label>
+					<lightning-input required="false" type="text" variant="label-hidden" onchange={handleValuChange} label="LLP Agreement"
+						name="LLP_Agreement__c" value={ApplicantRecord.LLP_Agreement__c}>
+					</lightning-input>
+				</lightning-layout-item>
+			</template>	
+			<template if:true={isTINVisible}>
+			<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+				class="slds-p-horizontal_small component slds-hide" data-id="TIN__c" flexibility="auto">
+				<label class="slds-form-element__label">TIN</label>
+				<div class="buttonIn">
+				<lightning-input required="false" class="validationForMix" type="text" variant="label-hidden" onchange={handleValuChange} label="TIN"
+					pattern="^(?![-])(?!.*[-]$)(?!.*[-]{2})[0-9-]+$" message-when-pattern-mismatch="Please enter a valid TIN No"
+					name="TIN__c" min-length="11" max-length="11" message-when-too-short="Please Enter 11 digit TIN No" value={ApplicantRecord.TIN__c}>
+				</lightning-input>
+				<div class="button slds-align_absolute-center">
+					<lightning-icon size="small" icon-name="utility:preview"
+						data-id={DocumentTINPreview} class="slds-hide" alternative-text="preview"
+					title="Preview" onclick={handlePreviewClick}></lightning-icon>
+					<lightning-button-icon style="float: right;" icon-name="utility:upload"
+						alternative-text="upload" title="Upload" data-name={label.DocumentTIN}
+						onclick={hanldeUploadClick}>
+					</lightning-button-icon>
+				</div>
+				</div>
+
+			</lightning-layout-item>
+			</template>	
+			<template if:true={isCINVisible}>
+			<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+				class="slds-p-horizontal_small component slds-hide" data-id="CIN__c" flexibility="auto">
+				<label class="slds-form-element__label">CIN</label>
+				<lightning-input required="false" class="validationForMix" type="text" variant="label-hidden" onchange={handleValuChange} label="CIN"
+					pattern="^([LUu]{1})([0-9]{5})([A-Za-z]{2})([0-9]{4})([A-Za-z]{3})([0-9]{6})$"
+					message-when-pattern-mismatch="Please enter a valid CIN" name="CIN__c" max-length="21"
+					value={ApplicantRecord.CIN__c}>
+				</lightning-input>
+			</lightning-layout-item>
+			</template>
+			<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+				class="slds-p-horizontal_small component slds-hide" data-id="CKYC__c" flexibility="auto">
+				<label class="slds-form-element__label">CKYC</label>
+				<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="CKYC"
+					name="CKYC__c" value={ApplicantRecord.CKYC__c}>
+				</lightning-input>
+			</lightning-layout-item>
+			<template if:true={isSoleProp}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Utility_Bills_Electricity__c" flexibility="auto">
+					<label class="slds-form-element__label">Utility Bills - Electricity</label>
+					<div class="buttonIn">
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Utility Bills - Electricity"
+						name="Utility_Bills_Electricity__c" value={ApplicantRecord.Utility_Bills_Electricity__c}>
+					</lightning-input>
+					<div class="button slds-align_absolute-center">
+						<lightning-icon size="small" icon-name="utility:preview"
+							data-id={DocumentElectricityPreview} class="slds-hide" alternative-text="preview"
+						title="Preview" onclick={handlePreviewClick}></lightning-icon>
+						<lightning-button-icon style="float: right;" icon-name="utility:upload"
+							alternative-text="upload" title="Upload" data-name={label.DocumentElectricity}
+							onclick={hanldeUploadClick}>
+						</lightning-button-icon>
+					</div>
+				</div>
+				</lightning-layout-item>
+			</template>
+			<template if:true={isSoleProp}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Utility_Bills_Landline_Phone__c" flexibility="auto">
+					<label class="slds-form-element__label">Utility Bills - Landline Phone</label>
+					<div class="buttonIn">
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Utility Bills - Landline Phone"
+						name="Utility_Bills_Landline_Phone__c" value={ApplicantRecord.Utility_Bills_Landline_Phone__c}>
+					</lightning-input>
+					<div class="button slds-align_absolute-center">
+						<lightning-icon size="small" icon-name="utility:preview"
+							data-id={DocumentLandlinePreview} class="slds-hide" alternative-text="preview"
+						title="Preview" onclick={handlePreviewClick}></lightning-icon>
+						<lightning-button-icon style="float: right;" icon-name="utility:upload"
+							alternative-text="upload" title="Upload" data-name={label.DocumentLandline}
+							onclick={hanldeUploadClick}>
+						</lightning-button-icon>
+					</div>
+				</div>
+				</lightning-layout-item>
+			</template>
+			<template if:true={isSoleProp}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Utility_Bills_Water__c" flexibility="auto">
+					<label class="slds-form-element__label">Utility Bills - Water</label>
+					<div class="buttonIn">
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Utility Bills - Water"
+						name="Utility_Bills_Water__c" value={ApplicantRecord.Utility_Bills_Water__c}>
+					</lightning-input>
+					<div class="button slds-align_absolute-center">
+						<lightning-icon size="small" icon-name="utility:preview"
+							data-id={DocumentWATERPreview} class="slds-hide" alternative-text="preview"
+						title="Preview" onclick={handlePreviewClick}></lightning-icon>
+						<lightning-button-icon style="float: right;" icon-name="utility:upload"
+							alternative-text="upload" title="Upload" data-name={label.DocumentWATER}
+							onclick={hanldeUploadClick}>
+						</lightning-button-icon>
+					</div>
+				</div>
+				</lightning-layout-item>
+			</template>
+			<template if:true={isSoleProp}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Importer_Exporter_Code_IEC_Certificate__c" flexibility="auto">
+					<label class="slds-form-element__label">Importer Exporter Code (IEC Certificate)</label>
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Importer Exporter Code (IEC Certificate)"
+						name="Importer_Exporter_Code_IEC_Certificate__c" value={ApplicantRecord.Importer_Exporter_Code_IEC_Certificate__c}>
+					</lightning-input>
+				</lightning-layout-item>
+			</template>
+			<template if:true={isSoleProp}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small component slds-hide" data-id="Income_Tax_Return__c" flexibility="auto">
+					<label class="slds-form-element__label">Income Tax Return</label>
+					<div class="buttonIn">
+					<lightning-input type="text" variant="label-hidden" onchange={handleValuChange} label="Income Tax Return"
+						name="Income_Tax_Return__c" value={ApplicantRecord.Income_Tax_Return__c}>
+					</lightning-input>
+					<div class="button slds-align_absolute-center">
+						<lightning-icon size="small" icon-name="utility:preview"
+							data-id={DocumentITRPreview} class="slds-hide" alternative-text="preview"
+						title="Preview" onclick={handlePreviewClick}></lightning-icon>
+						<lightning-button-icon style="float: right;" icon-name="utility:upload"
+							alternative-text="upload" title="Upload" data-name={label.DocumentITR}
+							onclick={hanldeUploadClick}>
+						</lightning-button-icon>
+					</div>
+				</div>
+				</lightning-layout-item>
+			</template>
+			<!--<template if:true={showBO}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+					class="slds-p-horizontal_small" flexibility="auto">
+					<label class="slds-form-element__label">Is BO</label>
+					<lightning-input data-name="Is_BO__c" data-id="Is_BO__c" name="Is_BO__c" type="checkbox" variant="label-hidden" onchange={handleValuChange} value={ApplicantRecord.Is_BO__c} checked={ApplicantRecord.Is_BO__c} ></lightning-input>
+				</lightning-layout-item>
+			</template>bug fix-R2-2033-->
+		</template>
+
+			</lightning-layout>
+			<template if:false={hidekycFields}>
+			<div class="slds-p-horizontal_small slds-m-top_medium slds-p-bottom_small component slds-hide"
+				data-id="Additional_Information__c">
+				<label class="slds-form-element__label">Additional KYC &nbsp;&nbsp;<!--SFAU-2968-->
+
+				</label>
+				<lightning-icon icon-name=action:new size="xx-small" onclick={handleAdditionalInformationClick}>
+				</lightning-icon>
+			</div>
+
+			<lightning-layout multiple-rows class="slds-p-bottom_small" if:true={isShowAdditionalInformationsPicklist}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto"
+					class="slds-p-horizontal_small">
+					<div class="slds-m-top_medium">
+						<lightning-combobox class="slds-form-element__label" data-index={index} variant="label-hidden"
+							name="AdditionalInformation" label="Additional Information"
+							value={AdditionalInformationvalue} placeholder="Select Document type"
+							options={AdditionalInformationoptions} onchange={handleAdditionalInformationChange} disabled={isStageNotQDE}>
+						</lightning-combobox>
+						<!--template if:false={isCommercial}--> <!-- commented for R2-2598 -->
+						<template for:each={allAdditionalInformationvalues} for:item="val">
+							<lightning-pill key={val} label={val} name={val} onremove={handleRemove}></lightning-pill>
+						</template>
+						<!--/template-->
+					</div>
+					<div class="slds-m-top_medium">
+						<template if:true={isEnabledVoterId}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr>VoterId</label>
+								<div class="buttonIn">
+									<lightning-input type="text" required="true" variant="label-hidden"
+										onchange={handleValuChange} onblur={handleOnBlur} class="validate checkValidity input kyc"
+										label="VoterId" name="Voter_Id__c" min-length="10" max-length="15"
+										value={ApplicantRecord.Voter_Id__c} disabled={isStageNotQDE}>
+									</lightning-input>
+									<div class="button slds-align_absolute-center">
+										<template if:true={isMobile}>
+											<lightning-button-icon style="float: right;" class="slds-hide"
+												icon-name="utility:cases" alternative-text="ocr" title="ocr"
+												data-id={label.DocumentVoter} data-name={label.DocumentVoter}
+												onclick={hanldeOcrClick}>
+											</lightning-button-icon>
+										</template>
+										<lightning-icon size="small" icon-name="utility:preview"
+											data-id={DocumentVoterPreview} class="slds-hide" alternative-text="preview"
+											title="Preview" onclick={handlePreviewClick}></lightning-icon>
+										<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+											alternative-text="upload" title="Upload" data-name={label.DocumentVoter}
+											onclick={hanldeUploadClick}>
+										</lightning-button-icon>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+
+					<div class="slds-m-top_medium">
+						<template if:false={isCommercial}>
+						<template if:true={isEnabledDrivingLicence}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr>Driving Licence</label>
+								<div class="buttonIn">
+									<lightning-input type="text" required="true" variant="label-hidden"
+										onchange={handleValuChange} class="validate checkValidity input kyc"
+										label="Driving Licence" name="Driving_License_Id__c" min-length="6"
+										max-length="25" pattern="[a-zA-Z0-9]*"
+										message-when-pattern-mismatch="Enter valid DL number"
+										value={ApplicantRecord.Driving_License_Id__c} disabled={isStageNotQDE}>
+									</lightning-input>
+									<div class="button slds-align_absolute-center">
+
+										<template if:true={isMobile}>
+											<lightning-button-icon style="float: right;" class="slds-hide"
+												icon-name="utility:cases" alternative-text="ocr" title="ocr"
+												data-id={label.DocumentDL} data-name={label.DocumentDL}
+												onclick={hanldeOcrClick}>
+											</lightning-button-icon>
+										</template>
+										<lightning-icon size="small" icon-name="utility:preview"
+											data-id={DocumentDLPreview} class="slds-hide" alternative-text="preview"
+											title="Preview" onclick={handlePreviewClick}></lightning-icon>
+										<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+											alternative-text="upload" title="Upload" data-name={label.DocumentDL}
+											onclick={hanldeUploadClick}>
+										</lightning-button-icon>
+									</div>
+								</div>
+							</div>
+						</template>
+						</template>
+					</div>
+
+					<div class="slds-m-top_medium">
+						<template if:true={isEnabledPassport}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr>Passport</label>
+								<div class="buttonIn">
+									 <!-- Pattern Update : SFAU-5896 Kunal 15th Jan-->
+									<lightning-input type="text" required="true" variant="label-hidden"
+										onchange={handleValuChange} class="validate checkValidity input kyc"
+										label="Passport" name="Passport_Number__c" pattern="^[A-Z][1-9][0-9]{6}$" 
+										 length="8"
+										message-when-pattern-mismatch="Enter valid Passport number"
+										value={ApplicantRecord.Passport_Number__c} disabled={isStageNotQDE}> <!--pattern="[A-PR-WYa-pr-wy][1-9][0-9]{6}"-->
+									</lightning-input>
+									 <!-- Pattern Update : SFAU-5896 Kunal 15th Jan-->
+									<div class="button slds-align_absolute-center">
+										<template if:true={isMobile}>
+											<lightning-button-icon style="float: right;" class="slds-hide"
+												icon-name="utility:cases" alternative-text="ocr" title="ocr"
+												data-id={label.DocumentPassport} data-name={label.DocumentPassport}
+												onclick={hanldeOcrClick}>
+											</lightning-button-icon>
+										</template>
+										<lightning-icon size="small" icon-name="utility:preview"
+											data-id={DocumentPassportPreview} class="slds-hide"
+											alternative-text="preview" title="Preview"
+											onclick={handlePreviewClick}></lightning-icon>
+										<lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+											alternative-text="upload" title="Upload" data-name={label.DocumentPassport}
+											onclick={hanldeUploadClick}>
+										</lightning-button-icon>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+					<div class="slds-m-top_medium">
+						<template if:true={isEnabledNpr}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label"
+									title="National Population Register (NPR)">NPR</label>
+								<div class="buttonIn">
+									<lightning-input type="text" required="true" variant="label-hidden"
+										onchange={handleValuChange} class="validate checkValidity input kyc"
+										name="NPR__c" pattern="[a-zA-Z0-9]+"
+										message-when-pattern-mismatch="Enter valid NPR number"
+										value={ApplicantRecord.NPR__c} disabled={isStageNotQDE}>
+									</lightning-input>
+								</div>
+							</div>
+						</template>
+					</div>
+					<div class="slds-m-top_medium">
+						<template if:true={isEnabledNrega}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label"
+									title="National Rural Employment Government Authority (NREGA Job Card)">NREGA</label>
+								<div class="buttonIn">
+									<lightning-input type="text" required="true" variant="label-hidden"
+										onchange={handleValuChange} class="validate checkValidity input kyc"
+										name="NREGA__c" pattern="[a-zA-Z0-9]+"
+										message-when-pattern-mismatch="Enter valid NREGA"
+										value={ApplicantRecord.NREGA__c} disabled={isStageNotQDE}>
+									</lightning-input>
+								</div>
+							</div>
+						</template>
+					</div>
+					<div class="slds-m-top_medium">
+						<template if:true={isEnabledCkyc}>
+							<div class="slds-is-relative ">
+								<label class="slds-form-element__label" title="CKYC">CKYC</label>
+								<div class="buttonIn">
+									<lightning-input type="text" variant="label-hidden" onchange={handleValuChange}
+										class="validate checkValidity input kyc" name="CKYC__c"
+										value={ApplicantRecord.CKYC__c} disabled={isStageNotQDE}>
+									</lightning-input>
+								</div>
+							</div>
+						</template>
+					</div>
+				</lightning-layout-item>
+			</lightning-layout>
+		</template>
+		</lightning-card>
+	</template>
+	<template if:false={blnRestrictEdit}>
+		<template if:true={showUploadComponent}>
+			<c-los-generic-document-upload show-upload-component={trueValue} isapplicant-page={trueValue} isdocmanager={trueValue}
+				show-input-box={falseValue} applicant-id={applicantId} doc-name={docName} ondocumentsuccess={handleSuccess}
+				oncancel={hanleCancel} uploadtypename="" is-model-needed={modelNeeded} onocrbutton={handleOCRButton}>
+			</c-los-generic-document-upload>
+		</template>
+	</template>
+	
+	<template if:true={showOCRDetails}>
+		<lightning-card icon-name="standard:account"
+			class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+			<template if:true={isloading}>
+				<lightning-spinner alternative-text="Loading"></lightning-spinner>
+			</template>
+			<div if:true={docImage} class="slds-grid slds-wrap slds-var-p-around_xx-small divComp">
+				<div class="slds-size_1-of-2">
+					<b>Image</b>
+				</div>
+				<div class="slds-size_1-of-2 textContent">
+					<img src={docImage} alternative-text="Image"></img>
+				</div>
+			</div>
+			<template for:each={dataValues} for:item="data">
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+					<div class="slds-size_1-of-2">
+						<b>{data.key}</b>
+					</div>
+					<div class="slds-size_1-of-2 textContent">
+						{data.value}
+					</div>
+				</div>
+			</template>
+			<div class="slds-align_absolute-center slds-var-m-top_large">
+				<lightning-button disabled={disableOkButton} label="Ok" variant="brand" title="Ok" onclick={okClick}
+					class="slds-var-m-left_x-small">
+				</lightning-button>
+				<!--<lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+				</lightning-button>-->
+			</div>
+		</lightning-card>
+	</template>
+</template>

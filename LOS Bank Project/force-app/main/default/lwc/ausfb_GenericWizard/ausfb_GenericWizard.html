@@ -1,0 +1,120 @@
+<template>
+
+    <lightning-card class="wizard">
+        <template if:true={loanApplicationRecord.Application_Id__c}>
+            <h1 slot="title">Loan Application : {loanApplicationRecord.Application_Id__c}</h1>
+        </template>
+        <div class="component skipKYC slds-hide">
+            <c-los-quick-loan record-id={recordId} onnext={nextHandler}>
+            </c-los-quick-loan>
+        </div>
+
+        <div class="component skipKYC slds-hide">
+            <c-los-add-ind-non-ind applicant-id={applicantRecord.Id} onnext={nextHandler}>
+            </c-los-add-ind-non-ind>
+        </div>
+
+        <div class="component skipKYC slds-hide fetchCustomerInfo">
+            <!--<template if:true={applicantRecord.Aadhar_Number__c}>-->
+            <template if:true={fetchDedupe}>
+                <c-lead-dedupe-parent applicant-id-input={applicantRecord} onnext={nextHandler}>
+                </c-lead-dedupe-parent>
+            </template>
+        </div>
+
+        <!--<template if:false={skipKYC}>-->
+        <div class="component slds-hide">
+            <template if:true={applicantRecord.KYC_Status__c}>
+                <c-los-k-y-c-component onnext={nextHandler} applicant-id={applicantRecord.Id}>
+                </c-los-k-y-c-component>
+            </template>
+        </div>
+
+        <div class="component slds-hide">
+            <template if:true={applicantRecord.KYC_Status__c}>
+                <c-los-pan-verification onnext={nextHandler} applicant-record={applicantRecord}
+                    loan-amount={loanApplicationRecord.Loan_Amount__c}>
+                </c-los-pan-verification>
+            </template>
+        </div>
+        <!--</template>-->
+
+        <div class="component skipKYC slds-hide fetchAddress">
+            <!--<template if:true={fetchCustomerInfo}>-->
+                <c-ausfb_customer-detail-component applicant-id-input={applicantRecord.Id} onnext={nextHandler}>
+                </c-ausfb_customer-detail-component>
+            <!--</template>-->
+        </div>
+        <div class="component skipKYC slds-hide fetchAddress">
+            <!--<template if:true={showAddress}>-->
+                <c-address-information-component applicant-id={applicantRecord} loan-application={loanApplicationRecord}
+                    onnext={nextHandler}>
+                </c-address-information-component>
+          <!-- </template>-->
+        </div>
+
+        <template if:true={isMobile}>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-align_absolute-center">
+                    <figure>
+                        <div class="slds-align_absolute-center">
+                            <lightning-icon icon-name="action:back" size="x-small" alternative-text="Previous"
+                                title="Previous" onclick={previousHandler} disabled={disablePrevious} slot="actions">
+                            </lightning-icon>
+                        </div>
+                        <figcaption
+                            class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                            Previous</figcaption>
+                    </figure>
+                </div>
+                <template if:true={loanApplicationRecord.Id}>
+                    <div class="slds-col slds-align_absolute-center">
+                        <figure>
+                            <div class="slds-align_absolute-center">
+                                <lightning-icon icon-name="action:close" size="x-small" alternative-text="Cancel"
+                                    title="Cancel" onclick={cancelHandler} slot="actions"></lightning-icon>
+                            </div>
+                            <figcaption
+                                class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                Cancel</figcaption>
+                        </figure>
+                    </div>
+                </template>
+                <div class="slds-col slds-align_absolute-center">
+                    <figure>
+                        <div class="slds-align_absolute-center">
+                            <lightning-icon icon-name="action:update_status" size="x-small" alternative-text="Next"
+                                title="Next" onclick={childNextHandler} disabled={disableNext} slot="actions">
+                            </lightning-icon>
+                        </div>
+                        <figcaption
+                            class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                            Next</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </template>
+        <template if:false={isMobile}>
+            <lightning-layout>
+                <lightning-layout-item>
+                    <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                        class="slds-m-left_small" disabled={disablePrevious}></lightning-button>
+                </lightning-layout-item>
+                <template if:true={loanApplicationRecord.Application_Id__c}>
+                    <lightning-layout-item>
+                        <lightning-button label="Cancel" icon-name="utility:close" onclick={cancelHandler}
+                            class="slds-m-left_small"></lightning-button>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item flexibility="grow">
+                </lightning-layout-item>
+
+                <lightning-layout-item>
+                    <lightning-button label={nextLabel} icon-name="utility:chevronright" icon-position="right"
+                        onclick={childNextHandler} class="slds-m-right_small" disabled={disableNext}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+    </lightning-card>
+</template>

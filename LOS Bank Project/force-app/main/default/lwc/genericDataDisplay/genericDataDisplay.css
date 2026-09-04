@@ -1,0 +1,16 @@
+.my-card{
+    display: block;
+}
+
+.back{
+    display: block;
+    width: 100%;
+}
+
+.divComp{
+    width: 100%;
+}
+
+.lgc-bg {
+    background-color: rgb(242, 242, 242);
+}

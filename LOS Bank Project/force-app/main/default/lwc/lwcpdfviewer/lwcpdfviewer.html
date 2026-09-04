@@ -1,0 +1,12 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-09-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-button label="Generate" onclick={generatePDF}></lightning-button>
+    <!--<iframe src={viewerUrl}></iframe>-->
+    <iframe id="pdfFrame" src="/resource/lcins1_pdfjs/web/viewer.html" width="100%" height="100%" class="pdfFrame" onload={generatePdf}></iframe>
+</template>

@@ -1,0 +1,139 @@
+<template>
+    
+    <lightning-spinner variant="brand" size="large" if:true={isLoaded}></lightning-spinner>
+    <lightning-card title={title}>
+      <div class="slds-var-m-around_medium">
+        <template if:true={showCustomButton}>
+          <lightning-button variant="brand" label="delete" title="titleName" class="slds-float_right" onclick={handleClick}></lightning-button>
+        </template>
+        
+        <!-- FILTERING  AND SORTING --> 
+          <lightning-layout multiple-rows>
+          
+              <lightning-layout-item size="12" small-device-size="12" medium-device-size={filterMediumAndLargeDeviceSize} large-device-size={filterMediumAndLargeDeviceSize} padding="around-small">
+                <!--<template if:true={showFilters}>
+                  <lightning-combobox name="filterBy" value={filterBy} label="Filter By"
+                  options={FilterByOptions} onchange={filterbyHandler}></lightning-combobox>
+                </template>-->
+            </lightning-layout-item>
+    
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size={filterInpMedAndLargeDeviceSize} large-device-size={filterInpMedAndLargeDeviceSize} padding="around-small">
+              <!--<template if:true={showFilters}>
+                <lightning-input type="text" label="Filter" onkeyup={filterHandler}></lightning-input>
+              </template>-->
+            </lightning-layout-item>
+          
+
+    
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size={sortMedAndLargeDeviceSize} large-device-size={sortMedAndLargeDeviceSize} padding="around-small" >
+              <!-- SORTABLE COMBOBOX-->
+              <template if:true = {isSortable} >
+                <div class="slds-wrap slds-float_right slds-list_horizontal">
+                  <lightning-combobox
+                    name="SortBy"
+                    label="Sort By"
+                    value={sortByField}
+                    placeholder="Select Field"
+                    options={sortOptions}
+                    onchange={sortByhandleChange}
+                    disabled={disableSortBy}
+                    >
+                    
+                  </lightning-combobox> &nbsp;
+                  <!-- SORT ICON -->
+                  
+                  <lightning-button-icon icon-name={sortIcon}  alternative-text="Settings" title="Settings" class="slds-p-top_large" 
+                    onclick={onHandleSorting} 
+                    disabled={disableSortIcon}>
+                  </lightning-button-icon>
+                  
+                  
+                </div>
+              </template>
+            </lightning-layout-item>
+          </lightning-layout>
+        
+
+        <lightning-layout multiple-rows>
+          <!-- LOOPING DATA -->
+          <template if:true={originalRecords}>
+            <template if:true={filteredData} for:each={filteredData} for:item="recData" >
+              <lightning-layout-item key={recData.header.id} padding="around-small" size="12" small-device-size={smallDeviceSize}
+              medium-device-size={mediumDeviceSize} large-device-size={largeDeviceSize} > 
+                <ul class="slds-has-dividers_around-space"> 
+                      
+                          <li class="slds-item" data-id={recData.recordDetail.Id} >
+                              <article class="slds-tile">
+                                <div class="slds-clearfix">
+                                  <!-- CheckBox -->
+                                  <template if:true={hideCheckboxColumn}>
+                                    <div class="slds-float_left">
+                                      <lightning-input type="checkbox" label="" class="slds-p-bottom_small" onchange={handleSelectedRecord} 
+                                      data-record={recData.recordDetail.Id}></lightning-input>
+                                    </div>                       
+                                  </template>
+                                  <!-- ROW ACTIONS -->
+                                  <template if:true={rowactions}>
+                                    <div class="slds-wrap">    
+                                        <div class="slds-float_right"> 
+                                          <lightning-button-menu alternative-text="Show menu" onselect={selectAction} data-record={recData.recordDetail.Id} icon-name="utility:settings" >
+                                            <template for:each={rowactions} for:item="menuItem" >     
+                                                <lightning-menu-item 
+                                                    key={menuItem.label}
+                                                    value={menuItem.name}
+                                                    label={menuItem.label}>
+                                                </lightning-menu-item>
+                                            </template>
+                                          </lightning-button-menu>
+                                        </div>                                
+                                    </div>
+                                  </template>
+                                </div>
+                                
+                                <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+    
+                                  <div class="slds-wrap slds-list_horizontal">
+                                    <!-- ICON -->
+                                    <template if:true={recordIcon}>                                   
+                                      <lightning-icon icon-name={recordIcon}  size="medium" ></lightning-icon> &nbsp; &nbsp;
+                                    </template>
+                                    <!-- HEADER -->
+                                      <template if:true={headerField}>
+                                        <lightning-formatted-url value={recData.header.id} target="_blank" label={recData.header.name} class="slds-truncate"></lightning-formatted-url>
+                                      </template>
+                                      <!-- DETAILS -->
+                                      <div class="slds-tile__detail slds-m-vertical_x-small">
+                                        <lightning-layout multiple-rows>
+                                            <template for:each={recData.detail.tableRows} for:item="rec" > 
+                                              <lightning-layout-item size="6" key={rec} class="slds-m-top_xx-small">
+                                                <label class="slds-text-color_weak">{rec.name}:</label>
+                                              </lightning-layout-item>
+    
+                                              <lightning-layout-item size="6" key={rec} class="slds-m-top_xx-small">
+                                                <p>{rec.value}</p> 
+                                              </lightning-layout-item>                                     
+                                            </template> 
+                                        </lightning-layout>                               
+                                      </div>
+                                  </div>  
+                                </div>
+    
+                              </article>
+                          </li>
+                      
+                </ul>
+              </lightning-layout-item>
+            </template>
+            <template if:false={filteredData.length}>
+              <div class="slds-text-color_destructive slds-var-m-around_medium">No records found for the word '{searchKey}' in '{filterBy}' field</div>
+            </template>
+          </template>       
+          <!-- ERROR HANDLING  -->
+          <template if:false={originalRecords}>
+            <div class="slds-text-color_destructive slds-var-m-around_medium">{error} </div>
+          </template>
+          
+        </lightning-layout>
+      </div>
+    </lightning-card>
+  </template>

@@ -1,0 +1,98 @@
+<template>
+    <div class="consent">    
+        <div class="consentTxt slds-text-align_left">       
+            <div class="slds-m-around_x-small">
+                <lightning-layout> 
+                    <lightning-layout-item size="8" small-device-size="4" large-device-size="2">
+
+                        <div data-id="consentCombobox" class="">
+                            <lightning-input type="checkbox" class="check" variant="label-hidden" onchange={handleConsentValue} checked={consent} read-only={consent}>
+                            </lightning-input>
+                        </div>
+
+                        <b><lightning-formatted-text value="AADHAAR CONSENT"></lightning-formatted-text></b>
+                        
+                        
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="4" small-device-size="8" large-device-size="1" class="comboboxPosition">
+                        <lightning-combobox
+                                name="Consent Language"
+                                placeholder="Language"
+                                variant="label-hidden"
+                                label="Consent Language"
+                                value={languageValue}
+                                options={languageOptions}
+                                onchange={handleLanguageChange}>
+                            </lightning-combobox>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+             <!--   <lightning-layout>                
+                    <div class="borderColorCombobox">
+                        <lightning-layout-item size="12" small-device-size="6" large-device-size="4"
+                        class="slds-p-left_medium">
+                            
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="6" large-device-size="8"
+                        class="slds-p-left_medium" >
+                     </lightning-layout-item>
+                    </div>
+                    
+                </lightning-layout>  -->
+            </div>
+
+            <template if:true={smartPhoneKYC}>
+                <ul style="list-style-type:disc" class="slds-p-left_x-large">
+                    <li>I have verified customer’s KYC documents and captured photo of original KYC
+                        documents of
+                        customer </li>
+                    <li>Customer has done the signature in his/her presence, and she/he has captured image
+                        of
+                        customer’s signature only </li>
+                    <li>Information available in the picture of document is matching with the information
+                        entered by
+                        authorized officer in CAF </li>
+                    <li>All of the necessary details in CAF including mandatory field are filled properly
+                    </li>
+                    <li><a href={consentDocUrl} style="text-decoration: underline;" target="_blank">AADHAAR Consent Text
+                            as per AADHAAR ACT</a>
+                    </li>
+                </ul>
+            </template>
+
+            <template if:false={smartPhoneKYC}>
+                    <a href={consentDocUrl} style="text-decoration: underline;" target="_blank">AADHAAR Consent Text as per
+                        AADHAAR ACT</a>
+            </template>
+            <br />
+            <div class="slds-align_absolute-center">
+                <audio src={audioFileUrl} >
+                </audio>
+            </div>
+            <div>             
+            <lightning-button-group>
+                <lightning-button-icon
+                    icon-name="utility:skip_back"
+                    alternative-text="Skip Back"
+                    title="Skip Back"
+                    onclick={handleSkipBack}
+                ></lightning-button-icon>
+                <lightning-button-icon
+                    icon-name={playPauseIcon}
+                    alternative-text={playPauseAltText}
+                    title={playPauseAltText}
+                    onclick={handlePlayPause}
+                ></lightning-button-icon>
+                <lightning-button-icon
+                    icon-name="utility:skip_forward"
+                    alternative-text="Skip Forward"
+                    title="Skip Forward"
+                    onclick={handleSkipForward}
+                ></lightning-button-icon>
+            </lightning-button-group>
+            </div>
+        
+        </div>
+    </div>
+</template>

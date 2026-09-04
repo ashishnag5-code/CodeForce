@@ -1,0 +1,46 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="queryRecords" description="This is the value for the component."
+                    type="Query__c[]" required="true" assignTo="{!queries}"/>
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" columns="1" title="Query">
+            <!-- Added the code under pageBlockSection - R2 2067 -->
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <table style="{!tableStyle}">
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadDataStyle} width:7% !important">Type</th>
+                            <th style="{!tableHeadDataStyle} width:15% !important">Sub Type</th>
+                            <th style="{!tableHeadDataStyle} width:10% !important">Assigned by</th>
+                            <th style="{!tableHeadDataStyle} width:10% !important">Query date &amp; time</th>
+                            <th style="{!tableHeadDataStyle} width:15% !important">Query Remarks</th>
+                            <th style="{!tableHeadDataStyle} width:10% !important">Reply By</th>
+                            <th style="{!tableHeadDataStyle} width:10% !important">Reply Date &amp; Time</th>
+                            <th style="{!tableHeadDataStyle} width:15% !important">Reply Remarks</th>
+                        </tr>
+                        <apex:repeat value="{!queries}" var="query">
+                            <tr style="{!tableRowStyle}">
+                                <td style="{!tableDataStyle}">{!query.Type__c}</td>
+                                <td style="{!tableDataStyle}">{!query.Sub_Type__c}</td>
+                                <td style="{!tableDataStyle}">{!query.CreatedBy.Name}</td>
+                                <td style="{!tableDataStyle}">
+                                    <apex:outputField value="{!query.CreatedDate}"/>
+                                    <!--{!query.CreatedDate}--></td>
+                                <td style="{!tableDataStyle}">{!query.Remarks__c}</td>
+                                <td style="{!tableDataStyle}">{!query.Assigned_To__r.Name}</td>
+                                <td style="{!tableDataStyle}">
+                                    <span style="display:{!IF(query.Resolution_Comments__c!=null,'inline','none')}">
+                                        <apex:outputField value="{!query.LastModifiedDate}"/>
+                                    </span>
+                                    <!--{!query.LastModifiedDate}-->
+                                </td>
+                                <td style="{!tableDataStyle}">{!query.Resolution_Comments__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+    </div>        
+</apex:component>

@@ -1,0 +1,23 @@
+<template>
+        <div class="slds-m-top_medium slds-m-bottom_x-large">
+            <!-- Simple -->
+            <div class="slds-p-around_medium lgc-bg">
+                <ul class="slds-has-dividers_bottom-space">
+                    <li class="slds-item">
+                        <lightning-tile label={sectionTitle} >
+                            <template for:each={collateralList} for:item="col">
+                                <dl class="slds-dl_horizontal" key={col.label}>
+                                    <dt class="slds-dl_horizontal__label">
+                                        <p class="slds-truncate" title="Company">{col.label}</p>
+                                    </dt>
+                                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                                        <p class="slds-truncate" title="Salesforce">{col.value}</p>
+                                    </dd>
+                                </dl>
+                            </template>
+                        </lightning-tile>
+                    </li>
+                </ul>
+            </div>
+        </div>
+</template>

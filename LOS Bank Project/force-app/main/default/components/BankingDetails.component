@@ -1,0 +1,80 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="cartRecordsDetails" description="This is the value for the component."
+    type="Bank_Account_Records__c[]" required="true" assignTo="{!cartRecords}"/>
+    <apex:attribute name="sentFromDetail" description="This is the value for the component."
+    type="String" required="true" assignTo="{!sentFrom}"/>
+
+    <div style="{!pageBlockSectionCSS} overflow-wrap:anywhere">
+        <apex:pageBlockSection showHeader="true" title="Banking Details (AU and Other than AU Bank)">							
+        </apex:pageBlockSection>
+            <table style="{!tableStyleForBank}">
+                <tr style="{!tableRowStyle}">
+                    <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                        <th style="{!tableHeadDataStyleForBank} width:7%">A/C Holder Name</th>
+                    <!--</apex:outputPanel> commented this condition as a part of JIRA 4309-->
+                    <th style="{!tableHeadDataStyleForBank} width:10%">A/C Number</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7%">Bank Name</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7%">Branch Name</th>
+                    <th style="{!tableHeadDataStyleForBank} width:3%">A/C Type</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5%">Start 
+                        <div style="font-size:7px">DDMMYY</div>
+                    </th>
+                    <th style="{!tableHeadDataStyleForBank} width:5%">END
+                        <div style="font-size:7px">DDMMYY</div> 
+                    </th>
+                    <th style="{!tableHeadDataStyleForBank} width:3%">Total Nos of Credit</th>
+                    <th style="{!tableHeadDataStyleForBank} width:3%">Total Nos of Debit</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">AMB</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">AMC</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">Avg. Monthly Balance / Proposed EMI</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">Avg. Monthly Credit / EMI (Existing + Proposed)</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5%">I/W Cheque Bounce</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5%">O/W Cheque Bounce</th>
+                    <th style="{!tableHeadDataStyleForBank} width:3%">Total No. of EMI</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">Total of EMI Amount</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%">Salary Confirm in Bank</th>
+                    <th style="{!tableHeadDataStyleForBank} width:6%"></th>
+                </tr>
+                <apex:repeat value="{!cartRecords}" var="bank">
+                    <tr style="{!tableRowStyle}">
+                        <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                            <td style="{!tableCellDataStyleForBank}">{!bank.Account_Name__c}</td>
+                        <!--</apex:outputPanel> commented this condition as a part of JIRA 4309-->
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Account_Number__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Bank_Name__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Branch_Name__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Account_Type__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputText value="{0,date,dd-MM-yy}"> 
+                                <apex:param value="{!bank.Statement_Start_Date__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputText value="{0,date,dd-MM-yy}"> 
+                                <apex:param value="{!bank.Statement_End_Date__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Total_Credit__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Total_Debit__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.Average_Monthly_Balance__c!=null,ROUND(bank.Average_Monthly_Balance__c,2),'')}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.Average_Monthly_Credit__c!=null,ROUND(bank.Average_Monthly_Credit__c,2),'')}</td>
+                        <!--<td style="{!tableCellDataStyleForBank}">{!bank.EMI_Amount__c}</td>
+                            <td style="{!tableCellDataStyleForBank}"></td>SFAU-4640
+                            -->
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.Average_Monthly_Balance__c!=null,ROUND(bank.Average_Monthly_Balance__c/bank.Applicant__r.Loan__r.EMI__c,2),'')}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.Average_Monthly_Credit__c!=null,ROUND(bank.Average_Monthly_Credit__c/bank.Applicant__r.Loan__r.EMI__c,2),'')}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Inward_Cheque_Bounce__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Outward_Cheque_Bounce__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.No_of_Emi_Paid__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.EMI_Amount__c!=null,ROUND(bank.EMI_Amount__c,2),'')}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!IF(bank.Total_Salary__c!=null,ROUND(bank.Total_Salary__c,2),'')}</td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputPanel rendered="{!cartDocDetail[bank.id]!=''}" >
+                            <apex:outputLink value="/{!cartDocDetail[bank.id]}" target="_blank">Cart excel link</apex:outputLink>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div>        
+</apex:component>

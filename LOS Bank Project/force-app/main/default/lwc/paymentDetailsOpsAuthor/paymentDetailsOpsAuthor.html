@@ -1,0 +1,461 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <!--<div class="slds-box slds-box_x-small slds-theme_shade">
+        <template if:true={showSection}>
+            <lightning-icon icon-name="utility:chevronright" onclick={handleOpenSection}
+                size="x-small"></lightning-icon>
+        </template>
+        <template if:false={showSection}>
+            <lightning-icon icon-name="utility:chevrondown" onclick={handleshowSection} size="x-small"></lightning-icon>
+        </template>
+        &nbsp;<b>Beneficiary Details</b>
+
+    </div>-->
+    <lightning-accordion active-section-name='BeneficiaryDetails' allow-multiple-sections-open>
+        <lightning-accordion-section name="BeneficiaryDetails" label="Beneficiary Details" class="accordClass">
+
+
+    <lightning-card>
+        <!--<lightning-layout>-->
+            <div class="slds-scrollable--x">
+            <!--<lightning-layout-item size="12" small-device-size="12" large-device-size="12">-->
+                <template if:true={isMobile}>
+                    <template for:each={paymentFavouringList} for:item="relatedRecord" for:index="index">
+                        <lightning-layout key={relatedRecord.Id} class="slds-p-bottom_xxx-small">
+                            <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                                <lightning-card icon-name="standard:today">
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Payment Mode</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="Payment_Mode__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="Payment_Mode__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Payment_Mode__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Payment Recipient</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="Payment_Recipient__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="Payment_Recipient__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Payment_Recipient__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Account Type</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="Account_Type__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="Account_Type__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Account_Type__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">IFSC Code</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="IFSC_Code__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="IFSC_Code__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.IFSC_Code__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Beneficiary Name</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="Beneficiary_Name__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="Beneficiary_Name__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Name__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Bank Name</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="Bank_Name_PMT__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="Bank_Name_PMT__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Bank_Name_PMT__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Account Number</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate">
+                                                <lightning-input data-id="LAN__c"
+                                                    class="slds-text-body_small slds-show"
+                                                    name="LAN__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text" disabled
+                                                    value={relatedRecord.Account_Number__c}
+                                                    onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Net Amount</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate" title={relatedRecord.Net_Amount__c} >
+                                                <lightning-input data-id="Net_Amount__c"
+                                                    class="slds-text-body_small slds-show" disabled
+                                                    name="Net_Amount__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="number"
+                                                    value={relatedRecord.Net_Amount__c}></lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">UTR Number</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate" title={relatedRecord.UTR_Number__c} >
+                                                <lightning-input data-id="UTR_Number__c"
+                                                    class="slds-text-body_small slds-show" disabled
+                                                    name="UTR_Number__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text"
+                                                    value={relatedRecord.UTR_Number__c}></lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Payment Favouring Status</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate" title={relatedRecord.Payment_Favouring_Status__c}>
+                                                <lightning-input data-id="Payment_Favouring_Status__c"
+                                                    class="slds-text-body_small slds-show" disabled
+                                                    name="Payment_Favouring_Status__c" variant="label-hidden"
+                                                    access-key={relatedRecord.key} type="text"
+                                                    value={relatedRecord.Payment_Favouring_Status__c}></lightning-input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                        <div class="slds-size_1-of-1">
+                                            <b><label class="slds-form-element__label">Action</label></b>
+                                        </div>
+                                        <div class="slds-size_1-of-1">
+                                            <div class="slds-truncate" title={relatedRecord.Payment_Favouring_Status__c}>
+                                                <template if:true={displayValidateButton}>
+                                                    <lightning-button access-key={relatedRecord.Id} data-id={relatedRecord.Id} class="validatePayment slds-hide" label="Validate" disabled onclick={handleValidatePayment}></lightning-button>
+                                                </template>
+                                                <template if:true={displayReleaseButton}>
+                                                    <lightning-button access-key={relatedRecord.Id} class="releasePayment slds-hide" data-id={relatedRecord.Id} label="Release" onclick={handleReleasePayment} disabled={relatedRecord.Is_Payment_Triggered__c}></lightning-button>
+                                                </template>
+                                                <template if:true={relatedRecord.is_Payment_Favouring_Modified__c}>
+                                                    <lightning-helptext content="Details were Modified at Ops Maker Stage" class="slds-p-around_small"></lightning-helptext>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </lightning-card>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+
+                </template>
+
+                <template if:false={isMobile}>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped" style="table-layout:fixed; width: 155%">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <!--<th class="" scope="col">
+                                    <div class="slds-truncate">                                    
+                                        <lightning-formatted-text value="" class="slds-text-body_small"></lightning-formatted-text>
+                                    </div>
+                                </th>-->
+                                <th class="" scope="col" style="width:5%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Payment Mode"
+                                            data-id="Payment_Mode__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:5%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Payment Recipient"
+                                            data-id="Payment_Recipient__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:6%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Account Type"
+                                            data-id="Account_Type__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:5%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="IFSC Code"
+                                            data-id="IFSC_Code__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:7%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Beneficiary Name"
+                                            data-id="Beneficiary_Name__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:7%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Bank Name"
+                                            data-id="Bank_Name_PMT__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:7%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Account Number"
+                                            data-id="Account_Number__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <!--<th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Loan Amount" data-id="Net_Amount__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Net Deduction" data-id="Net_Amount__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>-->
+                                <th class="" scope="col" style="width:6%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Net Amount" data-id="Net_Amount__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:9%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="UTR Number" data-id="UTR_Number__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:7%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Payment Status" data-id="Tranche_Status__c"
+                                            class="slds-text-body_small slds-show"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col" style="width:7%">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Action"
+                                            class="slds-text-body_small"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={paymentFavouringList} for:item="relatedRecord" for:index="index">
+                                <tr class="slds-hint-parent" key={relatedRecord.Id}>
+                                    <!--<td data-label="Check">
+                                            <div class="slds-truncate">
+                                                <div class="slds-align_absolute-center">
+                                                    <lightning-input onchange={handleChange} disabled={readOnly} name="isChecked" access-key={relatedRecord.key} variant="label-hidden" type="checkbox" value={relatedRecord.isChecked} checked={relatedRecord.isChecked}></lightning-input>
+                                                </div>  
+                                            </div>
+                                        </td>-->
+                                    <td data-label="Payment_Mode__c" title={relatedRecord.Payment_Mode__c} style="width:7%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Payment_Mode__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Payment_Mode__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Payment_Mode__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>  
+                                    <td data-label="Payment_Recipient__c" title={relatedRecord.Payment_Recipient__c} style="width:7%"> 
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Payment_Recipient__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Payment_Recipient__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Payment_Recipient__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>    
+                                    <td data-label="Account_Type__c" title={relatedRecord.Account_Type__c} style="width:7%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Account_Type__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Account_Type__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Account_Type__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>    
+                                    <td data-label="IFSC_Code__c" title={relatedRecord.IFSC_Code__c} style="width:7%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="IFSC_Code__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="IFSC_Code__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.IFSC_Code__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>  
+                                    <td data-label="Beneficiary_Name__c" title={relatedRecord.Beneficiary_Name__c} style="width:12%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Beneficiary_Name__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Beneficiary_Name__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Name__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>   
+                                    <td data-label="Bank_Name_PMT__c" title={relatedRecord.Bank_Name_PMT__c} style="width:12%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Bank_Name_PMT__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Bank_Name_PMT__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Bank_Name_PMT__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>        
+                                    <td data-label="Account_Number__c" title={relatedRecord.Account_Number__c} style="width:9%">
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="LAN__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="LAN__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text" disabled
+                                                value={relatedRecord.Account_Number__c}
+                                                onchange={handleChange}></lightning-input><!--value={relatedRecord.Account_Number__c}-->
+                                        </div>
+                                    </td>
+                                    <!--<td data-label="Net_Amount__c" title={relatedRecord.Net_Amount__c}>
+                                        <div class="slds-truncate">
+                                            <lightning-input data-id="Net_Amount__c"
+                                                class="slds-text-body_small slds-show"
+                                                name="Net_Amount__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="number" disabled
+                                                value={disbursementAmount}
+                                                onchange={handleChange}></lightning-input>
+                                        </div>
+                                    </td>--><!--value={relatedRecord.Tranche__r.Disbursement_Amount__c}-->
+                                    <!--<td data-label="Net_Amount__c">
+                                        <div class="slds-truncate" title={relatedRecord.Net_Amount__c}>
+                                            <lightning-input data-id="Net_Amount__c"
+                                                class="slds-text-body_small slds-show" disabled
+                                                name="Net_Amount__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="number"
+                                                value={totalCharges}
+                                                onchange={handleChange}></lightning-input>
+                                        </div>
+                                    </td>--><!--value={relatedRecord.Tranche__r.Loan_Application__r.Total_Charges__c}-->
+                                    <td data-label="Net_Amount__c" style="width:6%">
+                                        <div class="slds-truncate" title={relatedRecord.Net_Amount__c} >
+                                            <lightning-input data-id="Net_Amount__c"
+                                                class="slds-text-body_small slds-show" disabled
+                                                name="Net_Amount__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="number"
+                                                value={relatedRecord.Net_Amount__c}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="UTR_Number__c" style="width:9%">
+                                        <div class="slds-truncate" title={relatedRecord.UTR_Number__c} >
+                                            <lightning-input data-id="UTR_Number__c"
+                                                class="slds-text-body_small slds-show" disabled
+                                                name="UTR_Number__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text"
+                                                value={relatedRecord.UTR_Number__c}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Payment_Favouring_Status__c" style="width:7%">
+                                        <div class="slds-truncate" title={relatedRecord.Payment_Favouring_Status__c}>
+                                            <lightning-input data-id="Payment_Favouring_Status__c"
+                                                class="slds-text-body_small slds-show" disabled
+                                                name="Payment_Favouring_Status__c" variant="label-hidden"
+                                                access-key={relatedRecord.key} type="text"
+                                                value={relatedRecord.Payment_Favouring_Status__c}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Payment_Favouring_Status__c" style="width:8%">
+                                        <div class="slds-truncate" title={relatedRecord.Payment_Favouring_Status__c}>
+                                            <template if:true={displayValidateButton}>
+                                                <lightning-button access-key={relatedRecord.Id} data-id={relatedRecord.Id} class="validatePayment slds-hide" label="Validate" disabled onclick={handleValidatePayment}></lightning-button>
+                                            </template>
+                                            <template if:true={displayReleaseButton}>
+                                                <lightning-button access-key={relatedRecord.Id} class="releasePayment slds-hide" data-id={relatedRecord.Id} label="Release" onclick={handleReleasePayment} disabled={relatedRecord.Is_Payment_Triggered__c}></lightning-button>
+                                            </template>
+                                            <template if:true={relatedRecord.is_Payment_Favouring_Modified__c}>
+                                                <lightning-helptext content="Details were Modified at Ops Maker Stage" class="slds-p-around_small"></lightning-helptext>
+                                            </template>
+                                        </div>
+                                    </td>
+                                    <!--<td data-label="Tranche_Status__c" style="width:7%">
+                                        
+                                        <template if:false={relatedRecord.is_Payment_Favouring_Modified__c}>
+                                            <lightning-helptext content="This record was created"></lightning-helptext>
+                                        </template>
+                                    </td>-->
+                                </tr>
+                                
+                            </template>
+                        </tbody>
+                    </table>
+                </template>
+                
+                    
+                
+            <!--</lightning-layout-item>-->
+        </div>
+       <!-- </lightning-layout>-->
+    </lightning-card>
+    <template if:true={displayValidatePaymentsSection}>
+        <c-validate-payment-details-at-ops onenablereleasepayment={handleEnablePaymentReleaseEvent} payment-favouring={paymentRecord}></c-validate-payment-details-at-ops>
+    </template>
+</lightning-accordion-section>
+</lightning-accordion>
+    
+</template>

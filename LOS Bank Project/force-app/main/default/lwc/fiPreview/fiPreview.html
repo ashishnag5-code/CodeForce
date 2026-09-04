@@ -1,0 +1,31 @@
+<template><div class=" slds-m-left_x-large slds-grid slds-gutters slds-m-right_xx-large">
+   
+    <template for:each={imagesList} for:item="documentKey">
+        <div class="slds-col slds-size_1-of-4" key={documentKey.contentDocId}>
+
+            <template if:true={documentKey.url}>
+                <div class="slds" style="background-color: white;">
+                    <div class="container">
+                        <div class="slds-grid slds-var-m-top_medium slds-wrap">
+                            <div class="slds-col_padded slds-size_1-of-1">
+                                <template if:false={isFileTypePDF}>
+                                    <div class="slds-grid">
+                                        <img src={documentKey.url} />
+                                        <lightning-icon name={documentKey.contentDocId} size="x-small"
+                                            icon-name="utility:close" alternative-text="Approved"
+                                            title="Approved" onclick={handleClickDelete}></lightning-icon>
+
+                                    </div>
+                                    <!--   <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={documentKey.contentVerId} onclick={handleClickDelete}></lightning-icon>-->
+
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </template>
+        </div>
+    </template>
+</div>
+</template>

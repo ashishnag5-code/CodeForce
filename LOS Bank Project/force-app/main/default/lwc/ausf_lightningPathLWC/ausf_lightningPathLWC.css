@@ -1,0 +1,11 @@
+.currentStageBackgr {
+    background: rgba(63, 32, 85, 1);
+}
+
+.rejected-css {
+    --lwc-colorBackgroundPathLost: rgb(236,99,94);
+  }
+
+.pathWidth {
+    width: -webkit-fill-available;
+}

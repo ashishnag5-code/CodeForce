@@ -1,0 +1,155 @@
+<template>
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <lightning-layout>
+        <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+            <lightning-card class="no-wrap" icon-name="standard:account">
+                <h1 slot="title" class="no-wrap"><a> {objAccountRecord.Account_Number__c}</a></h1>
+                <div class="component slds-hide" data-id="Product_Code__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Loan Product Name - Code</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                             <!--{objAccountRecord.Product_Code__c}-->
+                             {objAccountRecord.Product__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Account_Name__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Customer Name</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Name__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Applicant_Type__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Applicant Type in Loan</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Applicant_Type__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Account_Number__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Loan Number</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Number__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="ROI__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Interest Rate</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.ROI__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Branch_Name__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Branch Name</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Branch_Name__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Loan_Amount__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Loan Amount</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Loan_Amount__c}
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="component slds-hide" data-id="Loan_Tenure__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Loan Tenure(months)</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Loan_Tenure__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="EMI_Amount__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">EMI Amount</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.EMI_Amount__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Loan_Current_DPD__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Loan Current DPD</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Loan_Current_DPD__c}
+                        </div>
+                    </div>
+                </div>
+              
+                <div class="component slds-hide" data-id="POS__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Prinicipal Bal</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.POS__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="IncludeInExposure">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Include In Exposure</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                           <!-- {objAccountRecord.Include_In_Exposure__c}-->
+                            <lightning-combobox name="includeExposure" label="Industry" data-name=""  variant="label-hidden"
+                                value={includeExposure}
+                            options={exposureOptions}  onchange={handleChange}>
+                        </lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+                <div class="component  slds-hide" data-id="SOA">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">SOA</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <lightning-button variant="base" label="View" title="Looks like a link" onclick={handleLoan}
+                                class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="slds-p-bottom--small"></div>
+</template>

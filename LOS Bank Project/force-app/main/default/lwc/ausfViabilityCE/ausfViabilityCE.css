@@ -1,0 +1,33 @@
+:host{
+    --slds-c-accordion-summary-color-background : #6D3078; 
+    --slds-c-accordion-heading-text-color : #FFF2F0;
+}
+
+.buttonClass{
+    --sds-c-button-neutral-color-background: #f37435;
+    --sds-c-button-brand-color-background: #f37435;
+    --sds-c-button-text-color: #FFF2F0;
+}
+.buttonIn {
+    width: 100%;
+    position: relative;
+}
+.button {
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    /*top: 2px;*/
+    top :24px;
+    height: 30px;
+    cursor: pointer;
+    /* color: white; */
+    /* background-color: #1e90ff; */
+    transform: translateX(2px);
+    right: 4px;
+}
+.redColor{
+    color:red;
+}

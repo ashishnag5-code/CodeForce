@@ -1,0 +1,288 @@
+<template>
+
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+    <!-- Existing Address Section-->
+    <template if:true={showMainSection}>
+        <template if:false={addinformation}>
+            <article class="slds-card slds-card_boundary">
+                <div class="slds-card__header slds-grid ">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name=custom:custom31 size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <span>Vehicle ({recordCount})</span>
+                                <!--<a href="#" class="slds-card__header-link slds-truncate" title="Address">
+                                    <span>Addresses ({recordCount})</span>
+                                </a>-->
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">
+                            <template if:true={showingwarningIcon}>
+                                <lightning-helptext icon-name="action:info"
+                                    content="You have to provide RC copy with AU HPN befor disbursement.">
+                                </lightning-helptext> &nbsp;
+                            </template>
+                            <template if:true={showAddressInsertion}>
+                                <lightning-icon icon-name=action:new size="small"
+                                    onclick={handleAdditionalInformationClick}></lightning-icon>
+                            </template>
+                        </div>
+                    </header>
+                </div>
+
+
+                <div class="slds-card__body slds-card__body_inner">
+                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <template if:false={viewMorePartial}>
+                            <template for:each={addressLst} for:item="relatedRecord">
+
+                                <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+                                    key={relatedRecord.Id} onclick={viewMoreHandler} data-id={relatedRecord.Id}
+                                    data-record-name="ViewMoreInformation">
+                                    <article class="slds-box">
+                                        <div class="slds-card__header slds-grid">
+                                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon icon-name=standard:custom31 size="small">
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <h2 class="slds-card__header-title">
+                                                        <a href="#" class="slds-card__header-link slds-truncate"
+                                                            title={relatedRecord.Name}>{relatedRecord.Current_Owner_Name__c}</a>
+                                                    </h2>
+                                                </div>
+                                                <div class="slds-no-flex">
+                                                    <lightning-icon icon-name=action:edit size="x-small"
+                                                        data-id={relatedRecord.Id}
+                                                        data-record-name={relatedRecord.Collateral_ID__c}
+                                                        alternative-text={relatedRecord.Collateral_ID__c}
+                                                        title={relatedRecord.Collateral_Type__c} onclick={handleRowAction}>
+                                                    </lightning-icon>
+                                                </div>
+                                            </header>
+                                        </div>
+                                        <div class="slds-card__body slds-card__body_inner">
+                                            <div class="slds-form-element" key={relatedRecord.Id}>
+                                                <span class="slds-form-element__label">Reg. No</span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Registration_Number__c}
+                                                    </div>
+                                                </div>
+
+                                                <span class="slds-form-element__label">Name of Owner</span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Current_Owner_Name__c}
+                                                    </div>
+                                                </div>
+
+                                                <span class="slds-form-element__label">Collateral Name </span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Manual_Collateral__c}
+                                                    </div>
+                                                </div>
+                                                <span class="slds-form-element__label">Make Model Variant </span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Make__c} {relatedRecord.Model__c} {relatedRecord.Variant__c}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </article>
+                                </li>
+                            </template>
+                        </template>
+                    </ul>
+                    <!--End -->
+                </div>
+            </article>
+        </template>
+    </template>
+
+    <!--<template if:true={viewMorePartial}>
+        <c-address-information-details address-records={addressLst} selected-address={selectedRecords}
+            onviewall={viewLessHandler}></c-address-information-details>
+    </template>-->
+    <!--End -->
+
+    <!-- Add New Address Details-->
+    <template if:true={addinformation}>
+        <lightning-card title="Add Vehicle Information" icon-name="custom:custom31" class="slds-box">
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    
+                    <label class="slds-form-element__label">Reg. No</label>
+                    <lightning-input type="text" variant="label-hidden" label=""
+                        value={collateralObj.Registration_Number__c} name="Registration_Number__c" onchange={handleValueChange}>
+                    </lightning-input>
+
+                    <label class="slds-form-element__label">Name of Property Owner</label>
+                    <lightning-input type="text" variant="label-hidden" label=""
+                        value={currentOwnerNameValue} name="Current_Owner_Name__c" onchange={handleValueChange}>
+                    </lightning-input>
+
+                    <label class="slds-form-element__label">Collateral Name</label>
+                    <lightning-input type="text" variant="label-hidden" label=""
+                        value={collateralObj.Manual_Collateral__c} name="Manual_Collateral__c" onchange={handleValueChange}>
+                    </lightning-input>
+
+                    <label class="slds-form-element__label">Make</label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Manual_Make__c"
+                        value={collateralObj.Manual_Make__c} onchange={handleValueChange}></lightning-input>
+
+                    <label class="slds-form-element__label">Model</label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Manual_Model__c"
+                        value={collateralObj.Manual_Model__c} onchange={handleValueChange}></lightning-input>
+
+                    <label class="slds-form-element__label">Variant</label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Manual_Variant__c"
+                        value={collateralObj.Manual_Variant__c} onchange={handleValueChange}></lightning-input>
+
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small " flexibility="auto">
+                    <label class="slds-form-element__label">Estimated market value</label>
+                        <lightning-input type="tel" variant="label-hidden" label="" name="Estimated_market_value__c"
+                        value={collateralObj.Estimated_market_value__c} onchange={handleValueChange}></lightning-input>
+
+                    <label class="slds-form-element__label">Additional collateral valid till date</label>
+                        <lightning-input type="date" variant="label-hidden" label="" name="Additional_collateral_valid_till_date__c"
+                        value={collateralObj.Additional_collateral_valid_till_date__c} onchange={handleValueChange}></lightning-input>
+
+                    <label class="slds-form-element__label">Collateral ID</label>
+                        <lightning-input type="tel" variant="label-hidden" label="" name="Collateral_ID__c"
+                        value={collateralObj.Collateral_ID__c} disabled onchange={handleValueChange}></lightning-input>
+
+                    <label class="slds-form-element__label">Apportioned Amount</label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Apportioned_Loan_Amount__c"
+                        value={collateralObj.Apportioned_Loan_Amount__c} disabled onchange={handleValueChange}></lightning-input>
+
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+
+                    <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                        onclick={handleCancelForm}></lightning-icon>
+
+                    <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" style={approvalSubmissionStyles}
+                        class="slds-m-left_small" onclick={handleSubmitForm}></lightning-icon>
+                </div>
+            </lightning-layout>
+
+        </lightning-card>
+    </template>
+
+    <!-- Edit Address Section-->
+    <template if:true={editAdress}>
+        <lightning-card title="Edit Vehicle Information" icon-name="standard:address" class="slds-box">
+            <lightning-record-edit-form record-id={editRecordId} object-api-name="Collateral__c" onsuccess={handleSuccess}
+                onsubmit={handleSubmit} mode="readonly">
+                <lightning-messages></lightning-messages>
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Reg. No</label>
+                        <lightning-input type="text" label="Reg. No" value={collateralObj.Registration_Number__c}
+                            variant="label-hidden" name="Registration_Number__c" onchange={handleValueChange}>
+                        </lightning-input>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Name of Property Owner</label>
+                        <lightning-input type="text" label="Address Line 1" value={collateralObj.Current_Owner_Name__c}
+                            variant="label-hidden" name="Current_Owner_Name__c" onchange={handleValueChange}>
+                        </lightning-input>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Collateral Name</label>
+                        <lightning-input type="text" label="Address Line 2" value={collateralObj.Manual_Collateral__c}
+                            variant="label-hidden" name="Manual_Collateral__c" onchange={handleValueChange}>
+                        </lightning-input>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Make</label>
+                        <lightning-input type="text" label="Make" value={collateralObj.Manual_Make__c}
+                            variant="label-hidden" name="Manual_Make__c" onchange={handleValueChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Model</label>
+                        <lightning-input type="text" label="" name="Manual_Model__c" value={collateralObj.Manual_Model__c}
+                            variant="label-hidden" onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Variant</label>
+                        <lightning-input type="text" label="" name="Manual_Variant__c" value={collateralObj.Manual_Variant__c}
+                            variant="label-hidden" onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Estimated market value</label>
+                        <lightning-input type="text" variant="label-hidden" label="" name="Estimated_market_value__c"
+                            value={collateralObj.Estimated_market_value__c} onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small">
+                        <label class="slds-form-element__label">Additional collateral valid till date</label>
+                        <lightning-input type="date" variant="label-hidden" label="" name="Additional_collateral_valid_till_date__c"
+                            value={collateralObj.Additional_collateral_valid_till_date__c} onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small">
+                        <label class="slds-form-element__label">Collateral ID</label>
+                        <lightning-input type="text" variant="label-hidden" label="" name="Collateral_ID__c"
+                            value={collateralObj.Collateral_ID__c} disabled onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small">
+                        <label class="slds-form-element__label">Apportioned Amount</label>
+                        <lightning-input type="number" variant="label-hidden" label="" name="Apportioned_Loan_Amount__c"
+                            value={collateralObj.Apportioned_Loan_Amount__c} disabled onchange={handleValueChange}></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                            onclick={handleRecordUpdateCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" type="submit"
+                            class="slds-m-left_small"></lightning-icon>
+                    </div>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </lightning-card>
+    </template> <br />
+    <!-- End -->
+
+
+</template>

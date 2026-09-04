@@ -1,0 +1,316 @@
+<template>
+    <template if:true={isMobile}>
+        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+            <template if:true={isMaritalStatus}>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Marital_Status__c">
+                    <lightning-combobox name="Marital_Status__c"  label="Marital Status"
+                            data-name="Marital_Status__c" read-only={readAlways} required class="validate"
+                            value={maritalValue} options={maritalOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                </div>
+            </lightning-layout-item>
+             </template>
+            <template if:true={spousNameRequired}>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component" data-id="Marital_Status__c">
+                        <lightning-input type="text" onchange={handleChange} label="Spouse Name"
+                                    value={spouseValue} required class="validate" data-name="Spouse_Name__c"
+                                    name="Spouse_Name__c">
+                                    </lightning-input>
+                    </div>
+                </lightning-layout-item>
+                
+            </template>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Residential_Status__c">
+                    <lightning-combobox name="Residential_Status__c"  label="Residential Status"
+                    data-name="Residential_Status__c" read-only={readAlways} required class="validate"
+                    value={resValue} options={resOptions} 
+                    onchange={handleChange}>
+                </lightning-combobox>
+
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Phsically_challenged__c">
+                    <lightning-combobox name="Phsically_challenged__c"  label="Physically Challenged"
+                            data-name="Phsically_challenged__c" read-only={readAlways} required class="validate"
+                            value={phValue} options={phOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <template if:true={isPhysicalChg}>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Natutre_of_Phsically_challenge__c">
+                    <lightning-combobox name="Natutre_of_Phsically_challenge__c"  label="Nature of Physically challenged"
+                    data-name="Natutre_of_Phsically_challenge__c" read-only={readAlways} required class="validate"
+                    value={npcValue} options={npcOptions} 
+                    onchange={handleChange}>
+                </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Proof_of_Disablity__c">
+                    <lightning-combobox name="Proof_of_Disablity__c"  label="Proof of Disablity"
+                                data-name="Proof_of_Disablity__c" read-only={readAlways} required class="validate"
+                                value={pdValue} options={pdOptions} 
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+        </template>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="High_risk_Profile__c">
+                    <lightning-combobox name="High_risk_Profile__c"  label="High Risk Profile"
+                    data-name="High_risk_Profile__c" read-only={readAlways} required class="validate"
+                    value={hrValue} options={hrOptions} 
+                    onchange={handleChange}>
+                </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="AU_Employee__c">
+                    <lightning-combobox name="AU_Employee__c"  label="AU Employee"
+                            data-name="AU_Employee__c" read-only={readAlways} required class="validate"
+                            value={auValue} options={auOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <template if:true={isAUEmployee}>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="Name_of_Employee_AU__c">
+                    <lightning-input type="text" onchange={handleChange} label="Name of Employee (AU)"
+                                value={empNameValue} required class="validate" data-name="Name_of_Employee_AU__c"
+                                name="Name_of_Employee_AU__c">
+                            </lightning-input>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="AU_Employee_ID__c">
+                    <lightning-input type="text" onchange={handleChange} required class="validate"
+                                label="AU Employee ID" value={empIdValue} pattern="[0-9]+" data-name="AU_Employee_ID__c"
+                                max-length="6"
+                                message-when-pattern-mismatch="Please enter valid 6 digit AU Employee ID"
+                                name="AU_Employee_ID__c">
+                            </lightning-input>
+                    
+                </div>
+            </lightning-layout-item>
+
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <div class="component" data-id="AU_Employment_status__c">
+                    <lightning-combobox name="AU_Employment_status__c"  label="AU Employment Status"
+                                data-name="AU_Employment_status__c" read-only={readAlways} required class="validate"
+                                value={aeValue} options={aeOptions} 
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                    
+                </div>
+            </lightning-layout-item>
+        </template>
+        </lightning-layout>
+
+
+    </template>
+    
+    <template if:false={isMobile}>
+    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+        <template if:true={isMaritalStatus}>
+        <div class="slds-col slds-size_1-of-3 " data-id="Marital_Status__c">
+            <span>
+                <lightning-layout-item flexibility="auto">
+                  <div class="slds-form-element__control slds-p-around--xx-small">
+                        <span class="slds-form-element__static"> 
+                            <lightning-combobox name="Marital_Status__c"  label="Marital Status"
+                            data-name="Marital_Status__c" read-only={readAlways} required class="validate"
+                            value={maritalValue} options={maritalOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                     </span>
+                    </div>
+                </lightning-layout-item>
+            </span>
+        </div>   
+         </template> 
+        <template if:true={spousNameRequired}>
+            <div class="slds-col slds-size_1-of-3 " data-id="Spouse_Name__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-input type="text" onchange={handleChange} label="Spouse Name"
+                                value={spouseValue} required class="validate" data-name="Spouse_Name__c"
+                                name="Spouse_Name__c">
+                                </lightning-input>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>    
+
+        </template>
+        <div class="slds-col slds-size_1-of-3 " data-id="Residential_Status__c">
+            <span>
+                <lightning-layout-item flexibility="auto">
+                  <div class="slds-form-element__control slds-p-around--xx-small">
+                        <span class="slds-form-element__static"> 
+                            <lightning-combobox name="Residential_Status__c"  label="Residential Status"
+                            data-name="Residential_Status__c" read-only={readAlways} required class="validate"
+                            value={resValue} options={resOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                     </span>
+                    </div>
+                </lightning-layout-item>
+            </span>
+        </div>    
+
+        <div class="slds-col slds-size_1-of-3 " data-id="Phsically_challenged__c">
+            <span>
+                <lightning-layout-item flexibility="auto">
+                  <div class="slds-form-element__control slds-p-around--xx-small">
+                        <span class="slds-form-element__static"> 
+                            <lightning-combobox name="Phsically_challenged__c"  label="Physically Challenged"
+                            data-name="Phsically_challenged__c" read-only={readAlways} required class="validate"
+                            value={phValue} options={phOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                     </span>
+                    </div>
+                </lightning-layout-item>
+            </span>
+        </div>    
+        <template if:true={isPhysicalChg}>
+            <div class="slds-col slds-size_1-of-3 " data-id="Natutre_of_Phsically_challenge__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-combobox name="Natutre_of_Phsically_challenge__c"  label="Nature of Physically challenged"
+                                data-name="Natutre_of_Phsically_challenge__c" read-only={readAlways} required class="validate"
+                                value={npcValue} options={npcOptions} 
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>    
+
+            <div class="slds-col slds-size_1-of-3 " data-id="Proof_of_Disablity__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-combobox name="Proof_of_Disablity__c"  label="Proof of Disablity"
+                                data-name="Proof_of_Disablity__c" read-only={readAlways} required class="validate"
+                                value={pdValue} options={pdOptions} 
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>    
+
+        </template>
+        <div class="slds-col slds-size_1-of-3 " data-id="High_risk_Profile__c">
+            <span>
+                <lightning-layout-item flexibility="auto">
+                  <div class="slds-form-element__control slds-p-around--xx-small">
+                        <span class="slds-form-element__static"> 
+                            <lightning-combobox name="High_risk_Profile__c"  label="High Risk Profile"
+                            data-name="High_risk_Profile__c" read-only={readAlways} required class="validate"
+                            value={hrValue} options={hrOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                     </span>
+                    </div>
+                </lightning-layout-item>
+            </span>
+        </div>    
+        <div class="slds-col slds-size_1-of-3 " data-id="AU_Employee__c">
+            <span>
+                <lightning-layout-item flexibility="auto">
+                  <div class="slds-form-element__control slds-p-around--xx-small">
+                        <span class="slds-form-element__static"> 
+                            <lightning-combobox name="AU_Employee__c"  label="AU Employee"
+                            data-name="AU_Employee__c" read-only={readAlways} required class="validate"
+                            value={auValue} options={auOptions} 
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                     </span>
+                    </div>
+                </lightning-layout-item>
+            </span>
+        </div>  
+        
+        <template if:true={isAUEmployee}>
+            <div class="slds-col slds-size_1-of-3 " data-id="Name_of_Employee_AU__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-input type="text" onchange={handleChange} label="Name of Employee (AU)"
+                                value={empNameValue} required class="validate"
+                                name="Name_of_Employee_AU__c">
+                            </lightning-input>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>  
+            <div class="slds-col slds-size_1-of-3 " data-id="AU_Employee_ID__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-input type="text" onchange={handleChange} required class="validate"
+                                label="AU Employee ID" value={empIdValue} pattern="[0-9]+"
+                                max-length="6"
+                                message-when-pattern-mismatch="Please enter valid 6 digit AU Employee ID"
+                                name="AU_Employee_ID__c">
+                            </lightning-input>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>  
+            <div class="slds-col slds-size_1-of-3 " data-id="AU_Employment_status__c">
+                <span>
+                    <lightning-layout-item flexibility="auto">
+                      <div class="slds-form-element__control slds-p-around--xx-small">
+                            <span class="slds-form-element__static"> 
+                                <lightning-combobox name="AU_Employment_status__c"  label="AU Employment Status"
+                                data-name="" read-only={readAlways} required class="validate"
+                                value={aeValue} options={aeOptions} 
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                         </span>
+                        </div>
+                    </lightning-layout-item>
+                </span>
+            </div>  
+        </template>
+    </div>
+</template>
+    
+</template>

@@ -1,0 +1,179 @@
+<!--
+  @description       : 
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 12-18-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="standard:account" size="medium" class="slds-m-right_small"></lightning-icon>
+            Charges Details
+        </h3>
+        
+        <!-- SFAU-5147 || START -->
+        <div slot="actions">
+            <lightning-button variant="base" label="Refresh"  onclick={refreshData} icon-name="action:refresh" icon-position="right"
+            class="slds-m-left_x-small"></lightning-button>
+        </div>
+        <!-- SFAU-5147 || END added refresh button -->
+
+        <div class="slds-p-horizontal_small">
+            <h4 class="slds-m-around_small">
+                <b>Total Charges</b> {totalCharges} 
+            </h4>
+            <c-custom-spinner
+                show-spinner={isloading}
+                record-id={recordId}
+                spinner-image={spinnerImage}
+                >
+            </c-custom-spinner>
+            <!-- <template if:true={isloading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template> -->
+
+            <div class="charge-list-scroll">
+                <template for:each={chargesData} for:item="objCharge">
+                        <lightning-layout data-key={objCharge.scCode} key={objCharge.scCode}>
+                            <template if:true={objCharge.isShownAtUI}>
+                            <lightning-layout-item if:false={objCharge.isStampingChargeNotApplicable} flexibility="auto" class="slds-card_boundary slds-m-top_x-small" >
+                                <lightning-card>
+                                            <h1 slot="title">
+                                                <lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+                                                <a class="slds-var-p-left_x-small no-wrap">{objCharge.scName}</a>
+                                            </h1>
+                                            <div class="slds-m-left_x-small">                      
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small component slds-hide"
+                                                    data-id="Rate_value_As_per_Policy__c">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Rate/value As per Policy</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        <lightning-input data-key={objCharge.scCode} type="text" value={objCharge.rateValueAsPerPolicy} onchange={handleValuChange} variant="label-hidden"
+                                                            disabled name="Rate_value_As_per_Policy__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <template if:true={objCharge.isActualRateFld}>
+                                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small component slds-hide"
+                                                        data-id="Actual_rate__c">
+                                                        <div class="slds-size_1-of-2">                                          
+                                                            <b><label class="slds-form-element__label">
+                                                                <abbr class="slds-required validate" title="required">* </abbr>Actual rate</label></b>
+                                                        </div>
+                                                        <div class="slds-size_1-of-2">
+                                                            
+                                                                <lightning-input data-key={objCharge.scCode} step=".01" type="number" value={objCharge.actualRate} onchange={handleValuChange} variant="label-hidden"
+                                                                                required class="validate" name="Actual_rate__c" disabled={disableFldAndBttn}>
+                                                                </lightning-input>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small component slds-hide" data-id="Charge_Amount__c">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">
+                                                            <abbr class="slds-required validate" title="required">* </abbr>Charge Amount</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        <lightning-input data-key={objCharge.scCode} type="number" step=".01" value={objCharge.chargeAmount} onchange={handleValuChange} variant="label-hidden"
+                                                            required class="validate checkValidity" name="Charge_Amount__c" min="0" disabled={disableFldAndBttn}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small component slds-hide" data-id="Tax_Amount__c">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Tax Amount</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        <lightning-input data-key={objCharge.scCode} type="number" value={objCharge.taxAmount} onchange={handleValuChange} variant="label-hidden"
+                                                        disabled name="Tax_Amount__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small component slds-hide" data-id="Total_Amount__c">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">
+                                                            <abbr class="slds-required validate" title="required">* </abbr>Total Amount</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        <lightning-input data-key={objCharge.scCode} type="number" step=".01" value={objCharge.totalAmount} onchange={handleValuChange} variant="label-hidden"
+                                                        required name="Total_Amount__c" disabled={disableFldAndBttn}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </div>
+                                                <!-- Stamping duty charge for MP -->
+                                                <div lwc:if={objCharge.showToggleAgri}  class="slds-grid slds-wrap slds-var-p-around_xx-small component" >
+                                                    <div class="slds-size_1-of-2">
+                                                            <b><label class="slds-form-element__label">
+                                                                End use of product AGRI</label></b>
+                                                        </div>
+                                                        <div class="slds-size_1-of-2">
+                                                            <lightning-input lwc:if={objCharge.agriEndUseOfProduct} data-key={objCharge.scCode} type="toggle" checked value={objCharge.agriEndUseOfProduct} onchange={handleValuChange} variant="label-hidden"
+                                                            name="Agri_and_End_use_of_product_AGRI__c" message-toggle-active="" message-toggle-inactive="" disabled={disableFldAndBttn}>
+                                                            </lightning-input>
+
+                                                            <lightning-input lwc:else data-key={objCharge.scCode} type="toggle"  value={objCharge.agriEndUseOfProduct} onchange={handleValuChange} variant="label-hidden"
+                                                            name="Agri_and_End_use_of_product_AGRI__c" message-toggle-active="" message-toggle-inactive="" disabled={disableFldAndBttn}>
+                                                            </lightning-input>
+                                                        </div>
+                                                </div>
+                                                <!-- Stamping duty charge for MP -->
+
+                                                <!-- Commercial Udyam Certificate handling -->
+                                                <div lwc:if={objCharge.showToggleUdyam}  class="slds-grid slds-wrap slds-var-p-around_xx-small component" >
+                                                    <div class="slds-size_1-of-2">
+                                                            <b><label class="slds-form-element__label">
+                                                                Udyam certificate available</label></b>
+                                                        </div>
+                                                        <div class="slds-size_1-of-2">
+                                                            <lightning-input lwc:if={objCharge.isUdyamCertificateAvailable} data-key={objCharge.scCode} type="toggle" checked value={objCharge.isUdyamCertificateAvailable} onchange={handleValuChange} variant="label-hidden"
+                                                            name="Udyam_Certificate_Available__c" message-toggle-active="" message-toggle-inactive="" disabled={disableFldAndBttn}>
+                                                            </lightning-input>
+
+                                                            <lightning-input lwc:else data-key={objCharge.scCode} type="toggle"  value={objCharge.isUdyamCertificateAvailable} onchange={handleValuChange} variant="label-hidden"
+                                                            name="Udyam_Certificate_Available__c" message-toggle-active="" message-toggle-inactive="" disabled={disableFldAndBttn}>
+                                                            </lightning-input>
+                                                        </div>
+                                                </div>
+                                                <!-- Commercial Udyam Certificate handling -->
+                                            </div>                              
+                                </lightning-card>
+
+                                
+                                
+                            </lightning-layout-item>
+                        </template>
+                        </lightning-layout>
+                </template>
+
+            <div class="slds-align_absolute-center slds-m-top_x-small">
+            <!--  <lightning-button variant="brand" label="Edit" title="Edit" class="slds-m-right_xx-small button" onclick={handleEdit} disabled={disableEditBttn}>
+                </lightning-button>
+                <lightning-button variant="brand" label="Save" title="Save" class="button" onclick={handleSave} disabled={disableFldAndBttn}></lightning-button> -->
+
+        <!--      <lightning-button-icon icon-name="action:edit" alternative-text="Edit" size="large" variant="bare"
+                    onclick={handleEdit} disabled={disableEditBttn}></lightning-button-icon>
+                <lightning-button-icon icon-name="action:approval" alternative-text="Save" size="large" title="Save" variant="bare"
+                    class="slds-m-left_xx-small button" onclick={handleSave} disabled={disableFldAndBttn}>
+                </lightning-button-icon>  -->
+                <template if:true={displayButtons}><!--4733-->
+                    <div disabled={disableEditBttn}>
+                        <lightning-icon icon-name="action:edit" alternative-text="Edit" size="x-small"
+                        onclick={handleEdit} disabled={disableEditBttn}></lightning-icon>
+                    </div>
+                    <div disabled={disableFldAndBttn}>
+                        <lightning-icon icon-name="action:approval" alternative-text="Save" size="x-small" title="Save" variant="bare"
+                        class="slds-m-left_xx-small button" onclick={handleSave} disabled={disableFldAndBttn}>
+                    </lightning-icon> 
+                    </div>
+                </template>
+                
+            </div>
+            </div>
+        
+        </div>
+
+    </lightning-card>
+</template>

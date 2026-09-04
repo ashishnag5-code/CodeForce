@@ -1,0 +1,82 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <h4 style="text-align: center;border:1px solid gray; padding:10px;">
+                IN CASE OF PARTNERSHIP FIRM
+            </h4>
+            <p style="text-align: right;">
+                Date: {!todaysDate}
+            </p><br/>
+            <p>To,<br/>
+            AU Small Finance Bank Limited<br/>
+            19-A, Dhuleshwar Garden,<br/>
+            Ajmer Road, Jaipur- 302001</p>
+            <br/>
+            <p style="text-align: center;font-weight:bold;">Subject: Letter of Authority for loan facility.</p>
+            
+            <p>Dear Sir,</p>
+            <p style="text-align: justify;">This is to inform you that, we, the below mentioned partners of {!applicant.Entity_Name__c}
+                (name of the firm), located at {!customerCurrentAddress.Address_Line_1__c},
+                <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_2__c))}">
+                    {!customerCurrentAddress.Address_Line_2__c}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_3__c))}">
+                    {!customerCurrentAddress.Address_Line_3__c}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.District__c))}">
+                    {!customerCurrentAddress.District__c}
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.City__c))}">
+                    {!customerCurrentAddress.City__c}
+                </apex:outputPanel>
+                {!customerCurrentAddress.State__c}, {!customerCurrentAddress.Pincode__c} hereby agree to borrow on behalf of and in the name of the firm an
+                amount of Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/> (Rupees
+                {!totalLoanAmountInWords} only) as loan/credit facility from AU Small
+                Finance Bank Limited.</p>
+            <p style="text-align: justify;">We hereby authorize Mr. _______________________________________________(Partner) and in his
+                absence Mr. _______________________________________________ (Partner) to execute all documents
+                including the loan/credit facility agreement as may be required in connection with the loan/credit facility. This
+                delegation of authority shall be valid and effective till otherwise communicated in writing.</p>
+            <table width="100%">
+                <tr>
+                    <td style="width: 50%">Name of the Partner</td>
+                    <td style="width: 50%">Signature</td>
+                </tr>
+                <apex:variable value="{!1}" var="rowNum"/>
+                <apex:repeat value="{!twoBOsList}" var="eachBO">
+                    <tr>
+                        <td>{!rowNum}.&nbsp; {!eachBO.Title__c} {!eachBO.First_Name__c} {!eachBO.Middle_Name__c} {!eachBO.Last_Name__c}</td>
+                        <td>____________________</td>
+                    </tr>
+                    <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                </apex:repeat>
+            </table><br/>
+            
+            <p>Thanking you,<br/>
+            Yours faithfully,<br/>
+            For {!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</p>
+            <apex:outputPanel rendered="{!allBOsList.size > 0}">
+                <table width="100%">
+                    <tr>
+                        <td style="width: 50%">Name of the Partner</td>
+                        <td style="width: 50%">Signature within rubber stamp</td>
+                    </tr>
+                    <apex:variable value="{!1}" var="rowNum"/>
+                    <apex:repeat value="{!allBOsList}" var="eachBO">
+                        <tr>
+                            <td>{!rowNum}.&nbsp; {!eachBO.Title__c} {!eachBO.First_Name__c} {!eachBO.Middle_Name__c} {!eachBO.Last_Name__c}</td>
+                            <td>____________________</td>
+                        </tr>
+                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                    </apex:repeat>
+                </table>
+            </apex:outputPanel>
+        </body>
+    </html>
+</apex:page>

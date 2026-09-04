@@ -1,0 +1,36 @@
+<apex:page controller="DedupeDetailsVFController" showHeader="false" sidebar="true">
+
+
+<apex:includeLightning />
+
+<script>
+    $Lightning.use("c:connectVFAndLWC", function() {
+        $Lightning.createComponent("c:cbsDedupePopOver",{open:true, recordId: '{!$CurrentPage.parameters.id}', factor:'{!$CurrentPage.parameters.factor}', type: '{!$CurrentPage.parameters.value}'},"lightningvf",function(cmp, status) {
+            console.log("component was created "+status);
+            if(status === 'SUCCESS'){
+                onComponentLoadSuccess();
+            }
+        });
+
+    });
+</script>
+
+<apex:form id="formTag">
+    <apex:actionFunction name="onComponentLoadSuccess" action="{!handleComponentLoadSuccess}" reRender="formTag,loadSection, loadSection1"></apex:actionFunction>
+</apex:form>
+
+<div style="padding:30px; height: 100%" id="lightningvf"></div>
+
+
+<apex:outputPanel id="loadSection">
+    <apex:outputText rendered="{!cmpParam}" >
+        <div style="text-align:center; font-size:large; font-weight:bold; padding-top:20%">
+            Please wait while the content loads.............
+        </div>
+    </apex:outputText>
+</apex:outputPanel>
+
+
+
+    
+</apex:page>

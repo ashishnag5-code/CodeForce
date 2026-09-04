@@ -1,0 +1,87 @@
+<apex:page renderAs="pdf" controller="CancelledPDFController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+  <html>
+    <head>
+      <style type="text/CSS">
+        .textCSS {
+          font-family: 'Times New Roman'; font-size : 15px;
+          color: rgb(51, 48, 48);
+        }
+        .marginBottomCSS {
+          margin-bottom: 3.5%;
+        }
+        body { font-family: 'Times New Roman'; font-size : 15px; color :333;}
+      </style>
+    </head>
+    <body>
+      <div class = "textCSS marginBottomCSS">To,</div>
+      <div class = "textCSS marginBottomCSS" style = "text-decoration: underline;">AU Bank Small Finance<br/></div>
+      <div class = "textCSS marginBottomCSS" style = "text-decoration: underline;">Test 123 AU Bank Small Finance AU Bank Small Finance</div>
+      <div class = "textCSS marginBottomCSS">Kind Attention : ...........................................</div>
+      <div class = "textCSS marginBottomCSS">
+        <span><b>Sub: </b></span>
+        <span >Cancellation of Delivery Order No. 12345 dt. 15/06/2023 (DO) issued by from AU Small Finance Bank Limited for loan availed by
+          ................... (Borrower)
+        </span>
+      </div>
+
+      <div class = "textCSS marginBottomCSS">
+        Dear Sir/Ma'am
+      </div>
+      <!--div class = "textCSS" style ="margin-bottom: 2%;">
+        This is in reference to the Loan availed from the Bank by the Borrower for the purchase of the Asset.
+      </div>
+
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        In this regard, please take a note that the captioned Delivery Order stands cancelled w.e.f the date of this letter
+      </div>
+
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        Kindly note that any delivery done after the date of this letter shall be at your own cost and risk and the bank shall not be liable
+        to make good any payments for such a delivery or will be liable for it in any man ner. In case the Asset has already been delievered 
+        against the DO you are requested to confirm the same immediately to the undersigned.
+      </div>
+
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        In case of any queries/ concern, we request you to kindly contact the undersigned.
+      </div-->
+      <div>
+        <apex:repeat value="{!objGenericMaster}" var="staticRecord" id="repeatedVal">
+            <apex:outputText escape="false" value="{!staticRecord.Letter_Content__c}" ></apex:outputText>
+
+          </apex:repeat>
+      </div>
+
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        This is for your information and necessary action.
+      </div>
+
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        Thanks and Regards
+      </div>
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        For AU Small Finance Bank Limited 
+      </div>
+      <div class = "textCSS" style ="margin-bottom: 2%;">
+        Authorized Signatory 
+      </div>
+      <div class = "textCSS" style ="margin-bottom: 1%;">
+        Name : 
+      </div>
+      <div class = "textCSS" style ="margin-bottom: 1%;">
+        Designation : 
+      </div>
+      <div class = "textCSS" style ="margin-bottom: 4%;">
+        Date :
+      </div>
+
+      <div class = "textCSS marginBottomCSS">
+        CC :
+        <ul style="list-style-type:georgian;">
+          <li style="margin-bottom: 1.5%">Borrower</li>
+          <li style="margin-bottom: 1.5%">Co-Borrower</li>
+          <li style="margin-bottom: 1.5%">Guarantor</li>
+        </ul>
+      </div>
+    </body>
+  </html>
+</apex:page>

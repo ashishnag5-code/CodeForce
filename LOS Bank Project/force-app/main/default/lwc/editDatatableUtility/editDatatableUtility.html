@@ -1,0 +1,161 @@
+<template>
+    <template if:true={showAddRow}>
+        <div style="float: right; margin-right: 9px;margin-bottom: 3px;">
+            <lightning-button-group>
+                <lightning-button onclick={addRow} icon-name="utility:relate" title="Add Row"></lightning-button>
+                <!--lightning-button onclick={deleteRow} icon-name="utility:delete"></!--lightning-button>
+                <lightning-button onclick={handleEdit} icon-name="utility:edit"></lightning-button>-->
+            </lightning-button-group>
+        </div>
+    </template>        
+     <div class="slds-p-around_x-small">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-max-medium-table_stacked">
+            <thead>
+                <tr class="">
+                    <template for:each={columns} for:item="column">
+                        <th key={column.fieldName} class="slds-cell-wrap" scope="col">
+                            <div title={column.label}>{column.label}</div>
+                        </th>
+                    </template>
+                    <template if:true={allowDeleteRows}>
+                        <th class="slds-cell-wrap" scope="col">Delete</th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={dataForDisplay} for:item="eachRow" for:index="i">
+                    <tr key={eachRow}>
+                        <template for:each={eachRow} for:item="eachCell" for:index="j">
+                            <td data-label={eachCell.label} key={eachCell} class="slds-cell-wrap">
+                               <template if:false={isEdited}>
+                                    <template if:true={eachCell.isText}>
+                                        <lightning-formatted-text value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-text>
+                                    </template>
+                                    <template if:true={eachCell.isNumber}>
+                                        <lightning-formatted-number value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-number>
+                                    </template>
+                                    <template if:true={eachCell.isEmail}>
+                                        <lightning-formatted-email value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-email>
+                                    </template>
+                                    <template if:true={eachCell.isUrl}>
+                                        <lightning-formatted-url value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-url>
+                                    </template>
+                                    <template if:true={eachCell.isDate}>
+                                        <lightning-formatted-date-time year="numeric" month="2-digit" day="2-digit"
+                                            value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-date-time>
+                                    </template>
+                                    <template if:true={eachCell.isCurrency}>
+                                        <lightning-formatted-number value={eachCell.dataVal} format-style="currency"
+                                            currency-code="INR" label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-number>
+                                    </template>
+                                    <template if:true={eachCell.isCheckbox}>
+                                        <lightning-input type={eachCell.datatype} label={eachCell.dataVal} value={eachCell.dataVal} checked={eachCell.dataVal}
+                                            variant="label-hidden" disabled></lightning-input>
+                                    </template>
+                                    <template if:true={eachCell.isPicklist}>
+                                        <lightning-formatted-text value={eachCell.dataVal}
+                                            label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-text>
+                                    </template>
+                                </template>
+                                <template if:true={isEdited}>
+                                    <template if:true={eachCell.isDisabled}>
+                                        <template if:true={eachCell.isText}>
+                                            <lightning-formatted-text value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-text>
+                                        </template>
+                                        <template if:true={eachCell.isNumber}>
+                                            <lightning-formatted-number value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-number>
+                                        </template>
+                                        <template if:true={eachCell.isEmail}>
+                                            <lightning-formatted-email value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-email>
+                                        </template>
+                                        <template if:true={eachCell.isUrl}>
+                                            <lightning-formatted-url value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-url>
+                                        </template>
+                                        <template if:true={eachCell.isDate}>
+                                            <lightning-formatted-date-time year="numeric" month="2-digit" day="2-digit"
+                                                value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-date-time>
+                                        </template>
+                                        <template if:true={eachCell.isCurrency}>
+                                            <lightning-formatted-number value={eachCell.dataVal} format-style="currency"
+                                                currency-code="INR" label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-number>
+                                        </template>
+                                        <template if:true={eachCell.isCheckbox}>
+                                            <lightning-input type={eachCell.datatype} label={eachCell.dataVal} value={eachCell.dataVal} checked={eachCell.dataVal}
+                                                variant="label-hidden" disabled></lightning-input>
+                                        </template>
+                                        <template if:true={eachCell.isPicklist}>
+                                            <lightning-formatted-text value={eachCell.dataVal}
+                                                label={eachCell.dataVal} disabled={eachCell.isDisabled}></lightning-formatted-text>
+                                        </template>
+                                    </template>
+                                    <template if:false={eachCell.isDisabled}>
+                                        <template if:false={eachCell.isCurrency}>
+                                            <template if:true={eachCell.isPicklist}>
+                                                <div class="slds-form-element__control slds-grow" key={eachCell.dataVal}>
+                                                    <div class="slds-select_container slds-show_inline-block" style="min-width:100%;">
+                                                        <select name={j} class="slds-select" data-id={i} data-name="dropdownId" data-type={eachCell.datatype} onchange={handleChange} disabled={eachCell.isDisabled}>
+                                                            <template for:each={eachCell.options} for:item="v">
+                                                                <option value={v.value} key={v.value} selected={v.selected}>{v.value}</option>
+                                                            </template>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template if:false={eachCell.isPicklist}>
+                                                <template if:true={eachCell.isCheckbox}>
+                                                    <lightning-input type={eachCell.datatype} key={eachCell.dataVal} data-id={i} data-type={eachCell.datatype}
+                                                        name={j} label={eachCell.dataVal} checked={eachCell.dataVal}
+                                                        variant="label-hidden" onchange={handleChange} disabled={eachCell.isDisabled}></lightning-input>
+                                                </template>
+                                                <template if:false={eachCell.isCheckbox}>
+                                                    <template if:true={eachCell.isNumber}>
+                                                        <lightning-input type={eachCell.datatype} key={eachCell.dataVal} data-id={i} data-type={eachCell.datatype}
+                                                        name={j} label={eachCell.dataVal} value={eachCell.dataVal} step="0.01"
+                                                        variant="label-hidden" onchange={handleChange} disabled={eachCell.isDisabled}></lightning-input>
+                                                    </template>
+                                                    <template if:false={eachCell.isNumber}>
+                                                        <template if:true={eachCell.isInteger}>
+                                                            <lightning-input type="number" key={eachCell.dataVal} data-id={i} data-type={eachCell.datatype}
+                                                            name={j} label={eachCell.dataVal} value={eachCell.dataVal} step="1"
+                                                            variant="label-hidden" onchange={handleChange} disabled={eachCell.isDisabled}></lightning-input>
+                                                        </template>
+                                                        <template if:false={eachCell.isInteger}>
+                                                            <lightning-input type={eachCell.datatype} key={eachCell.dataVal} data-id={i} data-type={eachCell.datatype}
+                                                            name={j} label={eachCell.dataVal} value={eachCell.dataVal}
+                                                            variant="label-hidden" onchange={handleChange} disabled={eachCell.isDisabled}></lightning-input>
+                                                        </template>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </template>
+                                        <template if:true={eachCell.isCurrency}>
+                                            <lightning-input type="number" formatter="currency" key={eachCell.dataVal} data-type={eachCell.datatype}
+                                                data-id={i} name={j} step="1" value={eachCell.dataVal}
+                                                label={eachCell.dataVal} variant="label-hidden" onchange={handleChange} disabled={eachCell.isDisabled}>
+                                            </lightning-input>
+                                        </template>
+                                    </template>
+                                </template>
+                            </td>
+                        </template>
+                        <template if:true={allowDeleteRows}>
+                            <td data-label="Delete">
+                                <lightning-button onclick={deleteRow} icon-name="utility:delete" label="Delete" data-id={i} variant="destructive"></lightning-button>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</template>

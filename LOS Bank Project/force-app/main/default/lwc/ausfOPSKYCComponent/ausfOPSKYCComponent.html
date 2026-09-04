@@ -1,0 +1,237 @@
+<template>
+    <div class="slds-m-top_x-small">
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <lightning-input label="Application Id" name="ApplicationId" type="text" value={applicationId} disabled></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <lightning-input label="Application Date" name="ApplicationDate" type="date" value={applicationDate} disabled></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <lightning-input label="Entity" name="Entity" type="text" value={entityValue} disabled></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <label class="slds-form-element__label">Applicant</label>
+                <lightning-combobox label="Applicant" placeholder="Select Applicant" value={applicant}
+                        name="Applicant" class="validate" variant="label-hidden" options={applicantOptions}
+                        onchange={handleChange} disabled={isOwnerQueue}>
+                </lightning-combobox>
+            </lightning-layout-item>
+            <template if:true={isInd}>
+                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_5-of-12"
+                    medium-device-size="12" large-device-size="5">
+                    <!--<lightning-input label="Photographs - Live" name="livePhotograph" type="url" value={liveImage}></lightning-input>-->
+                    <img class="imagediv slds-align_absolute-center" src={customerImg} style="height:180px;">
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_5-of-12"
+                    medium-device-size="12" large-device-size="5">
+                    <!--<lightning-input label="Photographs - Aadhar" name="aadharPhotograph" type="url" value={aadharImage}></lightning-input>-->
+                    <img class="imagediv slds-align_absolute-center" src={aadhaarImg} style="height:180px;">
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_2-of-12"
+                    medium-device-size="12" large-device-size="2">
+                    <!--<lightning-input label="Match %" name="match" type="text" value={match} disabled></lightning-input>-->
+                    <div align="center" style="padding-top: 90px;padding-right: 100px;">Match % : {match}</div>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+        <br>
+        <lightning-accordion active-section-name={activeSections} allow-multiple-sections-open>
+            <lightning-accordion-section name="KYC" label="Mandatory Document" class="accordClass">
+        <!--<div align="center" style="background-color:beige; font-size:medium;">Mandatory Document</div>-->
+        <br>
+        <template if:true={isInd}>
+            <lightning-datatable
+                    key-field="Id"
+                    data={kycList}
+                    columns={columns}
+                    draft-values={draftValues}
+                    onsave={saveRecord}
+                    class="slds-max-medium-table_stacked"
+                    onrowaction={callRowAction}
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+        <template if:false={isInd}>
+            <lightning-datatable
+                    key-field="Id"
+                    data={kycListNonInd}
+                    columns={columnsPOINonInd}
+                    draft-values={draftValues}
+                    onsave={saveRecord}
+                    class="slds-max-medium-table_stacked"
+                    onrowaction={callRowAction}
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+            </lightning-accordion-section>
+        <br>
+        <lightning-accordion-section name="POI" label="Proof of Identity (POI)" class="accordClass">
+        <!--<div align="center" style="background-color:beige; font-size:medium;">Proof of Identity (POI)</div>-->
+        <br>
+        <template if:true={isInd}>
+            <lightning-datatable
+                    key-field="Id"
+                    data={poiList}
+                    columns={columnsPOI}
+                    draft-values={draftValuesPOI}
+                    onsave={saveRecord}
+                    class="slds-max-medium-table_stacked"
+                    onrowaction={callRowActionPOI}
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+        <template if:false={isInd}>
+            <lightning-datatable
+                key-field="Id"
+                data={nonIndPoIList}
+                columns={columnsPOINonInd}
+                draft-values={draftValuesPOINonInd}
+                onsave={saveRecord}
+                class="slds-max-medium-table_stacked"
+                onrowaction={callRowActionPOI}
+                hide-checkbox-column="true">
+        </lightning-datatable>
+        </template>
+    </lightning-accordion-section>
+        <br>
+        <lightning-accordion-section name="POA" label="Proof of Address (POA)" class="accordClass">
+        <!--<div align="center" style="background-color:beige; font-size:medium;">Proof of Address (POA)</div>-->
+        <br>
+        <template if:true={isInd}>
+            <lightning-datatable
+                    key-field="Id"
+                    data={poaList}
+                    columns={columnsPOA}
+                    draft-values={draftValuesPOA}
+                    onsave={saveAddressRecord}
+                    class="slds-max-medium-table_stacked"
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+        <template if:false={isInd}>
+            <lightning-datatable
+                    key-field="Id"
+                    data={nonIndPOAList}
+                    columns={columnsPOA}
+                    draft-values={draftValuesPOANonInd}
+                    onsave={saveAddressRecord}
+                    class="slds-max-medium-table_stacked"
+                    hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+    </lightning-accordion-section>
+        <br>
+        <lightning-accordion-section name="Other" label="Other Validation Summary" class="accordClass">
+        <!--<div align="center" style="background-color:beige; font-size:medium;">Other Validation Summary</div>-->
+        <br>
+        <lightning-datatable
+                key-field="Id"
+                data={otherList}
+                columns={columnsOther}
+                class="slds-max-medium-table_stacked"
+                hide-checkbox-column="true">
+        </lightning-datatable>
+    </lightning-accordion-section>
+        </lightning-accordion>
+        <template if:true={isApplicantSelected}>
+            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                <template if:false={isRo}>
+                    <template if:false={isVerified}>
+                        <div align="center"><lightning-button class="buttonClass" variant="Brand" label="Save" onclick={handleSaveApplicant} disabled={isComplete}></lightning-button></div>
+                    </template>
+                </template>
+            </div>
+            
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <!--<template if:true={isAllVerified}>-->
+                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input label="Remarks" disabled={isRo} data-id="remark" name="OPS_Remark__c" type="text" value={remarksLoan} read-only={isComplete}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                        medium-device-size="12" large-device-size="6">
+                        <!--<lightning-input label="Action" data-id="action" name="OPS_Action__c" type="text" value={opsActionLoan}></lightning-input>-->
+                        <label class="slds-form-element__label">Action</label>
+                        <lightning-combobox disabled={isRo} label="Action" data-id="action" placeholder="Select Action" value={opsActionLoan}
+                                name="OPS_Action__c" class="validate" variant="label-hidden" options={opsActionOptions} read-only={isComplete}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <template if:true={isRo}>
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                            medium-device-size="12" large-device-size="6">
+                            <lightning-input label="Resubmission Remarks" data-id="RoRemarks" name="RO_KYC_Remark__c" type="text" value={roRemarks}></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <template if:true={roRemarks}>
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                            medium-device-size="12" large-device-size="6">
+                            <lightning-input label="RO Resubmission Remarks" type="text" value={roRemarks} disabled></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                <!--</template>-->
+                <!--<template if:true={isApplicantSelected}>
+                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input label="Verified" disabled={isRo} data-id="Ops_KYC_Verified__c" name="Ops_KYC_Verified__c" type="checkbox" value={isVerified} checked={isVerified}></lightning-input>
+                    </lightning-layout-item>
+                </template>-->
+            </lightning-layout>
+            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                <!--<template if:false={isRo}>
+                    <template if:false={isAllVerified}>
+                        <div align="center"><lightning-button class="buttonClass" variant="Brand" label="Save" onclick={handleSaveApplicant} disabled={isComplete}></lightning-button></div>
+                    </template>
+                </template>-->
+                <template if:false={isRo}>
+                    <!--<template if:true={isAllVerified}>-->
+                        <div align="center"><lightning-button class="buttonClass" variant="Brand" label="Submit" onclick={handleSave} disabled={isComplete}></lightning-button></div>
+                    <!--</template>-->
+                </template>
+                <template if:true={isRo}>
+                    <div align="center"><lightning-button class="buttonClass" variant="Brand" label="Re-Submit" onclick={handleReSubmit}></lightning-button></div>
+                </template>
+            </div>
+        </template>
+    </div>
+
+    <!--5599 Response Changes-->
+
+    <template if:true={renderResponseComponent}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+             <!-- modal header start -->
+               <header class="slds-modal__header">
+                  <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                     <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                     <span class="slds-assistive-text">Close</span>
+                  </button>
+                  <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Response</h2>
+               </header>
+           
+               <!-- modal body start -->
+               <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c-generic-data-display onback={cancel} display-type={genericDisplayType} identifier-documents={identifierDocuments} 
+                        onverified={verifyPANDetails} pan-response={responseComponentWrapper} display-verification-buttons={DEFAULT_TRUE} is-call-from-ops-k-y-c-screen={DEFAULT_TRUE}>
+                    </c-generic-data-display>
+               </div>
+     
+               <!-- modal footer start-->
+               <footer class="slds-modal__footer">
+                  <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+               </footer>
+            
+            </div>
+         </section>
+         <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+
+</template>

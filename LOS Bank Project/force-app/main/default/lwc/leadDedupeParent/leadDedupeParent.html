@@ -1,0 +1,53 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+    <div class="slds-theme_default">
+        <lightning-card title="Dedupe Results" icon-name="standard:lead">
+            <template if:true={rerunDedupe}>
+                <div slot="actions">
+                    <lightning-button label="Rerun" title="Rerun" onclick={handleDedupeRun} ></lightning-button>
+                </div>
+            </template>
+        </lightning-card>
+        <template if:false={boolFromCamReport}>
+            <lightning-tabset>
+                <lightning-tab label="Existing customer dedupe">   <!--Lead to Customer updated for SFAU-2907 Bug-->
+                    <template if:true={hasApplicants}>
+                        <c-lead-Dedupe-C-B-S oncopyrecord={setapplicant} applicant-input={applicantIdInput} 
+                            applicants={applicants} bool-is-from-wizard={boolIsFromWizard} applicant-id={applicantIdInput.Id}
+                                count-full-ind={countFullInd} count-full-non-ind={countFullNonInd} loan-app-id={recordId}
+                                bool-is-n-p-a={boolIsNPA} spinner-image={spinnerImage} onspinnerevent={onspinnerevent}>
+                        </c-lead-Dedupe-C-B-S>
+                    </template>
+                </lightning-tab>
+                <lightning-tab label="Existing Leads dedupe"> <!--Lead to Lead-->
+                    <template if:true={totalApplicantsCRM}>
+                        <c-lead-Dedupe-C-R-M oncopyrecord={setapplicant} onblocknext={abortApplication} 
+                            applicant-input={applicantIdInput} bool-is-from-wizard={boolIsFromWizard}
+                            bool-is-n-p-a={boolIsNPA} spinner-image={spinnerImage} loan-app-id={loanApplicationId}
+                            total-applicants={totalApplicantsCRM} onspinnerevent={onspinnerevent}>
+                        </c-lead-Dedupe-C-R-M>
+                    </template>
+                </lightning-tab>
+            </lightning-tabset>
+        </template>
+        <template if:true={boolFromCamReport}>
+            <template if:false={boolCamReportTypeCBS}>
+                <template if:true={totalApplicantsCRM}>
+                    <c-lead-Dedupe-C-R-M oncopyrecord={setapplicant} onblocknext={abortApplication} 
+                        applicant-input={applicantIdInput} bool-is-from-wizard={boolIsFromWizard}
+                        total-applicants={totalApplicantsCRM} bool-is-n-p-a={boolIsNPA}>
+                    </c-lead-Dedupe-C-R-M>
+                </template>
+            </template>
+            <template if:true={boolCamReportTypeCBS}>
+                <template if:true={hasApplicants}>    
+                    <c-lead-dedupe-C-B-S oncopyrecord={setapplicant} applicant-input={applicantIdInput} applicant-id={applicantIdInput.Id}
+                        applicants={applicants} bool-is-from-wizard={boolIsFromWizard} loan-app-id={loanApplicationId}
+                            count-full-ind={countFullInd} count-full-non-ind={countFullNonInd}
+                            bool-is-n-p-a={boolIsNPA}>
+                    </c-lead-Dedupe-C-B-S>
+                </template>
+            </template>
+        </template>
+    </div>
+</template>

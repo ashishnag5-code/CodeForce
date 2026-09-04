@@ -1,0 +1,391 @@
+<apex:component controller="CAMReportChildComponentsController">
+
+    <apex:attribute name="applicantList" description="This is the value for the component." type="Applicant__c[]"
+        required="true" assignTo="{!applicants}" />
+    <apex:attribute name="applicantIdList" description="This is the value for the component." type="Id[]"
+        required="true" assignTo="{!applicantIds}" />
+    <apex:attribute name="loanApp" description="This is the value for the component." type="Loan_Application__c"
+        required="true" assignTo="{!loan}" />
+    <apex:attribute name="fieldInvestigationRecordDetails" description="This is the value for the component."
+        type="FISummaryViewWrapper[]" required="true" assignTo="{!fieldInvestigationRecords}" />
+    <apex:attribute name="productDetailsValue" description="This is the value for the component." type="String"
+        required="true" assignTo="{!productDetails}" />
+    <apex:attribute name="subPageValue" description="This is the value for the component." type="String"
+        assignTo="{!subPage}" />
+    <apex:attribute name="addressRecords" description="This is the value for the component." type="Address__c[]"
+        required="true" assignTo="{!addressList}" />
+    <apex:attribute name="collateralDetails" description="This is the value for the component." type="Collateral__c"
+        required="true" assignTo="{!collateral}" />
+    <apex:attribute name="subProductValue" description="This is the value for the component." type="String"
+        assignTo="{!subProduct}" />
+    <apex:attribute name="bureauScore" description="This is the value for the component." type="String"
+        assignTo="{!bureauScor}" />
+    <script>
+        function openWindowForFI(reportLink, factor) {
+            if (factor == "1") {
+                var newWindow = window.open(reportLink);
+                if (window.focus)
+                    newWindow.focus();
+            }
+            if (factor == "3") {
+                var newWindow = window.open(reportLink, '_blank');
+                if (window.focus)
+                    newWindow.focus();
+            }
+        }
+
+    </script>
+
+    <div style='{!pageBlockSectionCSS}'>
+
+        <apex:pageBlockSection showHeader="true" title="Customer Details">
+        </apex:pageBlockSection>
+        <div style="">
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <th></th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <th style="{!tableHeadDataStyle}">{!applicant.RecordType.Name}</th>
+                    </apex:repeat>
+
+                    <th style="{!tableHeadDataStyle} display:{!IF(applicants.size==1,'table-head','none')}">Co Applicant
+                    </th>
+                    <th
+                        style="{!tableHeadDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-head','none')}">
+                        Guarantor</th>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Aadhaar Photo</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:form >
+                                <apex:image value="{!applicantVSAadharPhoto[applicant]}" width="10%" height="10%"
+                                    rendered="{!IF(applicantVSAadharPhoto[applicant]!='',true,false)}"></apex:image>
+                            </apex:form>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Camera Photo</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:image value="{!applicantVSLivePhoto[applicant]}" width="10%" height="10%"
+                                rendered="{!IF(applicantVSAadharPhoto[applicant]!='',true,false)}"></apex:image>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Photo Match %</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}"
+                            rendered="{!IF(applicantVSLivePhotomatch[applicant.Id]!='',true,false)}">
+                            {!applicantVSLivePhotomatch[applicant.Id]} %
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Name</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!applicant.First_Name__c} {!applicant.Middle_Name__c}
+                            {!applicant.Last_Name__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Constitution</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            {!IF(applicant.Customer_Type__c=='Individual','Individual','')}
+                            {!IF(applicant.Customer_Type__c=='Non Individual',applicant.Constitution_Type__c,'')}
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Gender</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!applicant.Gender__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Marital Status</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!applicant.Marital_Status__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Existing Customer</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!applicant.Existing_Customer__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Mobile No.</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!applicant.Mobile_Number__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Relation with Applicant</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            {!applicant.Relationship_with_applicant__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">DOB / Age</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}">
+                                <apex:param value="{!applicant.Dob__c}" />
+                            </apex:outputText>&nbsp;/&nbsp;
+                            <apex:outputText value="{0, number, 00}">
+                                <apex:param value="{!applicant.Age__c}" />
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+
+                <apex:repeat value="{!addressTypeValues}" var="addValue">
+                    <tr
+                        style="{!tableRowStyle} display:{!IF(addValue.type=='Current Address' || addValue.type=='Permanent Address / Aadhaar' || addValue.type=='Office Address','table-row','none')}">
+                        <th style="{!tableHeadStyle}">{!addValue.type}</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">
+                                {!IF(add.Address_Line_1__c!=null,add.Address_Line_1__c+', ','')}
+                                {!IF(add.Address_Line_2__c!=null,add.Address_Line_2__c+', ','')}
+                                {!IF(add.Address_Line_3__c!=null,add.Address_Line_3__c+', ','')}
+                                {!IF(add.City__c!=null,add.City__c+', ','')}
+                                {!IF(add.State__c!=null,add.State__c+', ','')}
+                                {!IF(add.Pincode__c!=null,add.Pincode__c,'')}
+                            </td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr
+                        style="{!tableRowStyle} display: {!IF(addValue.type=='Current Address' || addValue.type=='Permanent Address / Aadhaar' || addValue.type=='Office Address', 'table-row', 'none')}">
+                        <th style="{!tableHeadStyle}">Residence Type</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Status__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr
+                        style="{!tableRowStyle} display:{!IF(addValue.type=='Current Address' || addValue.type=='Permanent Address / Aadhaar' || addValue.type=='Office Address','table-row', 'none')}">
+                        <th style="{!tableHeadStyle}">Stability in Years</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Stability__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr
+                        style="{!tableRowStyle} display: {!IF((addValue.type=='Current Address'), 'table-row', 'none')};">
+
+                        <th style="{!tableHeadStyle}">Distance From Branch</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">
+                                {!add.Distance_from_Branch__c}
+                            </td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                </apex:repeat>
+
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Agri Land Size</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            {!IF(applicant.Applicant_Financials__r!=null &&
+                                applicant.Applicant_Financials__r.size>0 && applicant.Applicant_Financials__r[0].Agri_Land_in_Acres__c!=null,
+                                ROUND(applicant.Applicant_Financials__r[0].Agri_Land_in_Acres__c,2),'')}
+                        </td><!--R2-2832 round number to 2 decimal places-->
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+
+                <apex:repeat value="{!addressTypeValues}" var="addValue">
+                    <tr style="{!tableRowStyle} display:{!IF(addValue.type=='Land Address','table-row','none')}">
+                        <th style="{!tableHeadStyle}">{!addValue.type}</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">
+                                {!IF(add.Khata_Khasara_Survey_Number__c!=null,add.Khata_Khasara_Survey_Number__c+', ','')}
+                                {!IF(add.Village__c!=null,add.Village__c+', ','')}
+                                {!IF(add.Taluka__c!=null,add.Taluka__c+', ','')}
+                                {!IF(add.District__c!=null,add.District__c+', ','')}
+                                {!IF(add.State__c!=null,add.State__c+', ','')}
+                                {!IF(add.Pincode__c!=null,add.Pincode__c,'')}
+                            </td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr style="{!tableRowStyle} display: {!IF(addValue.type=='Land Address', 'table-row', 'none')}">
+                        <th style="{!tableHeadStyle}">AT / Post</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Village__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr style="{!tableRowStyle} display:{!IF(addValue.type=='Land Address','table-row', 'none')}">
+                        <th style="{!tableHeadStyle}">TAL</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Taluka__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr style="{!tableRowStyle} display: {!IF((addValue.type=='Land Address'), 'table-row', 'none')};">
+                        <th style="{!tableHeadStyle}">DIST</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">
+                                {!add.District__c}
+                            </td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                </apex:repeat>
+
+                <apex:repeat value="{!addressTypeValues}" var="addValue">
+                    <tr style="{!tableRowStyle} display:{!IF(addValue.type=='Touch Point Address','table-row','none')}">
+                        <th style="{!tableHeadStyle}">{!addValue.type}</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">
+                                {!IF(add.Address_Line_1__c!=null,add.Address_Line_1__c+', ','')}
+                                {!IF(add.Address_Line_2__c!=null,add.Address_Line_2__c+', ','')}
+                                {!IF(add.Address_Line_3__c!=null,add.Address_Line_3__c+', ','')}
+                                {!IF(add.City__c!=null,add.City__c+', ','')}
+                                {!IF(add.State__c!=null,add.State__c+', ','')}
+                                {!IF(add.Pincode__c!=null,add.Pincode__c,'')}
+                            </td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr style="{!tableRowStyle} display:{!IF(addValue.type=='Touch Point Address','table-row','none')}">
+                        <th style="{!tableHeadStyle}">Residence Type</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Status__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                    <tr style="{!tableRowStyle} display:{!IF(addValue.type=='Touch Point Address','table-row','none')}">
+                        <th style="{!tableHeadStyle}">Stability in Years</th>
+                        <apex:repeat value="{!addValue.value}" var="add">
+                            <td style="{!tableDataStyle}">{!add.Stability__c}</td>
+                        </apex:repeat>
+                        <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                        <td
+                            style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                        </td>
+                    </tr>
+                </apex:repeat>
+                <tr style="{!tableRowStyle} display: {!IF(subPage!='Credit', 'table-row', 'none')};">
+                    <th style="{!tableHeadStyle}">Purpose of Loan</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!loan.Purpose_of_Loan__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+                <tr style="{!tableRowStyle} display: {!IF(subPage!='Credit', 'table-row', 'none')};">
+                    <th style="{!tableHeadStyle}">End Use of Vehicle</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!collateral.Vehicle_Usage__c}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+
+                <tr style="{!tableRowStyle} display: {!IF(subPage=='Credit', 'table-row', 'none')};">
+                    <th style="{!tableHeadStyle}">Customer Profile</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!loan.Customer_Grade__c}</td>
+                        <!--{!applicant.Customer_Grade__c}-->
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td
+                        style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</apex:component>

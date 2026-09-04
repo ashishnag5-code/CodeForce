@@ -1,0 +1,22 @@
+<template>
+    <div>
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <!-- // SFAU-4293 - RO remarks not showing for OPS -->
+        <div class="slds-size_full slds-grid" if:true={showRORemarks}>
+            <span class="slds-size_1-of-2 slds-text-title_bold slds">RO Remarks:</span>
+            <span class="slds-size_1-of-2">{roRemarks}</span>
+        </div>
+        <lightning-textarea name="Remarks" 
+                            label="Remarks" 
+                            data-id="Remarks" 
+                            value={opsRemarks}
+                            onchange={handleOnChange}>    
+        </lightning-textarea>
+    </div>
+    <div slot="footer">
+        <button class="slds-button slds-button_brand buttonColor" onclick={closeAction}>Cancel</button>
+        <button class="slds-button slds-button_brand buttonColor" disabled={disableSubmit} onclick={handleSubmit}>Submit</button>
+    </div>
+</template>

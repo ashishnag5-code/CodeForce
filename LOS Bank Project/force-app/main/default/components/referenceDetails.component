@@ -1,0 +1,69 @@
+<apex:component >
+    <apex:attribute name="references" description="references Record for displaying applicant info" type="List" required="true"/>
+
+    <p class="subHeadingStyles">C. REFERENCES</p>
+    <table width="100%">
+        <tr width="100%">
+            <td rowspan="2" width="2%"><apex:image styleClass="verticalImageStyleShort" url="{!URLFOR($Resource.ApplicationForm, 'Reference1.png')}"/></td>
+            <td width="10%"><apex:outputText value="Name"/></td>
+            <td width="88%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="100%" style="background-color:white;padding-left:5px">{!references[0].Name}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr width="100%">
+            <td width="10%"><apex:outputText value="Mobile No."/></td>
+            <td width="88%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="25%" style="background-color:white;padding-left:5px">{!references[0].Mobile_Number}</td>
+                        <td style="text-align: right">Relationship with Applicant</td>
+                        <td width="30%" style="border-bottom: 1px solid black;padding-left:5px">{!references[0].Relationship_With_Borrower}</td>
+                        <!--td style="text-align: right">Years of acquaintance</td>
+                        <td>
+                            <apex:panelGrid columns="3">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText >&nbsp;</apex:outputText>
+                                <div class="whiteUncheckedBox"></div>
+                            </apex:panelGrid>
+                        </td-->
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr width="100%">
+            <td rowspan="2" width="2%"><apex:image styleClass="verticalImageStyleShort" url="{!URLFOR($Resource.ApplicationForm, 'Reference2.png')}"/></td>
+            <td width="10%"><apex:outputText value="Name"/></td>
+            <td width="88%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="100%" style="background-color:white;padding-left:5px">{!references[1].Name}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr width="100%">
+            <td width="10%"><apex:outputText value="Mobile No."/></td>
+            <td width="88%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="25%" style="background-color:white;padding-left:5px">{!references[1].Mobile_Number}</td>
+                        <td style="text-align: right">Relationship with Applicant</td>
+                        <td width="30%" style="border-bottom: 1px solid black;padding-left:5px">{!references[1].Relationship_With_Borrower}</td>
+                        <!--td style="text-align: right">Years of acquaintance</td>
+                        <td>
+                            <apex:panelGrid columns="3">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText >&nbsp;</apex:outputText>
+                                <div class="whiteUncheckedBox"></div>
+                            </apex:panelGrid>
+                        </td-->
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</apex:component>

@@ -1,0 +1,884 @@
+<!--
+  @description       : 
+  @author            : Neha
+  @group             : 
+  @last modified on  : 12-18-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+
+    <!--<template if:true={loadSpinner}>
+        <lightning-spinner size="medium"></lightning-spinner>
+    </template>-->
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={showPANVerificationModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+        class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                <lightning-icon icon-name="utility:close" size="small" onclick={handleClose}></lightning-icon>
+            </button>
+            <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">PAN Verification</h1>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <template for:each={applicantPANVerificationList} for:item="appl">
+                    <c-pan-verification-modal applicant-record={appl} key={appl.Id}></c-pan-verification-modal>
+                </template>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    <lightning-card class="loanDetailsCmp">
+        <h1 slot="title">
+            <div class="demo-only" style="width:30rem">
+                <article class="slds-tile slds-media">
+                  <div class="slds-media__figure">
+                    <span class="slds-icon_container" title="description of icon when needed">
+                        <lightning-icon icon-name="custom:custom41" size="medium"></lightning-icon>
+                    </span>
+                  </div>
+                  <div class="slds-media__body">
+                    <h3 class="slds-tile__title slds-truncate" title="Loan Details">
+                      <p>Loan Details</p>
+                    </h3>
+                    <div class="slds-tile__detail">
+                      <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-body_small" title="EMI Calculation">EMI Calculation</dt>
+                      </dl>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            <!--<lightning-tile label="Loan Details" type="media">
+                <lightning-icon slot="media" icon-name="standard:budget_category_value" size="medium"></lightning-icon>
+                <p class="slds-truncate slds-text-body_small" title="(EMI Calculation)">(EMI Calculation)</p>
+            </lightning-tile>-->
+        </h1>
+        
+        <!--<h1 slot="title">
+            <lightning-icon  class="slds-m-around_small" icon-name="custom:custom41" size="medium"></lightning-icon>
+            Loan Details 
+        </h1>
+        (EMI Calculation)-->
+        <template if:true={displayEdit}>
+            <span slot="actions">
+                <lightning-icon title="Edit Other Income Detail" 
+                icon-name="action:edit" size="x-small" 
+                alternative-text="" 
+                data-id="icon"
+                access-key={index}
+                class="slds-m-around_small"
+                onclick={handleEdit}></lightning-icon>
+            </span>
+        </template>
+
+        <!--<span slot="actions">
+            <lightning-icon title="Edit Other Income Detail" 
+                icon-name="action:download" size="x-small" 
+                alternative-text="" 
+                data-id="icon"
+                access-key={index}
+                class="slds-m-around_small"
+                onclick={handleEMIApi}></lightning-icon>
+        </span>-->
+    <lightning-layout multiple-rows vertical-align="end">
+            <lightning-layout-item data-id="Product__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Product__c"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Product__c"
+                            label="Product"
+                            disabled
+                            options={productOptions}
+                            value={loanApp.Product__c}
+                            onchange={handleChange}
+                            required></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Scheme__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox
+                        lwc:if={applicableTractorQdeUIChange}
+                        name="Scheme__c"
+                        label="Scheme"
+                        value={Scheme__c}
+                        data-name="Scheme__c"
+                        required
+                        disabled={readOnly}
+                        options={schemeOption}
+                        onchange={handleChange} ></lightning-combobox>
+
+                <lightning-input type="text" 
+                        lwc:else
+                        oncontextmenu={handleContext} 
+                        onpaste={handlePaste}
+                        data-name="Scheme__c"
+                        disabled
+                        required={requiredAtDDE}
+                        label="Scheme"
+                        name="Scheme__c"
+                        value={Scheme__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Promo_Code__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                        <!--<lightning-input type="text" 
+                        data-name='Promo_Code__c'
+                        message-when-pattern-mismatch="Promo Code must be Alpha Numeric"
+                        pattern="^[a-zA-Z0-9_]*$"
+                        disabled={readOnly}
+                        label="Promo Code"
+                        name="Promo_Code__c"
+                        value={loanApp.Promo_Code__c}
+                        onchange={handleChange}></lightning-input>-->
+                        <lightning-combobox name="Promo_Code__c"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Promo_Code__c"
+                            label="Promo Code"
+                            disabled={readOnly}
+                            options={promocodeOptions}
+                            value={loanApp.Promo_Code__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" padding="around-small" data-id="Wheels_Exposure__c" small-device-size="12" large-device-size="6" class="component slds-hide">
+                <template if:true={twoWheelerExposure}>
+                    <lightning-input type="text" 
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    label="Exposure 2 Wheelers"
+                    data-name="Wheels_Exposure__c"
+                    name="exposureWheels"
+                    value={loanApp.Wheels_Exposure__c}
+                    disabled></lightning-input>
+                </template>
+                <template if:true={fourWheelerExposure}>
+                    <lightning-input type="text" 
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    label="Exposure Wheels"
+                    data-name="Wheels_Exposure__c"
+                    name="exposureWheels"
+                    value={loanApp.Wheels_Exposure__c}
+                    disabled></lightning-input>
+                </template>
+                <template if:true={displayExposureFields}><!--changed applicableTractorQdeUIChange to displayExposureFields R2-2468-->
+                    <lightning-input type="text" 
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    label="Exposure Wheels"
+                    data-name="Wheels_Exposure__c"
+                    name="exposureWheels"
+                    value={loanApp.Wheels_Exposure__c}
+                    disabled></lightning-input>
+                </template>
+                
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6" data-id="Final_Exposure__c" class="component slds-hide">
+                    <lightning-input type="text" 
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    data-name='Final_Exposure__c'
+                    label="Total Exposure"
+                    name="finalExposure"
+                    value={loanApp.Final_Exposure__c}
+                    disabled></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item data-id="Loan_Amount__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input  max={maxLoanAmount} min={minLoanAmount}
+                required
+                label="Loan Amount"
+                oncontextmenu={handleContext} 
+                onpaste={handlePaste}
+                message-when-range-underflow={loanAmountUnderFlowError} type="number" 
+                message-when-range-overflow={loanAmountOverFlowError}
+                disabled={readOnly}
+                data-name="Loan_Amount__c"
+                name="Loan_Amount__c"
+                value={loanApp.Loan_Amount__c}
+                onchange={handleChange}
+                formatter="currency"></lightning-input>
+
+                <!--<div class="slds-form-element">
+                    <label class="slds-form-element__label" for="slider-id-01">
+                      <span class="slds-slider-label">
+                        <span class="slds-slider-label__label">Slider Label</span>
+                        <label class="slds-form-element__label slds-text-align_left">{minLoanAmount}</label>
+                        <label class="slds-form-element__label slds-text-align_right">{maxLoanAmount}</label>
+                        
+                      </span>
+                    </label>
+                    <div class="slds-form-element__control">
+                        <div class="slds-slider">
+                        <input type="range" id="slider-id-01" name="Loan_Amount__c" onchange={handleChange} class="slds-slider__range" min={minLoanAmount} max={maxLoanAmount} value={Loan_Amount__c}/>
+                        </div>
+                        
+                    </div>
+                </div>-->
+                <!--<template if:true={hideSliders}>
+                    <lightning-input max={maxLoanAmount} min={minLoanAmount}
+                    required
+                    label="Loan Amount"
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                        message-when-range-underflow={loanAmountUnderFlowError} type="number" 
+                        message-when-range-overflow={loanAmountOverFlowError}
+                        disabled={readOnly}
+                    data-name="Loan_Amount__c"
+                        name="Loan_Amount__c"
+                        value={loanApp.Loan_Amount__c}
+                        onchange={handleChange}
+                        formatter="currency"></lightning-input>
+                </template>
+                <template if:false={hideSliders}>
+                    <lightning-slider name="Loan_Amount__c" label="Loan Amount" class="sliderColor"
+                        value={loanApp.Loan_Amount__c} onchange={handleChange} disabled={readOnly}
+                        min={minLoanAmount} max={maxLoanAmount} data-name="Loan_Amount__c"></lightning-slider>
+                -->
+                        
+                <!--</template>-->
+                        
+
+            </lightning-layout-item>
+
+            <lightning-layout-item class="component slds-hide" data-id="Tenure__c" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <!--<template if:true={hideSliders}>
+                    <lightning-input min={minTenure} max={maxTenure}
+                    disabled={readOnly}
+                    data-name="Tenure__c"
+                    label="Tenure In Months"
+                    required
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    message-when-range-underflow={tenureUnderFlowError} 
+                    message-when-range-overflow={tenureOverFlowError}
+                    type="number" 
+                    name="Tenure__c"
+                    value={loanApp.Tenure__c}
+                    onchange={handleChange}></lightning-input>
+                </template>-->
+
+                <!--<template if:false={hideSliders}>
+                    <lightning-slider class="sliderColor" name="Tenure__c" label="Tenure In Months" value={loanApp.Tenure__c} onchange={handleChange}
+                min={minTenure} max={maxTenure} disabled={readOnly} data-name="Tenure__c"></lightning-slider>-->
+                
+                    <lightning-input min={minTenure} max={maxTenure}
+                    disabled={readOnly}
+                    label="Tenure In Months"
+                    data-name="Tenure__c"
+                required
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                message-when-range-underflow={tenureUnderFlowError} 
+                message-when-range-overflow={tenureOverFlowError}
+                type="number" 
+                name="Tenure__c"
+                value={loanApp.Tenure__c}
+                onchange={handleChange}></lightning-input>
+                <!--</template>-->
+                
+            
+            </lightning-layout-item>
+
+            <lightning-layout-item class="component slds-hide" data-id="ROI__c" size="12" small-device-size="12" large-device-size="6" padding="around-small">
+                <!--<div class="slds-size_1-of-1 slds-small-size_1-of-1 slds-large-size_1-of-2 slds-p-around_small">-->
+                    <!--<template if:true={hideSliders}>
+                        <lightning-input  min={minROI} max={maxROI}
+                        message-when-range-underflow={ROIUnderFlowError} 
+                        message-when-range-overflow={ROIOverFlowError}
+                        disabled={readOnly}
+                        data-name="ROI__c"
+                        label={roiLabel}
+                        required
+                        oncontextmenu={handleContext} 
+                        onpaste={handlePaste}
+                        type="number" 
+                        step=0.01
+                        name="ROI__c"
+                        value={loanApp.ROI__c}
+                        onchange={handleChange}></lightning-input>
+                    </template> --> 
+                    <!--<template if:false={hideSliders}>
+                        <lightning-slider  class="sliderColor" name="ROI__c" label={roiLabel} value={loanApp.ROI__c} onchange={handleChange}
+                        min={minROI} max={maxROI} step=0.01 disabled={readOnly}
+                        data-name="ROI__c"></lightning-slider>-->
+                        <template if:true={isDisbursementStage}>
+                            <lightning-input  min={minROI} max={maxROI}
+                            message-when-range-underflow={ROIUnderFlowError} 
+                            message-when-range-overflow={ROIOverFlowError}
+                            disabled
+                            label={roiLabel}
+                            data-name="ROI__c"
+                            required
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            type="number" 
+                            step=0.01
+                            name="ROI__c"
+                            value={loanApp.ROI__c}
+                            onchange={handleChange}></lightning-input>
+                        </template>
+                        <template if:false={isDisbursementStage}>
+                            <lightning-input  min={minROI} max={maxROI}
+                            message-when-range-underflow={ROIUnderFlowError} 
+                            message-when-range-overflow={ROIOverFlowError}
+                            disabled={readOnly}
+                            label={roiLabel}
+                            data-name="ROI__c"
+                            required
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            type="number" 
+                            step=0.01
+                            name="ROI__c"
+                            value={loanApp.ROI__c}
+                            onchange={handleChange}></lightning-input>
+                        </template>
+                        
+                    <!--</template>  -->
+                <!--</div>-->
+            </lightning-layout-item>
+
+            <!--<lightning-layout-item class="component slds-hide" data-id="Flat_ROI__c" size="12" small-device-size="12" large-device-size="6" padding="around-small">
+                <div class="slds-size_1-of-1 slds-small-size_1-of-1 slds-large-size_1-of-2 slds-p-around_small">
+                    <template if:true={hideSliders}>
+                        <lightning-input  min={minROI} max={maxROI}
+                        message-when-range-underflow={ROIUnderFlowError} 
+                        message-when-range-overflow={ROIOverFlowError}
+                        disabled={readOnly}
+                        data-name="Flat_ROI__c"
+                        required
+                        oncontextmenu={handleContext} 
+                        onpaste={handlePaste}
+                        label="Flat ROI"
+                        type="number" 
+                        step=0.01
+                        name="Flat_ROI__c"
+                        value={loanApp.Flat_ROI__c}
+                        onchange={handleChange}></lightning-input>
+                    </template>    
+                    <template if:false={hideSliders}>
+                        <lightning-slider  class="sliderColor" name="Flat_ROI__c" label="Flat ROI" value={loanApp.Flat_ROI__c} onchange={handleChange}
+                        min={minROI} max={maxROI} step=0.01 disabled={readOnly}
+                        data-name="Flat_ROI__c"></lightning-slider>
+                        
+                        <lightning-input  min={minROI} max={maxROI}
+                        message-when-range-underflow={ROIUnderFlowError} 
+                        message-when-range-overflow={ROIOverFlowError}
+                        disabled={readOnly}
+                        data-name="Flat_ROI__c"
+                        required
+                        oncontextmenu={handleContext} 
+                        onpaste={handlePaste}
+                        type="number" 
+                        step=0.01
+                        name="Flat_ROI__c"
+                        value={loanApp.Flat_ROI__c}
+                        onchange={handleChange}></lightning-input>
+                    </template>
+                    
+                </div>
+            </lightning-layout-item>-->
+
+            <lightning-layout-item data-id="Total_Loan_Amount__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="Total Loan Amount"
+                            type="number" 
+                            disabled
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            name="Total_Loan_Amount__c"
+                            value={loanApp.Total_Loan_Amount__c}
+                            formatter="currency"></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Type_of_Rate__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="Type of Rate"
+                type="text" 
+                oncontextmenu={handleContext} 
+                onpaste={handlePaste}
+                data-name="Type_of_Rate__c"
+                required={requiredAtDDE}
+                disabled
+                name="Type_of_Rate__c"
+                value={loanApp.Type_of_Rate__c}></lightning-input>
+            </lightning-layout-item>
+
+            <!--<lightning-layout-item data-id="Type_of_Rate__c" class="component slds-hide" size="10" padding="around-small" small-device-size="10" large-device-size="4">
+                    <lightning-input label="Type of Rate"
+                    type="text" 
+                    data-name="Type_of_Rate__c"
+                    required={requiredAtDDE}
+                    disabled
+                    name="Type_of_Rate__c"
+                    value={loanApp.Type_of_Rate__c}></lightning-input>
+            </lightning-layout-item>
+            
+            <lightning-layout-item data-id="Type_of_Rate__c" class="component slds-hide" size="2" padding="around-small" small-device-size="2" large-device-size="2">
+                <template if:false={showTable}>
+                    <lightning-icon icon-name="utility:preview" class="slds-m-bottom_x-small" size="small" onclick={handlePreview}></lightning-icon>
+            </template>
+            <template if:true={showTable}>
+                    <lightning-icon icon-name="utility:hide" class="slds-m-bottom_x-small" size="small" onclick={handlePreview}></lightning-icon>
+            </template>
+            </lightning-layout-item>
+                
+            
+            <template if:true={showTable}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                    <lightning-datatable hide-checkbox-column show-row-number-column max-column-width key-field="id"
+                        data={mclrData} columns={columns}></lightning-datatable>
+                </lightning-layout-item>
+            </template>-->
+            
+                    <!--<template for:each={mclrData} for:item="data" for:index="index">
+                        <lightning-accordion allow-multiple-sections-open key={data}>
+                            <lightning-accordion-section name="A" label={data.mclrTenure} >
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">MCLR Tenure Jan(22)</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.mclrTenure} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">MCLR %</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.mclrPercent} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Loan Tenure</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.tenure} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">IRR Below and Equal to MCLR</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.irrBelow} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">IRR Above MCLR</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.irrAbove} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Deviation Applicable</label>
+                                            <div class="slds-form-element__control">
+                                            <input type="text" placeholder="Placeholder text…" readonly="" value={data.deviationApplicable} class="slds-input" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-accordion-section>  
+                        </lightning-accordion>
+                    </template>-->
+                
+            
+
+            <lightning-layout-item data-id="RBP__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="Risk Base Pricing" 
+                            type="number" 
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="RBP__c"
+                            disabled
+                            required={requiredAtDDE}
+                            name="RBP__c"
+                            value={loanApp.RBP__c}></lightning-input>
+            </lightning-layout-item>
+
+            
+
+            <lightning-layout-item data-id="Purpose_of_Loan__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Purpose_of_Loan__c"
+                            label="Purpose of Loan"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Purpose_of_Loan__c"
+                            disabled={readOnly}
+                            required={requiredAtDDE}
+                            options={purposeOfLoanOptions}
+                            value={loanApp.Purpose_of_Loan__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Nature_of_Loan__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Nature_of_Loan__c"
+                            label="Nature of Loan"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Nature_of_Loan__c"
+                            required={requiredAtDDE}
+                            disabled
+                            options={natureOfLoanOptions}
+                            value={loanApp.Nature_of_Loan__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Schedule_Name__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Schedule_Name__c"
+                            label="Schedule Name"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Schedule_Name__c"
+                            required={requiredAtDDE}
+                            disabled={readOnly}
+                            options={scheduleNameOptions}
+                            value={loanApp.Schedule_Name__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Schedule_Code__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input name="Schedule_Code__c"
+                            type="text"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            label="Schedule Code"
+                            data-name="Schedule_Code__c"
+                            required={requiredAtDDE}
+                            disabled={readOnly}
+                            value={loanApp.Schedule_Code__c}
+                            onchange={handleChange}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Emi_Frequency__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                
+                <lightning-combobox lwc:if={applicableTractorQdeUIChange}
+                            name="Emi_Frequency__c"
+                            label="EMI Frequency"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            disabled={readOnly}
+                            data-name="Emi_Frequency__c"
+                            required
+                            options={emiFrequencyOptions}
+                            value={loanApp.Emi_Frequency__c}
+                            onchange={handleChange}></lightning-combobox>
+                
+                <lightning-combobox lwc:else
+                            name="Emi_Frequency__c"
+                            label="EMI Frequency"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            disabled={readOnly}
+                            data-name="Emi_Frequency__c"
+                            required={requiredAtDDE}
+                            options={emiFrequencyOptions}
+                            value={loanApp.Emi_Frequency__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <!--<lightning-layout-item data-id="Schedule_Type__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Schedule_Type__c"
+                            label="Schedule Type"
+                            required={requiredAtDDE}
+                            disabled={readOnly}
+                            options={scheduleTypeOptions}
+                            value={loanApp.Schedule_Type__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>-->
+
+            <template if:true={isIOI}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox name="Moratorium_Period__c"
+                    data-name="Moratorium_Period__c"
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                                    label="Moratorium Period"
+                                    disabled={readOnly}
+                                    options={moratoriumPeriodOptions}
+                                    value={loanApp.Moratorium_Period__c}
+                                    onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+            </template>
+            
+            <template if:true={isVPI}>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                    <c-vpi-parent loan-app={loanApp} onvpimodified={handleOnVPIModify}></c-vpi-parent>
+                </lightning-layout-item>
+            </template>
+            
+            <lightning-layout-item data-id="Disbursement_Category__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Disbursement_Category__c"
+                            label="Disbursement Category"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            data-name="Disbursement_Category__c"
+                            disabled={disbursementCategoryDisabled}
+                            required={requiredAtDDE}
+                            options={disbursementCategoryOptions}
+                            value={loanApp.Disbursement_Category__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <template if:true={showTrancheSection}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                        <c-tranche-parent fields-to-be-disabled={fieldsToBeDisabled} ontranche={handleEvents} loan-app={loanApp}></c-tranche-parent>
+                </lightning-layout-item>
+            </template>
+           
+            
+
+            <lightning-layout-item data-id="EMI_Date__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="EMI_Date__c"
+                            label="EMI Date"
+                            data-name="EMI_Date__c"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            required={requiredAtDDE}
+                            disabled={readOnly}
+                            options={emiDateOptions}
+                            value={loanApp.EMI_Date__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <template if:false={disableRepaymentStartDate}>
+                <lightning-layout-item data-id="Repayment_Start_Date__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-input label="Repayment Start Date" 
+                    type="date" 
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    data-name="Repayment_Start_Date__c"
+                    onchange={handleChange}
+                    required={requiredAtDDE}
+                    name="Repayment_Start_Date__c"
+                    value={loanApp.Repayment_Start_Date__c}></lightning-input>
+                </lightning-layout-item>
+            </template>
+            <lightning-layout-item data-id="First_EMI_Date__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="First EMI Date" 
+                type="date" 
+                data-id="firstemi"
+                data-name="First_EMI_Date__c"
+                required={requiredAtDDE}
+                name="First_EMI_Date__c"
+                value={loanApp.First_EMI_Date__c}
+                onchange={handleFirstEMIDateChange}
+                disabled={readOnly}
+                field-level-help="Repayment Start Date"></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="IFSC_Code__c" size="12" class="component slds-hide" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="Repayment IFSC Code" 
+                type="text" 
+                oncontextmenu={handleContext} 
+                onpaste={handlePaste}
+                onchange={handleChange}
+                    required={requiredAtDDE}
+                data-name="IFSC_Code__c"
+                min-length="11"
+                max-length="11"
+                pattern="^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$"
+                message-when-pattern-mismatch="Please enter valid IFSC Code"
+                name="IFSC_Code__c"
+                value={loanApp.IFSC_Code__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="MICR_Code__c" size="12" class="component slds-hide" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input label="Repayment MICR Code" 
+                type="text" 
+                oncontextmenu={handleContext} 
+                onpaste={handlePaste}
+                data-name="MICR_Code__c"
+                name="MICR_Code__c"
+                value={loanApp.MICR_Code__c}
+                disabled></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Bank_Name__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <template if:true={loadIt}>
+                    <template if:true={bankNameReadOnly}>
+                        <lightning-input label="Repayment Bank Name" data-name="Repayment_Bank_Name__c"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            required={requiredAtDDE}
+                            disabled
+                            value={loanApp.Repayment_Bank_Name__c}></lightning-input>
+                    </template>
+                    <template if:false={bankNameReadOnly}>
+                            <c-generic-custom-lookup name="Repayment_Bank_Name__c" label="Repayment Bank Name" record-type-name="Bank Master"
+                            search-fields="" stepid="0" loan-app={loanApp} is-required={isRequired}
+                            fieldapi="Bank_Name__c" object-name="Generic Master"
+                            s-object-api-name="Generic_Master__c" default-record-id={bankRecordId}
+                            onlookupselect={handleLookupSelect}>
+                        </c-generic-custom-lookup>
+                    </template>
+                    <lightning-formatted-text class="emandateText" value={eligibleForEmandate}></lightning-formatted-text>
+                </template>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Mode__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Repayment_Mode__c"
+                            dropdown-alignment='auto'
+                            label="Repayment Mode"
+                            data-name="Repayment_Mode__c"
+                            oncontextmenu={handleContext} 
+                            onpaste={handlePaste}
+                            required={requiredAtDDE}
+                            disabled={readOnly}
+                            options={repaymentModeOptions}
+                            value={loanApp.Repayment_Mode__c}
+                            onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Account_Type__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Repayment_Account_Type__c"
+                dropdown-alignment='auto'
+                required={requiredAtDDE}
+                data-name="Repayment_Account_Type__c"
+                oncontextmenu={handleContext} 
+                onpaste={handlePaste}
+                label="Repayment Account Type"
+                options={repaymentAccountTypeOptions}
+                value={loanApp.Repayment_Account_Type__c}
+                onchange={handleChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Account_Number__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <template if:true={manualEntryForAccNo}>
+                    <lightning-input label="Repayment Account Number" 
+                    type="text" pattern="^[0-9]*" 
+                    required={requiredAtDDE}
+                    disabled={readOnly} message-when-pattern-mismatch="Please enter only numeric values."
+                    data-name="Repayment_Account_Number__c"
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    onchange={handleChange}
+                    name="Repayment_Account_Number__c"
+                    value={loanApp.Repayment_Account_Number__c}></lightning-input>
+                </template>
+                <template if:false={manualEntryForAccNo}>
+                    <lightning-combobox name="Repayment_Account_Number__c"
+                    dropdown-alignment='auto'
+                    required={requiredAtDDE}
+                    label="Repayment Account Number"
+                    data-name="Repayment_Account_Number__c"
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                    disabled={readOnly}
+                    options={repaymentAccountNumberOptions}
+                    value={loanApp.Repayment_Account_Number__c}
+                    onchange={handleChange}></lightning-combobox>
+                </template>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_By__c"  size="12" class="component slds-hide" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Repayment_By__c"
+                data-name="Repayment_By__c"
+                dropdown-alignment='auto'
+                    oncontextmenu={handleContext} 
+                    onpaste={handlePaste}
+                            required={requiredAtDDE}
+                    label="Repayment By"
+                    options={applicantOptions}
+                    value={repaymentByValue}
+                    onchange={handleRepaymentByChange}></lightning-combobox>
+            </lightning-layout-item>
+
+            <template if:true={displayBTSection}>
+                <lightning-layout-item data-id="BT_Type__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox name="BT_Type__c"
+                                dropdown-alignment='auto'
+                                label="Balance Transfer Type"
+                                data-name="BT_Type__c"
+                                options={btOptions}
+                                required={isBTTypeRequired}
+                                value={loanApp.BT_Type__c}
+                                onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+            </template>
+
+
+            
+            <template if:true={isBTInternal}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                    <c-balance-transfer-parent fields-to-be-disabled={fieldsToBeDisabled} bt-case-type={btCaseType} bt-type={loanApp.BT_Type__c} product-details={productDetails} collateral={collateralDetails} loan-app={loanApp}></c-balance-transfer-parent>
+                </lightning-layout-item>
+            </template>
+            <template if:true={isBTExternal}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                    <c-balance-transfer-parent fields-to-be-disabled={fieldsToBeDisabled} bt-case-type={btCaseType} bt-type={loanApp.BT_Type__c} product-details={productDetails} collateral={collateralDetails} loan-app={loanApp}></c-balance-transfer-parent>
+                </lightning-layout-item>
+            </template>
+
+            <template if:true={isCustomerVisitForPDMandatory}>
+                <lightning-layout-item data-id="Visited_Customer_for_PD__c" size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox name="Visited_Customer_for_PD__c" class="validate" oncontextmenu={handleContext} onpaste={handlePaste} data-name="Visited_Customer_for_PD__c" label="I have visited the Customer's address and verified it"
+                        options={visitedCustomerPDOptions} value={loanApp.Visited_Customer_for_PD__c} onchange={handleChange} required disabled={readOnly}></lightning-combobox>
+                </lightning-layout-item>
+            </template>
+
+            <!--<template if:true={addNominee}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                    <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                        <lightning-accordion-section name="A" label="Nominee Details">
+                            <c-nominee-parent show-details={showNominee} onnominee={handleEvents} loan-app={loanApp}></c-nominee-parent>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </lightning-layout-item>class="component slds-hide" data-id="EMI__c"
+            </template>-->
+    </lightning-layout>
+    <br/><br/>
+    
+        <lightning-card class="slds-align_absolute-center">
+            <h1 slot="title" style="text-align: center;" class="component slds-hide" data-id="EMI__c">
+                EMI: <span class="slds-badge badgeProperty">
+                            <lightning-formatted-number value={loanApp.EMI__c} format-style="currency" 
+                                                        currency-code="INR"
+                                                        ></lightning-formatted-number>
+                    </span>
+                    <br/>
+                    <template if:false={boolHideCalculateEMI}>
+                        <template if:true={showEMIDisclaimerMsg}>
+                        <div style="font-size: small;">
+                        *{LOAN_DETAILS_EMI_DISCLAIMER}
+                        </div>
+                        </template>
+                    </template>
+            </h1>
+        </lightning-card>
+    <template if:false={boolHideCalculateEMI}>
+        <lightning-button class="slds-align_absolute-center buttonColor" variant="brand" label="Calculate EMI"
+        onclick={calculateEMI}></lightning-button>
+    </template>
+
+    <lightning-layout multiple-rows>
+        <template if:true={addNominee}>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                    <lightning-accordion-section name="A" label="Nominee Details">
+                        <c-nominee-parent show-details={showNominee} onnominee={handleEvents} loan-app={loanApp}></c-nominee-parent>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
+
+    <template if:true={displaySaveButton}>
+        
+        <div class="slds-align_absolute-center">
+            <!--<lightning-icon icon-name="action:reject" size="x-small" variant="success"
+                                onclick={closeLoanDetails} class="slds-m-around_medium"></lightning-icon>-->
+            <lightning-icon icon-name="action:approval" size="x-small"
+                                onclick={saveLoanDetails} class="slds-m-around_medium"></lightning-icon>
+            
+        </div>
+    </template>
+</lightning-card>
+</template>

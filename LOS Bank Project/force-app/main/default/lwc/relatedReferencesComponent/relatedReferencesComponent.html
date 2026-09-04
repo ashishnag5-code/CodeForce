@@ -1,0 +1,162 @@
+<template>
+    <!--<div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>-->
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <div>
+        <div if:true={addIcon} class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+
+                        <a class="slds-card__header-link slds-truncate" title="Applicants"
+                            onclick={handleGotoRelatedList}>
+                            <span>References ({referencesRecordCount})</span>
+                        </a>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <template if:true={addIcon}>
+                        <lightning-icon icon-name=action:new size="small" onclick={addReferenceIcon}></lightning-icon>
+                    </template>
+                </div>
+            </header>
+        </div>
+        
+        <!-- Card View Reference Section-->
+        <template if:true={viewRelatedReferences}>
+            <div class="slds-card__body slds-card__body_inner">
+                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                    <template for:each={referenceFldVal} for:item="references">
+                        <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+                            key={references.Mobile_Number} data-id={references.Mobile_Number}
+                            data-record-name="ViewMoreInformation">
+                            <article class="slds-box">
+                                <template if:true={showEdit}>
+                                    <div class="slds-card__header slds-grid slds-float_right">
+                                        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                            <div class="slds-no-flex">
+                                                <lightning-icon icon-name=action:edit size="x-small"
+                                                    data-id={references.Mobile_Number}
+                                                    data-record-name={references.Mobile_Number} alternative-text="Edit"
+                                                    title="Edit" onclick={handleReferenceEdit}>
+                                                </lightning-icon>
+                                            </div>
+                                            <div class="slds-no-flex slds-m-left_xx-small">
+                                                <lightning-icon icon-name=action:delete size="x-small"
+                                                    data-id={references.Mobile_Number}
+                                                    data-record-name={references.Mobile_Number} alternative-text="Delete"
+                                                    title="Delete" onclick={handleReferenceDelete}>
+                                                </lightning-icon>
+                                            </div>
+                                        </header>
+                                    </div>
+                                </template>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <span class="slds-card__header-link">Reference</span>
+                                    <div class="slds-form-element slds-m-top_x-small" key={references.Mobile_Number}>                                      
+                                        <span class="slds-form-element__label">Name</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {references.Name}
+                                            </div>
+                                        </div>
+                                        <span class="slds-form-element__label">Relationship With Borrower</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {references.Relationship_With_Borrower}
+                                            </div>
+                                        </div>
+                                        <span class="slds-form-element__label">Address</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {references.Address}
+                                            </div>
+                                        </div>
+                                        <span class="slds-form-element__label">Mobile No</span>
+                                        <div class="slds-form-element__control">
+                                            <div class="slds-form-element__static">
+                                                {references.Mobile_Number}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </template>
+    </div>
+
+    <!-- Add or Edit Reference Section-->
+    <template if:true={addReferencesScreen}>
+        <div class="slds-m-top_x-small">
+            <lightning-messages></lightning-messages>
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon class="slds-m-left_xx-small" icon-name=custom:custom9 size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-truncate">Add
+                            Reference</span></h2>
+                </div>
+            </header>
+            <div class="slds-m-top_x-small">
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input class="validate" type="text" required min-length="1" max-length="50" pattern="[a-zA-Z ]*$"
+                            message-when-pattern-mismatch="Please enter only Alphabets" label="Name" name="Name" date-name="Name"
+                            onchange={handleChange} value={NameVal}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox
+                            required
+                            class="validate"
+                            name="Relationship_With_Borrower"
+                            label="Relationship of borrower"
+                            value={relationshipOfBorrowerValue}
+                            placeholder="Select"
+                            options={relationshipOfBorrowerOptions}
+                            date-name="Relationship_With_Borrower__c"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input type="text" label="Address" min-length="1" max-length="100" name="Address"
+                        date-name="Address__c" onchange={handleChange} value={addressVal}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input class="validate" type="tel" required min-length="10" max-length="10" pattern="[6-9]\d{9}$"
+                            message-when-pattern-mismatch="Please enter correct mobile number" date-name="Mobile_Number__c"
+                            message-when-too-short="Please enter correct mobile number" label="Mobile Number"
+                            name="Mobile_Number" onchange={handleChange} value={mobileNoVal}></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                            onclick={handleCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                            class="slds-m-left_small" onclick={handleSave}>
+                        </lightning-icon>
+                    </div>
+                </lightning-layout>
+            </div>
+        </div>
+    </template>
+    <div class="slds-var-m-top_x-large">
+    </div>
+</template>

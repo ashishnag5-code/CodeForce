@@ -1,0 +1,299 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="string"/>
+    <aura:attribute name="componentContainer" type="list"/>
+    <aura:attribute name="buttonLabel" type="string"/>
+    <lightning:card>
+            <div class="tab_content">
+    
+                <!--<lightning:card title="Credit Score">
+                    <p class="slds-p-horizontal_large">
+                        <img src="{!$Resource.AUSF_CreditScore}" width="190"></img>
+                    </p>
+                </lightning:card>-->
+                <div class="header">
+                    Credit Score
+                </div>
+                <div class="loan_details">
+                    <div class="loan_description">
+                        <div class="loan_image_graph" style="text-align:center;">
+                            <img src="{!$Resource.AUSF_CreditScore}" width="190"></img>
+                        </div>
+                    </div>
+                    
+                 <!--   <div class="header">
+                        Details
+                    </div>
+                    
+                    <div class="loan_description" style="text-align:center;">
+                        <div class="loan" >
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Opportunity Name" style="font-size:13px;">Lender</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name" style="font-size:13px;">Kotak Mahindra</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);">Account Type</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Cloudhub">Personal Loan</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);">Account Status</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Cloudhub">Active</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);">Interest Rate</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Cloudhub">11%</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);">Sanctioned Amount</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Cloudhub">Rs. 4,00,000</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);">Currect Balance</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <div class="slds-truncate" title="Cloudhub">Rs. 1,85,000</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="header">
+                        Payment History
+                    </div>
+                    
+                    <div class="loan_description">                        
+                        <div class="loan">
+                            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-title_caps">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Opportunity Name">DPD</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Dec</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Nov</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Oct</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Sep</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Aug</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Jul</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Jun</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">May</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Apr</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Mar</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Feb</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Account Name">Jan</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);" style="font-size:10px;">2018</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            
+                                        </td>
+                                        <td data-label="Account Name">
+                                            
+                                        </td>
+                                        <td data-label="Account Name">
+                                            
+                                        </td>
+                                        <td data-label="Account Name">
+                                        	<lightning:icon iconName="utility:success" class="icn" size="xx-small"/>    
+                                        </td>
+                                        <td data-label="Account Name">
+                                        	<lightning:icon iconName="utility:success" class="icn" size="xx-small"/>    
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);" style="font-size:10px;">2017</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" data-label="Opportunity Name">
+                                            <div class="slds-truncate" title="Cloudhub"><a href="javascript:void(0);" style="font-size:10px;">2016</a></div>
+                                        </th>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                        <td data-label="Account Name">
+                                            <lightning:icon iconName="utility:success" class="icn" size="xx-small"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+       <p slot="footer">
+           <a class="slds-card__footer-action slds-text-align_center"  onclick="{!c.openPopup}"
+           >View Details
+           </a>
+       </p>
+       </lightning:card>
+    <aura:if isTrue="{!v.isModalOpen}">
+        <!-- Modal/Popup Box starts here-->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div aura:id="modalContainer" class="slds-modal__container standardDeviceWidth">
+                <!-- Modal/Popup Box Header Starts here-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" onclick="{!c.closePopup }" alternativeText="close"
+                                          variant="bare-inverse" class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.responseVar.Integration_Master__r.User_Friendly_Label__c}</h2>
+                </header>
+                <!--Modal/Popup Box Body Starts here-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    {!v.componentContainer}
+                </div>
+                <!--Modal/Popup Box Footer Starts here-->
+                <footer class="slds-modal__footer">
+                        <aura:if isTrue="{!v.buttonLabel != null}">
+                            <lightning:button variant="brand" label="{!v.buttonLabel}" title="{!v.buttonLabel}" onclick="{!c.retry}" disabled="{!v.disableRetry}"/>
+                        </aura:if>
+                    <lightning:button variant="neutral" label="Cancel" title="Cancel" onclick="{!c.closePopup}"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>

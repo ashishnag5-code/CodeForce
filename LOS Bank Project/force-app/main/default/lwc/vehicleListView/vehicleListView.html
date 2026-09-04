@@ -1,0 +1,444 @@
+<template>
+
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+    <!-- Existing Vehicle Section-->
+    <template if:true={showMainSection}>
+        <template if:false={addinformation}>
+            <article class="slds-card slds-card_boundary">
+                <div class="slds-card__header slds-grid ">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name=standard:work_order size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+
+                                <a href="#" class="slds-card__header-link slds-truncate" title="Address"
+                                    onclick={handleGotoRelatedList}>
+                                    <span>Vehicles</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">
+                            <template if:true={showAddressInsertion}>
+                                <lightning-icon icon-name=action:new size="small"
+                                    onclick={handleAdditionalInformationClick}></lightning-icon>
+                            </template>
+                        </div>
+                    </header>
+                </div>
+
+
+                <div class="slds-card__body slds-card__body_inner">
+                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <template if:false={viewMorePartial}>
+                            <template for:each={addressLst} for:item="relatedRecord">
+
+                                <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+                                    key={relatedRecord.Id} onclick={viewMoreHandler} data-id={relatedRecord.Id}
+                                    data-record-name="ViewMoreInformation">
+                                    <article class="slds-box">
+                                        <div class="slds-card__header slds-grid">
+                                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                                <div class="slds-media__figure">
+                                                    <lightning-icon icon-name=custom:custom31 size="small">
+                                                    </lightning-icon>
+                                                </div>
+                                                <div class="slds-media__body">
+                                                    <h2 class="slds-card__header-title">
+                                                        <a href="#" class="slds-card__header-link slds-truncate"
+                                                            title={relatedRecord.Name}>{relatedRecord.Name}</a>
+                                                    </h2>
+                                                </div>
+                                                <div class="slds-no-flex">
+                                                    <lightning-icon icon-name=action:edit size="x-small"
+                                                        data-id={relatedRecord.Id}
+                                                        data-record-name={relatedRecord.Pincode__c}
+                                                        alternative-text={relatedRecord.Product__c}
+                                                        title={relatedRecord.Product__c} onclick={handleRowAction}>
+                                                    </lightning-icon>
+                                                </div>
+                                            </header>
+                                        </div>
+                                        <div class="slds-card__body slds-card__body_inner">
+                                            <div class="slds-form-element" key={relatedRecord.Id}>
+                                                <span class="slds-form-element__label">Type</span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Address_Type__c}
+                                                    </div>
+                                                </div>
+
+                                                <span class="slds-form-element__label">Address Line 1</span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Address_Line_1__c}
+                                                    </div>
+                                                </div>
+
+                                                <span class="slds-form-element__label">City </span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.City__c}
+                                                    </div>
+                                                </div>
+                                                <span class="slds-form-element__label">Pincode </span>
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        {relatedRecord.Pincode__c}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </article>
+                                </li>
+                            </template>
+                        </template>
+                    </ul>
+                    <!--End -->
+                </div>
+            </article>
+        </template>
+    </template>
+
+    <template if:true={viewMorePartial}>
+        <c-address-information-details address-records={addressLst} selected-address={selectedRecords}
+            onviewall={viewLessHandler}></c-address-information-details>
+    </template>
+    <!--End -->
+
+    <!-- Add New Address Details-->
+    <template if:true={addinformation}>
+        <lightning-card title="Add New Address Information" icon-name="standard:address" class="slds-box">
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Address Type</label>
+                    <lightning-combobox name="Address_Type__c" label="Address Type" data-name="Address_Type__c"
+                        class="validate" variant="label-hidden" value={addressTypeValue} options={addressList}
+                        onchange={handleAddressType}></lightning-combobox>
+                    
+                        <template if:true={showSameAsDropDown}>
+                           <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Same As</label>
+                            <lightning-combobox name="" label="SameAs" data-name="SameAs"
+                                variant="label-hidden" value={sameasValue} options={sameAsOptions}
+                                onchange={handleCopyInfo}></lightning-combobox>
+                              <!--  <lightning-checkbox-group
+                                name="SameAs"
+                                label="Same As"
+                                data-name="SameAs"
+                                options={sameAsOptions}
+                                value={sameasValue}
+                                class="chckBox"
+                                onchange={handleCopyInfo}
+                                required
+                            >
+                            </lightning-checkbox-group>-->
+                        </template>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr> Address Line 1</label>
+                    <lightning-input type="text" variant="label-hidden" class="validate" label="" value={addressLine1Value}
+                        name="Address_Line_1__c" onchange={handleAddressType}></lightning-input>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr> Address Line 2</label>
+                    <lightning-input type="text" variant="label-hidden" class="validate" label="" value={addressLine2Value}
+                        name="Address_Line_2__c" onchange={handleAddressType}></lightning-input>
+                    <label class="slds-form-element__label">
+                        Address Line 3</label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Address_Line_3__c" value={addressLine3Value}
+                        onchange={handleAddressType}></lightning-input>
+                    
+                    <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Pin Code</label>
+                        <lightning-input type="tel" variant="label-hidden" class="validate" label="" name="Pincode__c" value={PincodeValue}
+                            onchange={handlePinCodeChange}></lightning-input>
+
+                        
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>State</label>
+                    <lightning-combobox name="State" label="State" data-name="State__c" class="validate"
+                        value={stateValue} variant="label-hidden" options={stateOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>City</label>
+                    <lightning-combobox name="City__c" label="City" data-name="City" class="validate"
+                        variant="label-hidden" value={cityValue} options={cityOptions} onchange={handlePicklistChange}>
+                    </lightning-combobox>
+
+                    
+
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small " flexibility="auto">
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Area Name</label>
+                    <lightning-combobox name="Area_Name__c" label="Area Name" data-name="Area_Name__c" class="validate"
+                        value={areNameValue} variant="label-hidden" options={areaOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Taluka</label>
+                    <lightning-combobox name="Taluka__c" label="Taluka" data-name="Taluka__c" class="validate"
+                        value={talukaValue} variant="label-hidden" options={talukaOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+                    
+                    
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Area Type</label>
+                    <lightning-combobox name="Area_Type__c" label="Area Type" data-name="AreaType" class="validate"
+                        value={areaTypeValue} variant="label-hidden" options={areaTypeOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+
+                    <label class="slds-form-element__label">
+                        Land Mark </label>
+                    <lightning-input type="text" variant="label-hidden" label="" name="Land_mark__c" value={LandMarkValue}
+                        onchange={handleAddressType}></lightning-input>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>
+                        <template if:false={showOfficeLabels}>
+                            Residence Status
+                        </template>
+                        <template if:true={showOfficeLabels}>
+                            Office Status
+                        </template>
+                    </label>
+                    <lightning-combobox name="Status__c" label="Residence Status" data-name="Status" class="validate"
+                        value={residenceStatusValue} variant="label-hidden" options={residenceStatusOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>
+                        <template if:false={showOfficeLabels}>
+                            Residence Type
+                        </template>
+                        <template if:true={showOfficeLabels}>
+                            Office Type
+                        </template>
+                    </label>
+                    <lightning-combobox name="Type__c" label="Residence Type" data-name="Type" class="validate"
+                        value={residenceStatusTypeValue} variant="label-hidden" options={residenceTypeOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+                        <template if:true={showOfficeLabels}>
+                            <label class="slds-form-element__label">
+                                Office Number </label>
+                        <lightning-input type="tel" variant="label-hidden" class="validate" label="" name="Office_Number__c" value={OfficeNoValue}
+                        onchange={handleAddressType}></lightning-input>
+                            </template>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Stability</label>
+                    <lightning-combobox name="Stability__c" label="Stability" data-name="Stability" class="validate"
+                        value={stabilityValue} variant="label-hidden" options={stabilityOptions}
+                        onchange={handlePicklistChange}></lightning-combobox>
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Address Taken From</label>
+                    <lightning-combobox name="Address_Source__c" label="Address Taken From" data-name="AddressTakenFrom"
+                        class="validate" value={addressTakenFromValue} variant="label-hidden"
+                        options={addressTakenFromOptions} onchange={handlePicklistChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+
+                    <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                        onclick={handleCancelForm}></lightning-icon>
+
+                    <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                        class="slds-m-left_small" onclick={handleSubmitForm}></lightning-icon>
+
+
+
+                    <!-- <lightning-button variant="neutral" label="Cancel" onclick={handleCancelForm}></lightning-button>
+                    <lightning-button class="slds-m-left_xx-small" label="Save" variant="brand"
+                        onclick={handleSubmitForm}></lightning-button>-->
+
+                </div>
+            </lightning-layout>
+
+        </lightning-card>
+    </template>
+
+    <!-- Edit Address Section-->
+    <template if:true={editAdress}>
+        <lightning-card title="Edit Address Information" icon-name="standard:address" class="slds-box">
+            <lightning-record-edit-form record-id={editRecordId} object-api-name="Address__c" onsuccess={handleSuccess}
+                onsubmit={handleSubmit} mode="readonly">
+                <lightning-messages></lightning-messages>
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="Address_Type__c" label="Address Type" data-name="Address_Type__c"
+                            required class="validate" value={addressTypeValue} options={addressList}
+                            onchange={handleAddressType}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="" label="Same As" data-name="SameAs"
+                        value={sameasValue} options={sameAsOptions}
+                        onchange={handleCopyInfo}></lightning-combobox>
+                    </lightning-layout-item>
+
+
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                       <!-- <lightning-input-field field-name="Address_Line_1__c" required>
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr> Address Line 1</label>
+                        <lightning-input type="text"  class="validate" label="Address Line 1" value={addressLine1Value} variant="label-hidden"
+                        name="Address_Line_1__c" onchange={handleAddressType}></lightning-input>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                       <!-- <lightning-input-field field-name="Address_Line_2__c" required>
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr> Address Line 2</label>
+                        <lightning-input type="text"  class="validate" label="Address Line 2" value={addressLine2Value} variant="label-hidden"
+                        name="Address_Line_2__c" onchange={handleAddressType}></lightning-input>
+                    
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                      <!--  <lightning-input-field field-name="Address_Line_3__c">
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr> Address Line 3</label>
+                        <lightning-input type="text"  class="validate" label="Address Line 3" value={addressLine3Value} variant="label-hidden"
+                        name="Address_Line_3__c" onchange={handleAddressType}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <!--<lightning-input-field field-name="Pincode__c" value={pinCodeVal} onchange={handlePinCodeChange}
+                            required>
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Pin Code</label>
+                        <lightning-input type="tel"  class="validate" label="" name="Pincode__c" value={pinCodeVal} variant="label-hidden"
+                            onchange={handlePinCodeChange}></lightning-input>
+                    </lightning-layout-item>
+                    
+
+                    
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="State" label="State" data-name="State" value={stateValue} required
+                            options={stateOptions} onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="City" label="City" data-name="City" value={cityValue}
+                            options={cityOptions} required onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="Area Name" label="Area Name" data-name="Areaname" value={areNameValue}
+                            required options={areaOptions} onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+
+                        <lightning-combobox name="Taluka" label="Taluka" data-name="Taluka" value={talukaValue} required
+                            options={talukaOptions} onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+
+                    
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                      <!--  <lightning-input-field field-name="Area_Type__c" required>
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Area Type</label>
+                        <lightning-combobox name="Area_Type__c" label="Area Type" data-name="AreaType" class="validate"
+                            value={areaTypeValue} variant="label-hidden" options={areaTypeOptions}
+                            onchange={handlePicklistChange}></lightning-combobox>
+                    
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                       <!-- <lightning-input-field field-name="Land_mark__c">
+                        </lightning-input-field>-->
+                        <label class="slds-form-element__label">
+                            Land Mark </label>
+                        <lightning-input type="text" variant="label-hidden" label="" name="Land_mark__c" value={LandMarkValue}
+                            onchange={handleAddressType}></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <template if:false={showOfficeLabels}>
+                            Residence Status
+                        </template>
+                        <template if:true={showOfficeLabels}>
+                            Office Status
+                        </template>
+                        <lightning-combobox name="Status" label="Status" data-name="Status" value={residenceStatusValue}
+                            variant="label-hidden"  options={residenceStatusOptions}
+                            onchange={handlePicklistChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <template if:false={showOfficeLabels}>
+                            Residence Type
+                        </template>
+                        <template if:true={showOfficeLabels}>
+                            Office Type
+                        </template>
+                        <lightning-combobox name="Type" label="Type" data-name="Type" 
+                            variant="label-hidden" value={residenceStatusTypeValue} options={residenceTypeOptions}
+                            onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="Stability" label="Stability" data-name="Stability"
+                            value={stabilityValue} required options={stabilityOptions} onchange={handlePicklistChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-combobox name="AddressTakenFrom" label="Address Taken From"
+                            data-name="AddressTakenFrom" value={addressTakenFromValue} 
+                            options={addressTakenFromOptions} onchange={handlePicklistChange}></lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                            onclick={handleRecordUpdateCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" type="submit"
+                            class="slds-m-left_small"></lightning-icon>
+
+                        <!--<lightning-button variant="base" label="Cancel" onclick={handleRecordUpdateCancel}>
+                        </lightning-button>
+                        <lightning-button class="slds-m-left_small" type="submit" variant="base" label="Save">
+                        </lightning-button>-->
+                    </div>
+                </lightning-layout>
+
+            </lightning-record-edit-form>
+        </lightning-card>
+    </template> <br />
+    <!-- End -->
+
+
+</template>

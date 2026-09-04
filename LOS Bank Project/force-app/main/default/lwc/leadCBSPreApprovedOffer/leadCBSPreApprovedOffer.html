@@ -1,0 +1,105 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+    <template if:true={showOffer}>
+    <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+          <div class="slds-media__figure">
+            <span class="slds-icon_container slds-icon-standard-account" title="account">
+                <lightning-icon icon-name="utility:summarydetail" size="small"></lightning-icon>
+              <span class="slds-assistive-text">account</span>
+            </span>
+          </div>
+          <div class="slds-media__body">
+            <h2 class="slds-card__header-title">
+              <a href="#" class="slds-card__header-link slds-truncate" title="Accounts">
+                <label class="slds-form-element__label">Pre Approved Offers</label>
+              </a>
+            </h2>
+          </div>
+        </header>
+    </div>
+    <template for:each={lstPreApprovedOffer} for:item="objPreApproved">
+        <lightning-layout key={objPreApproved.Offer_Id__c}>
+            <lightning-layout-item flexibility="auto" class="slds-card_boundary slds-p-around_xx-small">
+                <lightning-card icon-name="standard:account" variant="Narrow" data-id={objPreApproved.Offer_Id__c}>
+                    <h1 slot="title" class="no-wrap"><a>{objPreApproved.Offer_Id__c}</a></h1>
+                    <div slot="actions">
+                        <template if:false={objPreApproved.Is_Selected__c}>
+                            <lightning-button onclick={markSelected} disabled={selectDisabled} data-id={objPreApproved.Offer_Id__c} data-name="Avail" label="Avail" slot="actions"></lightning-button>
+                        </template>
+                        <template if:true={objPreApproved.Is_Selected__c}>
+                            <lightning-button onclick={markSelected} disabled={selectDisabled} data-id={objPreApproved.Offer_Id__c} data-name="Availed" label="Availed" slot="actions"></lightning-button>
+                        </template>
+                    </div>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Offer Name</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.Offer_Name__c}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">First Offer Amount</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.FirstOfferAmount__c}
+                        </div>
+                    </div>
+                    <template if:true={objPreApproved.boolIsInputobjPreApprovedIndividual}>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Valid From</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objPreApproved.ValidFrom__c}
+                            </div>
+                        </div>
+                    </template>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Valid Till</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.ValidTill__c}
+                        </div>
+                    </div>
+                    <!--<div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">LTV</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.ValidTill__c}
+                        </div>
+                    </div>-->
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Min Tenure in Months</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.MinLoanTenureinMonths__c}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Max Tenure in Months</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.MaxLoanTenureinMonths__c}
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">ROI</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objPreApproved.RateofInterest__c}
+                        </div>
+                    </div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+    </template>
+    </template>
+</template>

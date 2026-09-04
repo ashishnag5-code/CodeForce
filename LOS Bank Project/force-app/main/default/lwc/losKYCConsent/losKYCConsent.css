@@ -1,0 +1,33 @@
+.consent {
+    margin: auto;
+    padding: 1%;
+    border-radius: 12px;
+    width: 98%;
+    height: 10%;
+    border: 1px solid white;
+    box-sizing: border-box;
+    background-color: #CBC3E3;
+  }
+  
+  .check{
+    float:left;
+  }
+  
+  .consentTxt{
+    color: var(--lwc-brandTextLink,rgb(121, 68, 160));
+    line-height: 1.6;
+    font-family: Century;
+  }
+
+  .borderColorCombobox {
+    border-color: var(--lwc-brandTextLink,rgb(121, 68, 160)) !important;
+  }
+
+  .comboboxPosition {
+      position: relative;
+      right: 4%;
+  }
+
+  .marginCombobox {
+    margin-right: 0%;
+  }

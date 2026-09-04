@@ -1,0 +1,62 @@
+<template>
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-combobox name="Crop_Details__c" label="Crop Details" data-name=""
+                                class="validate" value={cropDetailsValue} options={cropOptions} required
+                                onchange={handleChange}>
+                            </lightning-combobox>
+           
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="number" name="Market_Price__c" value={marketPrice} 
+            onchange={handleChange} step="0.01" label="MSP"></lightning-input>
+        </lightning-layout-item>
+        
+    </lightning-layout>
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-combobox name="Irrigartion_Source__c" label="Irrigartion Source" data-name=""
+                                class="validate" value={cropDetailsValue} options={irrigationOptions} required
+                                onchange={handleChange}>
+                            </lightning-combobox>
+           
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="number" name="Area_under_crop__c" value={areaCropVal}
+            onchange={handleChange} step="0.01" label="Area under crop(acres)"></lightning-input>
+        </lightning-layout-item>
+        
+    </lightning-layout>
+
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="text" name="Sowing_Month__c" value={sowingmonthVal}
+            onchange={handleChange}  label="Sowing Month"></lightning-input>
+           
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="text" name="Harvesting_Month__c" value={harvestingmonthVal}
+            onchange={handleChange}  label="Harvesting Month"></lightning-input>
+        </lightning-layout-item>
+        
+    </lightning-layout>
+
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="number" name="Estimated_Yield__c" value={yieldVal}
+            onchange={handleChange}  label="Estimated Yield"></lightning-input>
+           
+        </lightning-layout-item>
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="text" name="Estimated_Sale_Value__c" value={saleVal}
+            onchange={handleChange}  label="Estimated Sale Value"></lightning-input>
+        </lightning-layout-item>
+        
+    </lightning-layout>
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+            <lightning-input type="number" name="Net_Revenue__c" value={netRevenueVal}
+            onchange={handleChange}  label="Net Revenue"></lightning-input>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

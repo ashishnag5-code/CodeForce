@@ -1,0 +1,6 @@
+<aura:component description="overrideStandardNewButton" implements="lightning:actionOverride,force:hasRecordId,lightning:isUrlAddressable">
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.reInit}" />
+    <c:ausfNewDeviation ongetapplicationid="{!c.handlePageRedirection}"  recordId="{!v.recordId}" ></c:ausfNewDeviation>
+</aura:component>

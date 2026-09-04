@@ -1,0 +1,14 @@
+.THIS .slds-timeline__item_task:before {
+    background: rgb(221, 219, 218)	 !important;
+    left: 1.5rem !important;
+}
+.THIS .detailStyle{
+    word-wrap: break-word;
+}
+.THIS .fullDeviceWidth {
+    min-width: -webkit-fill-available;
+}
+.THIS .standardDeviceWidth {
+    min-width: fit-content;
+    padding: 1rem;
+}

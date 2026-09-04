@@ -1,0 +1,174 @@
+<template>
+    <lightning-card title="Create Quick Loan Aplication" icon-name="standard:lead">
+
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small"
+                flexibility="auto">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Sourcing channel</label>
+                <lightning-combobox name="Sourcing_channel__c" label="Sourcing channel"
+                    value={sourcingChannelOptionsValue} class="validate" variant="label-hidden"
+                    placeholder="Select Sourcing channel" options={sourcingChannelPicklistValues}
+                    onchange={handleSourcingchannelChange}></lightning-combobox>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Source Name</label>
+                <lightning-input type="text" variant="label-hidden" class="validate" label="Source Name"
+                    name="Source_Name__c" onchange={handleValuChange}></lightning-input>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Product</label>
+                <lightning-combobox name="Product__c" label="Product" value={productOptionsValue}
+                    placeholder="Select Product" options={productPicklistValues} class="validate" variant="label-hidden"
+                    onchange={handleProductChange}>
+                </lightning-combobox>
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Category</label>
+                <lightning-combobox name="Category__c" label="Category" value={categoryValue} class="validate"
+                    variant="label-hidden" placeholder="Select Category Type" options={categoryTypePicklistValues}
+                    onchange={handleCategoryTypeChange}>
+                </lightning-combobox>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Vehicle Use</label>
+                <lightning-combobox name="Vehicle_use__c" label="Vehicle Use" value={vehicleUseOptionsValue}
+                    class="validate" variant="label-hidden" placeholder="Select Vehicle Use"
+                    options={vehicleUsePicklistValues} onchange={handleVehicleUseChange}></lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small"
+                flexibility="auto">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Customer Type</label>
+                <lightning-combobox name="Customer_Type__c" label="CustomerType" value={customerTypeOptionsValue}
+                    class="validate" variant="label-hidden" placeholder="Select Customer Type"
+                    options={customerTypePicklistValues} onchange={handleCustomerTypeChange}>
+                </lightning-combobox>
+
+                <template if:true={indvidualCustomer}>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Adhar Card </label>
+                    <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} class="validate"
+                        label="Adhar Card" name="Adhar_Card__c"></lightning-input>
+                </template>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Pan Card/Form16</label>
+                <lightning-combobox name="Pan_Form16__c" label="Pan/Form16" value={pancardForm16OptionsValue}
+                    class="validate" variant="label-hidden" placeholder="Select value"
+                    options={pancardForm16PicklistValues} onchange={handlePancardForm16ValueChange}>
+                </lightning-combobox>
+
+                <template if:true={isEnabledPanCard}>
+                    <template if:true={categoryChecks}>
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Pan Card</label>
+                        <lightning-input type="text" required="true" variant="label-hidden" onchange={handleValuChange}
+                            class="validate" label="Pan Card" name="Pan_Card__c"></lightning-input>
+                    </template>
+                    <!-- STARTS
+                    <label class="slds-form-element__label" >
+                        <abbr class="slds-required" title="required">* </abbr>Pan Card</label>
+                    <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} class="validate" label="Pan Card" name="Pan_Card__c"></lightning-input>
+               -->
+                </template>
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Loan Amount</label>
+                <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} class="validate"
+                    label="Loan Amount" name="Loan_Amount__c">
+                </lightning-input>
+                <!--</lightning-layout-item>-->
+                <!--</lightning-layout>
+
+        <lightning-layout multiple-rows vertical-align="center">-->
+                <!--<lightning-layout-item size="12" small-device-size="6" large-device-size="6" padding="around-small"
+                flexibility="auto">-->
+
+                <!--<div class="slds-var-p-around-medium">-->
+                <div class="slds-is-relative ">
+                    <!--<template if:true={isVerified}>
+                            <lightning-icon size="x-small" variant="success" class="input-icon right-icon"
+                                icon-name="utility:success" title="Mobile"></lightning-icon>
+                        </template>-->
+
+                    <!--<template if:true={boolSendOtp}>
+                            button class="slds-button input-icon right-icon" onclick={handleSendOTP} >SEND OTP</button>
+                            <a href="#" class="slds-has-blur-focus input-icon right-icon">Link with halo focus</a>
+                            <lightning-button variant="base" label="SEND OTP" title="Looks like a link"
+                                onclick={handleSendOTP} class="input-icon right-icon"></lightning-button>
+                        </template>-->
+
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Mobile</label>
+                    <div class="buttonIn">
+                        <lightning-input type="tel" name="Mobile__c" class="validate input" value={mobileNumber}
+                            variant="label-hidden" onchange={handleChangePhoneNumber} max-length="13"
+                            pattern="[+91]{3}[6-9]{1}[0-9]{9}"
+                            message-when-pattern-mismatch="Please enter a valid phone number"></lightning-input>
+
+                        <!--<button class="slds-button button" onclick={handleSendOTP}>SEND OTP</button>-->
+                        <template if:true={boolSendOtp}>
+                            <lightning-button variant="base" label="SEND OTP" disabled={boolCheckMobileNumber} title="Looks like a link"
+                                onclick={handleSendOTP} class="button"></lightning-button>
+                        </template>
+                        <template if:true={boolResendOtp}>
+                            <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                                onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button"></lightning-button>
+                        </template>
+                        <template if:true={isVerified}>
+                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                title="Mobile"></lightning-icon>
+                        </template>
+                    </div>
+
+                </div>
+                <template if:true={isEnterOtp}>
+                    <div class="slds-is-relative">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+                        <div class="buttonIn">
+                            <!--<template if:true={boolResendOtp}>
+                                        <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                                            onclick={handleResendOTP} class="button"></lightning-button>
+                                    </template>-->
+
+                            <!--<template if:true={isEnterOtp}>-->
+                            <lightning-input    type="Text" max-length="6"
+                                                pattern = "[0-9]{6}"
+                                                class="validate" placeholder="Enter OTP here" 
+                                                variant="label-hidden" 
+                                                onchange={handleChangeOtp}
+                                                message-when-pattern-mismatch="Please enter a valid OTP."
+                                                label="Enter OTP">
+                            </lightning-input>
+                            <!--</template>-->
+                            <!--<template if:true={boolVerify}>-->
+                                <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                                    onclick={handleVerify} disabled={boolVerify} class="button"></lightning-button>
+                            <!--</template>-->
+                        </div>
+                    </div>
+                    <div class="slds-align_absolute-center slds-m-top_small">
+                        <template if:true={boolRequestOtp}>
+                            Request OTP in&nbsp;<b>{increse1Second}</b>s
+                        </template>
+                    </div>
+                </template>
+
+
+                <!--</div>-->
+            </lightning-layout-item>
+            <!--
+            <lightning-layout-item size="12" small-device-size="6" large-device-size="6" padding="around-small"
+                flexibility="auto">
+                <button class="slds-button slds-m-top_medium">Button</button>
+            </lightning-layout-item>-->
+
+        </lightning-layout>
+        <p slot="footer">
+            <lightning-button label="Save" variant="brand" onclick={createLead}></lightning-button>
+        </p>
+    </lightning-card>
+</template>

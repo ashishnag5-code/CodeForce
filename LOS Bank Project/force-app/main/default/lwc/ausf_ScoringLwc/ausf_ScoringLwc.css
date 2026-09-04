@@ -1,0 +1,78 @@
+.mainContent{
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.scores {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.header_content {
+    font-size: 15px;
+    font-weight: 700;
+    padding-bottom: 13px;
+}
+
+.content {
+    padding: 10px; 
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.checkname{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.credit_score{
+	font-size:16px;
+	font-weight:700;
+	color:green;    
+}
+
+.slds-icon-action-check {
+    background-color: #2E7711;
+}
+
+.errorMessgaeCss {
+    margin-left: auto;
+    min-width: var(--slds-c-toast-sizing-min-width, var(--sds-c-toast-sizing-min-width, 20rem));
+}
+
+.cibil {
+    margin-top: 2rem;
+}
+
+.onClickRefresh {
+    cursor: pointer;
+}
+
+.pendingIcon {
+    display: inline-block; 
+    background:yellow;
+    border-radius: 60%;
+    box-shadow: 0 0 .1rem #888;
+    padding: 0.3rem 0.3rem;
+}
+
+.cibil_650_724_or_minusOne {
+    color: yellow;
+}
+
+.cibil_moreThan_725 {
+    color: green;
+}
+
+.cibil_below_650 {
+    color: red;
+}
+
+.hideCIBILReport {
+    display: none;
+}
+
+.showCIBILReport {
+    display: block;
+}

@@ -1,0 +1,285 @@
+<apex:page renderAs="pdf" controller="SanctionPDFController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+  <html>
+    <head>
+      <style type="text/CSS" media="print">
+        <apex:outputPanel layout="none" rendered="true">
+                .watermark {
+                    background-repeat: repeat;
+                    background-image: url("{!URLFOR($Resource.AUBankLogoSanction)}");
+                }
+        </apex:outputPanel>
+
+        .headerCSS1{
+          color:#6D3078; font-size: 40px; font-weight : 700; font-family: 'Quicksand', sans-serif;
+        }
+
+        .headerCSS2{
+          color: #F37435; font-size: 40px; font-weight : 700; font-family: 'Quicksand', sans-serif;
+        }
+
+        body { font-family: 'Quicksand', sans-serif !important; font-size : 13px !important; sans-serif; color :333;}
+
+        body li { 
+          margin-bottom : 2%;
+
+        }
+       
+        .detailsTableCSS{
+          margin-bottom: 3%;
+       }
+
+        .marginBottom_Size{
+          margin-bottom: 2%;
+       }
+
+        .textCSS{
+          font-family: 'Quicksand', sans-serif; font-size : 15px; color :333;
+       }
+
+        table{
+         width : 100%; background-color : rgb(244, 240, 240)
+       }
+      
+        td{
+          font-family: 'Quicksand', sans-serif; font-size : 13px; padding-left : 30%;
+          border-bottom: 1px dashed #9b9b9b;
+          padding: 1px;
+          font-weight: 100;
+        }
+
+        .noBorderCSS{
+          border: none
+        }
+
+        .staticTextHeader{
+          font-family: 'Quicksand', sans-serif; font-size : 13px; font-weight: bold;
+        }
+
+        .headerImageCSS{
+          align-content: right;
+
+        }
+
+        @page {
+            margin-bottom: 3cm;
+
+            
+            background-image: url("{!URLFOR($Resource.CancelledImage)}");
+            background-repeat: no-repeat;
+            background-position: center;
+            
+            
+
+            @bottom-left {
+             content: element(footer);
+            }
+        }
+
+        div.footer {
+            display: block;
+            position: running(footer);
+            margin-bottom: 10px;
+            align-content: left;
+            margin-top: 5%;
+        }
+      </style>
+    </head>
+    <div style="margin-bottom : 16%">
+      <!--apex:image url="{!URLFOR($Resource.AUMotoImage)}" height="100" width="150"></apex:image-->
+      <img src="{!URLFOR($Resource.AUMotoImage)}" height="100" width="150" align = "left"/>
+      <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "right"/>
+      <!--apex:image url="{!URLFOR($Resource.AUBankLogoSanction)}" style="margin-left : 17%; text-align:right;" height="100" width="150"></apex:image-->
+    </div>
+    <body class="watermark slds-scope">
+      <apex:pageMessages />
+      
+      <div class="footer" name="footer">
+          <apex:image url="{!URLFOR($Resource.SantionFooter)}" width="300%" height="90"></apex:image>
+      </div>
+
+      
+      
+      <div>DATE : {!PDFWrapperData.dateValue}</div>
+      
+      <div style="border : 3px solid black; width : 100rem; height : 100rem; margin-top : 2%; margin-bottom : 2%">
+        <div style="margin-top : 1%; margin-left : 2%; margin-bottom : 1%" class="textCSS">
+          Name of Customer : {!PDFWrapperData.applicant.customerName}<br/>
+        </div>
+        <div style="margin-top : 1%; margin-left : 2%; margin-bottom : 1%">
+          Father's Name : {!PDFWrapperData.applicant.fatherName}<br/>
+        </div> 
+        <div style="margin-top : 1%; margin-left : 2%; margin-bottom : 2%">
+          Address : {!PDFWrapperData.address.address}<br/>
+        </div>
+      </div>
+      
+      <div class= "table1CSS" style = "margin-bottom: 2%; height: 100%">
+        <table>
+          <thead>
+            <th></th>
+            <th></th>
+          </thead>
+          <tbody> 
+            <tr>
+              <td>DO NO.</td>
+              <td>Test</td>
+            </tr>
+            <tr>
+              <td>Application No</td>
+              <td>{!PDFWrapperData.loanApplication.applicationNo}</td>
+            </tr>
+            <tr>
+              <td class="noBorderCSS"> Branch Name</td>
+              <td class="noBorderCSS">{!PDFWrapperData.loanApplication.branchName}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style = "margin-bottom: 2%"> 
+        <div style = "margin-bottom:1%" class = "textCSS">
+          Dear {!PDFWrapperData.applicant.customerName},<br/>
+        </div>
+        <div style = "margin-bottom:1%" class = "textCSS"> 
+          We are pleased to share that your Loan Application No. {!PDFWrapperData.loanApplication.applicationNo}, applied through AU WHEELS, has been principally sanctioned.<br/>
+        </div>
+        <div class = "textCSS"> 
+          Here are the details
+        </div>
+      </div>
+
+      <div class = "detailsTableCSS">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Dealer Name</td>
+              <td>{!PDFWrapperData.loanApplication.dealerName}</td>
+            </tr>
+            <tr>
+              <td>Model</td>
+              <td>{!PDFWrapperData.collateral.model}</td>
+            </tr>
+            <tr>
+              <td>Vehicle Type (New/Old)</td>
+              <td>{!PDFWrapperData.collateral.vehicleType}</td>
+            </tr>
+            <tr>
+              <td>Vehicle No.(Only for old vehicles)</td>
+              <td>{!PDFWrapperData.collateral.vehicleNo}</td>
+            </tr>
+            <tr>
+              <td>Loan Amount</td>
+              <td>{!PDFWrapperData.loanApplication.loanAmount}</td>
+            </tr>
+            <tr>
+              <td>Tenure</td>
+              <td>{!PDFWrapperData.loanApplication.tenure}</td>
+            </tr>
+            <tr>
+              <td class = "noBorderCSS">EMI</td>
+              <td class = "noBorderCSS">{!PDFWrapperData.loanApplication.emi}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class = "detailsTableCSS" style="margin-bottom : 12% !important">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ex Showroom value</td>
+              <td>{!PDFWrapperData.collateral.exShowRoomValue}</td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td>{!PDFWrapperData.collateral.discount}</td>
+            </tr>
+            <tr>
+              <td>Loan Amount</td>
+              <td>{!PDFWrapperData.collateral.loanAmount}</td>
+            </tr>
+            <tr>
+              <td>Deductions</td>
+              <td>{!PDFWrapperData.collateral.deduction}</td>
+            </tr>
+            <tr>
+              <td>Final Amount</td>
+              <td>{!PDFWrapperData.collateral.finalAmount}</td>
+            </tr>
+            <tr>
+              <td>LTV (%)</td>
+              <td>{!PDFWrapperData.collateral.ltv}</td>
+            </tr>
+            <tr>
+              <td>Effective ROI (%)</td>
+              <td>{!PDFWrapperData.loanApplication.effectiveROI}</td>
+            </tr>
+            <tr>
+              <td>Interest Rate Type</td>
+              <td>{!PDFWrapperData.loanApplication.interestRate}</td>
+            </tr>
+            <tr>
+              <td>Benchmark Rate</td>
+              <td>Dealer Name</td>
+            </tr>
+            <tr>
+              <td>Benchmark Rate</td>
+              <td>Dealer Name</td>
+            </tr>
+            <tr>
+              <td class = "noBorderCSS">Maximum Interest</td>
+              <td class = "noBorderCSS">Dealer Name</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- End Static Text 1-->
+      <div style = "margin-bottom: 2%">
+        <div class = "staticTextHeader">Your loan will be disbursed on receipt of the following documents.</div>
+        <div>
+          <ul style="list-style-type:circle;">
+            <li class="textCSS" style = "font-size : 13px !important;">Duly Signed Loan Agreement</li>
+            <li class="textCSS" style = "font-size : 13px !important;">Repayment Instructions (Post-dated cheques or Debit-ECS Instructions or ACH</li>
+            <li class="textCSS" style = "font-size : 13px !important;">Invoice and Insurance Policy with hypothecation in favor of AU Small Finance Bank. Duly recorder thereon Margin Money Receipt.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- End static Text2-->
+
+      <div>
+        <div class = "staticTextHeader">You are also requested to note as follows.</div>
+        <div>
+          <apex:repeat value="{!PDFWrapperData.staticContentMaster}" var="staticRecord" id="repeatedVal">
+            <apex:outputText escape="false" value="{!staticRecord.Letter_Content__c}" ></apex:outputText>
+
+          </apex:repeat>
+        </div>
+
+      </div>
+
+      <!-- end Regards-->
+
+      <div style="margin-top:7%; position:relative">
+        <div class="textCSS" style="margin-bottom:1%">Warm Regards,<br/></div>
+        <div class="textCSS"><b>AU Small Finance Bank</b></div>
+      </div>
+
+    </body>
+  </html>
+  
+</apex:page>

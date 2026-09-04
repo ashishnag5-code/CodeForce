@@ -1,0 +1,38 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <h4 style="text-align: center;">
+                Annexure 2
+            </h4>
+            <p style="text-align: center;">(To be printed on Company letter head)</p>
+            <p>To,<br/>
+            {!btPayment.Beneficiary_Name__c}<br/>
+            {!btPayment.Bank_Name_Lookup__r.Branch_Name__c}<br/>
+            (Name and address of Finance company)</p>
+            <p>Subject: Payment of Settlement amount of Loan account no {!btPayment.Loan_Number__c}</p>
+            <p>Dear Sir,</p>
+            <p>In reference to you Foreclosure letter date ______________ bearing account number
+                {!btPayment.Loan_Number__c}
+                In the name of {!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}, we are attaching the payment
+                of
+                Rs. <apex:outputField value="{!btPayment.Net_Amount__c}"/> through Cheque / DD number _______________________ payable
+                at_________________________</p>
+            <p>Please acknowledge the duplicate copy of this letter as a token of acceptance of payment
+                towards full and final payment of loan account number {!btPayment.Loan_Number__c}
+                You are requested to handover the NOC to us and not customer in any condition.</p><br/>
+            <p>Thanking You</p>
+            <p>
+                Yours Faithfully
+            </p>
+            <br/>
+            <p>Authorized Signatory</p>
+            <h5>For AU Small Finance Bank Ltd.</h5>
+        </body>
+    </html>
+</apex:page>

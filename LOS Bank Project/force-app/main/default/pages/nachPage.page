@@ -1,0 +1,185 @@
+<apex:page controller="ACHPageController" action="{!getLADetails}" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false" renderAs="pdf" showHeader="false">
+<html>
+<head>
+<style>
+@page {
+    size: 9.2in 13in;
+    @ bottom-center { content : counter( page);
+    font-family: sans-serif;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 0px;
+    }
+}
+
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid;
+    padding: 1px;
+    font-size: 11px;
+}
+
+.dashedLine-mandate {
+    border-width: 1px;
+    padding: 2px;
+    width: 8in;
+}
+
+#umrn_Date td {
+    padding: 0px;
+} 
+
+#right_image {
+    position: relative;
+    z-index: -1;
+}
+
+.noBorder {
+    border: 0px solid;
+    margin-top: 2px;
+}
+
+
+#err {
+    color: red;
+    font-size: 20px;
+}
+
+p {
+    font-size: 8px;
+    padding: 0p !important;
+    margin: auto;
+}
+
+.heading {
+    background-color: #DCDCDC;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.placeHolder {
+    color: #DCDCDC;
+    border: 1px solid black;
+}
+
+.placeHolderItalic {
+    color: #DCDCDC;
+    border: 1px solid black;
+    font-style: italic;
+}
+
+#tickbox {
+    position: absolute;
+    z-index: -1;
+    width: 7%;
+    height: 55px;
+    margin: -26px 0px 0px 20px;
+}
+
+#cross_checkbox {
+    position: absolute;
+    z-index: -1;
+    width: 4%;
+    height: 20px;
+    margin: -10px 0 0 50px;
+}
+
+#right_checked_checkbox {
+    position: relative;
+    z-index: -1;
+    width: 2%;
+    height: 20px;
+}
+
+body {
+    margin-left: 0px;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+div {
+    font-size: 11px;
+}
+
+.checkbox {
+    height: 10px;
+}
+
+.center {
+    text-align: center;
+}
+
+.noBorder {
+    border: 0px solid;
+}
+
+.alignTop {
+    vertical-align: top;
+}
+
+.border {
+    border: 1px solid;
+}
+
+.font-serif {
+    font-family: serif;
+}
+
+.line-height {
+    line-height: 16px;
+}
+
+.line-height-standard {
+    line-height: 18px;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-margin-top {
+    margin-top: -2px;
+}
+
+.umrnDate {
+    margin: -50px 0 0 100px;
+}
+
+.mandateDiv {
+    border: 1px solid;
+    width: 8in;
+    height: 3.8in;
+}
+
+#mandate_logo
+{
+position:absolute;
+width:5px;                  
+height:5px;  
+margin-top: -2px;    
+}
+
+.mandate-info-align {
+    margin-top: 3px;
+    margin-right: 3px;
+}
+</style>
+</head>
+    <body>
+        <apex:form >   
+            <div >
+                <c:nachComponent loanObj="{!loanObj}" appObj="{!appObj}" customerName="{!customerName}" fromDate="{!fromDate}" endDate="{!endDate}" today="{!today}" referenceOne="{!referenceOne}" referenceTwo="{!referenceTwo}" ifscList="{!ifscList}" accNo="{!accNo}"/>
+                <div class="dashedLine-mandate"></div>
+                <c:nachComponent loanObj="{!loanObj}" appObj="{!appObj}" customerName="{!customerName}" fromDate="{!fromDate}" endDate="{!endDate}" today="{!today}" referenceOne="{!referenceOne}" referenceTwo="{!referenceTwo}" ifscList="{!ifscList}" accNo="{!accNo}"/>
+                <div class="dashedLine-mandate"></div>
+                <c:nachComponent loanObj="{!loanObj}" appObj="{!appObj}" customerName="{!customerName}" fromDate="{!fromDate}" endDate="{!endDate}" today="{!today}" referenceOne="{!referenceOne}" referenceTwo="{!referenceTwo}" ifscList="{!ifscList}" accNo="{!accNo}"/>
+            </div>   
+        </apex:form>
+    </body>
+</html>
+</apex:page>

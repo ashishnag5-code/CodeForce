@@ -1,0 +1,137 @@
+<template>
+
+  <div class="slds-box slds-box_x-small slds-theme_shade">
+    <template if:true={hideSection}>
+      <lightning-icon icon-name="utility:chevronright" onclick={handleOpenSection} size="x-small"></lightning-icon>
+    </template>
+    <template if:false={hideSection}>
+      <lightning-icon icon-name="utility:chevrondown" onclick={handleHideSection} size="x-small"></lightning-icon>
+    </template>
+    &nbsp;<b>VPI EMI Schedule ({recordCount})</b>
+
+  </div>
+    
+  
+  <template if:false={hideSection}>
+      <lightning-card>
+        
+          <!--<template if:true={readOnly}>
+            <span slot="actions">
+                    <lightning-icon class="slds-m-around_x-small" icon-name="action:edit" size="xx-small" onclick={handleEdit}></lightning-icon>
+            </span>
+        </template>
+        
+        <template if:false={readOnly}>
+          <span slot="actions">
+            <lightning-icon class="slds-m-around_x-small" icon-name="action:reject" size="xx-small" onclick={handleReject}></lightning-icon>
+
+          </span>               
+           
+        </template>-->
+        
+        
+      <lightning-layout>
+        <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+            <div class="slds-scrollable--x" >
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                    <thead>
+                      <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                          <div class="slds-truncate">                                    
+                            <lightning-formatted-text value="" class="slds-text-body_small"></lightning-formatted-text>
+                          </div>
+                        </th>
+                        <!--<th class="" scope="col">
+                          <div class="slds-truncate">
+                            <lightning-formatted-text value="Index" class="slds-text-body_small"></lightning-formatted-text>
+                          </div>
+                        </th>-->
+                        <th class="" scope="col">
+                          <div class="slds-truncate">
+                            <lightning-formatted-text value="Stage No" class="slds-cell-wrap slds-text-body_small"></lightning-formatted-text>
+                          </div>
+                        </th>
+                        <th class="" scope="col">
+                          <div class="slds-truncate">
+                            <lightning-formatted-text value="Upto Installment No" class="slds-cell-wrap slds-text-body_small"></lightning-formatted-text>
+                          </div>
+                        </th>
+                        <th class="" scope="col">
+                          <div class="slds-truncate">
+                            <lightning-formatted-number formatter="Currency" value="" class="slds-text-body_small"></lightning-formatted-number>
+                            <lightning-formatted-text formatter="Currency" value="Installment Amount" class="slds-cell-wrap slds-text-body_small"></lightning-formatted-text>
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={scheduleList} for:item="relatedRecord" for:index="index">
+                            <tr class="slds-hint-parent" key={relatedRecord.key}>  
+                                <td data-label="Check">
+                                  <div class="slds-truncate">
+                                    <div class="slds-align_absolute-center">
+                                        <lightning-input class="slds-text-body_small" onchange={handleChange} disabled={readOnly} name="isChecked" access-key={relatedRecord.key} variant="label-hidden" type="checkbox" value={relatedRecord.isChecked} checked={relatedRecord.isChecked}></lightning-input>
+                                    </div>  
+                                  </div>
+                                </td>
+                                <!--<td data-label="Index">
+                                  <div class="slds-truncate">
+                                    <lightning-input class="slds-text-body_small" read-only={readOnly} name="Index" variant="label-hidden" access-key={relatedRecord.key} type="number" value={index} required></lightning-input>                    
+                                  </div>
+                                </td>-->
+                                <td data-label="Stage_Number__c" title={relatedRecord.Stage_Number__c}>
+                                  <div class="slds-truncate">
+                                    <lightning-input class="slds-text-body_small" read-only=true name="Stage_Number__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Stage_Number__c} required></lightning-input>                    
+                                  </div>
+                                </td>
+                                <td data-label="Installment_Number__c">
+                                  <div class="slds-truncate" title={relatedRecord.Installment_Number__c}>
+                                    <lightning-input class="slds-text-body_small" read-only={readOnly} name="Installment_Number__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Installment_Number__c} required onchange={handleChange}></lightning-input>
+                                  </div>
+                                </td>
+                                <td data-label="Installment_Amount__c">
+                                  <div class="slds-truncate" title={relatedRecord.Installment_Amount__c}>
+                                    <lightning-input class="slds-text-body_small" read-only={readOnly} name="Installment_Amount__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Installment_Amount__c} required onchange={handleChange}></lightning-input>
+                                  </div>
+                                </td>
+                            </tr>
+                        </template>
+                        
+                    </tbody>
+                </table>
+            </div> 
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <template if:true={readOnly}>
+      <div class="slds-align_absolute-center">
+        <lightning-icon class="slds-m-around_x-small" icon-name="action:edit" size="xx-small" onclick={handleEdit}></lightning-icon>
+      </div>
+    </template>
+
+    <template if:false={readOnly}>
+      <div class="slds-align_absolute-center">
+          <lightning-icon class="slds-m-around_x-small" icon-name="action:approval"  size="xx-small" onclick={handleSave}></lightning-icon>
+        <template if:true={isDelete}>
+            <lightning-icon class="slds-m-around_x-small" icon-name="action:delete" size="xx-small" onclick={handleDeleteSelectedRows}></lightning-icon>
+        </template>
+        <template if:false={isDelete}>
+            <lightning-icon class="slds-m-around_x-small" icon-name="action:new" size="xx-small" onclick={handleAddNewSchedule}></lightning-icon>
+        </template>
+         
+      </div>
+     
+  </template> 
+       
+
+        
+
+        
+         
+
+        
+      
+      
+    </lightning-card>
+  </template> 
+</template>

@@ -1,0 +1,16 @@
+.req {
+    color: red;
+}
+
+.slds-form-element__label{
+    padding-top: 10px;
+}
+
+.datetime{
+    min-width:95.6%;
+    min-height: calc(var(--lwc-heightInput,1.875rem) + (1px * 2) + 24px) !important;
+}
+:host {
+    --slds-c-checkbox-toggle-switch-color-background: orange;
+    --slds-c-checkbox-toggle-color-background-checked: red;
+}

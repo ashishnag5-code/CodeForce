@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordAction</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="docName" type="String" label="Provide Document Master Name Eg:- AUWheels0003"></property>
+            <property name="applicantId" type="String" label="Applicant Record Id"></property>
+            <property name="showInputBox" type="Boolean" label="Show Input Text Box"></property>
+            <property name="showUploadComponent" type="Boolean" label="Show Upload Box"></property>
+            <supportedFormFactors>
+                <supportedFormFactor type="Large" />
+                <supportedFormFactor type="Small" />
+            </supportedFormFactors>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

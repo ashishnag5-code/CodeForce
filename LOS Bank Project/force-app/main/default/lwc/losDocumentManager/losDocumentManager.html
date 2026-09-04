@@ -1,0 +1,786 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-18-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:false={showOCRDetails}>
+        <div class="slds-var-p-top_medium table-div"
+            style="width: -webkit-fill-available;">
+            <template if:true={isLoanPage}>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                        <lightning-combobox name="docCategory" options={docCategoryOptions} 
+                        value={documentCaterogy} label="Document Category"
+                        onchange={handleChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item if:true={showApplicantSelect} size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                        <lightning-combobox name="Applicant__c" options={applicantOptions} 
+                        value={selectedApplicant} label="Select Applicant"
+                        onchange={handleChange}></lightning-combobox>
+                    </lightning-layout-item>
+ <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                        <!--call the optional docs component-->
+                        <c-display-optional-docs icon-name="standard:account"
+                        s-object-api-name="Document_Master__c"
+                        label="Search Optional Docs"
+                        onlookupupdate={lookupRecord}
+                        placeholder="Enter the doc name..."
+                        object-api-name={optionalObjectName}
+                        record-idfrom-parent={recordId}
+                        selected-applicant-record={applicantRecord}
+                        mandatory-doc-list={MdatoryDocsNames}
+                        onclearlist={handleClearlist}></c-display-optional-docs >          
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+            <br/>
+
+            <template if:true={isMobile}>
+                <!-- FORM FACTOR MOBILE--> 
+                <template if:true={isMandatory}>
+                <div class="slds-card__body slds-card__body--inner">
+
+                    <div class="slds-tile">
+                        <ul data-id="docLIST" class="slds-has-dividers_around-space">
+                            <template if:false={noRecordsFound} for:each={propertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                
+                                <li key={doc} class="slds-hint-parent slds-item">
+                                    <article class="slds-tile slds-tile_board">
+
+                                        <h1 class="slds-truncate" title={doc.docName.Document_Master__r.Document_Name__c}>
+                                            <lightning-formatted-text class="tileHeaderClass slds-truncate" value={doc.docName.Document_Master__r.Document_Name__c}></lightning-formatted-text>
+                                        </h1>
+
+                                        <div class="slds-tile__detail slds-text-body_small">
+                                            
+                                            <template if:true={showVerification}>
+                                                <!-- sldsValidatorIgnoreNextLine -->
+                                                <fieldset class="slds-form-element">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <span class="slds-form-element__label">Status of Verification: </span>
+                                                            <div class="slds-form-element__control">
+                                                                <span class="slds-form-element__static">
+                                                                    <template if:false={doc.isEmandate}>
+                                                                        <lightning-input  type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                        onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                                        autocomplete="true">
+                                                                    </lightning-input>
+                                                                    </template>
+                                                                    <template if:true={doc.isEmandate}>
+                                                                    <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                        onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                                        autocomplete="true">
+                                                                    </lightning-input>
+                                                                </template>
+                                                                    
+                                                                    <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </template>
+                                            <!-- Commenting for Bug : SFAU-2688-->
+                                            <!-- <template if:true={showDocStatus}>
+                                                <fieldset class="slds-form-element">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <span class="slds-form-element__label">Documents Status: </span>
+                                                            <div class="slds-form-element__control">
+                                                                <span class="slds-form-element__static">
+                                                                    <lightning-combobox name="documentStatus" label="Document Status" variant="label-hidden"
+                                                                        onchange={handleInputDoc} value={doc.documentStatus} options={DocumentStatusOptions} data-index={docIndex}
+                                                                        autocomplete="true">
+                                                                    </lightning-combobox>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>                                                                
+                                            </template> -->
+
+                                            <!-- sldsValidatorIgnoreNextLine -->
+                                            <fieldset class="slds-form-element">
+                                                <div class="slds-form-element__row">
+                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                        <span class="slds-form-element__label">Document View: </span>
+                                                        <div class="slds-form-element__control">
+                                                            <span class="slds-form-element__static">
+                                                                <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                                        <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                                        onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                                        <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                                        <template if:true={isValidUploadDeleteGenerate}>
+                                                                            <template if:true={doc.canDelete}>
+                                                                                <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}></lightning-icon>
+                                                                            </template>
+
+                                                                        </template>
+                                                                        
+                                                                        <br/>
+                                                                    </div>
+                                                                </template>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <!-- sldsValidatorIgnoreNextLine -->
+                                            <fieldset class="slds-form-element">
+                                                <div class="slds-form-element__row">
+                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                        <span class="slds-form-element__label">Upload / Delete: </span>
+                                                        <div class="slds-form-element__control">
+                                                            <span class="slds-form-element__static">
+                                                                <template if:true={isValidUploadDeleteGenerate}>
+                                                                    <template if:true={doc.showUpload}>
+                                                                        <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                                        <c-los-generic-document-upload is-form60 ={trueValue} called-from-doc-manager={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue}  show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} collateral-id={doc.docName.Collateral__c} applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name} ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+                               
+                                                                        </c-los-generic-document-upload>
+                                                                    </template>
+
+                                                            </template>
+                                                                <template if:true={doc.isSystemGenerated}>
+                                                                   <lightning-button disabled={doc.isDisabled} variant="brand" data-docname={doc.docName.Document_Master__r.Document_Name__c} data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                                                </template>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </article>
+                                </li>
+                            </template>
+                            <template if:true={noRecordsFound}>
+                                <div style="text-align: center;" class=" slds-size_12-of-12 slds-cell-wrap" title="No Records Found">
+                                    No Records Found !
+                                </div>
+                            </template>
+                        </ul>
+                        
+                    </div>
+                </div>
+                </template>
+                 <template if:true={isOptional}>
+                <div class="slds-card__body slds-card__body--inner">
+
+                    <div class="slds-tile">
+                        <ul data-id="docLIST" class="slds-has-dividers_around-space">
+                            <template if:false={noRecordsFound} for:each={optionalPropertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                
+                                <li key={doc} class="slds-hint-parent slds-item">
+                                    <article class="slds-tile slds-tile_board">
+
+                                        <h1 class="slds-truncate" title={doc.docName.Document_Master__r.Document_Name__c}>
+                                            <lightning-formatted-text class="tileHeaderClass slds-truncate" value={doc.docName.Document_Master__r.Document_Name__c}></lightning-formatted-text>
+                                        </h1>
+
+                                        <div class="slds-tile__detail slds-text-body_small">
+                                            
+                                            <template if:true={showVerification}>
+                                                <!-- sldsValidatorIgnoreNextLine -->
+                                                <fieldset class="slds-form-element">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <span class="slds-form-element__label">Status of Verification: </span>
+                                                            <div class="slds-form-element__control">
+                                                                <span class="slds-form-element__static">
+                                                                        <template if:false={doc.isEmandate}>
+                                                                    <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                        onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                                        autocomplete="true">
+                                                                    </lightning-input>
+                                                                        </template>
+                                                                        <template if:true={doc.isEmandate}>
+                                                                            <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                            onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                                            autocomplete="true">
+                                                                        </lightning-input>
+                                                                        </template>
+                                                                    <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </template>
+                                            
+
+                                            <!-- sldsValidatorIgnoreNextLine -->
+                                            <fieldset class="slds-form-element">
+                                                <div class="slds-form-element__row">
+                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                        <span class="slds-form-element__label">Document View: </span>
+                                                        <div class="slds-form-element__control">
+                                                            <span class="slds-form-element__static">
+                                                                <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                                        <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                                        onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                                        <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                                        <template if:true={isValidUploadDeleteGenerate}>
+                                                                            <template if:true={doc.canDelete}>
+                                                                                <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}></lightning-icon>
+                                                                            </template>
+                                                                        </template>
+                                                                        <br/>
+                                                                    </div>
+                                                                </template>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <!-- sldsValidatorIgnoreNextLine -->
+                                            <fieldset class="slds-form-element">
+                                                <div class="slds-form-element__row">
+                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                        <span class="slds-form-element__label">Upload / Delete: </span>
+                                                        <div class="slds-form-element__control">
+                                                            <span class="slds-form-element__static">
+                                                                <template if:true={isValidUploadDeleteGenerate}>
+                                                                    <template if:true={doc.showUpload}>
+                                                                        <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                                        <c-los-generic-document-upload is-form60 ={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue}  show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} collateral-id={doc.docName.Collateral__c} applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name} ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+                               
+                                                                        </c-los-generic-document-upload>
+                                                                    </template>
+                                                                </template>
+                                                                <template if:true={doc.isSystemGenerated}>
+                                                                   <lightning-button disabled={doc.isDisabled} variant="brand" data-docname={doc.docName.Document_Master__r.Document_Name__c} data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                                                </template>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </article>
+                                </li>
+                            </template>
+                            <template if:true={noRecordsFound}>
+                                <div style="text-align: center;" class=" slds-size_12-of-12 slds-cell-wrap" title="No Records Found">
+                                    No Records Found !
+                                </div>
+                            </template>
+                        </ul>
+                        
+                    </div>
+                </div>
+                </template>
+                <template if:true={isOptional}>
+                    <div class="slds-card__body slds-card__body--inner">
+    
+                        <div class="slds-tile">
+                            <ul data-id="docLIST" class="slds-has-dividers_around-space">
+                                <template if:false={noRecordsFound} for:each={displayPropertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                    
+                                    <li key={doc} class="slds-hint-parent slds-item">
+                                        <article class="slds-tile slds-tile_board">
+    
+                                            <h1 class="slds-truncate" title={doc.docName.Document_Master__r.Document_Name__c}>
+                                                <lightning-formatted-text class="tileHeaderClass slds-truncate" value={doc.docName.Document_Master__r.Document_Name__c}></lightning-formatted-text>
+                                            </h1>
+    
+                                            <div class="slds-tile__detail slds-text-body_small">
+                                                
+                                                <template if:true={showVerification}>
+                                                    <!-- sldsValidatorIgnoreNextLine -->
+                                                    <fieldset class="slds-form-element">
+                                                        <div class="slds-form-element__row">
+                                                            <div class="slds-form-element slds-size_1-of-1">
+                                                                <span class="slds-form-element__label">Status of Verification: </span>
+                                                                <div class="slds-form-element__control">
+                                                                    <span class="slds-form-element__static">
+                                                                        <template if:false={doc.isEmandate}>
+                                                                        <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                            onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                                            autocomplete="true">
+                                                                        </lightning-input>
+                                                                        </template>
+                                                                        <template if:true={doc.isEmandate}>
+                                                                            <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                                            onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                                            autocomplete="true">
+                                                                        </lightning-input>
+                                                                        </template>
+                                                                        <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </template>
+                                                
+    
+                                                <!-- sldsValidatorIgnoreNextLine -->
+                                                <fieldset class="slds-form-element">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <span class="slds-form-element__label">Document View: </span>
+                                                            <div class="slds-form-element__control">
+                                                                <span class="slds-form-element__static">
+                                                                    <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                                        <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                                            <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                                            onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                                            <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                                            <template if:true={isValidUploadDeleteGenerate}>
+                                                                                <template if:true={doc.canDelete}>
+                                                                                    <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}></lightning-icon>
+        
+        
+                                                                                </template>
+
+                                                                            </template>
+                                                                            <br/>
+                                                                        </div>
+                                                                    </template>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+    
+                                                <!-- sldsValidatorIgnoreNextLine -->
+                                                <fieldset class="slds-form-element">
+                                                    <div class="slds-form-element__row">
+                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                            <span class="slds-form-element__label">Upload / Delete: </span>
+                                                            <div class="slds-form-element__control">
+                                                                <span class="slds-form-element__static">
+                                                                    <template if:true={isValidUploadDeleteGenerate}>
+                                                                        <template if:true={doc.showUpload}>
+                                                                            <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                                            <c-los-generic-document-upload is-form60 ={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue}  show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} collateral-id={doc.docName.Collateral__c} applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name} ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+                                   
+                                                                            </c-los-generic-document-upload>
+                                                                        </template>
+
+                                                                   </template>
+                                                                    <template if:true={doc.isSystemGenerated}>
+                                                                       <lightning-button disabled={doc.isDisabled} variant="brand" data-docname={doc.docName.Document_Master__r.Document_Name__c} data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                                                    </template>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </article>
+                                    </li>
+                                </template>
+                                <template if:true={noRecordsFound}>
+                                    <div style="text-align: center;" class=" slds-size_12-of-12 slds-cell-wrap" title="No Records Found">
+                                        No Records Found !
+                                    </div>
+                                </template>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                    </template>
+                    <div if:false={fromWizard} class="slds-var-m-top_large slds-float_right slds-var-m-right_small">
+                        <lightning-button label="Submit" disabled={disableSubmit} class="buttonClass disabled-submit-button" variant="brand" name='save'
+                             onclick={handleSubmit}></lightning-button>
+                    </div>
+            </template>
+
+            <template if:false={isMobile}>
+                <div class="stickyHeader">
+                    <div class="slds-card slds-scrollable">
+                        <table
+                            class="slds-table slds-table_cell-buffer tableClass slds-table_bordered slds-table_col-bordered slds-no-row-hover">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-size_4-of-12 slds-cell-shrink slds-theme_shade slds-cell-fixed" scope="col">
+                                        <div class="slds-truncate slds-cell-wrap" title="Document Name"
+                                        >Document Name</div>
+                                    </th>
+                                    <th if:true={showVerification} class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                        <div class="slds-truncate" title="Upload">Status of Verification</div>
+                                    </th>
+                                    <!-- <th if:true={showDocStatus} class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                        <div class="slds-truncate" title="Upload">Documents Status </div>
+                                    </th> -->
+                                    <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                        <div class="slds-truncate" title="Upload">Document View </div>
+                                    </th>
+                                    <th class="slds-size_4-of-12 slds-cell-fixed" scope="col">
+                                        <div class="slds-truncate" title="Upload">Upload / Delete </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template if:true={isMandatory}>
+                                <template if:false={noRecordsFound} for:each={propertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                    <tr key={doc} class="slds-hint-parent">
+                                        <td>
+                                            <div class="slds-cell-wrap" title="Document Name">
+                                                <lightning-formatted-text value={doc.docName.Document_Master__r.Document_Name__c} ></lightning-formatted-text>
+                                            </div>
+                                        </td>
+                                        <td if:true={showVerification}>
+                                            <div class="slds-cell-wrap" title="Document Verification">
+                                                <template if:false={doc.isEmandate}>
+                                                <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                 onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                 autocomplete="true">
+                                                </lightning-input>
+                                            </template>
+                                            <template if:true={doc.isEmandate}>
+                                                <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                autocomplete="true">
+                                               </lightning-input>
+                                            </template>
+                                                   <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                            </div>
+                                        </td>
+                
+                                        <!-- <td if:true={showDocStatus}>
+                                            <div class="slds-cell-wrap" title="Document Status">
+                                                <lightning-combobox name="documentStatus" label="Document Status" variant="label-hidden"
+                                                 onchange={handleInputDoc} value={doc.documentStatus} options={DocumentStatusOptions} data-index={docIndex}
+                                                 autocomplete="true">
+                                                </lightning-combobox>
+                                            </div>
+                                        </td> -->
+                                        <td>
+                                            <div class="slds-cell-wrap" title="Document Name">
+                                                <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                        <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                        onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                        <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                        <template if:true={isValidUploadDeleteGenerate}>
+                                                            <template if:true={doc.canDelete}>
+                                                                <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}></lightning-icon>
+                                                            </template>
+                                                        </template>
+                                                        <br/>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <template if:true={isValidUploadDeleteGenerate}>
+                                                <template if:true={doc.showUpload}>
+                                                    <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                    <c-los-generic-document-upload is-form60={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue} collateral-id={doc.docName.Collateral__c}  show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name} ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+           
+                                                    </c-los-generic-document-upload>
+                                                  </template>
+                                           </template>
+                                           <template if:true={doc.isSystemGenerated}>
+                                            <lightning-button disabled={doc.isDisabled} variant="brand" data-docname={doc.docName.Document_Master__r.Document_Name__c} data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                           </template>
+                                        </td>
+                                    </tr>
+                                </template>
+                                </template>
+                                <template if:true={isOptional}>
+                    
+                                    <template if:false={noRecordsFound} for:each={optionalPropertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                        <tr key={doc} class="slds-hint-parent">
+                                            <td>
+                                                <div class="slds-cell-wrap" title="Document Name">
+                                                    <lightning-formatted-text value={doc.docName.Document_Master__r.Document_Name__c} ></lightning-formatted-text>
+                                                </div>
+                                            </td>
+                                            <td if:true={showVerification}>
+                                                <div class="slds-cell-wrap" title="Document Verification">
+                                                    <template if:false={doc.isEmandate}>
+                                                    <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                     onchange={handleInputDocOptional} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                     autocomplete="true">
+                                                    </lightning-input>
+                                                    </template>
+                                                    <template if:true={doc.isEmandate}>
+                                                        <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                        onchange={handleInputDocOptional} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                        autocomplete="true">
+                                                       </lightning-input>
+                                                    </template>
+                                                       <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                                </div>
+                                            </td>
+                    
+                                            <td>
+                                                <div class="slds-cell-wrap" title="Document Name">
+                                                    <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                        <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                            <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                            onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                            <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                            <template if:true={isValidUploadDeleteGenerate}>
+                                                                <template if:true={doc.canDelete}>
+                                                                    <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" 
+                                                                                    size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} 
+                                                                                    onclick={handleClickDelete}></lightning-icon>
+    
+                                                                </template>
+
+                                                            </template>
+                                                            
+                                                            <br/>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template if:true={isValidUploadDeleteGenerate}>
+                                                    <template if:true={doc.showUpload}>
+                                                        <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                        <c-los-generic-document-upload is-form60={trueValue} isloading ={isloading} isdocmanager={trueValue} 
+                                                        show-upload-component ={trueValue} collateral-id={doc.docName.Collateral__c} 
+                                                         show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} 
+                                                         applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name}
+                                                          ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+               
+                                                        </c-los-generic-document-upload>
+                                                    </template>
+
+                                                </template>
+                                               <template if:true={doc.isSystemGenerated}>
+                                                <lightning-button disabled={doc.isDisabled} variant="brand" 
+                                                data-docname={doc.docName.Document_Master__r.Document_Name__c} 
+                                                data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} 
+                                                class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                               </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    </template>
+                                <template if:true={noRecordsFound}>
+                                        <div style="text-align: center;" class=" slds-size_12-of-12 slds-cell-wrap" title="No Records Found">
+                                            No Records Found !
+                                        </div>
+                                </template>
+                                <template if:true={isOptional}>
+                    
+                                    <template if:false={noRecordsFound} for:each={displayPropertyDocListToBeDisplayed} for:item="doc" for:index="docIndex">
+                                        <tr key={doc} class="slds-hint-parent">
+                                            <td>
+                                                <div class="slds-cell-wrap" title="Document Name">
+                                                    <lightning-formatted-text value={doc.docName.Document_Master__r.Document_Name__c} ></lightning-formatted-text>
+                                                </div>
+                                            </td>
+                                            <td if:true={showVerification}>
+                                                <div class="slds-cell-wrap" title="Document Verification">
+                                                    <template if:false={doc.isEmandate}>
+                                                    <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                     onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isSystemGenerated}
+                                                     autocomplete="true">
+                                                    </lightning-input>
+                                                </template>
+                                                <template if:true={doc.isEmandate}>
+                                                    <lightning-input type="checkbox" if:true={doc.showVerified} name="isVerified" label="Document Verification" variant="label-hidden"
+                                                    onchange={handleInputDoc} checked={doc.isVerified}  data-index={docIndex} disabled={doc.isDisabled}
+                                                    autocomplete="true">
+                                                   </lightning-input>
+                                                </template>
+                                                       <p style="text-align: center;" if:false={doc.showVerified}>NA</p>
+                                                </div>
+                                            </td>
+                    
+                                            <td>
+                                                <div class="slds-cell-wrap" title="Document Name">
+                                                    <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                                        <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                            <lightning-button variant="base" label={fileRecord.fileName} name={fileRecord.recordId} data-filetpe={fileRecord.fileType} data-url={fileRecord.url} data-id={fileRecord.contentDocId} title="Document Name" 
+                                                            onclick={handlePreviewClick} class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                                            <a if:true={doc.canDownload} target="_blank" class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                                                            <template if:true={isValidUploadDeleteGenerate}>
+                                                                <template if:true={doc.canDelete}>
+                                                                    <lightning-icon class="slds-col slds-align_absolute-center" icon-name="utility:delete" 
+                                                                                    size="x-small" alternative-text="Delete" title="Delete" name={fileRecord.contentVerId} 
+                                                                                    onclick={handleClickDelete}></lightning-icon>
+                                                                </template>
+
+                                                            </template>
+                                                            <br/>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template if:true={isValidUploadDeleteGenerate}>
+                                                    <template if:true={doc.showUpload}>
+                                                        <!-- is-form60 sending true to restrict OCR on Document Manager screen.-->
+                                                        <c-los-generic-document-upload is-form60={trueValue} isloading ={isloading} isdocmanager={trueValue} 
+                                                        show-upload-component ={trueValue} collateral-id={doc.docName.Collateral__c} 
+                                                         show-input-box={falseValue} loan-id ={doc.docName.Loan_Application__c} 
+                                                         applicant-id={doc.docName.Applicant__c} doc-name ={doc.docName.Document_Master__r.Name}
+                                                          ondocumentsuccess={handleSuccess} uploadtypename ={doc.docName.Document_Master__r.Document_Name__c}>
+               
+                                                        </c-los-generic-document-upload>
+                                                    </template>
+
+                                           </template>
+                                               <template if:true={doc.isSystemGenerated}>
+                                                <lightning-button disabled={doc.isDisabled} variant="brand" 
+                                                data-docname={doc.docName.Document_Master__r.Document_Name__c} 
+                                                data-index={docIndex} label="Generate" title="Primary action" onclick={handleDocGenerate} 
+                                                class="buttonClass slds-var-m-left_x-small"></lightning-button>
+                                               </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    </template>
+                                <template if:true={noRecordsFound}>
+                                        <div style="text-align: center;" class=" slds-size_12-of-12 slds-cell-wrap" title="No Records Found">
+                                            No Records Found !
+                                        </div>
+                                </template>
+        
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div if:false={fromWizard} class="slds-var-m-top_large slds-float_right slds-var-m-right_small">
+                        <lightning-button label="Submit" disabled={disableSubmit} class="buttonClass disabled-submit-button" variant="brand" name='save'
+                             onclick={handleSubmit}></lightning-button>
+                    </div>
+                </div>
+            </template>
+
+
+            <br />
+        </div>
+    </template>
+    <template if:true={showOCRDetails}>
+        <lightning-card icon-name="standard:account" class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+            <template if:true={isloading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+            <template for:each={dataValues} for:item="data">
+                <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                    <div class="slds-size_1-of-2">
+                        <b>{data.key}</b>
+                    </div>
+                    <div class="slds-size_1-of-2 textContent">
+                        {data.value}
+                    </div>
+                </div>
+            </template>
+            <div class="slds-align_absolute-center slds-var-m-top_large">
+                <lightning-button  disabled={disableOkButton}  label="Ok" variant="brand" title="Ok" onclick={okClick} class="buttonClass slds-var-m-left_x-small">
+                </lightning-button>
+                <!--<lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+                </lightning-button>-->
+            </div>
+        </lightning-card>
+    </template>
+    <template if:true={renderApprovalRequestRemarkModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Approval Request for Sanction Letter</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-textarea data-id="remarks"
+                                        name="remarks" label="Remarks" disabled={disabledValue}
+                                        value={approvalRemarks} onchange={handleRemarkChange} >
+                    </lightning-textarea>
+                    
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand buttonClass" onclick={generateApprovalRequest} title="Request">Request</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={isPreviewImage}>
+        <div >     
+              <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"  class="slds-modal slds-fade-in-open slds-modal_full">
+                <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"  onclick={closepreviewModal}>
+                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                </svg>
+                <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                <h1 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Preview</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                       <img src={imageUrl} alt="Image Preview" />
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={closepreviewModal}>Ok</button>
+                </div>
+                </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+    </template>
+    <!--RBM Approval Modal-->
+    <template if:true={setRBMApprovalModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeRBMModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-03" class="slds-text-heading_medium slds-hyphenate">RBM {requestDocumentName} Request</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+
+                    <div class="slds-m-bottom--medium">
+                        <template if:true={renderFIPendingRBMTatkal}>
+                            FI is pending so RBM approval required. Do you want to proceed to raise the request for the generation of {systemLetterRequest}?
+                        </template>
+                        <template if:true={renderESignPendingRBMTatkal}>
+                            E sign is triggered so RBM approval requried. Do you want to proceed to raise the request for the generation of {systemLetterRequest}?
+                        </template>
+                        <template if:true={renderGenericPendingRBMTatkal}>
+                            Do you want to proceed to raise the request for the generation of {systemLetterRequest}?
+                        </template>
+                    </div>
+                    <lightning-textarea data-id="remarks"
+                                        name="remarks" label="RBM Remarks"
+                                        value={rbmApprovalRemarks} onchange={handleRBMApprovalRemarks} >
+                    </lightning-textarea>
+                    
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeRBMModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand buttonClass" onclick={generateRBMApprovalRequest} title="Request">Request</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

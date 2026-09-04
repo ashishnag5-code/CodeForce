@@ -1,0 +1,196 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-13-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:true={isloading}>
+		<lightning-spinner alternative-text="Loading"></lightning-spinner>
+	</template>
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="standard:lead" alternative-text="Utility image" title="Image"></lightning-icon>
+            &nbsp;&nbsp;&nbsp; Lead Assignemnt
+        </h3>
+        <div slot="footer">
+            <div class="slds-align_absolute-center slds-var-m-top_large">
+                <template if:false={showSearchResult}>
+                    <template if:true={renderAssignMeButton}>
+                        <lightning-button disabled={disableAssignMeButton} label={assignButtonLabel} variant="brand" title={assignButtonLabel} 
+                                          onclick={handleAssignMe} 
+                                          class="slds-var-m-left_x-small">
+                        </lightning-button>
+                    </template>
+                    <lightning-button disabled={disableNextButton} label="Next" variant="brand" title="Ok" onclick={nextClick} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                    <lightning-button label="Cancel" variant="brand" title="Cancel" onclick={cancelRecord} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                </template>
+                <template if:true={showSearchResult}>
+                    <lightning-button label="Previous" variant="brand" title="Previous" onclick={previousClick} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                    <lightning-button disabled={disableOwnerButton} label="Change Owner" variant="brand" title="Ok" onclick={changeOwner} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                    <lightning-button label="Cancel" variant="brand" title="Cancel" onclick={cancelRecord} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                </template>
+			</div>
+        </div>
+        <template if:false={showSearchResult}>
+            <template if:true={isListViewReturn}>
+                <ul class="slds-var-m-around_medium">
+                    <!--<template for:each={ids} for:item="id">
+                        <li key={id}>{id}</li>
+                    </template>-->
+                    <table class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover ">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                    <div class="slds-truncate slds-cell-wrap" title="Salesforce Id"
+                                    >Salesforce Id</div>
+                                </th>
+                                <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                    <div class="slds-truncate slds-cell-wrap" title="Document Name"
+                                    >Lead Number</div>
+                                </th>
+                                <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                    <div class="slds-truncate" title="Upload">Sourcing channel </div>
+                                </th>
+                                <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                    <div class="slds-truncate" title="Upload">Stage</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={leadRecordListView} for:item="leadRec" for:index="loadIndex">
+                                <tr key={leadRec} class="slds-hint-parent">
+                                    <td class="slds-cell-wrap " data-label="Lead Id" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                        <div class="slds-cell-wrap" title="Lead Id">
+                                            <lightning-formatted-text value={leadRec.Id} ></lightning-formatted-text>
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap " data-label="Lead Number" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                        <div class="slds-cell-wrap" title="Lead Number">
+                                            <lightning-formatted-text value={leadRec.Application_Id__c} ></lightning-formatted-text>
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Source Channel" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                        <div class="slds-cell-wrap" title="Source Channel">
+                                            <lightning-formatted-text value={leadRec.Sourcing_channel__c} ></lightning-formatted-text>
+                                        </div>
+                                    </td>
+                                    <td class="slds-cell-wrap" data-label="Lead Stage" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                        <div class="slds-cell-wrap" title="ead Stage">
+                                            <lightning-formatted-number value={leadRec.Stage__c} ></lightning-formatted-number>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </ul>
+            </template>
+            <div class="c-container">
+                <lightning-layout multiple-rows class="x-large">
+                        <template if:false={isListViewReturn}>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                <!-- pattern="^\S[0-9]*\S$"-->
+                                <lightning-input disabled={disableLeadInput} value={leadNumber} class="checkValidity" min-length="10"  message-when-too-short="Please enter a valid Lead No Eg. 1234567890"
+                                message-when-pattern-mismatch="Please enter a valid Lead No" name="leadNumber" required type="text" onchange={handleInputChange} label="Lead Number"  placeholder="Enter Lead Number"></lightning-input>
+                            </lightning-layout-item>
+
+                             <!-- R2-9 | A lead can be assigned to a TCU Queue or Branch -->
+                             <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                <lightning-input label="Assign to" message-toggle-active="TCU Queue" message-toggle-inactive="Branch" onchange={handleAssignTypeChange} value={assignType} type="toggle" disabled={isSubmitToTCUAllowed}></lightning-input>
+                            </lightning-layout-item>
+
+
+                            <lightning-layout-item  flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6" if:true={assignType}>
+                                <lightning-input value={tcuQueueName} name="tcu-queue" required type="text" label="TCU Queue Name" disabled></lightning-input>
+                        </lightning-layout-item>
+        
+                            <lightning-layout-item  flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6" if:false={assignType}>
+                                    <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                                    <c-generic-custom-lookup selected-record={recordSelected} name="Account_Code__c" data-sequence="2"
+                                    label="Branch Name/Number" record-type-name="Branch" class="validateGenericLookupFld"
+                                    search-fields="" stepid="0" fieldapi="Account_Code__c" object-name="Account"
+                                    s-object-api-name="Account" default-record-id="" is-required=true onlookupselect={handleChange}>
+                                </c-generic-custom-lookup>
+                            </lightning-layout-item>
+                        </template>
+                        <template if:true={isListViewReturn}>
+                            <lightning-layout-item  flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="12">
+                                <!--<lightning-input value={branchNameNumber} class="checkValidity" pattern="^\S.*\S$" message-when-pattern-mismatch="Please enter a valid Branch Name/Number" name="branchNameNumber" required type="text" onchange={handleInputChange} label="Branch Name/Number"  placeholder="Enter Branch Name/Number"></lightning-input>-->
+                                <c-generic-custom-lookup selected-record={recordSelected} name="Account_Code__c" data-sequence="2"
+                                label="Branch Name/Number" record-type-name="Branch" class="validateGenericLookupFld"
+                                search-fields="" stepid="0" fieldapi="Account_Code__c" object-name="Account"
+                                s-object-api-name="Account" default-record-id="" is-required=true onlookupselect={handleChange}>
+                            </c-generic-custom-lookup>
+                        </lightning-layout-item>
+                        </template>
+
+                    </lightning-layout>
+            </div>
+        </template>
+        <template if:true={showSearchResult}>
+            <template if:true={leadNumber}>
+                <h1 class="slds-var-m-top_small" slot="title">Selected Lead Number : {leadNumber}</h1>
+            </template>
+            <table class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover ">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="slds-size_3-of-12 slds-cell-shrink slds-theme_shade slds-cell-fixed" scope="col">
+                            <div class="slds-truncate slds-cell-wrap" title="CheckBox"></div>
+                        </th>
+                        <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                            <div class="slds-truncate slds-cell-wrap" title="User Name"
+                            >User Name</div>
+                        </th>
+                        <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                            <div class="slds-truncate slds-cell-wrap" title="Designation">Designation</div>
+                        </th>
+                        <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                            <div class="slds-truncate" title="Upload">Employee Code </div>
+                        </th>
+                        <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                            <div class="slds-truncate" title="Upload">Work Load </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={wrapperResult} for:item="loadRec" for:index="loadIndex">
+                        <tr key={loadRec} class="slds-hint-parent">
+                            <th class="slds-cell-wrap " data-label="Select CheckBox" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                <div class="slds-cell-wrap" title="Select CheckBox">
+                                    <lightning-input name ={loadRec.userId} type="checkbox" onclick={setBoxes} data-id={loadRec.userId}></lightning-input>
+                                </div>
+                            </th>
+                            <td class="slds-cell-wrap " data-label="User Name" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                <div class="slds-cell-wrap" title="User Name">
+                                    <lightning-formatted-text value={loadRec.roName} ></lightning-formatted-text>
+                                </div>
+                            </td>
+                            <td class="slds-cell-wrap " data-label="Designation" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                <div class="slds-cell-wrap" title="Designation">
+                                    <lightning-formatted-text value={loadRec.designation} ></lightning-formatted-text>
+                                </div>
+                            </td>
+                            <td class="slds-cell-wrap" data-label="Employee Code" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                <div class="slds-cell-wrap" title="Employee Code">
+                                    <lightning-formatted-text value={loadRec.employeeCode} ></lightning-formatted-text>
+                                </div>
+                            </td>
+                            <td class="slds-cell-wrap" data-label="Load Count" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                <div class="slds-cell-wrap" title="Load Count">
+                                    <lightning-formatted-number value={loadRec.workLoad} ></lightning-formatted-number>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,236 @@
+<template>
+    <div if:true={isResourceLoading}>
+        <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+        </lightning-spinner>
+    </div>
+    <div style={toggleDisplayOnResourceLoad}>
+        <div style={backgroundSet}>
+        <!-- Start Blog Area -->
+        <section class="blog-area pt-24">
+            <div class="container main-container-mobdob">
+                <div class="row justify-content-md-center ">
+                    <div class="col-lg-6 col-md-12 col-sm-12">
+                        <div class="row  bg-white">
+                            <div class="col-lg-12 col-md-12 p-40">
+                                <div class="single-blog">     
+                                    <!-- Start Main Banner Area -->
+                                    <div>
+                                    <div class="main-banner-area bg-three">
+                                        <div class="d-table">
+                                            <div class="d-table-cell">
+                                                <div class="container-fluid">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-7">
+                                                            <div class="main-banner-content p-t-40">
+                                                                <p>Home Loans starting at</p>
+                                                                <h1>{interestRate}%<sup>*</sup><span> p.a.</span></h1>
+                                                                <p class="slider-text">LIMITED PERIOD OFFER</p>
+                                                                <p class="tc">* TERMS AND CONDITIONS APPLY</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <!-- End Main Banner Area -->
+                                    <p class="small-heading p-t-32 pb-12">BENEFITS</p>
+                                    
+                                    <div class="row">
+                                        <div class="col-6 content-desktop">
+                                            <ul class="post-meta">
+                                                <li>
+                                                    <img src={interestIcon} alt="Attractive interest rates" class="p-r-12">
+                                                    Attractive interest rates
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-6 content-desktop">
+                                            <ul class="post-meta">
+                                                <li>
+                                                    <img src={onlineSanctionIcon} alt="Quick online sanction"  class="p-r-12">
+                                                    Quick online sanction
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="content-mobile">
+                                        <div class="col-12 p-12">
+                                            <ul class="post-meta">
+                                                <li>
+                                                    <img src={interestIcon} alt="Attractive interest rates" class="p-r-12">
+                                                    Attractive interest rates
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <hr/>
+                                        <div class="col-12 p-12">
+                                            <ul class="post-meta">
+                                                <li>
+                                                    <img src={onlineSanctionIcon} alt="Quick online sanction"  class="p-r-12">
+                                                    Quick online sanction
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="content">
+                                        <h3>
+                                            Enter your details
+                                        </h3>                                        
+                                    <form class="inquiry-form">
+                                        <div class="row m-0">
+                                            <div class="col-md-12 col-sm-12">   
+                                                
+                                            <div class="form-group row">
+                                                <div class="select-box did-floating-label-content">    
+                                                    <select class="form-control did-floating-select" disabled={freezeProduct} value={productName} onchange={productTypeHandler} data-id ="productField">
+                                                        <option value=''></option>
+                                                        <option value="Home Loan">Home Loans</option>
+                                                        <option value="Balance Transfer">Balance Transfer</option>
+                                                        <option value="Top Up">Top-up Loan</option>
+                                                    </select>
+                                                    <div class={selectDropdown}></div>
+                                                    <label class="did-floating-label">Product type</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="form-group row">
+                                                <div class="col-sm-10  did-floating-label-content" style="padding-right: 0px;">
+                                                    <input class="dateOfBirth did-floating-input form-control" 
+                                                            type="date" 
+                                                            placeholder=" " 
+                                                            name="dobField"
+                                                            onblur={handleChangeDOBDate} 
+                                                            min={minDate} 
+                                                            max={maxDate}
+                                                            value={dobDate}
+                                                            data-id ="dobField" 
+                                                            required
+                                                            disabled={OTPVerified}>
+                                                    <label class="did-floating-label">Date of birth</label>
+                                                </div>
+                                            </div>  
+                                            <!--Amit 28/9 -->
+                                            <p if:true={isDOBInvalid}  class="red marginTopNeg23">Please enter a valid date of birth.</p>
+                                            <p style="display:none;" data-id="dobFieldValidationError" class="red">You must be 18 years old and less than 65 years old.</p>
+
+                                            <div class="form-group row">
+                                                <div class="col-sm-9" style="padding-right: 0px;">
+                                                    <!--Added for Country Code Flag Picker-->
+                                                        
+                                                            <div class="iti iti--allow-dropdown">
+                                                                <div class="iti__flag-container">
+                                                                <div onclick={toggleIntTelFlagList} class="iti__selected-flag" role="combobox" aria-controls="iti-0__country-listbox" aria-owns="iti-0__country-listbox" aria-expanded="false" tabindex="0" title="India (भारत): +91" aria-activedescendant="iti-0__item-in-preferred">
+                                                                <div class="iti__flag iti__in selectedFlag">
+                                                                </div>
+                                                                <div class="iti__arrow">
+                                                                </div>
+                                                                </div>
+                                                                <ul onclick={handleCountryChange} class="iti__country-list iti__hide" id="iti-0__country-listbox" role="listbox" aria-label="List of countries">
+                                                                <li aria-selected="true" data-country-code="in" data-dial-code="91" role="option" id="iti-0__item-in-preferred" tabindex="-1" class="iti__country iti__preferred iti__active">
+                                                                <div class="iti__flag-box">
+                                                                <div class="iti__flag iti__in">
+                                                                </div>
+                                                                </div>
+                                                                <span class="iti__country-name">
+                                                                India (भारत)</span>
+                                                                <span class="iti__dial-code">
+                                                                +91</span>
+                                                                </li>
+                                                                <li class="iti__divider" role="separator" aria-disabled="true">
+                                                                </li>
+                                                            </ul>
+                                                            </div>
+                                                                <input class="did-floating-input form-control" disabled={OTPVerified} name="telField" maxlength="14" type="tel" id="phone" data-id="telField" placeholder="e.g. +91  99999-99999" value="+91" autocomplete="off" data-intl-tel-input-id="0" onblur={handleChangePhoneNumberOnBlur} onkeyup={handleChangePhoneNumberOnKeyUp}>
+                                                                <label style="display:none;" class="did-floating-label">Mobile</label>
+                                                            </div>
+                                                </div>
+                                                <label if:false={isResend} for="inputEmail3" onclick={handleSendOTP} class={OTPClass} >SEND OTP</label>
+                                                <label if:true={isResend} for="inputEmail3" onclick={handleSendOTP} class={OTPClass} >RESEND OTP</label>
+                                            </div> 
+                                            <p style="display:none;" data-id="telFieldValidationError" class="red">Please enter a valid mobile number</p>  
+                                            <p if:true={DOBMissing} class="red">Please enter valid Date of Birth</p>
+                                            <p if:true={productTypeMissing} class="red">Please select valid Product Type</p>
+                                            <p if:true={wrongCountryCode} class="red">Country code is different from the country which is selected</p>
+                                            <p if:true={pauseResendOTP} style="margin-top:-15px;color:#00000066;" class="red">Resend OTP in <span style="color:#00000066;" data-id="sendOTPTimer">30</span> Seconds</p> 
+                                        
+                                            <div class={otpParentDivClass}>
+                                                <div class="col-sm-9  did-floating-label-content" style="padding-right: 0px;">
+                                                    <input class="did-floating-input form-control fieldDisabled" data-id="OTPInput" type="text" placeholder=" " id="mobile" name="otpField" onblur={handleOTPChangeOnBlur} onkeyup={handleOTPChange} value={otpEntered} disabled={disableOTP} maxlength="6">
+                                                    <label class={otpLabelClass}>Enter OTP</label>    
+                                                </div>
+                                                <template if:false={OTPVerified}><label for="inputEmail3" data-id="verifyOTP" class="col-sm-13 col-form-label blue-text otp p-t-14" onclick={handleOTPVerification}>VERIFY</label></template>
+                                                <template if:true={OTPVerified}><label for="inputEmail3" class="col-sm-13 col-form-label green-text calicon p-t-14"><img src={checkIcon} style="padding-bottom: 3px;"> Verified</label></template>
+                                            </div>   
+                                            <p style="display:none;" data-id="otpFieldValidationError" class="red">Enter a valid OTP</p>
+                                            <p if:true={wrongOTP} class="red">The OTP you have entered is wrong.</p>
+                                            <p if:true={wrongOTPLimitHit} class="red">You have entered wrong OTP too many times. Retry in {wrongOTPLimitHitCounter} Seconds</p>
+                                           
+                                            <div class="col-lg-12 row p-t-13">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick={ndncConsentHandler}>
+                                                    <label class="form-check-label" for="flexCheckDefault">
+                                                        I authorize Kotak Mahindra Bank to contact me even if I am registered under NDNC.
+                                                    </label>
+                                                </div>
+                                            </div> 
+
+                                            <div class="col-lg-12 pt-32 row marginBottom35">                                    
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" onclick={whatsAppConsentHandler}>
+                                                    <label class="form-check-label" for="flexCheckDefault1">
+                                                        I would like to receive all important communication on WhatsApp
+                                                    </label>
+                                                </div>
+                                            </div> 
+
+                                            <template if:true={isCaptchaEnabledBool}>
+                                               <!--<c-google-captcha oncaptcha={handleCaptchaUpdate}></c-google-captcha>--> 
+                                            </template>
+                                            
+                                            <!-- A 10/08/2022 -->
+                                            <center>
+                                                <div class="col-lg-7 pt-10 row">  
+                                                    <button type="button" class="applyButton red-btn" disabled={isButtonDisabled} onclick={handleApplyNow}>
+                                                        APPLY NOW
+                                                    </button>
+                                                </div>
+                                            </center>       
+
+                                            </div>             
+                                        </div>                                       
+                                        </form> 
+                                        <p class="note note-text"><span><i class='material-icons-outlined'>info</i> Note</span><br class="mb-12">*Credit at the sole discretion of Kotak Mahindra Bank Ltd and subject to guidelines issued by RBI from time to time. Interest rates starting at {interestRate}% p.a.</p>
+                                        <br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+            </div>
+        </section>
+        <!-- End Blog Area -->
+        <template if:true={isIncorrectOTP}>
+            <div id="myModal" class="modal fade show" tabindex="-1" aria-modal="true" role="dialog" style="display: block;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h6 class="heading">OTP incorrect</h6>
+                            <p class="text-secondary"><small><span>This is your final attempt.</span><br>
+                                Entering an incorrect OTP again will cause the verification process to get locked for 180 Seconds.</small></p>                                
+                            <a class="blue-btn" style="color:#ffffff" onclick={closeModal}>
+                                GOT IT
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+            </template>
+            </div>
+    </div>
+</template>

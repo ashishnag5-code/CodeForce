@@ -1,0 +1,37 @@
+<template>
+    <!-- <template if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template> -->
+  
+    <c-custom-spinner
+      show-spinner={isLoaded}
+      spinner-image={spinnerImage}
+      >
+      </c-custom-spinner>
+  
+    <lightning-card title="Please select Next Approver">
+    <div class="slds-p-around_small">
+        <lightning-combobox
+            name="Level"
+            label="Approver Level"
+            placeholder="Select Approver Level"
+            value={selectedLevel}
+            onchange={handleChange}
+            options={_levelOptions}>
+        </lightning-combobox>
+        <lightning-combobox
+            name="Approver"
+            label="Approver Name"
+            placeholder="Select Approver"
+            value={selectedApprover}
+            onchange={handleChange}
+            options={approverNameOptions}>
+        </lightning-combobox>
+    </div>
+  
+    <span class="slds-grid slds-grid_align-space" slot="footer">
+        <lightning-button label={name} name={name} onclick={handleSave}></lightning-button>
+        <lightning-button label="Cancel" name="cancel" onclick={handleCancel}></lightning-button>
+    </span>
+  </lightning-card>
+  </template>

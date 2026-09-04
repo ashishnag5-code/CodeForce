@@ -1,0 +1,120 @@
+<apex:page controller="EMISchedulePageController" renderAs="pdf" readOnly="true" applyHtmlTag="false" showHeader="false">
+     
+    <html>
+            <head>
+                <!--<meta http-equiv="Content-Type" content="text/html;charset=UTF-8;width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no" />-->
+                <style>
+                    @page {
+                    size: a4 portrait;
+                    }
+                    table, th, td {
+                      border: 1px solid black;
+                      border-collapse: collapse;
+                      word-break: break-all
+                    }
+                    facetHeaders{
+                        background-color: rgb(109,48,120);
+                        color: white;
+                    }
+                </style>
+            </head>
+            <body>
+                <div style="text-align:center; display: {!IF(displayField==true, 'inline', 'none')};">
+                    <h4>
+                        EMI Schedule Details
+                    </h4>
+                </div>
+                <div style="text-align:center; display: {!IF(displayField==false, 'inline', 'none')};">
+                    <h4>
+                        Repayment Schedule Details
+                    </h4>
+                </div>
+
+                
+                <apex:outputPanel layout="block" style=" width:100%; overflow:scroll">
+                <apex:pageBlock >
+                    <apex:pageBlockTable style="font-size:x-small; text-align:center;" border="1px" value="{!response}" var="emiResponse"  cellpadding="1.5" columnsWidth="1%,1%,3%,3%,3%,3%,3%,3%,3%,3%,3%,3%,3%,3%,1%">
+                    <apex:column >
+                        <div class="facetHeaders">
+                            <apex:facet name="header">Stage</apex:facet>
+                        </div>
+                        <apex:outputText value="{!emiResponse.StageNumber}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Count</apex:facet>
+                        <apex:outputText value="{!emiResponse.InstallmentCounter}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Start Date</apex:facet>
+                        <apex:outputText value="{!emiResponse.InstallmentStartDate}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Inst Date</apex:facet>
+                        <apex:outputText value="{!emiResponse.InstallmentDate}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">IRR</apex:facet>
+                        <apex:outputText value="{!emiResponse.InterestRate}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Principal Amount</apex:facet>
+                        <apex:outputText value="{!emiResponse.PrincipalAmount}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Interest</apex:facet>
+                        <apex:outputText value="{!emiResponse.InterestAmount}"/>
+                    </apex:column>
+            
+                    <!--<apex:column >
+                        <apex:facet name="header">Subsidy Amount</apex:facet>
+                        <apex:outputText value="{!emiResponse.SubsidyAmount}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Premium Amount</apex:facet>
+                        <apex:outputText value="{!emiResponse.PremiumAmount}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Service Charge</apex:facet>
+                        <apex:outputText value="{!emiResponse.ServiceChargeAmount}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Capitalized Amount</apex:facet>
+                        <apex:outputText value="{!emiResponse.CapitalizedAmount}"/>
+                    </apex:column>-->
+            
+                    <apex:column >
+                        <apex:facet name="header">Installment Amount</apex:facet>
+                        <apex:outputText value="{!emiResponse.InstallmentAmount}"/>
+                    </apex:column>
+            
+                    <apex:column >
+                        <apex:facet name="header">Principal Balance</apex:facet>
+                        <apex:outputText value="{!emiResponse.PrincipalBalanceAmount}"/>
+                    </apex:column>
+            
+                    <!--<apex:column rendered="{!displayField}">
+                        <apex:facet name="header">Total Installment</apex:facet>
+                        <apex:outputText value="{!emiResponse.TotalInstallmentAmount}"/>
+                    </apex:column>-->
+            
+                    <apex:column >
+                        <apex:facet name="header">Days</apex:facet>
+                        <apex:outputText value="{!emiResponse.NumberOfDays}"/>
+                    </apex:column>
+            
+                </apex:pageBlockTable>
+                </apex:pageBlock>
+            </apex:outputPanel>
+
+            </body>
+    </html>
+</apex:page>

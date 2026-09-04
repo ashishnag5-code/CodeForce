@@ -1,0 +1,1769 @@
+<!--
+  @description       : Financial Template details to be filled by 
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 12-18-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <!-- <lightning-spinner alternative-text="Loading" variant="inverse" lwc:if={isLoading}></lightning-spinner> -->
+     
+    <c-custom-spinner
+        show-spinner={isLoading}
+                spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+    
+    <lightning-accordion allow-multiple-sections-open active-section-name="A" lwc:if={isComponentVisible}>
+        <lightning-accordion-section name="A" label="Financial Template" >
+    <lightning-card >
+        <lightning-layout multiple-rows >
+            <!-- <lightning-layout-item padding="around-small" size="1" medium-device-size="2" lwc:if={isLargeScreen}>
+            </lightning-layout-item>
+           <lightning-layout-item style="overflow: auto;" padding="around-medium" size="12" medium-device-size="8">
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="1" medium-device-size="2" lwc:if={isLargeScreen}>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="1" medium-device-size="2" lwc:if={isLargeScreen}>
+            </lightning-layout-item> -->
+            <lightning-layout-item padding="around-small" size="12" medium-device-size="1" lwc:if={isLargeScreen}>
+
+            </lightning-layout-item> 
+           <lightning-layout-item style="overflow: auto;" padding="around-small" size="12" medium-device-size="10">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item padding="around-small" size="11" medium-device-size="4">
+                        <lightning-combobox
+                            label="Recent Financial Year"
+                            placeholder="Select Progress"
+                            options={yearOptions}
+                            value={yearDropDownPickList}
+                            onchange={handleRecentYearChange} ></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="1" medium-device-size="8">
+                        
+
+                    </lightning-layout-item>
+                   
+                    <lightning-layout-item padding="around-small" size="12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right"
+                            aria-label="Example default base table of Opportunities">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Name">Name</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="(Provisional)">(Provisional)</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="(Audited)">(Audited)</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="(Audited)">(Audited)</div>
+                                    </th>
+                                </tr>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Year">Year</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={currentYearValues.date}>
+                                            <lightning-formatted-date-time value={currentYearValues.date}></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={lastYearValues.date}>
+                                            <lightning-formatted-date-time value={lastYearValues.date} ></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={lastToLastYearValues.date}>
+                                            <lightning-formatted-date-time value={lastToLastYearValues.date} ></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Proposed Loan Amount">Proposed Loan Amount</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={currentYearValues.date}>
+                                            <lightning-formatted-number value={proposedLoanAmount} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                    </th>
+                                    <th class="" scope="col">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Capital Funds
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable} variant="label-hidden" type="number" label="Enter some text"
+                                                data-name="currentYearValues-capitalFunds"
+                                                value={currentYearValues.capitalFunds} onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                data-name="lastYearValues-capitalFunds" value={lastYearValues.capitalFunds}
+                                                onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number"
+                                                data-name="lastToLastYearValues-capitalFunds" label="Enter some text"
+                                                value={lastToLastYearValues.capitalFunds} onchange={handleInputChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Reserves & surplus
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                onchange={handleInputChange} data-name="currentYearValues-reservesSurplus"
+                                                value={currentYearValues.reservesSurplus}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.reservesSurplus} onchange={handleInputChange}
+                                                data-name="lastYearValues-reservesSurplus">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.reservesSurplus} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-reservesSurplus">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Add/Less : Profit / Loss for the year
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.addLessProfitLossForTheYear}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-addLessProfitLossForTheYear">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.addLessProfitLossForTheYear}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-addLessProfitLossForTheYear">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.addLessProfitLossForTheYear}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-addLessProfitLossForTheYear">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total Networth
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalNetworth}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalNetworth}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalNetworth}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent" style="height: 2rem;">
+                                    <th data-label="Opportunity Name" scope="row" colspan="4">
+
+                                    </th>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Secured loans
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.securedLoans} onchange={handleInputChange}
+                                                data-name="currentYearValues-securedLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.securedLoans} onchange={handleInputChange}
+                                                data-name="lastYearValues-securedLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.securedLoans} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-securedLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Unsecured loans from Family member/friends/group firm & co
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.unsecuredLoansFromFamilyMemberFriendGroupFirm}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-unsecuredLoansFromFamilyMemberFriendGroupFirm">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.unsecuredLoansFromFamilyMemberFriendGroupFirm}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-unsecuredLoansFromFamilyMemberFriendGroupFirm">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.unsecuredLoansFromFamilyMemberFriendGroupFirm}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-unsecuredLoansFromFamilyMemberFriendGroupFirm">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Unsecured loans from Others
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.unsecuredLoansFromOthers}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-unsecuredLoansFromOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.unsecuredLoansFromOthers} onchange={handleInputChange}
+                                                data-name="lastYearValues-unsecuredLoansFromOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.unsecuredLoansFromOthers}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-unsecuredLoansFromOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Bank OD / CC Limits
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.bankODCDLimit} onchange={handleInputChange}
+                                                data-name="currentYearValues-bankODCDLimit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.bankODCDLimit} onchange={handleInputChange}
+                                                data-name="lastYearValues-bankODCDLimit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.bankODCDLimit} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-bankODCDLimit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Deferred tax balance
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.deferredTaxBalance} onchange={handleInputChange}
+                                                data-name="currentYearValues-deferredTaxBalance">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.deferredTaxBalance} onchange={handleInputChange}
+                                                data-name="lastYearValues-deferredTaxBalance">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.deferredTaxBalance} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-deferredTaxBalance">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Current Liability & Provisions
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.currentLiabilityProvisions}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-currentLiabilityProvisions">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.currentLiabilityProvisions}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-currentLiabilityProvisions">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.currentLiabilityProvisions}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-currentLiabilityProvisions">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Sundry Creditors in above
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.sundryCreditors} onchange={handleInputChange}
+                                                data-name="currentYearValues-sundryCreditors">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.sundryCreditors} onchange={handleInputChange}
+                                                data-name="lastYearValues-sundryCreditors">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.sundryCreditors} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-sundryCreditors">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total Liabilities
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalLiability}
+                                                label="Disabled number field"></lightning-input>
+                                            </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalLiability}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalLiability}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total long term liabilities
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalLongTermLiability}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalLongTermLiability}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalLongTermLiability}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent" style="height: 2rem;">
+                                    <th data-label="Opportunity Name" scope="row" colspan="4">
+
+                                    </th>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Fixed Assets
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.fixedAssets} onchange={handleInputChange}
+                                                data-name="currentYearValues-fixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.fixedAssets} onchange={handleInputChange}
+                                                data-name="lastYearValues-fixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.fixedAssets} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-fixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Investment
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.investment} onchange={handleInputChange}
+                                                data-name="currentYearValues-investment">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.investment} onchange={handleInputChange}
+                                                data-name="lastYearValues-investment">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.investment} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-investment">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Current Assets, Loans & Adv, Others
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.currentAssetsLoansAdvOthers}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-currentAssetsLoansAdvOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.currentAssetsLoansAdvOthers}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-currentAssetsLoansAdvOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.currentAssetsLoansAdvOthers}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-currentAssetsLoansAdvOthers">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Debtors as in Above
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.debtorsAsInAbove} onchange={handleInputChange}
+                                                data-name="currentYearValues-debtorsAsInAbove">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.debtorsAsInAbove} onchange={handleInputChange}
+                                                data-name="lastYearValues-debtorsAsInAbove">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.debtorsAsInAbove} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-debtorsAsInAbove">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total Assets
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalAssets}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalAssets}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalAssets}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent" style="height: 2rem;">
+                                    <th data-label="Opportunity Name" scope="row" colspan="4">
+
+                                    </th>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Sales Income">
+                                            Sales Income
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.salesIncome} onchange={handleInputChange}
+                                                data-name="currentYearValues-salesIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.salesIncome} onchange={handleInputChange}
+                                                data-name="lastYearValues-salesIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.salesIncome} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-salesIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate"
+                                            title="Other Income (Income not relevant to key business)">
+                                            Other Income (Income not relevant to key business)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.othersIncome} onchange={handleInputChange}
+                                                data-name="currentYearValues-othersIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.othersIncome} onchange={handleInputChange}
+                                                data-name="lastYearValues-othersIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.othersIncome} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-othersIncome">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total Income
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalIncome}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalIncome}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalIncome}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-hint-parent">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Administrative Expenses">
+                                            Administrative Expenses
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.administrativeExpense} onchange={handleInputChange}
+                                                data-name="currentYearValues-administrativeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.administrativeExpense} onchange={handleInputChange}
+                                                data-name="lastYearValues-administrativeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.administrativeExpense}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-administrativeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Depreciation">
+                                            Depreciation
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.depreciation} onchange={handleInputChange}
+                                                data-name="currentYearValues-depreciation">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.depreciation} onchange={handleInputChange}
+                                                data-name="lastYearValues-depreciation">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.depreciation} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-depreciation">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Net Profit">
+                                            Net Profit
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.netProfit} onchange={handleInputChange}
+                                                data-name="currentYearValues-netProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.netProfit} onchange={handleInputChange}
+                                                data-name="lastYearValues-netProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.netProfit} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-netProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Tax Expense">
+                                            Tax Expense
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.taxExpense} onchange={handleInputChange}
+                                                data-name="currentYearValues-taxExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.taxExpense} onchange={handleInputChange}
+                                                data-name="lastYearValues-taxExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.taxExpense} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-taxExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Tax Expense">
+                                            Financial Expenses (Interest on SL & Bank Charges)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.financeExpense} onchange={handleInputChange}
+                                                data-name="currentYearValues-financeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.financeExpense} onchange={handleInputChange}
+                                                data-name="lastYearValues-financeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.financeExpense} onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-financeExpense">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Cash Profits (Depreciation+ Net Profit)">
+                                            Cash Profits (Depreciation+ Net Profit)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.cashProfits}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.cashProfits}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.cashProfits}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate"
+                                            title="PBDIT (Profit before depreciation, interest & tax)">
+                                            PBDIT (Profit before depreciation, interest & tax)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.pbdit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.pbdit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.pbdit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Sundry Debtors> 6 months">
+                                            Sundry Debtors> 6 months
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.sundryDebitorMoreThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-sundryDebitorMoreThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.sundryDebitorMoreThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-sundryDebitorMoreThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.sundryDebitorMoreThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-sundryDebitorMoreThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Sundry Debtors< 6 months">
+                                            Sundry Debtors &lt; 6 months
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.sundryDebitorLessThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="currentYearValues-sundryDebitorLessThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.sundryDebitorLessThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="lastYearValues-sundryDebitorLessThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={isComponentNotEditable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.sundryDebitorLessThanSixMonths}
+                                                onchange={handleInputChange}
+                                                data-name="lastToLastYearValues-sundryDebitorLessThanSixMonths">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Capital Funds">
+                                            Total Sundry Debtors
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.totalSundryDebitors}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.totalSundryDebitors}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastToLastYearValues.totalSundryDebitors}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent" style="height: 2rem;">
+                                    <th scope="row" colspan="4">
+
+                                    </th>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="ICOR (Interest coverage ratio)">
+                                            ICOR (Interest coverage ratio)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.icor}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.icor}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="DSCR ( Debt Service Coverage Ratio)">
+                                            DSCR ( Debt Service Coverage Ratio)
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.dscr} 
+                                                data-name="currentYearValues-dscr">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.dscr} 
+                                                data-name="lastYearValues-dscr">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Current Ratio">
+                                            Current Ratio
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.currentRatio}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.currentRatio}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Leverage">
+                                            Leverage
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.leverage}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.leverage}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Long term leverage/Debt Equity Ratio">
+                                            Long term leverage/Debt Equity Ratio
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.longTermLeverage}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.longTermLeverage}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Debtor  Turnover Days">
+                                            Debtor Turnover Days
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.debitorsTurnoverDays}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.debitorsTurnoverDays}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Creditor  Turnover Days">
+                                            Creditor Turnover Days
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.creditorsTurnoverDays}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.creditorsTurnoverDays}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <c-ausfb-financial-by-credit-secured-loans
+                            formula-field-on-form-disable={formulaFieldOnFormDisable}
+                            is-component-visible={isComponentVisible}
+                            is-component-not-editable={isComponentNotEditable}
+                            last-year-data-date={lastYearValues.date}
+                            onrecalculate={handleSecuredLoanCalculation}
+                        ></c-ausfb-financial-by-credit-secured-loans>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right"
+                            aria-label="Example default base table of Opportunities">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Analysis" style="width:27rem">Analysis</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        
+                                    </th>
+                                    <th class="" scope="col">
+                                        
+                                    </th>
+                                    <th class="" scope="col">
+                                        
+                                    </th>
+                                </tr>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Change in %">Change in %</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={currentYearValues.date}>
+                                            <lightning-formatted-date-time value={currentYearValues.date}></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={lastYearValues.date}>
+                                            <lightning-formatted-date-time value={lastYearValues.date} ></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="NW">
+                                            NW
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.changeInNW}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.changeInNW}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Turnover">
+                                            Turnover
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.changeTurnover}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.changeTurnover}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Net Profit">
+                                            Net Profit
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.changeNetProfit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.changeNetProfit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Cash Profit">
+                                            Cash Profit
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.changeCashProfit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.changeCashProfit}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right"
+                            aria-label="Example default base table of Opportunities">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="STRATEGIC FINANCIAL NORMS">STRATEGIC FINANCIAL NORMS</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={currentYearValues.date}>
+                                            <lightning-formatted-date-time value={currentYearValues.date}></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={lastYearValues.date}>
+                                            <lightning-formatted-date-time value={lastYearValues.date} ></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title={lastToLastYearValues.date}>
+                                            <lightning-formatted-date-time value={lastToLastYearValues.date} ></lightning-formatted-date-time>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Net worth to be +ve ">
+                                            Net worth to be +ve
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicNetWorthToBe} 
+                                                data-name="currentYearValues-strategicNetWorthToBe">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicNetWorthToBe} 
+                                                data-name="lastYearValues-strategicNetWorthToBe">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicNetWorthToBe}
+                                                data-name="lastToLastYearValues-strategicNetWorthToBe">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Secured Loans">
+                                            Secured Loans
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicSecuredLoans} 
+                                                data-name="currentYearValues-strategicSecuredLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicSecuredLoans} 
+                                                data-name="lastYearValues-strategicSecuredLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable} variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicSecuredLoans}
+                                                data-name="lastToLastYearValues-strategicSecuredLoans">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Fixed Assets Loans">
+                                            Fixed Assets
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicFixedAssets} 
+                                                data-name="currentYearValues-strategicFixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicFixedAssets} 
+                                                data-name="lastYearValues-strategicFixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicFixedAssets}
+                                                data-name="lastToLastYearValues-strategicFixedAssets">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Turnover">
+                                            Turnover
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicTurnover} 
+                                                data-name="currentYearValues-strategicTurnover">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicTurnover} 
+                                                data-name="lastYearValues-strategicTurnover">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicTurnover} 
+                                                data-name="lastToLastYearValues-strategicTurnover">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="PBT">
+                                            PBT
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicPbt} 
+                                                data-name="currentYearValues-strategicPbt">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicPbt}
+                                                data-name="lastYearValues-strategicPbt">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicPbt} 
+                                                data-name="lastToLastYearValues-strategicPbt">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Cash Profit">
+                                            Cash Profit
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicCashProfit} 
+                                                data-name="currentYearValues-strategicCashProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicCashProfit} 
+                                                data-name="lastYearValues-strategicCashProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastToLastYearValues.strategicCashProfit}
+                                                data-name="lastToLastYearValues-strategicCashProfit">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="YOY Turnover to be +ve">
+                                            YOY Turnover to be +ve
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.strategicYoyTurnoverToBe}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.strategicYoyTurnoverToBe}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Cash Profit of current year to be positive">
+                                            Cash Profit of current year to be positive
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicCashProfitOfCurrentYearToBePositive}
+                                                data-name="currentYearValues-strategicCashProfitOfCurrentYearToBePositive">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicCashProfitOfCurrentYearToBePositive}
+                                                data-name="lastYearValues-strategicCashProfitOfCurrentYearToBePositive">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="DSCR should be > 1.1">
+                                            DSCR should be > 1.1
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={currentYearValues.strategicdsdrShouldBe} 
+                                                data-name="currentYearValues-strategicdsdrShouldBe">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input disabled={formulaFieldOnFormDisable}  variant="label-hidden" type="number" label="Enter some text"
+                                                value={lastYearValues.strategicdsdrShouldBe} 
+                                                data-name="lastYearValues-strategicdsdrShouldBe">
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate"
+                                            title="Debt Equity Ratio {including proposed} to be =< 3 times">
+                                            Debt Equity Ratio (including proposed) to be =&lt; 3 times
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.strategicDebtEquityRatio}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.strategicDebtEquityRatio}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                                <tr class="slds-hint-parent">
+                                    <th data-label="Opportunity Name" scope="row">
+                                        <div class="slds-truncate" title="Drs. Turnover should be </= 90 days">
+                                            Drs. Turnover should be &lt;/= 90 days
+                                        </div>
+                                    </th>
+                                    <td data-label="Account Name">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={currentYearValues.strategicDrsTurnover}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                                disabled={formulaFieldOnFormDisable} value={lastYearValues.strategicDrsTurnover}
+                                                label="Disabled number field"></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="Close Date">
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="1" medium-device-size="1" lwc:if={isLargeScreen}>
+            </lightning-layout-item>
+        </lightning-layout>
+        <div slot="footer">
+            <lightning-button disabled={isComponentNotEditable} class="slds-align_absolute-center buttonColor" variant="brand" label="Save Template"
+            onclick={handleSaveOperation}></lightning-button>
+        </div>
+    </lightning-card>
+</lightning-accordion-section>
+    </lightning-accordion>
+    
+</template>

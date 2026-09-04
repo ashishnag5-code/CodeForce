@@ -1,0 +1,86 @@
+<apex:page renderAs="PDF" controller="SystemGeneratedEsignDocumentsController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html><!--CustomerRequestLetterDeferralController-->
+    <head>
+        <style>
+            body { font-family: 'Quicksand'; font-size : 15px !important; sans-serif; color :333;}
+            .container{
+                    margin: 0px 55px;
+                }
+            .heading{
+                text-align: center;
+                width:100%
+            }
+            .main-content{
+                text-align: justify;
+            }
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+                padding:1px 5px;
+              }
+
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        
+        <div class="latter-heading">
+            <p class="heading">
+                Annexure IV <br/>
+            </p>
+            <p>To </p> 
+            <p>The Branch Manager
+                <br/>
+                AU Small Finance Bank Ltd.,</p>
+            <p>{!loan.Branch_Master__r.Account_Name__c}</p>
+        </div>
+
+        <div class="sub-class">
+            <p>Subject: Deduction of initial payment form loan amount.</p>
+        </div>
+        <div class="main-content">
+            <p>Dear Sir</p>
+            <p>
+                With reference to above, I would like to inform you that you have sanction a loan of
+                Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/> On vehicle number {!collateral.Registration_Number__c}. In the above loan I
+                had agreed to pay the following charges.
+            </p>
+            <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                <apex:repeat value="{!charges}" var="charge">
+                    <apex:outputText rendered="{!charge.Total_Amount__c > 0}">
+                        <tr>
+                            <td style="width:50%; padding: 0.5em; border: 0.1em solid black;">
+                                {!charge.Charges_Name__c}
+                            </td>
+                            <td style="width:50%; padding: 0.5em; border: 0.1em solid black;">
+                                Rs.&nbsp;<apex:outputField value="{!charge.Total_Amount__c}"/>/-
+                            </td>
+                        </tr>
+                    </apex:outputText>
+                </apex:repeat>
+                <tr>
+                    <td style="width:50%; padding: 0.5em; border: 0.1em solid black;">
+                            Grand Total
+                        </td>
+                        <td style="width:50%; padding: 0.5em; border: 0.1em solid black;">
+                            Rs.&nbsp;<apex:outputField value="{!loan.Total_Charges__c}"/> /-
+                        </td>
+                </tr>
+            </table>
+            <p>
+                I request you to deduct the amount of Rs&nbsp;<apex:outputField value="{!loan.Total_Charges__c}"/> against the above given charges
+                from the loan amount and pay the balance amount of Rs.&nbsp;{!netDisbAmountStr} in favour
+                of {!beneficiaryName}
+            </p>
+             <p>
+                Thanking You
+            </p>
+            <p>
+
+            (Name and Signature)</p>
+
+        </div>
+       </div>
+     </body>
+</html>
+</apex:page>

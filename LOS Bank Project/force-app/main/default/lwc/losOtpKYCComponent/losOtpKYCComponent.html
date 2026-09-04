@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="KYC - OTP" icon-name="standard:lead">
+        <lightning-button label="Edit/New" onclick={handleClick} slot="actions"></lightning-button>
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template-->
+        <template if:true={showOTPKYC}>
+            <!--<lightning-button label="Edit" onclick={handleClick} class="slds-float--right"></lightning-button>-->
+            <div class="slds-m-around_small slds-m-bottom_large back">
+                <a onclick={showKYCOptions} class="slds-float--right slds-m-right_small">Back
+                    <!--<lightning-icon icon-name="utility:back" onclick={showKYCOptions} class="slds-float--right"
+                        size="small" alternative-text="Close" title="Close"></lightning-icon>-->
+                </a>
+            </div>
+
+            <lightning-layout class="slds-m-around-small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-around_xx-small slds-p-around_xx-small" flexibility="auto">
+                    <c-generic-Verification-Component name="aadhaarVerification"
+                        applicant={applicant} aadhaar-number={applicant.Aadhaar_Number__c} is-verified={isVerified}
+                        onprogressvaluechange={handleProgressValueChange} consent={consent}>
+                    </c-generic-Verification-Component>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <c-los-k-y-c-consent type="OTP" onsetconsent={updateConsent} consent={consent} applicant-id={applicant.Id}></c-los-k-y-c-consent>
+        </template>
+
+        <template if:true={showAadhaarDetails}>
+            <c-generic-data-display onback={showDetails} onverified={handleDocumentVerify} identifier-documents={identifierDocuments} display-type="aadhaar" pan-response ={adharValidateResponse}>             
+            </c-generic-data-display>
+        </template>
+    </lightning-card>
+
+
+</template>

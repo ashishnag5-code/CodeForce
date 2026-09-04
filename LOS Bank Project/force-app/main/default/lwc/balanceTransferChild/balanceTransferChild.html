@@ -1,0 +1,246 @@
+<template>
+    <!--<tr class="slds-hint-parent">  -->
+    
+        <td data-label="Check">
+            <div class="slds-truncate">
+                <div class="slds-align_absolute-center">
+                    <lightning-input onchange={handleChange} disabled={readOnly} name="isChecked" access-key={btRecord.key} variant="label-hidden" type="checkbox" value={btRecord.isChecked} checked={btRecord.isChecked}></lightning-input>
+                </div>  
+            </div>
+        </td>
+        <td data-label="Loan Account Number">
+            <lightning-combobox name="Loan_Number__c"
+                            required
+                            read-only={readOnly}
+                            variant="label-hidden"
+                            options={loanNumberOptions}
+                            value={btRecord.Loan_Number__c}
+                            onchange={handleChange}></lightning-combobox>
+        </td>
+        <template if:true={isInternal}>
+            
+                <td data-label="BT_Loan_Status__c">
+
+
+                    <div style="overflow:visible !important">
+                        <lightning-combobox name="BT_Loan_Status__c"
+                        required
+                        read-only={readOnly}
+                        variant="label-hidden"
+                        options={btLoanStatusOptions}
+                        value={btRecord.BT_Loan_Status__c}
+                        onchange={handleChange}></lightning-combobox>
+                    </div>
+                        
+                </td>
+                
+            
+            <td data-label="POS__c">
+                <div class="slds-truncate">
+                    <lightning-input class="slds-text-body_small" read-only=true name="POS__c" variant="label-hidden" access-key={btRecord.key} type="number" value={btRecord.POS__c} required onchange={handleChange}></lightning-input>                    
+                </div>
+            </td>
+        </template>
+        
+        <template if:false={isInternal}>
+            <template if:true={loadIt}>
+                <template if:true={readOnly}>
+                    <td data-label="Financial_Institute_Name__c">   
+                        <lightning-input variant="label-hidden"
+                        read-only={readOnly}
+                        value={btRecord.Financial_Institute_Name__c}></lightning-input>
+                    </td>
+                </template>
+                
+                <template if:false={readOnly}>
+                    <td data-label="Financial_Institute_Name__c">                      
+                        <c-generic-custom-lookup name="Financial_Institute_Name__c" record-type-name="Financial Institution Name"
+                        hide-input-label={hideInpLabel} search-fields="" stepid="0" default-record-id={defaultInstitute}
+                            fieldapi="Financial_Institute_Name__c" object-name="Generic Master"
+                            s-object-api-name="Generic_Master__c" required=""
+                            onlookupselect={handleLookupSelect}>
+                        </c-generic-custom-lookup>
+                    </td>
+                </template>
+                
+            </template>
+            <td data-label="NOC_before_Disbursement__c">                      
+                <div class="slds-m-top_x-large">
+                    <lightning-input onchange={handleChange}
+                    disabled={readOnly}
+                    type="checkbox" 
+                    variant="label-hidden"
+                    name="NOC_before_Disbursement__c"
+                    value={btRecord.NOC_before_Disbursement__c}
+                    checked={btRecord.NOC_before_Disbursement__c}></lightning-input>
+                </div>
+            </td>
+            <td data-label="BT_Amount__c">                
+                <lightning-input onchange={handleChange}
+                    read-only={readOnly}
+                    required
+                    type="text" 
+                    variant="label-hidden"
+                    name="BT_Amount__c"
+                    value={btRecord.BT_Amount__c}></lightning-input>
+            </td>            
+            
+            
+        </template>
+<!--</tr>-->
+    
+    <!--<template if:false={addBT}>
+        <article class="slds-box">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <template if:true={isRecordSaved}>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="custom:custom9" size="small"></lightning-icon>
+                        </div>
+                    </template>
+                    <template if:false={isRecordSaved}>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:warning" variant="warning" size="small"></lightning-icon>
+                        </div>
+                    </template>
+                    
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate"
+                                title={btRecord.Name} data-id={btRecord.Name}
+                                onclick={navigateToAppRecordPage}>{btRecord.Name}</a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning-icon icon-name="action:edit" size="x-small" onclick={handleRowAction}></lightning-icon>
+                        <lightning-icon icon-name="action:delete" size="x-small" variant="success"
+                                    onclick={deleteBT} class="slds-m-around_medium"></lightning-icon>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-form-element">
+                    <template if:true={isInternal}>
+                        <span class="slds-form-element__label">POS</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{btRecord.POS__c}</div>
+                        </div>
+                        <span class="slds-form-element__label">BT Loan Status</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{btRecord.BT_Loan_Status__c}</div>
+                        </div>
+                    </template>
+                    
+                    <span class="slds-form-element__label">Loan Account Number</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{btRecord.Loan_Number__c}</div>
+                    </div>
+
+                    <template if:false={isInternal}>
+                        <span class="slds-form-element__label">BT Amount</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{btRecord.BT_Amount__c}</div>
+                        </div>
+                        <span class="slds-form-element__label">Financial Institute Name</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{btRecord.Financial_Institute_Name__c}</div>
+                        </div>
+                        <div class="slds-form-element__label" for="checkbox-unique-id-87">NOC before Disbursement</div>
+                            <div class="slds-form-element__control">
+                              <span class="slds-checkbox slds-checkbox_standalone">
+                                <input type="checkbox" id="checkbox-unique-id-87" name="label" value={btRecord.NOC_before_Disbursement__c} checked={btRecord.NOC_before_Disbursement__c} />
+                                <span class="slds-checkbox_faux"></span>
+                              </span>
+                            </div>
+                        <span class="slds-form-element__label">NOC before Disbursement</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-checkbox">
+                                <input type="checkbox" name="options" id="checkbox-unique-id-81" value={btRecord.NOC_before_Disbursement__c} checked={btRecord.NOC_before_Disbursement__c}/>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </article>
+    </template>
+    
+
+    <template if:true={addBT}>
+        <lightning-card icon-name="custom:custom9">
+            <h1 slot="title">
+                {loanApp.BT_Type__c} Balance Transfer
+            </h1>
+            <span slot="actions">
+                <lightning-icon icon-name="action:reject" size="x-small" onclick={handleReject}></lightning-icon>
+            </span>
+            <lightning-layout multiple-rows>
+                <template if:true={isInternal}>
+                    <lightning-layout-item data-id="POS__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                        <lightning-input onchange={handleChange}
+                            required
+                            disabled
+                            type="text" 
+                            label="POS"
+                            name="POS__c"
+                            value={btRecord.POS__c}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item data-id="BT_Loan_Status__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                        <lightning-combobox name="BT_Loan_Status__c"
+                        disabled={readOnly}
+                        label="BT Loan Status"
+                        options={btLoanStatusOptions}
+                        value={btRecord.BT_Loan_Status__c}
+                        onchange={handleChange}></lightning-combobox>
+                    </lightning-layout-item>
+                </template>
+                
+                <lightning-layout-item data-id="Loan_Number__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <lightning-combobox name="Loan_Number__c"
+                        disabled={readOnly}
+                        label="Loan Number"
+                        options={loanNumberOptions}
+                        value={btRecord.Loan_Number__c}
+                        onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+
+                <template if:false={isInternal}>
+                    <lightning-layout-item data-id="BT_Amount__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                        <lightning-input onchange={handleChange}
+                            required
+                            type="text" 
+                            label="BT Amount"
+                            name="BT_Amount__c"
+                            value={btRecord.BT_Amount__c}></lightning-input>
+                    </lightning-layout-item>
+                    <template if:true={loadIt}>
+                        <lightning-layout-item data-id="Financial_Institute_Name__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <c-generic-custom-lookup name="Financial_Institute_Name__c" label="Financial Institute Name" record-type-name="Financial Institution Name"
+                                search-fields="" stepid="0" default-record-id={defaultInstitute}
+                                fieldapi="Financial_Institute_Name__c" object-name="Generic Master"
+                                s-object-api-name="Generic_Master__c" required=""
+                                onlookupselect={handleLookupSelect}>
+                            </c-generic-custom-lookup>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item data-id="NOC_before_Disbursement__c" class="component slds-show" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                        <div class="slds-m-top_x-large">
+                            <lightning-input onchange={handleChange}
+                            type="checkbox" 
+                            label="NOC before Disbursement"
+                            name="NOC_before_Disbursement__c"
+                            value={btRecord.NOC_before_Disbursement__c}
+                            checked={btRecord.NOC_before_Disbursement__c}></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>  
+            <div class="slds-align_absolute-center">
+                <lightning-icon icon-name="action:approval" size="x-small" variant="success"
+                                    onclick={saveBT} class="slds-m-around_medium"></lightning-icon>
+                <lightning-icon icon-name="action:delete" size="x-small" variant="success"
+                                    onclick={deleteBT} class="slds-m-around_medium"></lightning-icon>
+            </div>  
+        </lightning-card>
+    </template>-->
+    
+</template>

@@ -1,0 +1,46 @@
+<template>
+    <lightning-card title="List of Documents">
+        <!--<div style="float:right"><lightning-button  variant="brand-outline" label="Refresh" title="Refresh"
+                          onclick={handleRefresh} class="slds-m-left_x-small"></lightning-button></div>-->
+        <!--<img src={refresh} style="float:right" class="imageCss"  onclick={handleRefresh}> -->
+        <div class="slds-var-p-top_medium table-div"
+             style="width: -webkit-fill-available;">
+
+
+            <div class="stickyHeader">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+                       style="width: 100%">
+                    <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col" width="30%">
+                            <div class="slds-truncate slds-cell-wrap" title="Document Name"
+                            >Document Name</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <template for:each={docList} for:item="doc" for:index="docIndex">
+                        <tr key={doc} class="slds-hint-parent">
+                            <td data-label="Document Name" class="slds-cell-wrap head-col" width="100%">
+                                <div class="slds-cell-wrap" style="display: inline-block;" title="Document Name">
+
+                                    <lightning-button variant="base" label={doc.Document__c} name={doc.Id} title="Document Name"
+                                                      onclick={handleClick} class="slds-cell-wrap"></lightning-button>
+
+                                    <!--<a href="" value={doc.Id} onclick={handleclick}> {doc.Document__c}  </a>-->
+                                </div>
+                                <div style="display: inline-block; float:right"> <img src={upload} style="width:20px"  class="imageCss" onclick={handleUpload}></div>
+                            </td>
+
+                        </tr>
+                    </template>
+                    </tbody>
+                </table>
+
+            </div>
+            <br />
+
+        </div>
+        <p slot="footer">{contentUrl}</p>
+    </lightning-card>
+</template>

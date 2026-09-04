@@ -1,0 +1,122 @@
+.edit-icon {
+    visibility :hidden;
+    margin-left: 0.5em;
+    opacity: 0.5;
+        float: right;
+        cursor: pointer;
+}
+
+.tileHeaderClass{
+    font-weight: bold;
+    font-size: medium;
+    white-space: normal;
+}
+
+.buttonClass{
+    --sds-c-button-neutral-color-background: #f37435;
+    --sds-c-button-brand-color-background: #f37435;
+    --sds-c-button-text-color: #FFF2F0;
+}
+
+.linkClass{
+    --sds-c-button-text-color: #f37435 !important;
+}
+
+td:hover > div .edit-icon {
+    visibility : visible;
+    margin-left: 0.5em;
+        opacity: 0.5;
+        float: right;
+        cursor: pointer;
+}
+.document-table {
+    /* table-layout: fixed; */
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.table-div {
+    overflow-x: auto;
+    background-color:white;
+    position: relative;
+    /* width:100%; */
+    z-index: 1;
+    /* overflow: auto; */
+    
+}
+
+fieldset {
+    min-width: 0;
+}
+.checkbox {
+    display: flex;
+    margin: auto;
+}
+
+.head-col {
+    /* position:absolute;  */
+    width:5em; 
+    left:0;
+    top:auto;
+    border-right: 0px none black; 
+    margin-top:-3px;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    z-index: 3;
+    background: white;
+}
+
+.stickyHeader {
+    overflow: auto;
+    height: 500px;
+}
+
+.stickyHeader th {
+    position: sticky;
+    z-index: 4;
+    top: 0;
+}
+
+.head-col-header {
+    background: rgb(243, 243, 243) !important;
+
+}
+
+.sub-category {
+    /* width:20px; */
+    word-wrap: break-word;
+}
+
+.edited-cell {
+    background-color: var(--lwc-colorBackgroundHighlight,rgb(250, 255, 189));
+    font-style: italic;
+}
+
+.footer-div {
+    background: rgb(243, 243, 243);
+    padding: 10px;
+    box-shadow: inset 0 -2px 2px 0 rgb(0 0 0 / 16%);
+}
+.prop-table-main{
+    border: 1px solid black;
+    border-collapse: collapse;
+ 
+}
+.prop-table-header{
+    text-align: left;
+    background: #F3F3F3;
+    color: #444444;
+    padding-left: 0.5em;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.prop-table-head-col{
+    text-align: left;
+    padding-left: 0.5em;
+    border: 1px solid black;
+    border-collapse: collapse; 
+    word-wrap: break-word;
+}
+.prop-table-row{
+    border: 1px solid black;
+    border-collapse: collapse;  
+}

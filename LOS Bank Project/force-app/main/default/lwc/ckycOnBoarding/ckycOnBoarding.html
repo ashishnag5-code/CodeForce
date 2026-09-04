@@ -1,0 +1,79 @@
+<template>
+    <lightning-card title="CKYC" icon-name="standard:lead" class="headingColor">
+
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template-->
+
+        <template if:false={isShowCkycDetails}>
+
+            <div class="slds-m-around_small slds-m-bottom_large back">
+                <a onclick={showKYCOptions} class="slds-float--right slds-m-right_small">Back
+                </a>
+            </div>
+
+            <div class="slds-m-top_small">
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto">
+
+                        <lightning-combobox data-id="ckycInput" class="ckycOptions slds-m-left_small" name="CKYC__c"
+                            variant="label-hidden" value={ckyc.value} placeholder="Select" options={ckycOptions}
+                            onchange={handleCkycOptionsChange}></lightning-combobox>
+
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto">
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="9" small-device-size="12" large-device-size="6" flexibility="auto">
+                        <template if:true={isShowInp}>
+                            <div class="slds-m-top_x-small slds-m-left_small">
+                                <lightning-input data-id="ckycInput" type="text" label={ckyc.label} disabled
+                                    name={ckyc.label} value={ckyc.docNumber}>
+                                </lightning-input>
+                            </div>
+                        </template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto">
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto">
+                        <template if:true={isShowInp}>
+                            <div class="slds-m-top_x-small slds-m-left_small">
+                                <lightning-input class="validate"
+                                     required data-id="dobOrDoe" name="dobOrDoe" type="date" label="" value={dobOnUi} max={maxDate}                              
+                                     onchange={handleValueChange} disabled={isDisableDob}>
+                                </lightning-input>                                
+                             <!--   <lightning-helptext class="" content="Enter the Date of Birth in this format i.e dd-MM-yyyy"></lightning-helptext> -->
+                            </div>
+                        </template>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="3" small-device-size="12" large-device-size="3" flexibility="auto">
+                        <template if:false={isSearchbutton}>
+                            <div class="slds-p-left_medium searchButton">
+                                <lightning-button data-id="ckycInput" class="actionItem" label="Search" title="Search"
+                                    onclick={searchCkyc}>
+                                </lightning-button>
+                            </div>
+                        </template>
+                        <template if:true={isVerified}>
+                            <div class="slds-p-left_medium searchButton">
+                                <lightning-icon size="small" variant="success"
+                                                icon-name="utility:success" title=""></lightning-icon>
+                                </div>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+        </template>
+
+        <template if:true={isShowCkycDetails}>
+            <c-generic-data-display identifier-documents={showBottomIcons} onback={showDetails}
+                onverified={handleSaveAfterCkycSearch} display-type={dispType} pan-response={ckycSearchResultData}>
+            </c-generic-data-display>
+        </template>
+    </lightning-card>
+</template>

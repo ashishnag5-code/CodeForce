@@ -1,0 +1,34 @@
+<template>
+	<lightning-layout>
+		<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+			<lightning-card icon-name="standard:account" >
+				<h1 slot="title"><a>{applicantRecord.strCustomerId}</a></h1>
+				<div slot="actions">
+					<a><lightning-icon icon-name="utility:back" onclick={viewAllRecords} class="slds-float_right" size="small" alternative-text="Close" title="Close"></lightning-icon></a>
+				</div>
+				<!--<div slot="footer" class="slds-align_absolute-center">
+					<template if:true={isMobile}>
+						<figure>
+							<div class="slds-align_absolute-center">
+								<lightning-icon icon-name="action:clone" onclick={markSelected} size="x-small" alternative-text="Copy" title="Copy"></lightning-icon>
+							</div>
+							<figcaption class="slds-align_absolute-center slds-text-body_small slds-var-p-top_xx-small slds-text-color_weak">Copy To Application</figcaption>
+						</figure>
+					</template>
+					<template if:false={isMobile}>
+						<lightning-button onclick={markSelected} disabled={applicantRecord.boolBlockNext} data-id={applicantRecord.strCustomerId} label="Copy To Application" slot="actions"></lightning-button>
+					</template>
+				</div>-->
+				<c-ausf-collatral-detail collateral-list={collatralDetail} section-title="Collatral Detail"></c-ausf-collatral-detail>
+				<c-ausf-collatral-detail collateral-list={linkageDetail} section-title="Linkage Detail"></c-ausf-collatral-detail>
+				<template if:true={isAutomobileView}>
+					<c-ausf-collatral-detail collateral-list={automobileDetail} section-title="Automobile Detail"></c-ausf-collatral-detail>
+				</template>
+				<template if:true={isPropertyView}>
+					<c-ausf-collatral-detail collateral-list={propertyDetail} section-title="Property Detail"></c-ausf-collatral-detail>
+				</template>
+				<c-ausf-collatral-detail collateral-list={valuationDetail} section-title="Valuation Detail"></c-ausf-collatral-detail>
+			</lightning-card>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

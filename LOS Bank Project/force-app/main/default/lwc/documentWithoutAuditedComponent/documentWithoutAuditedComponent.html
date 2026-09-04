@@ -1,0 +1,33 @@
+<template>
+    <!--Spinner Section-->
+    <c-custom-spinner show-spinner={isLoaded} spinner-image={spinnerImage}></c-custom-spinner>
+    <!--End-->
+    <template if:true={rendewithoutauditedFinaceTemplate}>
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+            <!--Calling Child Component-->
+            <template for:each={itemList} for:item="item" for:index="index">
+               
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"  key={item.id}
+                        active-section-name={activeSections}>
+                        <c-documented-without-audited-child-component key-value={item.id} is-r2={isR2} is-mobile={isMobile} onotherincome={handleOtherIncome}
+                            financial-id={financialId} applicant-id={applicantId} onhome={navigateToHome} ondeletedrecord={handleDeleteRecord}
+                            onwithoutdocauditedsubmit={passtoparent} loan-id={loanAppId} 
+                            onwithoutdocauditedupdate={handlepasstoparentUpdate} existing-details={existingDetails}>
+                        </c-documented-without-audited-child-component>
+                    </lightning-accordion>
+                    <template if:true={showYearIcons}>
+                    <div class="slds-align--absolute-center slds-text-heading_small"  key={item.id}>
+                        Add Year<lightning-icon icon-name="action:new" size="x-small" alternative-text=""
+                            access-key={item.id} id={index} class="slds-m-left_small" onclick={addNewRow}>
+                        </lightning-icon>
+                        &nbsp; Cancel Year <lightning-icon icon-name="action:delete" size="x-small" alternative-text=""
+                            access-key={item.id} id={index} class="slds-m-left_small" onclick={removeRow}>
+                        </lightning-icon>
+                    </div>
+                    </template>
+                
+            </template>
+            <!--End-->
+        </div>
+    </template>
+</template>

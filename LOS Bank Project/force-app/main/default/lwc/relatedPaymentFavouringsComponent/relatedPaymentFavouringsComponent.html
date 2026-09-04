@@ -1,0 +1,520 @@
+<template>
+	<!--<div if:true={isLoaded} class="slds-is-relative">
+		<lightning-spinner alternative-text="Loading..." variant="brand">
+		</lightning-spinner>
+	</div>-->
+	<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+	<!-- Existing Payment Favourings Section-->
+	<template if:true={showMainSection}>
+		<template if:false={addPaymentFavouring}>
+			<div class="slds-card__header slds-grid ">
+				<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					<div class="slds-media__figure">
+						<lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+					</div>
+					<div class="slds-media__body">
+						<h2 class="slds-card__header-title">
+
+							<a class="slds-card__header-link slds-truncate" title="Payment Favourings"
+								onclick={handleGotoRelatedList}>
+								<span>Payment Favourings ({recordCount})</span>
+							</a>
+						</h2>
+					</div>
+					<div class="slds-no-flex">
+						<template if:true={showPaymentFavouringInsertion}>
+							<template if:false={hideIcons}>
+								<lightning-icon icon-name=action:new size="small"
+								onclick={handlePaymentFavouringInformationClick}></lightning-icon>
+							</template>
+						</template>
+					</div>
+				</header>
+			</div>
+
+			<div class="slds-card__body slds-card__body_inner">
+				<ul class="slds-grid slds-wrap slds-grid_pull-padded">
+					<template for:each={paymentFavouringsLst} for:item="relatedRecord">
+
+						<li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+							key={relatedRecord.Id} data-id={relatedRecord.Id} data-record-name="ViewMoreInformation">
+							<article class="slds-box">
+								<div class="slds-card__header slds-grid">
+									<header class="slds-media slds-media_center slds-has-flexi-truncate">
+										<div class="slds-media__figure">
+											<lightning-icon icon-name=custom:custom9 size="small">
+											</lightning-icon>
+										</div>
+										<div class="slds-media__body">
+											<h2 class="slds-card__header-title">
+												<a class="slds-card__header-link slds-truncate"
+													title={relatedRecord.Name} data-id={relatedRecord.Id}
+													onclick={navigateToAppRecordPage}>{relatedRecord.Name}</a>
+											</h2>
+										</div>
+										<div class="slds-no-flex slds-grid">
+											<template if:false={hideIcons}>
+												<div class="slds-size_1-of-2">
+													<lightning-icon icon-name=action:delete size="x-small"
+															data-id={relatedRecord.Id} data-button="delete"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name} title={relatedRecord.Name}
+															onclick={handleRowAction}>
+														</lightning-icon>
+												</div>
+												<div class="slds-size_1-of-2 slds-p-left_xxx-small">
+													<lightning-icon icon-name=action:edit size="x-small"
+														data-id={relatedRecord.Id} data-button="edit"
+														data-record-name={relatedRecord.Name}
+														alternative-text={relatedRecord.Name} title={relatedRecord.Name}
+														onclick={handleRowAction}>
+													</lightning-icon>
+												</div>
+											</template>
+										</div>
+									</header>
+
+								</div>
+								<div class="slds-card__body slds-card__body_inner">
+									<div class="slds-form-element" key={relatedRecord.Id}>
+										<span class="slds-form-element__label">Payment Recipient</span>
+										<div class="slds-form-element__control">
+											<div class="slds-form-element__static">
+												{relatedRecord.Payment_Recipient__c}
+											</div>
+										</div>
+										<!--<span class="slds-form-element__label">Beneficiary Name</span>
+										<div class="slds-form-element__control">
+											<div class="slds-form-element__static">
+												{relatedRecord.Name__c}
+											</div>
+										</div>-->
+										<span class="slds-form-element__label">Payment Mode</span>
+										<div class="slds-form-element__control">
+											<div class="slds-form-element__static">
+												{relatedRecord.Payment_Mode__c}
+											</div>
+										</div>
+										<span class="slds-form-element__label">Net Amount</span>
+										<div class="slds-form-element__control">
+											<div class="slds-form-element__static">
+												<lightning-input value={relatedRecord.Net_Amount__c} variant="label-hidden" type="number" formatter="Currency" read-only="true"></lightning-input>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</article>
+						</li>
+					</template>
+				</ul>
+			</div>
+		</template>
+	</template>
+	<!--End -->
+
+	<!-- Add New Payment Favouring  Details-->
+	<template if:true={addPaymentFavouring}>
+		<lightning-card title="Add New Payment Favouring Information" icon-name="standard:address" class="slds-box">
+			<lightning-layout multiple-rows class="slds-p-bottom_small">
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Payment Recipient</label>
+					<lightning-combobox name="Payment_Recipient__c" label="Payment Recipient"
+						data-name="Payment_Recipient__c" class="validate" variant="label-hidden"
+						value={paymentRecipientValue} options={paymentRecipientDependentOptions}
+						onchange={handlePaymentRecipientChange}></lightning-combobox>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Payment Mode</label>
+					<lightning-combobox name="Payment_Mode__c" label="Payment Mode" data-name="Payment_Mode__c"
+						class="validate" variant="label-hidden" value={paymentModeValue} options={paymentModeOptions}
+						onchange={handlePaymentModeChange}></lightning-combobox>
+				</lightning-layout-item>
+				<template if:true={displayFieldIfNotTA}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>IFSC Code</label>
+					<lightning-input type="text" name="IFSC_Code__c" label="IFSC Code" data-name="IFSC_Code__c"
+						class="validate" pattern="^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$" max-length="11" min-length="11"
+						message-when-pattern-mismatch="Please enter a valid IFSC." variant="label-hidden"
+						value={ifscValue} onchange={handleIfscChange} disabled={isAccDetailsReadOnly}>
+					</lightning-input>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<template if:false={isBankLookup}>
+						<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Bank Name</label>
+						<template if:false={isBankPicklist}>
+							<lightning-input type="text" name="Bank_Name_PMT__c" label="Bank Name"
+								data-name="Bank_Name_PMT__c" class="validate" variant="label-hidden" value={bankValue}
+								onchange={handleBankChange} disabled={isAccDetailsReadOnly}>
+							</lightning-input>
+						</template>
+						<template if:true={isBankPicklist}>
+							<lightning-combobox name="Bank_Name_PMT__c" label="Bank Name" data-name="Bank_Name_PMT__c"
+								class="validate" variant="label-hidden" value={bankValue} options={bankOptions}
+								onchange={handleBankChange}></lightning-combobox>
+						</template>
+					</template>
+					<template if:true={isBankLookup}>
+						<c-generic-custom-lookup name="Bank_Name_PMT__c" label="Bank Name"
+							record-type-name="Bank Master" dependent-field-api="" dependent-picklist-value=""
+							dependent-field-second-api="" dependent-picklist-second-value=""
+							dependent-field-third-api="" dependent-picklist-third-value="" dependent-field-fourth-api=""
+							dependent-picklist-fourth-value="" search-fields="" stepid="0" fieldapi="Bank_Name_PMT__c"
+							object-name="Generic Master" s-object-api-name="Generic_Master__c"
+							default-record-id={bankValue} required="" onlookupselect={handleLookupSelect}>
+						</c-generic-custom-lookup>
+					</template>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<div data-id="beneficiaryNameDiv" class="">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required">* </abbr>Beneficiary Name</label>
+						<lightning-input type="text" name="Name__c" label="Beneficiary Name" data-name="Name__c" disabled={isAccDetailsReadOnly}
+							class="validate" variant="label-hidden" value={nameValue} onchange={handleNameChange}>
+						</lightning-input>
+					</div>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<!--<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Account Number / Loan Account Number (For SVOH case)</label>-->
+					<template if:false={isAccountNumberPicklist}>
+						<div class="buttonIn">
+							<lightning-input type="text" name="AccountNumber" label={loanAccountNumberLabel}
+								data-name="Account_Number__c" class="validate mobilebutton"
+								value={accountNoValue} onchange={handleAccountNoChange} disabled={isAccDetailsReadOnly}><!--removed input from class-->
+							</lightning-input>
+
+
+							<template if:true={boolShowVerify}>
+								<lightning-button variant="base" label="Verify" disabled={boolCheckAccNumber}
+									title="Click the button to verify penny drop" onclick={handleVerify} class="button">
+								</lightning-button>
+							</template>
+
+							<template if:true={isVerified}>
+								<lightning-icon size="small" variant="success" class="button"
+									icon-name="utility:success" title="Mobile"></lightning-icon>
+							</template>
+							<template if:true={boolShowError}>
+								<lightning-icon size="xx-small" class="button1" icon-name="action:close" title="Mobile">
+								</lightning-icon>
+							</template>
+						</div>
+						
+
+					</template>
+					<template if:true={isAccountNumberPicklist}>
+						<lightning-combobox name="Account_Number__c" label={loanAccountNumberLabel}
+							data-name="Account_Number__c" class="validate" value={accountNoValue}
+							options={accountNumberOptions} onchange={handleAccountNoChange}></lightning-combobox>
+					</template>
+				</lightning-layout-item>
+				<!--25 AUG-->
+				<template if:true={showBenificiary}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<div data-id="beneficiaryNameDiv" class="">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required">* </abbr>Beneficiary Name (Response)</label>
+						<lightning-input type="text" name="Beneficiary_Name_Response__c" label="Beneficiary Name" disabled  data-name="Beneficiary_Name_Response__c"
+							class="validate" variant="label-hidden" value={benificiaryResponseName} >
+						</lightning-input>
+					</div>
+					</lightning-layout-item>
+				</template>
+
+				<!--End-->
+
+				
+				</template>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>
+							Net Amount
+							<template if:true={displayHelpTextForNetAmt}><!--R2-642 added helpText-->
+								<lightning-helptext content="This is Tentative Amount; Final amount will be considered on Date of Disbursement." class="slds-var-m-left-small"></lightning-helptext>
+							</template>
+						</label>
+					<lightning-input type="number" name="Net_Amount__c" label="Net Amount" data-name="Net_Amount__c"
+						class="validate amount" variant="label-hidden" value={netAmountValue}
+						onchange={handleNetAmountChange}>
+					</lightning-input>
+				</lightning-layout-item>
+
+				<template if:true={isTranche}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+						padding="around-small">
+						<lightning-combobox required name="Tranche__c" class="validate" label="Tranche"
+							value={trancheValue} options={trancheOptions} onchange={handleTranche}>
+						</lightning-combobox>
+					</lightning-layout-item>
+				</template>
+
+				<template if:true={displayFieldIfNotTA}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<lightning-combobox required name="Account_Type__c" label="Account Type" data-name="Account_Type__c"
+						class="validate" value={accountTypeValue} options={acccountTypeOptions}
+						onchange={handleAccountType}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				</template>
+
+				<template if:true={showMarginMoneyFld}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+						<lightning-combobox required name="Margin_Money_Action__c" label="Margin Money Action" data-name="Margin_Money_Action__c"
+							class="validate" value={marginMoneyValue} options={marginMoneyOptions} disabled={disableMarginMoneyFld}
+							onchange={handleMarginMoneyChange}>
+						</lightning-combobox>
+					</lightning-layout-item>
+					</template>
+
+				<template if:true={showButton}>
+					<div class="slds-m-around_medium">
+						<!--template if:true={isUploadDisabled}>
+							<lightning-input disabled type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf, .jpeg"
+							label="Add Cheque"></lightning-input>
+						</template-->
+						<template if:false={isEditRestricted}>
+							<template if:false={isUploadDisabled}>
+								<label class="slds-form-element__label">Add Cheque</label>
+								<c-los-generic-document-upload hidefiledetails={trueValue} isloading={isloading}
+									isdocmanager={trueValue} show-upload-component={trueValue} show-input-box={falseValue}
+									loan-id={recordId} doc-name={docName} ondocumentsuccess={handleSuccess}
+									uploadtypename={docTypeName}></c-los-generic-document-upload>
+								<template if:true={fileData}>
+									<div>{fileData.filename}</div>
+								</template>
+							</template>
+						</template>
+						
+						<!-- <lightning-input disabled={isUploadDisabled} type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf, .jpeg"
+							label="Add Cheque" onchange={openfileUpload}></lightning-input> -->
+
+					</div>
+
+					<!--lightning-button variant="brand" label="submit" title="Submit" onclick={handleClick}
+						class="slds-m-left_x-small"></lightning-button-->
+
+					<!--lightning-button variant="brand" label="Add Cheque" title="Add Cheque"
+						onclick={handleAddCheque}></lightning-button-->
+				</template>
+				<br/>
+			</lightning-layout>
+
+				<lightning-layout multiple-rows class="slds-p-around_small">
+					<div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+						<lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+							onclick={handleRecordInsertionCancel}></lightning-icon>
+						<lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+							onclick={handleRecordInsertionSave} class="slds-m-left_small"></lightning-icon>
+					</div>
+				</lightning-layout>
+		</lightning-card>
+	</template>
+
+	<!-- Edit Payment Favouring Section-->
+	<template if:true={editPayment}>
+		<lightning-card title="Edit Payment Favouring Information" icon-name="custom:custom9" class="slds-box">
+			<lightning-layout multiple-rows class="slds-p-bottom_small">
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Payment Recipient</label>
+					<lightning-combobox name="Payment_Recipient__c" label="Payment Recipient"
+						data-name="Payment_Recipient__c" class="validate" variant="label-hidden"
+						value={paymentRecipientValue} options={paymentRecipientDependentOptions}
+						onchange={handlePaymentRecipientChange}></lightning-combobox>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Payment Mode</label>
+					<lightning-combobox name="Payment_Mode__c" label="Payment Mode" data-name="Payment_Mode__c" disabled={disablePaymentMode}
+						class="validate" variant="label-hidden" value={paymentModeValue} options={paymentModeOptions}
+						onchange={handlePaymentModeChange}></lightning-combobox>
+				</lightning-layout-item>
+				<template if:true={displayFieldIfNotTA}>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>IFSC Code</label>
+					<lightning-input type="text" name="IFSC_Code__c" label="IFSC Code" data-name="IFSC_Code__c"
+						class="validate" pattern="^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$" max-length="11" min-length="11"
+						message-when-pattern-mismatch="Please enter a valid IFSC." variant="label-hidden"
+						value={ifscValue} onchange={handleIfscChange} disabled={isAccDetailsReadOnly}>
+					</lightning-input>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<template if:false={isBankLookup}>
+						<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Bank Name</label>
+						<template if:false={isBankPicklist}>
+							<lightning-input type="text" name="Bank_Name_PMT__c" label="Bank Name"
+								data-name="Bank_Name_PMT__c" class="validate" variant="label-hidden" value={bankValue}
+								onchange={handleBankChange} disabled={isAccDetailsReadOnly}>
+							</lightning-input>
+						</template>
+						<template if:true={isBankPicklist}>
+							<lightning-combobox name="Bank_Name_PMT__c" label="Bank Name" data-name="Bank_Name_PMT__c"
+								class="validate" variant="label-hidden" value={bankValue} options={bankOptions}
+								onchange={handleBankChange}></lightning-combobox>
+						</template>
+					</template>
+					<template if:true={isBankLookup}>
+						<c-generic-custom-lookup name="Bank_Name_PMT__c" label="Bank Name"
+							record-type-name="Bank Master" dependent-field-api="" dependent-picklist-value=""
+							dependent-field-second-api="" dependent-picklist-second-value=""
+							dependent-field-third-api="" dependent-picklist-third-value="" dependent-field-fourth-api=""
+							dependent-picklist-fourth-value="" search-fields="" stepid="0" fieldapi="Bank_Name_PMT__c"
+							object-name="Generic Master" s-object-api-name="Generic_Master__c"
+							default-record-id={bankValue} required="" onlookupselect={handleLookupSelect}>
+						</c-generic-custom-lookup>
+					</template>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Beneficiary Name</label>
+					<lightning-input type="text" name="Name__c" label="Beneficiary Name" data-name="Name__c" disabled={isAccDetailsReadOnly}
+						class="validate" variant="label-hidden" value={nameValue} onchange={handleNameChange}>
+					</lightning-input>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<!--<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Account Number / Loan Account Number (For SVOH case)</label>-->
+					<template if:false={isAccountNumberPicklist}>
+						<div class="buttonIn">
+							<lightning-input type="text" name="AccountNumber" label={loanAccountNumberLabel}
+								data-name="AccountNumber" class="validate" value={accountNoValue}
+								onchange={handleAccountNoChange} disabled={isAccDetailsReadOnly}>
+							</lightning-input>
+							<template if:true={boolShowVerify}>
+								<lightning-button variant="base" label="Verify" disabled={boolCheckAccNumber}
+									title="Click the button to verify penny drop" onclick={handleVerify} class="button">
+								</lightning-button>
+							</template>
+
+							<template if:true={isVerified}>
+								<lightning-icon size="small" variant="success" class="button"
+									icon-name="utility:success" title="Mobile"></lightning-icon>
+							</template>
+							<template if:true={boolShowError}>
+								<lightning-icon size="small" variant="destructive" class="button"
+									icon-name="utility:clear" title="Mobile"></lightning-icon>
+							</template>
+						</div>
+					</template>
+
+					<template if:true={isAccountNumberPicklist}>
+						<lightning-combobox name="Account_Number__c" label={loanAccountNumberLabel}
+							data-name="Account_Number__c" class="validate" value={accountNoValue}
+							options={accountNumberOptions} onchange={handleAccountNoChange}></lightning-combobox>
+					</template>
+				</lightning-layout-item>
+				<!--25 AUG-->
+				<template if:true={showBenificiary}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<div data-id="beneficiaryNameDiv" class="">
+						<label class="slds-form-element__label">
+							<abbr class="slds-required" title="required">* </abbr>Beneficiary Name (Response)</label>
+						<lightning-input type="text" name="Beneficiary_Name_Response__c" label="Beneficiary Name" disabled  data-name="Beneficiary_Name_Response__c"
+							class="validate" variant="label-hidden" value={benificiaryResponseName} >
+						</lightning-input>
+					</div>
+					</lightning-layout-item>
+				</template>
+
+				<!--End-->
+			</template>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>
+							Net Amount
+							<template if:true={displayHelpTextForNetAmt}><!--R2-642 added helpText-->
+								<lightning-helptext content="This is Tentative Amount; Final amount will be considered on Date of Disbursement." class="slds-var-m-left-small"></lightning-helptext>
+							</template>
+						</label>
+					<lightning-input type="number" name="Net_Amount__c" label="Net Amount" data-name="Net_Amount__c"
+						class="validate amount" variant="label-hidden" value={netAmountValue}
+						onchange={handleNetAmountChange}>
+					</lightning-input>
+
+				</lightning-layout-item>
+
+				<template if:true={isTranche}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+						padding="around-small">
+						<lightning-combobox required name="Tranche__c" class="validate" label="Tranche"
+							value={trancheValue} options={trancheOptions} onchange={handleTranche}>
+						</lightning-combobox>
+					</lightning-layout-item>
+				</template>
+				<template if:true={displayFieldIfNotTA}>
+
+				<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+					<lightning-combobox required name="Account_Type__c" label="Account Type" data-name="Account_Type__c"
+						class="validate" value={accountTypeValue} options={acccountTypeOptions}
+						onchange={handleAccountType}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				<template if:true={showMarginMoneyFld}>
+					<lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+						<lightning-combobox required name="Margin_Money_Action__c" label="Margin Money Action" data-name="Margin_Money_Action__c"
+							class="validate" value={marginMoneyValue} options={marginMoneyOptions} disabled={disableMarginMoneyFld}
+							onchange={handleMarginMoneyChange}>
+						</lightning-combobox>
+					</lightning-layout-item>
+					</template>
+			</template>
+
+				<template if:true={showButton}>
+					<div class="slds-m-around_medium">
+						<!-- <lightning-input disabled={isUploadDisabled} type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf, .jpeg" label="Add Cheque"
+							onchange={openfileUpload}></lightning-input> -->
+						<!--template if:true={isUploadDisabled}>
+								<lightning-input disabled type="file" accept=".xlsx, .xls, .csv, .png, .doc, .docx, .pdf, .jpeg"
+								label="Add Cheque"></lightning-input>
+							</template-->
+						<template if:false={isEditRestricted}>
+							<template if:false={isUploadDisabled}>
+								<label class="slds-form-element__label">Add Cheque</label>
+								<c-los-generic-document-upload hidefiledetails={trueValue} isloading={isloading}
+									isdocmanager={trueValue} show-upload-component={trueValue} show-input-box={falseValue}
+									loan-id={recordId} doc-name={docName} ondocumentsuccess={handleSuccess}
+									uploadtypename={docTypeName}></c-los-generic-document-upload>
+								<template if:true={fileData}>
+									<div>{fileData.filename}</div>
+								</template>
+							</template>
+						</template>
+						
+
+					</div>
+
+					<!--lightning-button variant="brand" label="submit" title="Submit" onclick={handleClick}
+						class="slds-m-left_x-small"></lightning-button-->
+
+					<!--lightning-button variant="brand" label="Add Cheque" title="Add Cheque"
+					onclick={handleAddCheque}></lightning-button-->
+				</template>
+				<br/>
+			</lightning-layout>
+
+				<lightning-layout multiple-rows class="slds-p-around_small">
+					<div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+						<lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+							onclick={handleRecordUpdateCancel}></lightning-icon>
+						<lightning-icon icon-name="action:approval" size="x-small" type="submit" alternative-text="Save"
+							onclick={handleRecordUpdateSave} class="slds-m-left_small"></lightning-icon>
+					</div>
+				</lightning-layout>
+		</lightning-card>
+	</template>
+	<!--Added for repaymetn Requirement-->
+	<template if:true={isRenderedFromRepayment}>
+		<lightning-button class="slds-align--absolute-center" label="Back To Repayment" title="back To Repayment" 
+						  onclick={navigateBackToRepayment}>
+		</lightning-button>
+	</template>
+</template>

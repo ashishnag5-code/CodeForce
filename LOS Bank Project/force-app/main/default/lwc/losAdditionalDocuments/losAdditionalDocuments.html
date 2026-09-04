@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="KYC" icon-name="standard:lead">
+
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+
+        <label class="slds-form-element__label slds-m-left_small slds-m-bottom_large">Upload documents for Additional KYC:</label>
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="4"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <img src={passport} width="60%" height="50%" onclick={selectKYCType} class="imageCss"
+                    data-id="Passport">
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="4"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <img src={DL} width="80%" height="50%" onclick={selectKYCType} class="imageCss" data-id="DL">
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="4"
+                class="slds-p-horizontal_small" flexibility="auto">
+                <img src={voter} width="40%" height="20%" onclick={selectKYCType} class="imageCss" data-id="Voter">
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>

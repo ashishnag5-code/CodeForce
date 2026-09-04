@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute label="Parent Flow" name="flowName" datasource="apex://GenericWizardScreenConfigList"/>
+    <design:attribute label="Child to Parent" name="childToFlow" datasource="apex://GenericWizardCurrentConfigList"/>
+    <design:attribute label="Refetch Data" name="boolReFetchData" default="false"/>
+</design:component>

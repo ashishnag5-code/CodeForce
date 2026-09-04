@@ -1,0 +1,16 @@
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+    width: 300px !important;
+}
+/*.slds-modal__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}*/
+/*.slds-modal {
+    position: relative !important;
+}*/

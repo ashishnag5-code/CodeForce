@@ -1,0 +1,58 @@
+<template>
+<table>
+    <tbody>
+    <tr class="slds-line-height_reset">
+
+        <td data-label="Name" scope="row">
+            <div class="slds-truncate">
+                <lightning-input type="text" variant="label-hidden" name="month" onchange={handleChange} value={test}>
+                </lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="text" variant="label-hidden" name="year" onchange={handleChange} value={test}>
+                </lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="averageBalanceOn5th" onchange={handleChange}
+                    value={test}></lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="averageBalanceOn15th"
+                    onchange={handleChange} value={test}></lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="averageBalanceOn25th"
+                    onchange={handleChange} value={test}></lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="averageBalance" disabled="true"
+                    onchange={handleChange} value={averageBalanceVal}>
+                </lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="amb" onchange={handleChange} value={test}>
+                </lightning-input>
+            </div>
+        </td>
+        <td data-label="">
+            <div class="slds-truncate">
+                <lightning-input type="number" variant="label-hidden" name="amc" onchange={handleChange} value={test}>
+                </lightning-input>
+            </div>
+        </td>
+    </tr>
+</tbody>
+    </table>
+</template>

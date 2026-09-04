@@ -1,0 +1,13 @@
+<template>
+    <c-common-toast></c-common-toast>
+
+    <template if:true={renderRejectButton}>
+        <lightning-button variant="brand" data-id="reject" 
+                          class="slds-m-top_small buttonColor slds-m-left--small" label={rejectButtonLabel}
+                          onclick={handleFiReject} disabled={disabledRejectButton}>
+        </lightning-button>
+
+    </template>
+    
+    
+</template>

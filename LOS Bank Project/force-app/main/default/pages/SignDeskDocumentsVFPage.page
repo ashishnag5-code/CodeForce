@@ -1,0 +1,6 @@
+<apex:page renderAs="PDF">
+
+    <apex:iframe src="https://ausfb2022--dev1--c.sandbox.vf.force.com/apex/LoanAgreementDocument" />
+    <apex:iframe src="https://ausfb2022--dev1--c.sandbox.vf.force.com/apex/SanctionPDFPageTest" />
+
+</apex:page>

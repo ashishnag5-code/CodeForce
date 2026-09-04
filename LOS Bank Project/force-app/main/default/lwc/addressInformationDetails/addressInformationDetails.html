@@ -1,0 +1,222 @@
+<template>
+    <article class="slds-card slds-card_boundary">
+        <div class="slds-card__body slds-card__body_inner">
+            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                <template for:each={selectedAddress} for:item="relatedRecord">
+                    <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+                        key={relatedRecord.Id} data-id={relatedRecord.Id}>
+                        <article class="slds-box">
+                            <div class="slds-card__header slds-grid">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name=standard:address size="small">
+                                        </lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body">
+                                        <h2 class="slds-card__header-title">
+                                            <!--<a href="#" class="slds-card__header-link slds-truncate"
+                                                title={relatedRecord.Name}>{relatedRecord.Address_Type__c}</a>-->
+                                                {relatedRecord.Address_Type__c}
+
+                                        </h2>
+                                    </div>
+
+                                </header>
+                            </div>
+                            <div class="slds-card__body slds-card__body_inner">
+
+                                <div class="slds-form-element slds-form-element_readonly" key={relatedRecord.Id}>
+                                    <!--<span class="slds-form-element__label">Type</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Address_Type__c}
+                                        </div>
+                                    </div>-->
+                                    <template if:false={relatedRecord.isLandAddress}>
+                                    <span class="slds-form-element__label">Address Line 1</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Address_Line_1__c}
+                                        </div>
+                                    </div>
+
+                                    <span class="slds-form-element__label">Address Line 2</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Address_Line_2__c}
+                                        </div>
+                                    </div>
+
+                                    <span class="slds-form-element__label">Address Line 3</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Address_Line_3__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">State </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.State__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">City </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.City__c}
+                                        </div>
+                                    </div>
+
+                                    <span class="slds-form-element__label">District </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.District__c}
+                                        </div>
+                                    </div>
+                                    <template if:false={isPermanent}>
+                                    <span class="slds-form-element__label">Area Name</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Area_Name__c}
+                                        </div>
+                                    </div>
+                                    </template>
+
+                                    <span class="slds-form-element__label">Taluka </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Taluka__c}
+                                        </div>
+                                    </div>
+
+                                    <span class="slds-form-element__label">Pincode </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Pincode__c}
+                                        </div>
+                                    </div>
+
+                                    <span class="slds-form-element__label">Area Type </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Area_Type__c}
+                                        </div>
+                                    </div>
+                                    <template if:false={isPermanent}>
+                                    <span class="slds-form-element__label">Land Mark </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Land_mark__c}
+                                        </div>
+                                    </div>
+                                    </template>
+
+                                    <span class="slds-form-element__label"> Status </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Status__c}
+                                        </div>
+                                    </div>
+                                    <template if:false={isPermanent}>
+                                    <template if:false={isOffice}>
+                                    <span class="slds-form-element__label"> Type </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Type__c}
+                                        </div>
+                                    </div>
+                                    </template>
+
+                                    <span class="slds-form-element__label"> Stability </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Stability__c}
+                                        </div>
+                                    </div>
+                                    </template>
+                                    <template if:false={isOffice}>
+                                    <span class="slds-form-element__label"> Address Taken From </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Address_Source__c}
+                                        </div>
+                                    </div>
+                                    </template>
+                                    
+                                    <span class="slds-form-element__label"> Distance From Branch</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Distance_from_Branch__c}
+                                        </div>
+                                    </div>
+                                    </template>
+                                    <template if:true={relatedRecord.isLandAddress}>
+                                        <span class="slds-form-element__label">State </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.State__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">District </span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.District__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">Taluka</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Taluka__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">Village</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Village__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">Khata No. / Khasara No. / Survey No.</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Khata_Khasara_Survey_Number__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">Pincode</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Pincode__c}
+                                        </div>
+                                    </div>
+                                    <span class="slds-form-element__label">Land Mark</span>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-form-element__static">
+                                            {relatedRecord.Land_mark__c}                                        
+                                        </div>
+                                    </div>
+
+                                    </template>
+
+
+
+
+                                </div>
+
+                            </div>
+                        </article>
+
+                    </li>
+                </template>
+
+
+
+
+
+
+            </ul>
+            <div class="slds-align_absolute-center">
+                <lightning-icon icon-name="action:back" size="x-small" title="Previous" alternative-text="Previous"
+                    onclick={viewAllRecords} slot="actions"></lightning-icon>
+                <!--  <lightning-button onclick={viewAllRecords} title="Previous" label="Back" slot="actions"></lightning-button>-->
+            </div>
+        </div>
+    </article>
+</template>

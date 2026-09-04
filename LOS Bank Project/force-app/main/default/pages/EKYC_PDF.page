@@ -1,0 +1,379 @@
+<apex:page standardController="Applicant__c" extensions="EKYC_Controller" renderAs="pdf" showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <html>
+    <head>
+        <style>
+            
+            .ft12 {
+            font-family: Times;
+            color: #000000;
+            white-space: nowrap;
+            line-height: 140%;
+            }
+            
+            .ft13 {            
+            margin-top: 7%;
+            }    
+            
+            .ft15 {
+            line-height: 30%;
+            }
+            
+            .ft20 {
+            font-size: 140%;
+            font-family: Helvetica;
+            color: #000000;
+            white-space: nowrap;
+            margin-top: 6%;
+            }
+            
+            .ekycHeading {
+           	margin-top: 2%;
+            }
+            
+            .ft21 {
+            font-size: 100%;
+            font-family: Helvetica;
+            color: #000000;
+            white-space: nowrap;
+            }
+            
+            .ft22 {
+            font-size: 115%;
+            font-family: Helvetica;
+            color: #000000;
+            white-space: nowrap;
+            }
+            
+            .ft23 {
+            font-size: 78%;
+            line-height: 50%;
+            margin-top: -1%;
+            font-family: Helvetica;
+            color: #000000;
+            white-space: nowrap;
+            }
+            
+            
+           <!-- @page {
+                size: letter;
+                margin: 10mm;
+              
+                @bottom-center {
+                    content: "Page " counter(page) " of " counter(pages);
+                }  
+            }  -->
+            .page-break {
+                display:block;
+                page-break-after:always;
+            }
+          <!--  body {
+                font-family: Arial Unicode MS;
+            }   -->
+            
+            .declarationCss {
+            	margin-top:10%;
+            }
+            .colonCss {
+            	margin-left: 80%;          	
+            }
+            
+            .aacountDetailUndeline {
+            	color: #6D3078;
+            }
+            
+            .gapBtwAccDetAndHr {
+            	line-height: 1%;
+            }
+            
+            .hrCss1 {
+            	width:100%; 
+                height:2px;
+                border-width:0;
+                color:#F37435;
+                background-color:#F37435;
+            }
+            
+            .gapBtwPersonDetAndHr{
+            	line-height : 1%;
+            	margin-top : 3.5%;
+            }         
+            
+            .hrCss2 {
+            	color : #D3D3D3;
+            	background-color:#D3D3D3;
+            	border : none;
+            	height : 0.6px;
+            	position : relative;
+              	bottom : 8px;
+            }
+
+            .hrCss3 {
+                color : #D3D3D3;
+            	background-color:#D3D3D3;
+                height: 5px;
+            	
+            }
+
+            .hrCss4 {
+                color : #D3D3D3;
+            	background-color:#D3D3D3;
+                height: 0px;
+                position : relative;
+              	bottom : 15.5px;          	
+            }
+
+            .hrCss5 {
+                color : #777777;
+            	background-color:#777777;
+                height: 1px; 
+                margin-top: 25px;  	
+            }
+
+            .hrCss6 {
+                color : #3D3D3D;
+            	background-color:#3D3D3D;
+                height: 1px;                 	
+            }
+            
+            .marginForFirstSec {
+            	margin-top : 3%;
+            }
+
+            .marginFromAddessDet {
+                margin-top : 5%;
+            }
+            .marginFromSecondSect {
+                margin-top : 10%;
+            }
+
+            .margin6 {
+                margin-top: 5%;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        
+    <div class="page-break ft12">
+    	<!--  <img width="892" height="1262" src="target001.png" alt="background image"/>   -->
+        <apex:image url="{!$Resource.EKYC}" width="95%" />
+        <p style="" class="ft13"><b>......................................................................................................................................................................<br/></b>Thank you for choosing AU Small Finance Bank.</p>
+        <p style="" class="ft13">We started our journey in 1996 as Au Financiers, an NBFC. Under the aegis of RBI, we transformed into<br/>AU Small Finance Bank in 2017. The same year, AU Bank registered a stellar stock exchange listing and<br/>debuted into the Fortune 500-India list. AU was the only asset financing company to become a Small<br/>Finance Bank as it focused on financial inclusion, followed the last mile delivery model and has been<br/>vigilant on good governance. Our enviable track record and impeccable asset quality have earned us the<br/>prestige of one of the fastest growing banks of India.</p>
+        <p style="" class="ft13">Regarding your account, mentioned below are the details that you had shared &amp; verified during the<br/>account opening process. We request your kind inspection of these details. In case of any discrepancy,<br/>we request you to immediately get in touch with the Bank representative who assisted you in the<br/>on-boarding process. Alternatively, you may choose to visit your nearest AU Small Finance Bank branch<br/>or call us at our Customer Care number of 1800 1200 1200.</p>
+        <div class="ft15">
+            <p style="" class="ft13"><b>Contact Us</b></p>
+            <p style="" class="">Website : <a href="www.aubank.in" target="_blank">www.aubank.in</a></p>
+            <p style="" class="">Phone Banking : 1800 1200 1200</p>
+            <p>Registered Office :AU SMALL FINANCE BANK LIMITED, 19-A, Dhuleshwar Garden, Ajmer Road,</p>
+            <p>Jaipur – 302001, Rajasthan, India</p> 
+        </div>       			 			
+    </div>
+        
+    <div>
+        <div>
+            <div class="gapBtwAccDetAndHr">
+                <h3 class="aacountDetailUndeline">
+                   Account Holder Detail
+                </h3>
+            	<hr class="hrCss1"/> 
+            </div>
+            <div class="gapBtwPersonDetAndHr">
+              <h4>
+                Personal Detail
+              </h4>
+              <hr class="hrCss2"/>  
+            </div>
+        	<apex:panelGrid columns="3" id="theGrid0" summary="" style="line-height:1;" styleClass="ft21 marginForFirstSec">
+                    <apex:outputText value="Customer Photograph"/> 
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:image styleClass="colonCss" value="{!genericUrlPathForImage + getCustomerPhotoId}" width="200px" height="200px" alt=""/>
+
+                    <!--apex:image styleClass="colonCss" value="{!genericUrlPathForImage + getCustomerPhotoId}" alt=""/-->
+                    <apex:outputText value="Aadhaar Number"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.maskAadhaarNo}"/>
+                    <apex:outputText value="PAN No"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.PAN__c}"/>
+                    <apex:outputText value="Customer ID"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.First_Name__c}"/>
+                    <apex:outputText value="Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.applicantName}"/>
+                    <apex:outputText value="Father Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Father_Name__c}"/>
+                    <apex:outputText value="Mother Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Mother_Name__c}"/>
+                    <apex:outputText value="Date Of Birth"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText value="{0, date, d-MM-yyyy}"> 
+                    <apex:param value="{!Applicant__c.Dob__c}" /> 
+                	</apex:outputText>
+                    <apex:outputText value="Gender"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Gender__c }"/>
+                    <apex:outputText value="Maritial Status"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Spouse Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Spouse_Name__c }"/>
+                    <apex:outputText value="Email Id"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Email__c }"/>
+                    <apex:outputText value="Employment Status"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Political Exposed Person"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Politically_Exposed_Person__c }"/>
+                    <apex:outputText value="Qualification"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Education_qualification__c }"/>
+                    <apex:outputText value="Mobile Number"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Mobile_Number__c }"/>
+                    <apex:outputText value="Place Of Birth"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Occupation Type"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Designation"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Annual Income"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="MITC Declaration"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="FATCA Declaration"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Are you a tax resident in any country other than India?"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+                    <apex:outputText value="Signature"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Marital_Status__c }"/>
+            </apex:panelGrid>
+
+            <div>            
+                <hr class="hrCss3 marginFromAddessDet"/>  
+                <div class="">
+                    <h3>
+                        Address Detail
+                    </h3>
+                    <hr class="hrCss4"/>
+                </div>
+                <div>
+                    <apex:panelGrid columns="3" id="theGrid3" style="line-height:1;" styleClass="ft21 marginForFirstSec">
+                        <apex:outputText value="Permanent Address"/>
+                        <apex:outputText styleClass="colonCss" value=":"/>
+                        <apex:outputText styleClass="colonCss" value="{!applcntAddress}"/>
+                    </apex:panelGrid>
+                </div>
+                <hr class="hrCss5"/>
+            </div>
+
+        </div>
+       
+          <div class="ft20"><b>  EKYC Detail </b></div>
+   
+      
+        <div class="ekycHeading">                    
+            <apex:panelGrid columns="3" id="theGrid" summary="EKYC Detail" style="line-height:2.5;" styleClass="ft21">
+                    <apex:outputText value="Customer Photograph"/> 
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:image styleClass="colonCss" value="{!genericUrlPathForImage + getCustomerPhotoId}" alt=""/>
+                    <apex:outputText value="Masked Aadhaar Number"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.maskAadhaarNo }"/>
+                    <apex:outputText value="Aadhaar Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Aadhaar_Name__c }"/>
+                    <apex:outputText value="First Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.First_Name__c }"/>
+                    <apex:outputText value="Middle Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Middle_Name__c  }"/>
+                    <apex:outputText value="Last Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Last_Name__c }"/>
+                    <apex:outputText value="Age"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Age__c }"/>
+                    <apex:outputText value="DOB"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText value="{0, date, d-MM-yyyy}"> 
+                    <apex:param value="{!Applicant__c.Dob__c}" /> 
+                	</apex:outputText>
+                    <apex:outputText value="Gender"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Gender__c }"/>
+                    <apex:outputText value="Father Name"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!Applicant__c.Father_Name__c }"/>
+                    <apex:outputText value="Address"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applcntAddress}"/>
+                    <apex:outputText value="Pin"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.pin}"/>
+                    <apex:outputText value="City"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.city}"/>
+                    <apex:outputText value="State"/>
+                    <apex:outputText styleClass="colonCss" value=":"/>
+                    <apex:outputText styleClass="colonCss" value="{!applicantDetails.state}"/>
+            </apex:panelGrid>
+
+            <div class="marginFromSecondSect">
+                <hr class="hrCss6"/> 
+                <div class="margin6">
+                    <apex:panelGrid columns="3" id="theGrid2" style="line-height:2.5;" styleClass="ft21">
+                        <apex:outputText value="E-signed by"/>
+                        <apex:outputText style="colonCss" value=":"/>
+                        <apex:outputText style="colonCss" value="{!applicantDetails.applicantName}"/>
+                        <apex:outputText value="Reason"/>
+                        <apex:outputText style="colonCss" value=":"/>
+                        <apex:outputText style="colonCss" value=""/>
+                        <apex:outputText value="E-sign"/>
+                        <apex:outputText style="colonCss" value=":"/>
+                        <apex:outputText style="colonCss" value=""/>
+                        <apex:outputText value="Date"/>
+                        <apex:outputText style="colonCss" value=":"/>
+                        <apex:outputText value="{0,date,dd-MM-yyyy hh:mm:ss aa}">
+                            <apex:param value="{!NOW()+offset}"/>
+                    </apex:outputText>
+                </apex:panelGrid>
+                </div>
+                <hr class="hrCss6 margin6"/> 
+                <div class="">
+                    <b>Note</b> -Revised Schedule of Charges w.e.f. 1st September 2018 for new accounts &amp; w.e.f. 1st October 2018 for existing accounts(Opened till 31st August-18), for more details please refer AU Bank`s website at below link.<a> https://www.aubank.in/schedule-charges</a>
+                </div>
+            </div>
+        </div>
+
+      <!--  <div class="declarationCss">
+            <apex:outputText styleClass="ft22" value="Declaration"/><br/>
+            <div class="ft23">
+                <p>I/We hereby submit voluntarily at my/our own discretion and give my/our consent to AU Small Finance Bank Ltd. to obtain my/our Aadhaar,</p>
+                <p> Name and Fingerprint/Iris for authentication with UIDAI &amp; use my e-sign as a digital signature and consider the same as my consent for</p>
+                <p> opening Savings Account with AU Small Finance Bank Limited. The consent and purpose of collecting Aadhaar has been explained to me/us</p>
+                <p>in local language. Bank has informed me/us that my/our identity information would only be used for KYC purposes and also informed that </p>
+                <p>my Biometric will not be stored/shared and will be submitted to CIDR only for the purpose of authentication.</p>
+            </div>              
+        </div>  -->
+    </div>  
+        
+        
+    </body>
+   </html>
+</apex:page>

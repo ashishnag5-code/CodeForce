@@ -1,0 +1,50 @@
+<template>
+ 
+    <div class="slds-text-align_center">
+        <span class="slds-text-heading_large">Where in the World Am I?</span>
+    </div>
+  
+    <!-- After the current location is received,
+         its value is displayed here: -->
+    <template if:true={currentLocation}>
+        <div class="slds-m-vertical_large slds-p-vertical_medium
+                    slds-text-align_left slds-border_top slds-border_bottom">
+           
+            <!-- Current location as latitude and longitude -->
+            Your current location is:
+            <pre>{currentLocationAsString}</pre>
+  
+            <!-- Current location as a map -->
+            <lightning-map map-markers={currentLocationAsMarker} zoom-level=16>
+            </lightning-map>
+        </div>
+    </template>
+  
+    <!-- While request is processing, show spinner -->
+    <div class="slds-m-around_large">
+        <template if:true={requestInProgress}>
+            <div class="slds-is-relative">
+                <lightning-spinner
+                    alternative-text="Getting location...">
+                </lightning-spinner>
+            </div>
+        </template>
+    </div>
+  
+    <!-- Static help text -->
+    <div class="slds-text-align_center slds-text-color_weak slds-m-vertical_large">
+        Click <strong>Get Current Location</strong> to see where you are.
+    </div>
+  
+    <!-- The get-current-location button;
+         Disabled if LocationService isn't available -->
+    <div class="slds-align_absolute-center slds-m-vertical_large">
+        <lightning-button
+            variant="brand"
+            icon-name="utility:target"
+            label="Get Current Location"
+            title="Use your device's GPS and other location sensors to determine your current location"
+            onclick={handleGetCurrentLocation}>
+        </lightning-button>
+    </div>
+ </template>

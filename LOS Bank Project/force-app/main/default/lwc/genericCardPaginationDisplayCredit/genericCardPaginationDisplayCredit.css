@@ -1,0 +1,56 @@
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width:auto;
+  height:100%;
+}
+
+td, th {
+  border: 1px solid #ffffff;
+  text-align: left;
+  padding: 6px;
+}
+
+.align{
+text-align:center;
+}
+
+.header {
+
+background-color:#7030a0;
+color:white;
+text-align:center;
+
+}
+
+.marginleft {
+  margin-left: 20px;
+ 
+}
+
+tr {
+  height: 25px;
+}
+
+.subheader {
+
+background-color:#ed7d31;;
+color:white;
+text-align:center;
+
+}
+
+
+
+.colcolor {
+
+background-color:#ed7d31;;
+color:white;
+
+}
+
+
+
+:host{
+  display: contents;
+}

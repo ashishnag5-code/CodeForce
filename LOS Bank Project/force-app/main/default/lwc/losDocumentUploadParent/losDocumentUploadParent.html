@@ -1,0 +1,68 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 12-26-2022
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-card title="Upload Documents" icon-name="standard:document">
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"> Test Loading</lightning-spinner>
+        </template>
+        <!--<lightning-layout multiple-rows class="slds-var-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-var-p-horizontal_small" flexibility="auto">
+                <div class="slds-is-relative">
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Aadhaar Number</label>
+                    <div class="buttonIn">
+                        <lightning-input type="text" variant="label-hidden"
+                            class="validate checkValidity masked input aadhaar" label="Aadhaar Card" name="Aadhaar_Number__c"
+                            max-length="16" min-length="12"  pattern="^[0-9]{12}$|^[0-9]{16}$" message-when-pattern-mismatch="Enter Valid Aadhaar or VID"
+                            value={aadharNumber}>
+                        </lightning-input>
+                        <lightning-button-icon class="button" icon-name="utility:upload"
+                        alternative-text="upload" title="Upload" data-name="AUWheels0003" onclick={handleUploadClick}>
+                    </lightning-button-icon>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+        <template if:true={showUploadComponent}>
+            <c-los-document-upload applicant-id={applicantId} doc-name ={docName} ondocumentsuccess={handleSuccess}></c-los-document-upload>
+        </template>-->
+        <c-los-generic-document-upload doc-name="AUWheels0003" upload-type-name= "Aadhar Card" applicant-id={recordId}></c-los-generic-document-upload>
+        <div class="">
+        <div class="slds-var-p-horizontal_small slds-var-m-top_medium slds-var-p-bottom_small">
+            <label class="slds-form-element__label">Additional Information &nbsp;&nbsp;
+
+            </label>
+            <lightning-icon icon-name=action:new size="xx-small" onclick={handleAdditionalInformationClick}>
+            </lightning-icon>
+        </div>
+        <lightning-layout multiple-rows class="slds-var-p-bottom_small" if:true={isShowAdditionalInformationsPicklist}>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="12" flexibility="auto"
+                class="slds-var-p-horizontal_small">
+                <div class="slds-var-m-top_medium">
+                    <lightning-combobox class="slds-form-element__label" data-index={index} variant="label-hidden"
+                        name="AdditionalInformation" label="Additional Information" value={AdditionalInformationvalue}
+                        placeholder="Select Document type" options={AdditionalInformationoptions}
+                        onchange={handleAdditionalInformationChange}>
+                    </lightning-combobox>
+                    <template for:each={fileUploadWrapper} for:item="item" for:index="index">
+                        <lightning-pill key={item.doName} label={item.uploadTypeName} name={item.docName} onremove={handleRemove}></lightning-pill>
+                    </template>
+                </div>
+                <div class="slds-var-m-top_medium">
+                    <template for:each={fileUploadWrapper} for:item="item" for:index="index">
+                        <span key={item}>
+                            <c-los-generic-document-upload doc-name={item.docName} upload-type-name={item.uploadTypeName} applicant-id={recordId}></c-los-generic-document-upload>
+                        </span>
+                </template>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+    </lightning-card>
+</template>

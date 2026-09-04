@@ -1,0 +1,88 @@
+<apex:component >
+    <apex:attribute name="collateral" description="collateral Record for displaying applicant info" type="Collateral__c" required="true"/>
+    <apex:attribute name="lstPropertyOffered" description="collateral Record for displaying applicant info" type="Collateral__c[]" required="true"/>
+    <apex:attribute name="marginMoney" description="Calculated margin money" type="String"/>
+    
+    <p class="subHeadingStyles">H. IN CASE OF WHEELS, BELOW ADDITIONAL DETAILS ARE REQUIRED</p>
+    <table width="100%" cellpadding="2" cellspacing="2">
+        <tr style="background-color: white">
+            <th style="padding-left:10px;" width="20%">Particulars</th>
+            <th style="padding-left:10px;" width="30%">Details</th>
+            <th style="padding-left:10px;" width="20%">Particulars</th>
+            <th style="padding-left:10px;" width="30%">Details</th>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">New/Used</td>
+            <td style="padding-left:10px;">{!collateral.Collateral_Type__c}
+            </td>
+            <td style="padding-left:10px;">Discount</td>
+            <td style="padding-left:10px;"><apex:outputField value="{!collateral.Discount__c}"/></td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">Dealer&apos;s Name</td>
+            <td style="padding-left:10px;">{!collateral.Loan__r.Dealer_Master__r.Name}</td>
+            <td style="padding-left:10px;">NOD Price</td>
+            <td style="padding-left:10px;"><apex:outputField value="{!collateral.Net_of_Discount_Price__c}"/></td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">Asset Make</td>
+            <td style="padding-left:10px;">{!collateral.Make__c}</td>
+            <td style="padding-left:10px;">On road cost</td>
+            <td style="padding-left:10px;"><apex:outputField value="{!collateral.On_Road_Price__c}"/></td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">Model</td>
+            <td style="padding-left:10px;">{!collateral.Model__c} {!collateral.MMV_Master__r.Name}</td>
+            <td style="padding-left:10px;">Margin Money</td>
+            <td style="padding-left:10px;">{!marginMoney}</td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">Year of Manufacturing</td>
+            <td style="padding-left:10px;">{!LEFT(collateral.Manufacture_year_month__c, 4)}</td>
+            <td style="padding-left:10px;">LTV</td>
+            <td style="padding-left:10px;">{!collateral.Approved_LTV__c} %</td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="padding-left:10px;">Ex-showroom price</td>
+            <td style="padding-left:10px;">{!collateral.Ex_Showroom_Price__c}</td>
+            <td style="padding-left:10px;">Registration</td>
+            <td style="padding-left:10px;">
+                <apex:panelGrid columns="6">
+                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    <apex:outputText value="Personal"/>
+                    <div style="width: 50px"></div>
+                    <apex:outputText value=" "/>
+                    <div class="orangeUncheckedBox"></div>
+                    <apex:outputText value="Taxi"/>
+                </apex:panelGrid>
+            </td>
+        </tr>
+    </table>
+
+    <p class="subHeadingStyles">I. DETAILS OF PROPERTY OFFERED AS COLLATERAL</p>
+    <table width="100%" cellpadding="2" cellspacing="2">
+        <tr style="text-align: center;">
+            <th style="background-color: white" width="5%">S.No.</th>
+            <th style="background-color: white" width="10%">Type</th>
+            <th style="background-color: white" width="20%">Name of Property</th>
+            <th style="background-color: white" width="15%">Status</th>
+            <th style="background-color: white" width="20%">Area</th>
+            <th style="background-color: white" width="30%">Address</th>
+        </tr>
+        <tr style="background-color: white">
+            <td style="background-color: white; text-align: center">1</td>
+            <td/><td/><td/><td/><td/>
+        </tr>
+        <apex:variable value="{!1}" var="collateralSno" />
+        <apex:repeat var="collateral" value="{!lstPropertyOffered}">
+            <tr>
+                <td><apex:variable value="{!collateralSno+1}" var="collateralSno" /></td>
+                <td>{!collateral.Collateral_Type__c }</td>
+                <td>{!collateral.Collateral_Name__c}</td>
+                <td>{!collateral.Invoice_Status__c }</td>
+                <td>{!collateral.Land_Area__c }</td>
+                <td>{!collateral.Address_Line_1__c }</td>
+            </tr>
+        </apex:repeat>
+    </table>
+</apex:component>

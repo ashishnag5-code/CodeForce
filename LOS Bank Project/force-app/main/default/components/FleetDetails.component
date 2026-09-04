@@ -1,0 +1,47 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="fleetRecordsList" description="This is the value for the component."
+    type="Fleet__c[]" required="true" assignTo="{!fleetRecords}"/>
+
+    <apex:variable value="{!0}" var="rowNum"/>
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Fleet Details">							
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadDataStyle} width:3% !important">Sr.No.</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Name</th>
+                    <th style="{!tableHeadDataStyle} width:5% !important">Relationship with Borrower</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Vehicle Type</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Vehicle Number</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Vehicle Make Model</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">MFG Year</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">HPN Status</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Financial Institution Name</th>
+                    <th style="{!tableHeadDataStyle} width:5% !important">Loan Tenure</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Installment Paid</th>
+                </tr>
+                <apex:repeat value="{!fleetRecords}" var="fleet">
+                    <tr style="{!tableRowStyle}">
+                        <td style="{!tableDataStyle}">
+                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                            {!rowNum}
+                        </td>
+                        <td style="{!tableDataStyle}">{!fleet.Name}</td>
+                        <td style="{!tableDataStyle}">{!fleet.Relationship_with_borrower__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.Type_of_Vehicle__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.Vehicle_Number__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.Vehicle_Make_Model__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.MFG_Year__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.HPN_Status__c}</td>
+                        <!-- R2-2696 -->
+                        <td style="{!tableDataStyle}">{!fleet.Financial_Institution__r.Bank_Name__c}</td>
+                        <!-- R2-2696 -->
+                        <!-- <td style="{!tableDataStyle}">{!fleet.Financial_Institution_Name__c}</td> -->
+                        <td style="{!tableDataStyle}">{!fleet.Loan_Tenure__c}</td>
+                        <td style="{!tableDataStyle}">{!fleet.Installment_Paid__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div>        
+</apex:component>

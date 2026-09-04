@@ -1,0 +1,301 @@
+<template>
+    <lightning-card>
+        <!-- <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template> -->
+
+        <c-custom-spinner
+            show-spinner={isloading}
+            spinner-image={spinnerImage}
+            >
+        </c-custom-spinner>
+        <template if:false={isStatusSelected}>
+            <lightning-layout class="slds-grid slds-grid_align-space slds-wrap">
+                <template if:true={isRO}>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={dispatchToRPCLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Dispatch To RPC" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Dispatch To RPC" onclick={showForm}>Dispatch To RPC</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={dispatchToCPCLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Dispatch to CPC from RPC/COM">
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Dispatch to CPC from RPC/COM" onclick={showForm}>Dispatch to CPC</a>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={isRPCCPC}>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={receivedAtRPCLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Received at RPC" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Received at RPC" onclick={showForm}>Received at RPC</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={dispatchToCPCLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Dispatch to CPC from RPC/COM" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Dispatch to CPC from RPC/COM" onclick={showForm}>Dispatch to CPC from RPC/COM</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={receivedAtCPCLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Received at CPC" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Received at CPC" onclick={showForm}>Received at CPC</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={notReceivedLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Disbursed File not received at RPC/CPC" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Disbursed File not received at RPC/CPC" onclick={showForm}>Disbursed File not received at RPC/CPC</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                            <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={sendToStoreLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Send to Store" >
+                            <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Send to Store" onclick={showForm}>Send to Store</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                        <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={notReceivedLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Disbursed File not received at Store" >
+                        <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Disbursed File not received at Store" onclick={showForm}>Disbursed File not received at Store</a>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                        <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={sendToStoreLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="Received at Store" >
+                        <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="Received at Store" onclick={showForm}>Received at Store</a>
+                    </lightning-layout-item>
+                </template>
+
+                <lightning-layout-item class="launch-pad-tile-layout-item slds-size_12-of-12 slds-small-size_12-of-12 slds-medium-size_1-of-12 slds-large-size_1-of-12">
+                    <img class="launch-pad-tile-icon-img slds-align_absolute-center" src={sendToStoreLogoUrl} aria-hidden="true" tabindex="-1" role="presentation" alt="" name="View Status" >
+                    <a class="slds-button launch-pad-tile-text slds-align_absolute-center slds-m-vertical_x-small slds-text-align_center" role="button" tabindex="0" title="Tap to activate" name="View Status" onclick={showForm}>View Status</a>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+        </template>
+        <!--pooja -->
+    
+        <template if:true={showLoanDetail}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+
+                <div class="slds-modal__container" style="width:fit-content;">
+                    <lightning-record-edit-form object-api-name="Loan_Application__c" record-id={selectedLoanId} 
+                                onsuccess={handleFormSuccess}>
+                    <header class="slds-modal__header">
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Loan Details</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-card title="Edit Record">
+                            
+                                <lightning-messages></lightning-messages>
+                                
+                                <lightning-input-field label="First EMI Status" required name="FirstEMI_Status__c" field-name="FirstEMI_Status__c" value={selectedEMIStatus} onchange={handlePicklistChange}>
+                                </lightning-input-field>
+                                <lightning-input-field label="Document Type" name="Document_Type__c" field-name="Document_Type__c" value={selectedDocType} onchange={handlePicklistChange}>
+                                </lightning-input-field>
+                                <lightning-input-field label="EMI options" name="EMI_Options__c" field-name="EMI_Options__c" required>
+                                </lightning-input-field>
+                                <lightning-input label="RPC Queue Name" name="RPCQueueName" value={RPCQueueName} disabled style="width:auto">
+                                </lightning-input>
+
+                        </lightning-card>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Close" variant ="neutral" onclick={closeModal}></lightning-button>&nbsp;
+                        <lightning-button label="Submit" type="submit" variant="brand"></lightning-button>
+                    </footer>
+                </lightning-record-edit-form> 
+                </div> 
+            </section>
+             <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+        <template if:true={isStatusSelected}>
+            <div class="button-container-inner slds-float_right slds-var-m-top_medium">
+                <div style="padding-right:10px;"><lightning-button variant="Brand" label="Back" onclick={loadPreviousScreen} class="buttonColor"></lightning-button></div>
+            </div>
+            <template if:true={isRO}>
+            <lightning-tabset>
+            <div class="slds-m-top_x-small">
+                <lightning-tab label={title}>
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <template if:true={showInputFieldsRO}>
+                            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                medium-device-size="12" large-device-size="6">
+                                <lightning-input  name="Courier_Date__c" label="Courier Date" type="date" value={courierDate} onchange={handleChange} max={today} required></lightning-input>
+                            </lightning-layout-item>
+                            <!-- ADDED For 3131-->
+                            <template if:true={isNonStatusScreen}>
+                            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                    medium-device-size="12" large-device-size="6">
+                                    <lightning-input name="Courier_Name__c" label="Courier Name" type="text" value={courierName} onchange={handleChange} required></lightning-input>
+                            </lightning-layout-item>
+                            </template>
+                            <!-- <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                medium-device-size="12" large-device-size="6">
+                                <lightning-input name="AWB_Number__c" label="AWB Number" type="text" value={awbNumber} onchange={handleChange} required></lightning-input>
+                            </lightning-layout-item> -->
+                        </template>
+                        
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                            medium-device-size="12" large-device-size="6">
+                            <label class="slds-form-element__label"><abbr class="slds-required" title="required">* </abbr>Type</label>
+                            <lightning-combobox label="Type" placeholder="Select Type" value={typeValue}
+                                name="RecordType" class="validate" variant="label-hidden" options={typeOptions}
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                            medium-device-size="12" large-device-size="6">
+                            <label class="slds-form-element__label"><abbr class="slds-required" title="required">* </abbr>Search by</label>
+                            <lightning-combobox label="Search by" placeholder="Select search by" value={searchField}
+                                name="SearchBy" class="validate" variant="label-hidden" options={searchOptions}
+                                onchange={handleChange}>
+                        </lightning-combobox>
+                        </lightning-layout-item>
+                        <template if:true={showInputFields}>
+                            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                            medium-device-size="12" large-device-size="6">
+                            <lightning-input name="AWB_Number__c" label="AWB Number" type="text" value={awbNumber} onchange={handleChange} required></lightning-input>
+                        </lightning-layout-item>
+                        </template>
+                       
+                        <!-- ADDED For 3131-->
+                        <template if:true={isNonStatusScreen}>
+                            <!-- <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                    medium-device-size="12" large-device-size="6">
+                                    <lightning-input name="Assigned_RPC__c" label="RPC Name" type="text" value={rpcName} onchange={handleChange} required></lightning-input>
+                            </lightning-layout-item> -->
+
+                            
+                            <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                    medium-device-size="12" large-device-size="6">
+                                    <lightning-textarea name="Remarks__c" label="Remarks" value={remarksValue} onchange={handleChange}></lightning-textarea>
+                            </lightning-layout-item>
+                        </template>
+                        <!--Ended for 3131-->
+
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_3-of-12"
+                            medium-device-size="12" large-device-size="3">
+                            <lightning-input type="text" label="Search Loan Application" name="searchKey"
+                            value={searchKey} 
+                            onchange={handleSearchKey}> 
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_3-of-12"
+                        medium-device-size="12" large-device-size="3" style="padding-top:30px;">
+                            <lightning-button label="Search" variant="brand" onclick={SearchLoanApplication} class="buttonColor"></lightning-button>
+                        </lightning-layout-item>
+                        <template if:true={showTable}>
+                            <div class="slds-scrollable--y" style="max-height: 300px;">
+                                <lightning-datatable class="slds-max-medium-table_stacked" key-field="Id" data={loanApps} columns ={tablecolumn} onrowselection={getSelectedRow} selected-rows={selectedRows}
+                                onrowaction={handleRowActions} > 
+                                </lightning-datatable>
+                            </div>
+                            <template if:true={showSelectedTable}>
+                                <lightning-card title="Selected Loan Applications" style="padding-top:30px;" >
+                                    <div class="slds-scrollable--y" style="max-height: 300px;">
+                                        <lightning-datatable class="slds-max-medium-table_stacked" key-field="Id" data={selectedLoanApps} columns ={tablecolumn} hide-checkbox-column="true"  show-row-number-column="true"> 
+                                        </lightning-datatable>
+                                    </div>
+                                </lightning-card>
+                            </template>
+                                
+                        </template>
+                    </lightning-layout>
+                    <template if:true={showSelectedTable}>
+                        <template if:true={showTable}>
+                            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                <div align="center"><lightning-button variant="Brand" label="Submit" onclick={saveRecord} class="buttonColor"></lightning-button></div>
+                            </div>
+                        </template>
+                    </template>
+                    
+                    </lightning-tab>
+                    </div>
+                </lightning-tabset>
+            </template>
+            <template if:true={isRPCCPC}>
+                <lightning-tabset>
+                    <div class="slds-m-top_x-small">
+                        <lightning-tab label={title}>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                <template if:true={showInputFields}>
+                                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                        medium-device-size="12" large-device-size="6">
+                                        <lightning-input  name="Courier_Date__c" label="Courier Date" type="date" value={courierDate} onchange={handleChange} max={today} required></lightning-input>
+                                    </lightning-layout-item>
+                                    <!--Added for 3131-->
+                                    <template if:true={isNonStatusScreen}>
+                                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                            medium-device-size="12" large-device-size="6">
+                                            <lightning-input name="Courier_Name__c" label="Courier Name" type="text" value={courierName} onchange={handleChange} required></lightning-input>
+                                    </lightning-layout-item>
+                                    </template>
+                                </template>
+                                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                    medium-device-size="12" large-device-size="6">
+                                    <label class="slds-form-element__label"><abbr class="slds-required" title="required">* </abbr>Type</label>
+                                    <lightning-combobox label="Type" placeholder="Select Type" value={typeValue}
+                                        name="RecordType" class="validate" variant="label-hidden" options={typeOptions}
+                                        onchange={handleChange}>
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+                                
+                                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                    medium-device-size="12" large-device-size="6">
+                                    <label class="slds-form-element__label"><abbr class="slds-required" title="required">* </abbr>Search by</label>
+                                    <lightning-combobox label="Search by" placeholder="Select search by" value={searchField}
+                                    name="SearchBy" class="validate" variant="label-hidden" options={searchOptionsRPC}
+                                    onchange={handleChange} required>
+                                    </lightning-combobox>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_3-of-12"
+                                    medium-device-size="12" large-device-size="3">
+                                    <lightning-input type="text" label="Search Loan Application" name="searchKey"
+                                    value={searchKey} 
+                                    onchange={handleSearchKey}> 
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <template if:true={showInputFields}>
+                                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                        medium-device-size="12" large-device-size="6">
+                                        <lightning-input name="AWB_Number__c" label="AWB Number" type="text" value={awbNumber} onchange={handleChange} required></lightning-input>
+                                    </lightning-layout-item>
+                                </template>
+                                <!-- ADDED For 3131-->
+                                <template if:true={isNonStatusScreen}>
+                                    <!-- <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                            medium-device-size="12" large-device-size="6">
+                                            <lightning-input name="Assigned_RPC__c" label="RPC Name" type="text" value={rpcName} onchange={handleChange} required></lightning-input>
+                                    </lightning-layout-item> -->
+                                    
+                                    <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                                            medium-device-size="12" large-device-size="6">
+                                            <lightning-textarea name="Remarks__c" label="Remarks" value={remarksValue} onchange={handleChange}></lightning-textarea>
+                                    </lightning-layout-item>
+                                </template>
+                                <!--Ended for 3131-->
+
+                                <lightning-layout-item size="12" small-device-size="12" class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_3-of-12"
+                                    medium-device-size="12" large-device-size="3" style="padding-top:30px;">
+                                    <lightning-button label="Search" variant="brand" onclick={SearchLoanApplication} class="buttonColor"></lightning-button>
+                                </lightning-layout-item>
+                                <template if:true={showTable}>
+                                <div class="slds-scrollable--y" style="max-height: 300px;">
+                                    <lightning-datatable class="slds-max-medium-table_stacked" key-field="Id" data={loanApps} columns ={tablecolumn} onrowselection={getSelectedRow} selected-rows={selectedRows} show-row-number-column="true" onrowaction={handleRowActions}> 
+                                    </lightning-datatable>
+                                </div>
+                                <template if:true={showSelectedTable}>
+                                    <lightning-card title="Selected Loan Applications" style="padding-top:30px;" >
+                                        <div class="slds-scrollable--y" style="max-height: 300px;">
+                                            <lightning-datatable class="slds-max-medium-table_stacked" key-field="Id" data={selectedLoanApps} columns ={tablecolumn} hide-checkbox-column="true"  show-row-number-column="true"> 
+                                            </lightning-datatable>
+                                        </div>
+                                    </lightning-card>   
+                                </template>
+                            </template>
+                            </lightning-layout>
+                            <template if:true={showSelectedTable}>
+                                <template if:true={showTable}>
+                                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                        <div align="center"><lightning-button variant="Brand" label="Back" onclick={loadPreviousScreen} class="buttonColor"></lightning-button>
+                                        &nbsp;<lightning-button variant="Brand" label="Submit" onclick={saveRecord} class="buttonColor"></lightning-button></div>
+                                    </div>
+                                </template>
+                            </template>
+                        </lightning-tab>
+                    </div>
+                </lightning-tabset>
+            </template>
+        </template>
+    
+    
+    </lightning-card>
+</template>

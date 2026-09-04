@@ -1,0 +1,69 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="cibilRecordsDetails" description="This is the value for the component."
+    type="Bank_Account_Records__c[]" required="true" assignTo="{!cibilRecords}"/>
+    <apex:attribute name="isSectionEnabledForCECVSCVCAR" description="This is the value for the component."
+    type="boolean" required="false" assignTo="{!isSectionEnabledForCV_CE_SCV_Product}"/>
+
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Cibil Summary">
+        </apex:pageBlockSection>
+            <table style="{!tableStyleForBank}">
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Customer Name</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7% !important">Financiers Name</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Type</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Start Date</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">End Date</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Date of Last report to CIBIL</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7% !important">Amount</th>
+                    <th style="{!tableHeadDataStyleForBank} width:10% !important">Pmt Frequency</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Tenor</th>
+                    <th style="{!tableHeadDataStyleForBank} width:4% !important">EMI Paid</th>
+                    <th style="{!tableHeadDataStyleForBank} width:4% !important">EMI OD</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7% !important">OD Amount</th>
+                    <th style="{!tableHeadDataStyleForBank} width:7% !important">EMI Amount</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Peak Delay</th>
+                    <th style="{!tableHeadDataStyleForBank} width:5% !important">Average Delay</th>
+                    <th style="{!tableHeadDataStyleForBank} width:10% !important">Ownership</th>
+                    <th style="{!tableHeadDataStyleForBank} width:10% !important">Status</th>
+                    <th style="display: {!IF(isSectionEnabledForCECVSCVCAR, 'tableHeadDataStyleForBank', 'none')};{!tableHeadDataStyleForBank} width:10% !important">Conduct</th>
+                </tr>
+                <apex:repeat value="{!cibilRecords}" var="bank">
+                    <tr style="{!tableRowStyle}">
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Applicant__r.Applicant_Name__c}</td>
+
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Name_of_the_Financier__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Type_of_Loan__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}"> 
+                                <apex:param value="{!bank.Account_Opening_Date__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}"> 
+                                <apex:param value="{!bank.Account_Closing_Date__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableCellDataStyleForBank}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}"> 
+                                <apex:param value="{!bank.Date_Of_Enquiry__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Loan_Amount__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Payment_Frequency__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Tenure__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.No_of_Emi_Paid__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Loan_Overdue_EMI__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Amount_Overdue__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.EMI_Amount__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Highest_Overall_DPD__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Average_Delay__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Owenership_Indicator__c}</td>
+                        <td style="{!tableCellDataStyleForBank}">{!bank.Current_Status__c}</td>
+                        <td style="display: {!IF(isSectionEnabledForCECVSCVCAR, 'tableCellDataStyleForBank', 'none')};{!tableCellDataStyleForBank}">{!bank.Track_Record__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div> 
+</apex:component>

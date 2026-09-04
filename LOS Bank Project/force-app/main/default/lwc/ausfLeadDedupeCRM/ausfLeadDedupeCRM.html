@@ -1,0 +1,15 @@
+<template>
+	<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} class="slds-box">
+        <lightning-accordion-section name={labels.leadDedupeTitle} label={labels.leadDedupeTitle}>
+            <c-lead-Dedupe-C-R-M applicable-dedupe-actions={applicableDedupeActions}
+                applicant-input={applicant} spinner-image={spinnerImage} loan-app-id={recordId}
+                total-applicants={duplicateLoans} onspinnerevent={onspinnerevent} if:true={hasDuplicates}>
+            </c-lead-Dedupe-C-R-M>
+            <div class="" if:false={hasDuplicates}>
+                No duplicates found
+            </div>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

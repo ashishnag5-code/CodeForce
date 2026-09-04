@@ -1,0 +1,25 @@
+.previewIcon {
+    float: right;
+    position: relative;
+    right: .5rem;
+    bottom: 1.7rem;
+}
+.buttonIn {
+    width: 100%;
+    position: relative;
+    border: none;
+}
+.button {
+    
+    position: absolute;
+    top: 0px;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    cursor: pointer;
+    /* color: white; */
+    /* background-color: #1e90ff; */
+    transform: translateX(2px);
+    right: 2px;
+}

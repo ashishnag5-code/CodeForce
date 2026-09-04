@@ -1,0 +1,306 @@
+<template>
+    <!--Spinner Section-->
+    <c-custom-spinner show-spinner={isLoaded} spinner-image={spinnerImage}></c-custom-spinner>
+    <!--End-->
+    <!--New Form-->
+    <template if:false={showEditView}>
+
+
+
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+            <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                active-section-name={activeSections}>
+                
+                <template if:false={showViewForm}>
+                    <lightning-accordion-section name="A" label="Income Verification Member Details">
+                        <template if:true={isR2}>
+                            <template if:true={readAttribute}>
+                                <div slot="actions">
+                                    <lightning-icon icon-name=action:edit size="x-small" onclick={handleEdit}></lightning-icon>
+                                </div>
+                            </template>
+                        </template>
+                        <!-- Added in R2-->
+                        <template if:true={isDelete}>
+                            <template if:true={readAttribute}>
+                                <span slot="actions" class="slds-p-left--small">
+                                    <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                                        alternative-text="" access-key={index} class="slds-m-right_small"
+                                        onclick={handleDeleteRow}></lightning-icon>
+                                </span>
+                            </template>
+                        </template>
+                        <!--End-->
+                        <template if:true={isMobile}>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Monthly_Turnover__c">
+                                        <lightning-input class="validate" type="number" name="Monthly_Turnover__c"
+                                            value={turnOver} required read-only={readAttributee} onchange={handleChange}
+                                            step="0.01" placeholder="please enter the monthly turnover details..."
+                                            label="Turnover/Sale As Per  Assessment (₹)"></lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Annual_Turnover__c">
+                                        <label class="slds-form-element__label">
+                                            Annual Turnover</label>
+                                        <lightning-input type="number" name="Annual_Turnover__c" value={annualTurnover}
+                                            read-only={readAttributee} variant="label-hidden" label="" step="0.01"
+                                            onchange={handleChange} disabled></lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Monthly_Expense__c">
+                                        <lightning-input type="number" name="Monthly_Expense__c" value={expense}
+                                            read-only={readAttributee} onchange={handleChange} step="0.01"
+                                            placeholder="please enter the monthly expense details..." label="Expense">
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Annual_Expense__c">
+                                        <label class="slds-form-element__label">
+                                            Annual Expense</label>
+                                        <lightning-input type="number" name="Annual_Expense__c" value={annualExpense}
+                                            read-only={readAttributee} variant="label-hidden" label="" step="0.01"
+                                            onchange={handleChange} disabled></lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Company_Name__c">
+                                        <lightning-input type="text" name="Company_Name__c" value={bnameVal}
+                                            read-only={readAttributee} onchange={handleChange}
+                                            placeholder="please enter the business name..." label="Business Name">
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <c-bank-statement-upload-financials loan-app-id={loanAppId} parent-name='financial'
+                                        showonly-itr=true applicant-id={applicantId} document-type='Bank ITR Statement'
+                                        read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                                        applicant-record-id={applicantId}
+                                        onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isMobile}>
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Monthly_Turnover__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static">
+                                                    <lightning-input class="validate" type="number"
+                                                        name="Monthly_Turnover__c" value={turnOver} required
+                                                        read-only={readAttributee} onchange={handleChange} step="0.01"
+                                                        placeholder="please enter the monthly turnover details..."
+                                                        label="Turnover/Sale As Per  Assessment (₹)"></lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 slds-hide " data-id="Annual_Turnover__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static">
+                                                    <label class="slds-form-element__label">
+                                                        Annual Turnover</label>
+                                                    <lightning-input type="number" name="Annual_Turnover__c"
+                                                        value={annualTurnover} read-only={readAttributee}
+                                                        variant="label-hidden" label="" step="0.01"
+                                                        onchange={handleChange} disabled></lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Monthly_Expense__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static">
+                                                    <lightning-input type="number" name="Monthly_Expense__c"
+                                                        value={expense} read-only={readAttributee}
+                                                        onchange={handleChange} step="0.01"
+                                                        placeholder="please enter the monthly expense details..."
+                                                        label="Expense">
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Annual_Expense__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static">
+                                                    <label class="slds-form-element__label">
+                                                        Annual Expense</label>
+                                                    <lightning-input type="number" name="Annual_Expense__c"
+                                                        value={annualExpense} read-only={readAttributee}
+                                                        variant="label-hidden" label="" step="0.01"
+                                                        onchange={handleChange} disabled></lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 slds-hide " data-id="Company_Name__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static">
+                                                    <lightning-input type="text" name="Company_Name__c" value={bnameVal}
+                                                        read-only={readAttributee} onchange={handleChange}
+                                                        placeholder="please enter the business name..."
+                                                        label="Business Name">
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 " data-id="">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static">
+                                                    <c-bank-statement-upload-financials loan-app-id={loanAppId}
+                                                        parent-name='financial' showonly-itr=true
+                                                        applicant-id={applicantId} document-type='Bank ITR Statement'
+                                                        read-attribute={disableUpload}
+                                                        heading-value="Upload Bank Statement"
+                                                        applicant-record-id={applicantId}
+                                                        onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+
+
+                    </lightning-accordion-section>
+
+                    <lightning-accordion-section name="B" label="Net Profit">
+                        <template if:true={isMobile}>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Monthly_Net_Profit__c">
+                                        <label class="slds-form-element__label">
+                                            Monthly</label>&nbsp;
+                                        <lightning-formatted-number value={monthlyNetProfit} format-style="decimal">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                    large-device-size="6">
+                                    <div class="component slds-hide" data-id="Annual_Net_Profit__c">
+                                        <label class="slds-form-element__label">
+                                            Annually </label>&nbsp;
+                                        <lightning-formatted-number value={annualNetProfit} format-style="decimal">
+                                        </lightning-formatted-number>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </template>
+                        <template if:false={isMobile}>
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Monthly_Net_Profit__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static">
+                                                    <label class="slds-form-element__label">
+                                                        Monthly</label>&nbsp;
+                                                    <lightning-formatted-number value={monthlyNetProfit}
+                                                        format-style="decimal">
+                                                    </lightning-formatted-number>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 slds-hide " data-id="Annual_Net_Profit__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static">
+                                                    <label class="slds-form-element__label">
+                                                        Annually </label>&nbsp;
+                                                    <lightning-formatted-number value={annualNetProfit}
+                                                        format-style="decimal">
+                                                    </lightning-formatted-number>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+
+
+                            </div>
+                        </template>
+                    </lightning-accordion-section>
+
+
+                    <!--Button Section-->
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                            <template if:false={isR2}>
+                                <lightning-button label="Back" title="Back" onclick={redirectHome}
+                                    class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                            </template>
+                            <lightning-button label="Save Income"
+                                class="buttonClass disabled-submit-button slds-m-left_x-small" variant="brand"
+                                name='save' disabled={isButtonDisabled} onclick={handleSubmit}></lightning-button>
+                            
+                        </div>
+                    </lightning-layout>
+                    <!--End-->
+                </template>
+            </lightning-accordion>
+        </div>
+
+
+    </template>
+    <!--End-->
+
+    <!-- Edit Form-->
+    <template if:true={showEditView}>
+        <template for:each={existingDetails} for:item="item" for:index="index">
+            <c-assessed-edit-view key={item.id} instance={item} onhome={redirectHome} loan-id={loanAppId} is-r2={isR2} is-delete={isDelete} ondeletedrecord={handleEditDelete}
+                applicant-id={applicantId} is-mobile={isMobile}
+                onotherincome={handleOtherIncome}></c-assessed-edit-view>
+        </template>
+    </template>
+
+</template>
+<!--End-->
+</template>

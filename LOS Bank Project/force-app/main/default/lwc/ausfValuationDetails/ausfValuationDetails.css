@@ -1,0 +1,26 @@
+.box-color{
+    color: red;
+}
+
+  .rowHeight {
+    height: 50px;
+  }
+  
+  .table-container {
+    
+    overflow-x: auto;
+    overflow-y: auto;
+   
+  }
+  
+  .rowWidth {
+    width: 10%;
+  }
+
+  .tableMobileWidth{
+    width: 100%;
+  }
+
+  .tableDesktopWidth{
+    width: 100%;
+  }

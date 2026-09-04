@@ -1,0 +1,227 @@
+<template>
+    <lightning-card title={button_headLabel} icon-name="standard:lead">
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <lightning-layout multiple-rows horizontal-align="center" class="slds-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small" flexibility="auto">
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Product</label>
+                <lightning-combobox label="Product" placeholder="Select Product" value={productOptionValue}
+                    options={productCategory} name="Product" class="validate" variant="label-hidden" onchange={handleProductChange}
+                    read-only={isReadOnly}>
+                </lightning-combobox>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Loan Type</label>
+                <lightning-combobox label="Sub Product" placeholder="Select Sub Product" value={subProductOptionValue}
+                    options={productSubCategory} name="SubProduct" class="validate" variant="label-hidden" onchange={handleSubProductChange}
+                    read-only={isLoanTypeReadOnly}>
+                </lightning-combobox>
+
+                <label class="slds-form-element__label">Sourcing channel</label>
+                <lightning-combobox name="Sourcing_channel__c" label="Sourcing channel"
+                    value={sourcingChannelOptionsValue} class="" variant="label-hidden"
+                    placeholder="Select Sourcing channel" options={sourcingChannelPicklistValues}
+                    onchange={handleSourcingchannelChange} read-only={isSourcingChannelReadOnly}></lightning-combobox>
+
+
+                <!-- R2-22 -->
+                <template if:true={isCollateralTypeApplicable}>
+                    <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Collateral Type
+                    </label>
+                    <lightning-combobox name="Collateral_Type__c" label="Collateral Type"
+                        value={loanApplicationRecord.Collateral_Type__c}
+                        class="validate" variant="label-hidden" options={collateralTypes}
+                        onchange={handleValuChange}
+                    ></lightning-combobox>
+                </template>
+        
+                <template if:true={isVehicleUsageApplicable}>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Vehicle Use</label>
+                    <lightning-combobox name="Vehicle_use__c" label="Vehicle Use" value={vehicleUseOptionsValue}
+                        class="validate" variant="label-hidden" placeholder="Select Vehicle Use"
+                        options={vehicleUsePicklistValues} onchange={handleVehicleUseChange}></lightning-combobox>
+                </template>
+               
+                    <template if:true={isShowcustomLookups}>
+                        <div style="padding-top: 6px;">
+                            <c-generic-custom-lookup data-id="Purchase_City__c" parent-component-name="losQuickLoan" selected-record={recordSelected.Purchase_City__c} name="Purchase_City__c" label="City of Source" record-type-name="Dealer"
+                                dependent-field-api="Dealer_Class__c"
+                                dependent-picklist-value={dealerClassValue}
+                                dependent-field-second-api="Product__c" dependent-picklist-second-value={productValueType}
+                                dependent-field-third-api="Vehicle_use__c"
+                                dependent-picklist-third-value={vehicleUseOptionsValue}
+                                dependent-field-fourth-api="Purchase_City__c" dependent-picklist-fourth-value=""
+                                search-fields="" stepid="0" fieldapi="Purchase_City__c" object-name="Dealer Master"
+                                s-object-api-name="Account" default-record-id="" required=""
+                                onlookupselect={handleLookupSelect}>
+                            </c-generic-custom-lookup>
+                        </div>
+                        <!-- // R2-1738 - Populating sourcing channel name should auto populate City of Source -->
+                        <!-- <template if:true={_isShowSourceNameLookup}> -->
+    
+                            <div style="padding-top: 6px;">
+                                <c-generic-custom-lookup data-id="Source_Name__c" parent-component-name="losQuickLoan" name="Source_Name__c" selected-record={recordSelected.Source_Name__c} label="Sourcing channel Name" record-type-name="Dealer"
+                                    dependent-field-api="Dealer_Class__c"
+                                    dependent-picklist-value={dealerClassValue}
+                                    dependent-field-second-api="Product__c" dependent-picklist-second-value={productValueType}
+                                    dependent-field-third-api="Vehicle_use__c"
+                                    dependent-picklist-third-value={vehicleUseOptionsValue}
+                                    dependent-field-fourth-api="Purchase_City__c"
+                                    dependent-picklist-fourth-value={purchasingCityVal} search-fields="" stepid="0"
+                                    fieldapi="Source_Name__c" object-name="Dealer Master"
+                                    s-object-api-name="Account" default-record-id={sourceNameId} required=""
+                                    onlookupselect={handleLookupSelect}>
+                                </c-generic-custom-lookup>
+                            </div>
+                        <!-- </template> -->
+                    </template>
+
+                <!-- R2-30 - Dealer Source Code  -->
+                <div if:true={isShowcustomLookups}>
+                    <label class="slds-form-element__label">Source Code</label>
+                    <lightning-input
+                        lwc:ref="dealerSourceCode"
+                        variant="label-hidden"
+                        label="Source Code"
+                        name="Source_Code__c"
+                        onchange={handleSourceCodeChange}
+                        value={dealerSourceCode}
+                        disabled
+                    ></lightning-input>
+                </div>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Mobile #</label>
+                <lightning-input type="tel" variant="label-hidden" class="validate" label="Mobile #" name="Mobile__c"
+                    onchange={handleValuChange} max-length="10" pattern="[6-9]{1}[0-9]{9}" value={mobileNumber}
+                    message-when-pattern-mismatch="Please enter a valid phone number"></lightning-input>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Customer Name</label>
+                <lightning-input type="text" variant="label-hidden" class="validate checkValidity" label="Customer Name" 
+                    pattern="[a-zA-Z\s]+" message-when-pattern-mismatch="Please enter only Alphabets"
+                    name="Customer_Name__c" value={loanApplicationRecord.Customer_Name__c} onchange={handleValuChange}></lightning-input>
+              
+                <label class="slds-form-element__label"></abbr>Customer Type</label>
+                <lightning-combobox name="Customer_Type__c" label="CustomerType" value={customerTypeOptionsValue}
+                    class="" variant="label-hidden" placeholder="Select Customer Type" 
+                    options={customerTypePicklistValues} onchange={handleCustomerTypeChange}></lightning-combobox>
+
+
+                <template if:true={displayCampaign}>
+                    <label class="slds-form-element__label"></abbr>Campaign Name</label>
+                    <lightning-combobox name="Campaign__c" label="CampaignName" value={selectedCampaign}
+                            class="" variant="label-hidden" placeholder="Select Campaign Name" disabled={isCampaignSelectionDisabled}
+                            options={campaignOptions} onchange={handleValuChange}></lightning-combobox>
+                </template>
+                
+
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small" flexibility="auto">
+                <label class="slds-form-element__label" if:true={isLGCodeAvailable}>
+                    <abbr class="slds-required" title="required">* </abbr>
+                    {letterOfXCodeLabel}
+                </label>
+                <lightning-input type="text" max-length="6" variant="label-hidden" class="" label={letterOfXCodeLabel} name="LC_Code__c"
+                    value={loanApplicationRecord.LC_Code__c} onchange={handleValuChange} disabled={isLGCodeDisabled} if:true={isLGCodeAvailable}></lightning-input>
+
+                <template if:true={branchLocation}>
+                    <label class="slds-form-element__label">Branch</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Branch" name="Branch__c"
+                        value={loanApplicationRecord.Branch__c} disabled="true">
+                    </lightning-input>
+                </template>
+
+                <label class="slds-form-element__label">Loan Amount</label>
+                <lightning-input type="number" max-length="9" variant="label-hidden" class="" label="Loan Amount"
+                    name="Loan_Amount__c" value={loanAmount} onchange={handleAmountChange}></lightning-input>
+
+             <!--   <label class="slds-form-element__label">Loan Amount(In Words)</label>
+                <lightning-input type="text" disabled="true" variant="label-hidden" class=""
+                    label="Loan Amount(In Words)" value={loanAmountInWords} name="Loan_Amount_In_Words__c">
+                </lightning-input>  -->
+                
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-large-size_1-of-1">
+                        <span>
+                            <label class="slds-form-element__label">Follow Up Date</label>
+                            <lightning-input type="date" date-style="short" name="Follow_Up_Date__c"
+                                label="Follow Up Date" min={today} variant="label-hidden" class="checkValidity" 
+                                value={loanApplicationRecord.Follow_Up_Date__c} onchange={handleValuChange}>
+                            </lightning-input>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-large-size_1-of-1">
+                        <span>
+                            <label class="slds-form-element__label">Follow Up Time</label>
+                            <lightning-input type="time" class="checkValidity" label="Follow Up Time" name="Follow_Up_Time__c"
+                                value={followUpTime} variant="label-hidden" onchange={handleValuChange}></lightning-input>
+                        </span>
+                    </div>
+                </div>                          
+
+                <!-- R2-15 - Lead Status field -->
+                <label class="slds-form-element__label" for="lead_status"></abbr>Lead Status</label>
+                <lightning-combobox
+                    id="lead_status"
+                    name="Lead_Status__c"
+                    label="Lead Status"
+                    value={loanApplicationRecord.Lead_Status__c}
+                    variant="label-hidden"
+                    options={leadStatusOptions}
+                    onchange={handleValuChange}
+                ></lightning-combobox>
+
+                <!-- R2-29 - Lead Priority field -->
+                <label class="slds-form-element__label" for="lead_priority"></abbr>Lead Priority</label>
+                <lightning-combobox
+                    id="lead_priority"
+                    name="Lead_Priority__c"
+                    label="Lead Priority"
+                    value={loanApplicationRecord.Lead_Priority__c}
+                    variant="label-hidden"
+                    options={leadPriorityOptions}
+                    onchange={handleValuChange}
+                ></lightning-combobox>
+        
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-large-size_1-of-1">
+                        <span>
+                            <label class="slds-form-element__label"></abbr>Remarks</label>
+                            <lightning-input type="text" class="" variant="label-hidden" label="Remarks" name="Remarks__c"
+                                value={loanApplicationRecord.Remarks__c} onchange={handleValuChange}></lightning-input>
+                        </span>
+
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-large-size_1-of-1">
+                        <span>
+                            <label class="slds-form-element__label"></abbr>Customer Interested</label>
+                            <lightning-input type="toggle" variant="label-hidden"
+                                                    message-toggle-active="Yes" message-toggle-inactive="No"
+                                                    checked={loanApplicationRecord.Customer_Interested__c} data-id="Customer_Interested__c"
+                                                    name="Customer_Interested__c" onchange={handleToggleChange}>
+                                                </lightning-input>
+                            <!--lightning-combobox name="Customer_Interested__c" label="CampaignName" value={loanApplicationRecord.Customer_Interested__c}
+                                                class="" variant="label-hidden" placeholder=""
+                                                options={customerInterestedValues} onchange={handleValuChange}></lightning-combobox-->
+                        </span>
+
+                    </div>
+
+                </div>
+            </lightning-layout-item>
+                
+        </lightning-layout>
+        <p slot="footer">
+            <lightning-button label={button_headLabel} variant="brand" onclick={createLead} disabled={isloading}></lightning-button>
+        </p>
+    </lightning-card>
+</template>

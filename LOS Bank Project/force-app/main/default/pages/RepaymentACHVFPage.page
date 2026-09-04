@@ -1,0 +1,172 @@
+<apex:page renderAs="pdf" Controller="ACHPageController" action="{!getLADetails}" applyHtmlTag="false" showHeader="false">
+    
+    <html>
+        <head>
+    <style>
+        @page {
+                size: 400mm 210mm;
+                border: 1px black solid;
+            }
+
+    </style>
+    
+    </head>
+
+    <body style="font-family: sans-serif !important;">
+        <div class="landscapePage">
+        <apex:image url="{!$Resource.Logo_Ausf}" width="70" height="50"/>&nbsp;&nbsp;&nbsp;
+        <label for="UMRN">UMRN</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px; min-height:10px;vertical-align:middle;" class="inputBox"></div>
+        <input type="text"></input>&nbsp;
+        <label for="presentDate">Date</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!today}</div>
+        <input type="text"></input>&nbsp;
+    </div>
+        <br></br>
+        
+        <div>
+        <label for="utilityCode">Utility Code</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox">
+            NACH00000000006531
+        </div>&nbsp;
+        <!-- Checbox 1 ticked -->
+        <div style="border:1px solid black; padding:5px;display:inline-block;background-color:black;" class="inputBox" ></div>
+        <!--<div style="border:1px solid black; padding:2px;display:inline-block" class="inputBox">
+            &nbsp;
+        </div> -->
+        
+        <label for="Create">Create</label>&nbsp;
+        <!-- Checbox 2 unticked -->
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<div style="border:1px solid black; padding:2px;display:inline-block" class="inputBox">
+            &nbsp;
+        </div>
+        <input type="checkbox" id="html" name="action" value="Modify"></input>-->
+        <label for="Modify">Modify</label>&nbsp;
+         <!-- Checbox 3 unticked -->
+         <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<div style="border:1px solid black; padding:2px;display:inline-block" class="inputBox">
+            &nbsp;
+        </div> 
+        <input type="checkbox" id="html" name="action" value="Cancel"></input>-->
+        <label for="Cancel">Cancel</label>&nbsp;
+        </div>
+        <br></br>
+        <div>
+        <label for="bankCode">Sponsor Bank Code</label>
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox">AUBL0000001</div>
+        <!--<input type="text" value="AUBL0000001"></input>-->&nbsp;
+        <label for="authorize">I/We hereby authorize</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">AU Small Finance Bank Ltd.</div>
+        <!--<input type="text" value="AU Small Finance Bank Ltd." style="width:200px;"></input>&nbsp;-->
+    </div>
+        <br></br>
+        <div>
+        <label for="debit">to debit (tick)</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">SB/CA/CC/SB-NRE/SB-NRO/Other</div>
+        <!--<input type="text" value="SB / CA / CC /SB-NRE / SB-NRO / Other" style="width:250px;"></input>-->&nbsp;
+        <label for="acNum">Bank a/c Number</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.Repayment_Account_Number__c}</div>
+        <!--<input type="text" style="width:220px;"></input>&nbsp;-->
+    </div>
+        <br></br>
+        <div>
+        <label for="withBank">with Bank</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.Repayment_Bank_Name__c}</div>
+        <!--<input type="text" style="width:300px;"></input>-->&nbsp;
+        <label for="ifscMicr">IFSC / MICR</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.IFSC_Code__c}</div>
+        <input type="text" style="width:200px;"></input>&nbsp;
+    </div>
+        <br></br>
+        <div>
+        <label for="amount">an amount of Rupees</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:150px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.Loan_Amount_In_Words__c}</div>
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.Total_Loan_Amount__c}</div>
+        <!--<input type="text" style="width:300px;"></input>&nbsp;
+        <input type="text" style="width:200px;"></input>&nbsp;-->
+    </div>
+        <br></br>
+        <div>
+        <u>
+            <label for="debitType" style="">DEBIT TYPE</label>
+        </u>
+        &nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="fixed" value="Fixed Amount"></input>-->
+        <label for="fixed">Fixed Amount</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block;background-color:black;" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="action" value="Maximum Amount" checked='true'></input>-->
+        <label for="maxAmount">Maximum Amount</label>&nbsp;
+        <u>
+            <label for="debitType" style="">FREQUENCY</label>
+        </u>
+        &nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block;background-color:black;" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="monthly" value="Monthly"></input>-->
+        <label for="Monthly">Monthly</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="Quarterly" value="Quarterly"></input>-->
+        <label for="Quarterly">Quarterly</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="Half Yearly" value="Half Yearly"></input>-->
+        <label for="Half Yearly">Half Yearly</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="Yearly" value="Yearly"></input>-->
+        <label for="Quarterly">Yearly</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="Aswhenpresented" value="Aswhenpresented"></input>-->
+        <label for="Aswhenpresented">As &amp; when presented</label>&nbsp;
+    </div>
+        <br></br>
+        <div>
+        <label for="Reference 1">Reference 1</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!loanObj.Application_Id__c}</div>
+        <!--<input type="text" style="width:250px;"></input>&nbsp;-->
+        <label for="Reference 2">Reference 2</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;vertical-align:middle;" class="inputBox">{!appObj.CIF_No__c}</div>
+        <!--<input type="text" style="width:250px;"></input>&nbsp;-->
+        </div>
+        <br></br>
+    <div>
+        <label>1. I agree for the debit of mandate processing charges by the bank whom I am authorizing to debit my account as per
+            latest schedule of the charges of the bank. 2. This is to confirm that the declaration has been carefully read,
+            understood &amp; made by me/us. I am authorising the user entity / Corporate to debit my account , based on the
+            instructions as agreed and signed by me. 3. I have understood that I am authorized to cancel / amend this mandate
+            by appropriately communicating the cancellation / amendment request to the user / corporate or the bank where
+            I have authorized the debit.</label>
+            </div>
+        <br></br>
+        <div>
+        <label for="From">From</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;" class="inputBox">{!loanObj.EMI_Date__c}</div>
+        <!--<input type="text" style="width:300px;"></input>&nbsp;-->
+    </div>
+        <br></br>
+        <div>
+        <label for="To">To</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px;" class="inputBox">{!endDate}</div>
+        <!--<input type="text" style="width:300px;"></input>&nbsp;-->
+    </div>
+    <br></br>
+    <div>
+        <label for="Or">Or</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block" class="inputBox"></div>
+        <!--<input type="checkbox" id="html" name="Until Cancelled" value="Until Cancelled"></input>-->
+        <label for="Until Cancelled">Until Cancelled</label>
+    </div>
+        <br></br>
+    <div>
+        <label for="Phone">Phone No.</label>&nbsp;
+        <div style="border:1px solid black; padding:5px;display:inline-block; min-width:100px;min-height:10px; vertical-align:middle;" class="inputBox">{!appObj.Mobile_Number__c}</div>
+        <!--<input type="text" style="width:150px;"></input>&nbsp;&nbsp;-->
+        <label>1. <u>{!customerName}</u></label>&nbsp; <label>2. ---------------</label> &nbsp; <label>3. ---------------</label>
+    </div>
+    </body>
+
+    </html>
+
+
+
+
+</apex:page>

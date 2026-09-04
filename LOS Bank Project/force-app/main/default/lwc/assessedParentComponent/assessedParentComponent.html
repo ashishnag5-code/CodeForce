@@ -1,0 +1,33 @@
+<template>
+    <c-custom-spinner show-spinner={isLoaded} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={renderAssessedFinaceTemplate}>
+        <div class="slds-m-top--small">
+            <template for:each={itemList} for:item="item" for:index="index">
+            <lightning-card  key={item.id}>
+                <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                    active-section-name={activeSections}>
+                   
+                  <!--  <c-documented-audited-child-component key-value={item.id} financial-id={financialId} applicant-id={applicantId} ondocauditedsubmit={passtoparent} onauditedupdate={handlepasstoparentUpdate} existing-details={existingDetails} onhome={navigateToHome} spinner-image={spinnerImage} ></c-documented-audited-child-component>-->
+                  <c-assessed-nodocumented-component is-r2={isR2}  key-value={item.id} financial-id={financialId} applicant-id={applicantId} onassesesnodocsubmit={handleSubmit} onassessedupdate={handleUpdate}  loan-app-id={loanAppId}  existing-details={existingDetails} onhome={navigateToHome} spinner-image={spinnerImage} is-mobile={isMobile} onotherincome={handleOtherIncome} ondeletedrecord={handleDeleteRecord}></c-assessed-nodocumented-component>
+                 <!-- <c-assessed-nodocumented-component financial-id={applicantFinancialId} onassesesnodocsubmit={handleSubmit} onassessedupdate={handleUpdate}
+                    spinner-image={spinnerImage} existing-details={assessedData} applicant-id={applicantId}
+                   >
+                </c-assessed-nodocumented-component>-->
+                </lightning-accordion>
+                
+                    <template if:true={showYearIcons}>
+                   <div class="slds-align--absolute-center slds-text-heading_small">
+                        Add Income<lightning-icon icon-name="action:new" size="x-small" alternative-text="" access-key={item.id} id={index}
+                           class="slds-m-left_small" onclick={addNewRow}></lightning-icon>
+                
+                       &nbsp; Cancel Income <lightning-icon icon-name="action:delete" size="x-small" alternative-text="" access-key={item.id} id={index}
+                           class="slds-m-left_small" onclick={removeRow}></lightning-icon>
+                        </div>       
+                    </template> 
+            </lightning-card>
+            </template>                               
+            
+        </div>
+    </template>
+</template>

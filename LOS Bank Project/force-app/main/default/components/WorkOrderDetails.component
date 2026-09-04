@@ -1,0 +1,42 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="workOrderVar" description="This is the value for the component."
+    type="Work_Order__c[]" required="true" assignTo="{!workOrderDetails}"/>
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Work Order / Contract in Hand">							
+        </apex:pageBlockSection>
+        <apex:variable value="{!1}" var="collateralSno" />
+        <table style="{!tableStyle}">
+            <tr style="{!tableRowStyle}">
+                <th style="{!tableHeadDataStyle} width:3% !important">Sr no.</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Name of the Principal</th>
+                <th style="{!tableHeadDataStyle} width:5% !important">Nature of Work</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Contract start date</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Completion date</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">%age work completed</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Value of contract (Rs in lacs)</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Unexecuted CIH (Rs in Lacs)</th>
+            </tr>
+            <apex:repeat value="{!workOrderDetails}" var="workorder">
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableDataStyle}">{!workorder.S_No__c}</td>
+                    <td style="{!tableDataStyle}">{!workorder.Name_of_the_Principal__c}</td>
+                    <td style="{!tableDataStyle}">{!workorder.Nature_of_Work__c}</td>
+                    <td style="{!tableDataStyle}">
+                        <apex:outputText value="{0,date,dd.MM.yyyy}">
+                            <apex:param value="{!workorder.Contract_start_date__c}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="{!tableDataStyle}">
+                        <apex:outputText value="{0,date,dd.MM.yyyy}">
+                            <apex:param value="{!workorder.Completion_date__c}" />
+                        </apex:outputText>
+                    </td>
+                    <td style="{!tableDataStyle}">{!workorder.age_work_completed__c}</td>
+                    <td style="{!tableDataStyle}">{!workorder.Value_of_contract_Rs_in_lacs__c}</td>
+                    <td style="{!tableDataStyle}">{!workorder.Unexecuted_CIH_Rs_in_Lacs__c}</td>                    
+                </tr>
+            </apex:repeat>
+        </table>
+    </div>   
+</apex:component>

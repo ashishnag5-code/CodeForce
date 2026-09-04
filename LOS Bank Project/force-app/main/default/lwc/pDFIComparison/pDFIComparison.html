@@ -1,0 +1,55 @@
+<template>
+    <template if:true={errorMessage}>
+        {errorMessage}
+    </template>
+    <template if:false={errorMessage}>
+        <div class="slds-box slds-theme–default">
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped tablecss">
+            <thead>
+                <th>
+                    <div class="slds-align_absolute-center">
+                        Category
+                    </div>
+                </th>
+                <th>
+                    <div class="slds-align_absolute-center">
+                        Details from FI
+                    </div>
+                </th>
+                <th>
+                    <div class="slds-align_absolute-center">
+                        Details from PD
+                    </div>
+                </th>
+            </thead>
+            <tbody>
+                <template for:each={valuesForDisplay} for:item="each">
+                    <tr key={each.parameter}>
+                        <td class="slds-p-around_medium">
+                            <div class="slds-align_absolute-center">
+                                {each.parameter}
+                            </div>
+                        </td>
+                        <td class="slds-p-around_medium">
+                            <template if:true={each.isSame}>
+                                <div style="color:green" class="slds-align_absolute-center">{each.fiValue}</div>
+                            </template>
+                            <template if:false={each.isSame}>
+                                <div style="color:red" class="slds-align_absolute-center">{each.fiValue}</div>
+                            </template>
+                        </td>
+                        <td class="slds-p-around_medium">
+                            <template if:true={each.isSame}>
+                                <div style="color:green" class="slds-align_absolute-center">{each.pdValue}</div>
+                            </template>
+                            <template if:false={each.isSame}>
+                                <div style="color:red" class="slds-align_absolute-center">{each.pdValue}</div>
+                            </template>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+    </template>
+</template>

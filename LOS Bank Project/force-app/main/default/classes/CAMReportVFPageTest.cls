@@ -1,0 +1,313 @@
+@isTest
+public class CAMReportVFPageTest {
+    @testSetup static void setup() {
+        Group grp = (Group )TestFactory.createSObject(new Group (
+            Name ='Group1',
+            Type='Queue'
+        ),true); 
+         
+            
+        Account accInstance = (Account )TestFactory.createSObject(new Account (
+            Name ='TestAccount',
+            Account_Code__c='2103',
+            Branch_Queue__c=grp.Id
+        ),true);
+        Date start = Date.newInstance(1999, 12, 31);
+        Date endDate = Date.newInstance(1999, 12, 31);
+        Scheme_Master__c scheme1 = (Scheme_Master__c)TestFactory.createSObject(new Scheme_Master__c(
+            START_DATE__c  = start,
+            EXPIRY_DATE__c   = endDate,
+            Is_InActive__c  = false,
+            Scheme_Name__c = 'Normal', Vehicle_Category__c ='TestCat'
+        ),true);
+        Loan_Application__c loanAppl = (Loan_Application__c)TestFactory.createSObject(new Loan_Application__c(
+            Application_Number__c  = 'AP-12345',
+            Adhar_Card__c   = 123456,
+            Loan_Amount__c  = 1000,
+            Product__c='10201',
+            Customer_Type__c='Individual',
+            Stage__c ='DDE',
+            EMI_Date__c = '10/3/2022',
+            Tenure__c = 10,BRE_Status__c = Label.BRE_Status_Received,
+            Branch_Master__c = accInstance.Id, BRE_Selected_Scheme__c = scheme1.id
+        ),true);
+        Applicant__c appl = (Applicant__c)TestFactory.createSObject(new Applicant__c(
+            First_Name__c = 'Vikash',
+            Middle_Name__c = 'Kumar',
+            Last_Name__c = 'Mandal',
+            CIF_No__c = '576321', 
+            Bureau_Score__c = '122',
+            Loan__c =loanAppl.Id,
+            RecordTypeId=Schema.SObjectType.Applicant__c.getRecordTypeInfosByDeveloperName().get('Primary_Applicant').getRecordTypeId()
+        ),true);
+        
+        
+        Integration_Master__c intmassearch2 = (Integration_Master__c)TestFactory.createSObject(new Integration_Master__c(
+            Name = 'FICO BRE',
+            Active__c = true,
+            Timeout__c = '120000',
+            End_Point_URL__c = 'https://serviceuatsfdc.aubankuat.in/FicoBREService',
+            HTTP_Method__c = 'POST',
+            API_Key__c = '12345',
+            Apiuser__c = 'SFDC'
+            
+        ),true);
+        Integration_Checklist__c intCheck = (Integration_Checklist__c)TestFactory.createSObject(new Integration_Checklist__c(
+            Request__c = 'FICO BRE',
+            Response__c = '',//{"response_status":{"code":"97","message":"K-100-Resident authentication failed","status":"FAIL","txnID":"UKC:10-USR001-SFDC-20230519130219-"}}',
+            Applicant__c = appl.Id,
+            Integration_Master__c = intmassearch2.Id
+            
+        ),true);
+        
+        Profile prof = [select Id,Name from profile where name like '%Credit%'];
+        User usr = (User)TestFactory.createSObject(new User(firstName = 'test1',
+                                                            lastName = 'test2',
+                                                            profileId = prof.id,
+                                                            username = 'test'+UserInfo.getOrganizationId()+'@test.com',
+                                                            email = 'test@test.com',
+                                                            Branch_Code__c  = '2103'
+                                                           ),true);
+        
+        BSR_PSL_Details__c  bsrObj = (BSR_PSL_Details__c )TestFactory.createSObject(new BSR_PSL_Details__c (
+            Loan_Application__c = loanAppl.Id,
+            RecordTypeId = Schema.SObjectType.BSR_PSL_Details__c.getRecordTypeInfosByName().get('PSL').getRecordTypeId()
+        ),true);
+        
+        Fleet__c objFleet = (Fleet__c)TestFactory.createSObject(new Fleet__c(
+            Loan_Application__c=loanAppl.Id,
+            Relationship_with_borrower__c = 'Father',
+            Vehicle_Number__c  = '7847',
+            Name = 'Bike', 
+            Vehicle_Make_Model__c = '2022', 
+            MFG_Year__c='2022', 
+            HPN_Status__c='Free'
+        ),true);
+
+        Deviation__c  dev = (Deviation__c)TestFactory.createSObject(new Deviation__c(
+            Loan_Application__c  = loanAppl.id ,Source__c='SF',Archived__c = false, Active__c  = true,Deviation_Type__c  ='COW-No HPN-Customer'
+        ),true);
+        
+        list<Loan_Application_Approval__c> lstLoanAppApproval = new List<Loan_Application_Approval__c>();
+        Loan_Application_Approval__c loanAppApproval = (Loan_Application_Approval__c)TestFactory.createSObject(new Loan_Application_Approval__c(
+            Loan_Application__c  = loanAppl.Id, Approver__c = usr.id 
+        ),false);
+        Loan_Application_Approval__c loanAppApproval1 = (Loan_Application_Approval__c)TestFactory.createSObject(new Loan_Application_Approval__c(
+            Loan_Application__c  = loanAppl.Id, Approver__c = usr.id 
+        ),false);
+        lstLoanAppApproval.add(loanAppApproval);
+        insert lstLoanAppApproval;
+        
+        Collateral__c coll= new Collateral__c(Loan__c=loanAppl.Id,Original_Vehicle_Usage__c = 'Test',
+                                             RecordTypeId = Schema.SObjectType.Collateral__c.getRecordTypeInfosByName().get('New').getRecordTypeId());
+        insert coll;
+        
+        Valuation__c val= new Valuation__c(Name='TestVal',Collateral__c=coll.Id);
+        
+        Document_Master__c docMasterRecord1 = (Document_Master__c)TestFactory.createSObject(new Document_Master__c(
+           Document_Name__c = 'Valuation Report With Vehicle Photo',
+           Constitiution__c = 'Partnership Firms',
+           Individual_NI__c='NI'
+        ),true);
+        
+          Document_Checklist__c docCheckRecord1 = (Document_Checklist__c)TestFactory.createSObject(new Document_Checklist__c(
+           Document_Master__c = docMasterRecord1.Id,
+           Active__c =true,
+           Collateral__c = coll.Id
+        ),true);
+        
+        Document_Master__c docMasterRecord2 = (Document_Master__c)TestFactory.createSObject(new Document_Master__c(
+           Document_Name__c = 'Vahaan Master',
+           Constitiution__c = 'Partnership Firms',
+           Individual_NI__c='NI'
+        ),true);
+        
+          Document_Checklist__c docCheckRecord2 = (Document_Checklist__c)TestFactory.createSObject(new Document_Checklist__c(
+           Document_Master__c = docMasterRecord2.Id,
+           Active__c =true,
+           Loan_Application__c = loanappl.Id
+        ),true);
+        
+        ContentVersion contentVersion = new ContentVersion(
+            Title = 'Vahaan',
+            PathOnClient = 'Vahaan.jpg',
+            Request_id__c ='Req1',
+            VersionData = Blob.valueOf('Test Content'),
+            Origin = 'H'
+        );
+        insert contentVersion; 
+        
+        Id conDocId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:contentVersion.Id].ContentDocumentId;
+        List<ContentDocumentLink> cdlList = new List<ContentDocumentLink>();
+        ContentDocumentLink cdl = New ContentDocumentLink();
+        cdl.LinkedEntityId = docCheckRecord1.Id;
+        cdl.ContentDocumentId = conDocId;
+        cdl.shareType = 'V';
+        cdlList.add(cdl);
+        
+        ContentDocumentLink cdl1 = New ContentDocumentLink();
+        cdl1.LinkedEntityId = docCheckRecord2.Id;
+        cdl1.ContentDocumentId = conDocId;
+        cdl1.shareType = 'V';
+        cdlList.add(cdl1);
+        Insert cdlList;
+        
+        BRE_Response__c bre = (BRE_Response__c)TestFactory.createSObject(new BRE_Response__c(
+            BRE_Response__c = '{"message":{"requestTime":"May 10, 2023 07:10:36.051 AM PDT","dmElapsedTime":0,"application":{"product":[{"noOfTopUp":0,"existingGroupExposure":0,"requestedLoanAmountForSingleUnit":0,"loanType":"USED","requestedROI":10,"schemeId":"Scheme 0001","requestedInstallmentAmount":37811,"roiAsPerMaster":0,"noOfUnits":0,"rateType":"FIXED","sourcingDetails":{"sourcingCategory":"NA","sourcingClass":"NON_TA","sourcingChannel":"AU_SAMRIDHI_REFERRAL"},"productDecision":{"isAppliedPromoCode":false,"schemeDecision":[],"ruleAudits":[],"uwCriterias":[]},"requestedTenor":30,"productType":"TW_USED","requestedLoanAmount":50000,"existingTWExposure":0,"vehicleDetails":{"ltvOnVehicleCost":0,"loanAmountOnBody":0,"isVahanDataFetched":false,"vehicleCategory":"A","currentOwnerName":"","otherFundingItemsDetails":{"otherCosts":0,"insuranceAmount":0,"rtoAmount":1000,"lsAmount":0,"apportionedLoanAmount":1000000,"assecessoriesAmount":0},"hoursMeterReading":0,"isTARSubmitted":false,"ownerSerialNumber":"","ltvOfferedOnBody":0,"newVehicleCostDetails":{"insurance":1000,"otherCosts":1000,"fairMarketValue":0,"finalCost":1184000,"discount":20000,"onRoadPrice":1182000,"approvedCustomerEquity":0,"costToBeConsidered":0,"netOfDiscountPrice":1180000,"exShowroomPrice":1200000,"priceVariance":0,"absoloutAmount":0,"rtoTaxes":1000,"assecessories":1000},"kmMeterReading":0,"HPNFinanciersName":"","variant":"MARUTI_CIAZ_ALPHA SMART HYBRID_PETROL","model":"CIAZ","registrationCity":"","make":"MARUTI","maxFundingCap":0,"isRegisterable":false,"challanOverdueAmount":1000,"engineCategory":"BS4","vehicleUsage":"PERSONAL","loanAmountOnChasisAndFullYBuild":0,"maxLTV":0,"ltvOnRoad":84,"vehicleColour":"Wine red","isLuxaryVehicle":false,"isAccessoriesFunding":false,"fuelType":"PETROL","isVehicleDelivered":false,"isBlackListed":false,"bodyCost":0,"ltvExShowroom":84,"ltvOnFinalCost":84,"manufactureYear":2023,"manufactureMonth":2},"totalExposure":0,"subProductType":"CAR","requestedPF":23600,"productCode":"10301","existingWheelExposure":0,"triggerDetails":{"sourcingTriggerLevel":"L1","branchTriggerType":"NA","dealerTriggerType":"NA","roTriggerType":"NA","sourcingTriggerType":"NA","branchTriggerLevel":"L1","roTriggerLevel":"L1","dealerTriggerLevel":"L1"},"existingTotalExposure":0,"isTopUp":false,"apportionedLoanAmount":0}],"applicants":[{"isPDSubmitted":false,"relatedPartyStatus":"NO_MATCH","constitution":"INDIVIUDAL","isPhysicallyChallenged":false,"gender":"Male","customerRiskProfile":"NORMAL","isBiometricAddressNotChanged":true,"isLeadToLeadPartialMatch":false,"fcsToEMIRatio":0,"existingCustomer":false,"bureauResponse":{"cibilResponse":[{"scoreList":[{"reasonCode4":"39","score":"00687","reasonCode3":"41","reasonCode2":"42","scoreCardVersion":"10","reasonCode1":"35","reasonCode5":"26","scoreCardName":"08","scoreDate":"25092019","scoreName":"CIBILTUSC3"}],"employmentList":{"income":0,"occupationCode":"04","accountType":"12","dateReported":"31072020"},"addressList":[{"addressCategory":"02","matchPercent":0,"pinCode":"413510","dateReported":"30112019","addressLine1":"GEETHA RESIDENCY GEETHA RESIDENCY KALAMB","stateCode":"27"},{"addressCategory":"02","matchPercent":0,"pinCode":"413510","dateReported":"18102019","addressLine1":"CUSTOMERADDRESS A/P GEETHA RESIDENCY,TQ-KALAMB,OSM","addressLine2":",A/P GEETHA RESIDENCY,TQ-KALAMB,LATUR, ,","stateCode":"27","addressLine3":"LATUR","enrichedThroughtEnquiry":"Y"},{"addressCategory":"02","matchPercent":0,"pinCode":"413510","dateReported":"06102019","addressLine1":"S/O KUMAR PATIL GEETHA RESIDENCY N/R DATTA MANDI","addressLine2":"R GEETHA RESIDENCY GEETHA RESIDENCY","stateCode":"27"}],"accountList":[{"valueOfCollateral":0,"dateOpenedOrDisbursed":"27032021","cashLimit":0,"rateOfInterest":0,"ownershipIndicator":"4","emiAmount":18140,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"paymentFrequence":"3","creditLimit":0,"repaymentTenure":180,"typeOfCollateral":"1","highCreditOrSanctionedAmount":1390000,"dateReportedAndCertified":"31102022","overdueAmount":0,"accountType":"50","currentBalance":1346292,"paymentHistoryEndDate":"1032021","paymentHistoryStartDate":"1102022","actualPaymentAmount":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","settlementAmount":0,"dateOfLastPayment":"6102022","paymentHistory2":"0"},{"dateReportedAndCertified":"31122021","valueOfCollateral":75300,"overdueAmount":0,"dateOpenedOrDisbursed":"5112020","cashLimit":0,"accountType":"7","currentBalance":0,"paymentHistoryEndDate":"1112021","rateOfInterest":26,"dateClosed":"21122021","paymentHistoryStartDate":"1122021","ownershipIndicator":"1","actualPaymentAmount":75300,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","creditLimit":0,"repaymentTenure":12,"settlementAmount":0,"dateOfLastPayment":"21122021","typeOfCollateral":"2","highCreditOrSanctionedAmount":75300},{"dateReportedAndCertified":"5112020","valueOfCollateral":50350,"overdueAmount":0,"dateOpenedOrDisbursed":"4092020","cashLimit":0,"accountType":"7","currentBalance":0,"paymentHistoryEndDate":"1092020","rateOfInterest":26,"dateClosed":"5112020","paymentHistoryStartDate":"1112020","ownershipIndicator":"1","actualPaymentAmount":49991,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","creditLimit":0,"repaymentTenure":12,"settlementAmount":0,"dateOfLastPayment":"5112020","typeOfCollateral":"2","highCreditOrSanctionedAmount":50000},{"dateReportedAndCertified":"4092020","valueOfCollateral":42000,"overdueAmount":0,"dateOpenedOrDisbursed":"13032020","cashLimit":0,"accountType":"7","currentBalance":0,"paymentHistoryEndDate":"1032020","rateOfInterest":26,"dateClosed":"4092020","paymentHistoryStartDate":"1092020","ownershipIndicator":"1","actualPaymentAmount":41981,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","creditLimit":0,"repaymentTenure":12,"settlementAmount":0,"dateOfLastPayment":"4092020","typeOfCollateral":"2","highCreditOrSanctionedAmount":42000},{"dateReportedAndCertified":"13032020","valueOfCollateral":29050,"overdueAmount":0,"dateOpenedOrDisbursed":"18122019","cashLimit":0,"accountType":"7","currentBalance":0,"paymentHistoryEndDate":"1122019","rateOfInterest":26,"dateClosed":"13032020","paymentHistoryStartDate":"1032020","ownershipIndicator":"1","actualPaymentAmount":29047,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","creditLimit":0,"repaymentTenure":12,"settlementAmount":0,"dateOfLastPayment":"13032020","typeOfCollateral":"2","highCreditOrSanctionedAmount":29050},{"dateReportedAndCertified":"30042021","valueOfCollateral":0,"overdueAmount":0,"dateOpenedOrDisbursed":"18122019","cashLimit":0,"accountType":"51","currentBalance":0,"paymentHistoryEndDate":"1122019","rateOfInterest":0,"dateClosed":"17042021","paymentHistoryStartDate":"1042021","ownershipIndicator":"4","actualPaymentAmount":0,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"AU SFB","paymentHistory1":"0","creditLimit":0,"repaymentTenure":120,"settlementAmount":0,"dateOfLastPayment":"10032021","highCreditOrSanctionedAmount":1000000},{"dateReportedAndCertified":"20102022","valueOfCollateral":0,"overdueAmount":0,"dateOpenedOrDisbursed":"12122005","cashLimit":0,"accountType":"10","currentBalance":36197,"paymentHistoryEndDate":"1112019","rateOfInterest":0,"paymentHistoryStartDate":"1102022","ownershipIndicator":"2","actualPaymentAmount":0,"emiAmount":0,"writtenOffAmountTotal":0,"writtenOffAmountPrincipal":0,"reportingMemberShortName":"NOT DISCLOSED","paymentHistory1":"0","creditLimit":0,"repaymentTenure":0,"settlementAmount":0,"dateOfLastPayment":"7102022","highCreditOrSanctionedAmount":39024,"paymentHistory2":"0"}],"isAddtionalMatch":false,"name":{"gender":"2","dob":"17111989","errorSegmentTag":"N01","name1":"KIRAN KUMAR PATIL"},"header":{"memberReferenceNumber":"47958179","timeProceed":"061608","dateProceed":"19092020","enquiryMemberUserID":"NB66057777_CIRC2CNPECV","subjectReturnCode":"1","version":"12","enquiryControlNumber":"003510718234"},"enquiryList":[{"enquiryPurpose":"01","dateReported":"16092020","reportingMemberShortName":"SBM INVST FIN","enquiryAmount":400000},{"enquiryPurpose":"53","dateReported":"15062020","reportingMemberShortName":"NOT DISCLOSED","enquiryAmount":445728},{"enquiryPurpose":"06","dateReported":"31012020","reportingMemberShortName":"NOT DISCLOSED","enquiryAmount":28980},{"enquiryPurpose":"53","dateReported":"07112019","reportingMemberShortName":"NOT DISCLOSED","enquiryAmount":465000},{"enquiryPurpose":"53","dateReported":"18102019","reportingMemberShortName":"NOT DISCLOSED","enquiryAmount":255000},{"enquiryPurpose":"06","dateReported":"06102019","reportingMemberShortName":"NOT DISCLOSED","enquiryAmount":28980}],"phoneList":[{"telephoneNumber":"9686316324","matchPercent":0,"telephoneType":"01"}],"idList":[{"idType":"01","idValue":"ASBPG1647I"},{"idType":"03","idValue":"KAN8027289"}],"status":"SUCCESS"}]},"negativePartyStatus":"NO_MATCH","customerType":"I","freeToFinanceRatio":0,"idDetaiis":[{"idType":"PASSPORT","isVerified":false},{"idType":"PAN","isVerified":false},{"idType":"VOTER_CARD","isVerified":false},{"idType":"DL","isVerified":false},{"idType":"AADHAAR","isVerified":false},{"idType":"NPR_CARD","isVerified":false},{"idType":"NREGA","isVerified":false}],"karzaData":[{"reportedDate":"2022-02-02T00:00:00Z","scoreOrValue":30,"subType":"PERMANENT_ADDRESS","karzaVerificationType":"KYC"}],"applicantType":"PRIMARY","relationWithApplicant":"SELF","customerSegment":"SALARIED","isAUEmployee":false,"applicantId":"A-00000149","isFinancialApplicant":true,"expansionRatio":0,"noOfDependents":0,"shareholdingPercent":0,"address":[{"country":"IN","isResiCumOffice":false,"city":"SAHARANPUR","addressType":"PERMANENT","isNegativeArea":false,"ownershipStatus":"OWNED","locationType":"URBAN","distanceFromBranch":0,"timeAtCurrentCity":0,"timeAtCurrentAddress":36,"pinCode":"247001","district":"SAHARANPUR","taluka":"SAHARANPUR","propertyType":"FLAT","pinCodeCategory":"NON_WORKING","locationSubType":"METRO","state":"Uttar Pradesh"},{"country":"IN","isResiCumOffice":false,"city":"SAHARANPUR","addressType":"CURRENT","isNegativeArea":false,"ownershipStatus":"OWNED","locationType":"URBAN","distanceFromBranch":0,"timeAtCurrentCity":0,"timeAtCurrentAddress":36,"pinCode":"247001","district":"SAHARANPUR","taluka":"SAHARANPUR","propertyType":"FLAT","pinCodeCategory":"NON_WORKING","locationSubType":"METRO","state":"Uttar Pradesh"}],"cfrStatus":"NO_MATCH","isLeadToLeadFullMatch":false,"internalRiskScore":0,"employmentDetails":{"totalWorkExperience":24,"employmentType":"SALARIED_PRIVATE","employerName":"SALESFORCE COM INDIA PVT LTD","companyCategory":"CAT_A","timeWithCurrentEmployer":12},"dateOfBirth":"1984-05-01T00:00:00Z","emailDetails":[{"emailType":"PERSONAL","isEmailIdVerified":false}],"customerSubGrade":"SFO","isAgriRevenueProof":false,"ekycType":"PHYSICAL","incomeData":{"itrAmount":0,"yearlyObligation":0,"documentITRIncome":0,"totalMonthlyIncome":50000,"totalYearlyIncome":0,"verfiedAgriIncome":0,"monthlyIncentive":0,"grossRecPrevYear":0,"otherIncome":0,"grossRecCurrYear":0,"assessedIncome":0,"monthlyObligation":18140,"documentIncome":0,"yealryBonus":0,"patCurrYear":0,"patPrevYear":0,"documentSalariedIncome":0},"isETBAddressNotChanged":true,"amlStatus":"FULL_MATCH","nationality":"INDIAN","customerSegmentSubType":"DOCUMENTED","isLeadToCustomerPartialMatch":false,"totalRelationshipValue":0,"etbType":"ROYALE","noOfCattle":0,"customerGrade":"IB","age":468,"maritalStatus":"SINGLE"}],"documentsReceived":[{"documentDate":"2023-05-07T00:00:00Z","documentDescription":"Pan Card/Form 60","isVerified":false,"documentId":"AUWheels0001","documentName":"Pan Card/Form 60","stabilityDate":"2023-05-07T00:00:00Z"},{"documentDate":"2023-05-07T00:00:00Z","documentDescription":"Aadhaar Card","isVerified":false,"documentId":"AUWheels0003","documentName":"Aadhaar Card","stabilityDate":"2023-05-07T00:00:00Z"},{"documentDate":"2023-05-07T00:00:00Z","documentDescription":"Bank Statement","isVerified":false,"documentId":"AUWheels0107","documentName":"Bank Statement","stabilityDate":"2023-05-07T00:00:00Z"}],"randomNumber":26,"applicationDecision":{"strategyUsed":"CHAMPION","subjectivityMessages":[],"calculatedVariables":[],"systemDecision":"ERROR","ruleAudits":[{"ruleId":"","metaphorName":"FN_PreProcessing"},{"ruleId":"","metaphorName":"FN_ProductPreProcessing"},{"ruleId":"","metaphorName":"FN_ApplicationInitializations"},{"ruleId":"","metaphorName":"FN_ApplicationDerivations"},{"ruleId":"","metaphorName":"FN_DeriveCoAppCustomerSegment"},{"ruleId":"rule7","metaphorName":"DTAB_DeriveVehicleCategory"},{"ruleId":"rule455","metaphorName":"DTAB_AcceptableDistanceFromBranch"}],"uwCriterias":[]},"applicationInfo":{"rmCode":"rouser1","roName":"RO User1","applicationNumber":"DEL0000000115","applicationCounter":1,"branchName":"Dwarka Delhi","branchRegion":"Delhi","rmName":"RO User1","applicationStage":"QDE","transactionId":"SFDCSIT_a5e59d5148ea5df0492c48064","roCode":"rouser1","branchCode":"2100","cityCategory":"","applicationId":"DEL0000000115","branchHub":"HUB0023","leadId":"","applicationDate":"2023-05-10T08:34:01Z"}},"dmRequestTime":"May 10, 2023 3:45:15.732 PM UTC","error":[{"errorCode":"DM_TECH_ERROR","description":"Evaluation error nExpression produces unexpected value: null. while evaluating "theProduct.termSetInput.vehicleDetails.usedVehicleCostDetails" in function FN_ApplicationDerivations ","stackTrace":"com.blazesoft.engines.rules.NdEvaluationException: Evaluation error  while evaluating "theProduct.termSetInput.vehicleDetails.usedVehicleCostDetails" in function FN_ApplicationDerivations nExpression produces unexpected value: null.ntat com.blazesoft.engines.rules.NdEvaluationContext.unexpectedValue(:851)ntat com.blazesoft.engines.rules.expressions.NdPropertyExpression.unexpectedValue(:360)ntat com.blazesoft.engines.rules.expressions.NdPropertyExpression.bANUBmBA(:340)ntat com.blazesoft.engines.rules.expressions.NdPropertyExpression.bANUBAKC(:305)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.bANUBsZV.bANUBsZO(:531)ntat com.blazesoft.engines.rules.expressions.bANUBsZV.bANUBAKC(:516)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.bANUDRlY.bANUDRlX(:354)ntat com.blazesoft.engines.rules.expressions.bANUDRlY.bANUBAJB(:385)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:590)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluate(:557)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBASK(:1254)ntat com.blazesoft.engines.rules.expressions.bANUCMIN.bANUBAJB(:192)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:590)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluate(:557)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBBcU(:1512)ntat com.blazesoft.engines.rules.expressions.bANUCMIN.bANUBAJB(:195)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.NdFunction$bANUAUmZ.catchEvaluate(:552)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBpPM(:214)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBAKC(:185)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluateAction(:1267)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:237)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAJB(:212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:590)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluate(:557)ntat com.blazesoft.engines.rules.expressions.bANUCPVS.bANUBAJB(:183)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluateAction(:1267)ntat com.blazesoft.engines.rules.expressions.NdTryStatement.bANUBAJB(:366)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluateAction(:1267)ntat com.blazesoft.engines.rules.expressions.NdTryStatement.bANUBAJB(:366)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.NdFunction$bANUAUmZ.catchEvaluate(:552)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBpPM(:214)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBAKC(:185)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdSimplePropertyAssignmentStatement.bANUBAJB(:134)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.NdFunction$bANUAUmZ.catchEvaluate(:552)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiDA(:1129)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchInvokeInternal(:1210)ntat com.blazesoft.engines.flow.bANUAMZI.bANUAWcP(:591)ntat com.blazesoft.engines.flow.bANUDYnS.bANUDSUA(:345)ntat com.blazesoft.engines.flow.bANUDTbH.bANUDSVB(:888)ntat com.blazesoft.engines.flow.bANUDTbH.bANUDSTM(:651)ntat com.blazesoft.engines.rules.NdRuleflowFunctional.imperativeInvokeRuleflow(:470)ntat com.blazesoft.engines.rules.NdRuleflowFunctional$bANUDvfH.bANUDvdF(:915)ntat com.blazesoft.engines.rules.NdRuleflowFunctional$bANUDvfH.bANUDveG(:924)ntat com.blazesoft.engines.rules.NdRuleflowFunctional$bANUDvfH.catchEvaluate(:1038)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBpPM(:214)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBAKC(:185)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.evaluateAction(:1267)ntat com.blazesoft.engines.rules.expressions.NdTryStatement.bANUBAJB(:366)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBAKC(:520)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.NdFunction$bANUAUmZ.catchEvaluate(:552)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBpPM(:214)ntat com.blazesoft.engines.rules.expressions.NdFunctionalExpression.bANUBAKC(:185)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBATL(:1284)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluateAction(:1274)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUCTFX(:240)ntat com.blazesoft.engines.rules.expressions.bANUCTSM.bANUBAKC(:219)ntat com.blazesoft.engines.rules.expressions.NdExpression.bANUBALD(:610)ntat com.blazesoft.engines.rules.expressions.NdExpression.catchEvaluate(:1212)ntat com.blazesoft.engines.rules.NdFunction$bANUAUmZ.catchEvaluate(:552)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiCX(:949)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchEvaluate(:882)ntat com.blazesoft.engines.rules.NdFunctionalItem.bANUEiDA(:1129)ntat com.blazesoft.engines.rules.NdFunctionalItem.catchInvoke(:1291)ntat com.blazesoft.server.deploy.rules.NdDeployRulesServiceSrlInvoker.invoke(:153)ntat com.blazesoft.server.deploy.rules.NdDeployRulesServiceClientContext.invokeService(:2538)ntat com.blazesoft.server.deploy.rules.NdDeployInvokerRulesServiceClientContext.execute(:73)ntat com.blazesoft.server.rules.NdRulesServiceAgent.process(:1485)ntat com.blazesoft.server.rules.NdRulesServiceAgent.run(:1259)ntat com.blazesoft.server.local.NdLocalServiceExecContext.runAgent(:102)ntat com.blazesoft.server.local.NdLocalService.runAgent(:1252)ntat com.blazesoft.server.local.NdLocalService.invokeServiceSessionImpl(:1914)ntat com.blazesoft.server.local.NdLocalService.invokeServiceSession(:1966)ntat com.blazesoft.server.deploy.NdStatelessServer.bANUKoeK(:251)ntat com.blazesoft.server.deploy.NdStatelessServer.invokeService(:376)ntat com.blazesoft.server.deploy.NdStatelessServer.invokeService(:540)ntat com.blazesoft.server.deploy.NdStatelessServer.invokeService(:509)ntat com.blazesoft.server.deploy.dmp.NdDMPStatelessServer.access$101(:48)ntat com.blazesoft.server.deploy.dmp.NdDMPStatelessServer$bANUJHDT.invokeService(:148)ntat com.blazesoft.server.deploy.dmp.NdDMPStatelessServer.invokeServiceWithAsyncADMEventLogging(:210)ntat com.blazesoft.server.deploy.dmp.NdDMPStatelessServer.invokeServiceWithADMEventLogging(:173)ntat com.blazesoft.server.deploy.dmp.NdDMPStatelessServer.invokeService(:279)ntat com.blazesoft.server.deploy.webservice.rma.RmaDynamicRest.processWithDecisionFlow1(Unknown Source)ntat sun.reflect.GeneratedMethodAccessor1734.invoke(Unknown Source)ntat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)ntat java.lang.reflect.Method.invoke(Method.java:498)ntat org.glassfish.jersey.server.model.internal.ResourceMethodInvocationHandlerFactory.lambda$static$0(ResourceMethodInvocationHandlerFactory.java:52)ntat org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher$1.run(AbstractJavaResourceMethodDispatcher.java:124)ntat org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.invoke(AbstractJavaResourceMethodDispatcher.java:167)ntat org.glassfish.jersey.server.model.internal.JavaResourceMethodDispatcherProvider$ResponseOutInvoker.doDispatch(JavaResourceMethodDispatcherProvider.java:176)ntat org.glassfish.jersey.server.model.internal.AbstractJavaResourceMethodDispatcher.dispatch(AbstractJavaResourceMethodDispatcher.java:79)ntat org.glassfish.jersey.server.model.ResourceMethodInvoker.invoke(ResourceMethodInvoker.java:475)ntat org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:397)ntat org.glassfish.jersey.server.model.ResourceMethodInvoker.apply(ResourceMethodInvoker.java:81)ntat org.glassfish.jersey.server.ServerRuntime$1.run(ServerRuntime.java:255)ntat org.glassfish.jersey.internal.Errors$1.call(Errors.java:248)ntat org.glassfish.jersey.internal.Errors$1.call(Errors.java:244)ntat org.glassfish.jersey.internal.Errors.process(Errors.java:292)ntat org.glassfish.jersey.internal.Errors.process(Errors.java:274)ntat org.glassfish.jersey.internal.Errors.process(Errors.java:244)ntat org.glassfish.jersey.process.internal.RequestScope.runInScope(RequestScope.java:265)ntat org.glassfish.jersey.server.ServerRuntime.process(ServerRuntime.java:234)ntat org.glassfish.jersey.server.ApplicationHandler.handle(ApplicationHandler.java:680)ntat org.glassfish.jersey.servlet.WebComponent.serviceImpl(WebComponent.java:394)ntat org.glassfish.jersey.servlet.WebComponent.service(WebComponent.java:346)ntat org.glassfish.jersey.servlet.ServletContainer.service(ServletContainer.java:366)ntat org.glassfish.jersey.servlet.ServletContainer.service(ServletContainer.java:319)ntat org.glassfish.jersey.servlet.ServletContainer.service(ServletContainer.java:205)ntat sun.reflect.GeneratedMethodAccessor89.invoke(Unknown Source)ntat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)ntat java.lang.reflect.Method.invoke(Method.java:498)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:282)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:279)ntat java.security.AccessController.doPrivileged(Native Method)ntat javax.security.auth.Subject.doAsPrivileged(Subject.java:549)ntat org.apache.catalina.security.SecurityUtil.execute(SecurityUtil.java:314)ntat org.apache.catalina.security.SecurityUtil.doAsPrivilege(SecurityUtil.java:170)ntat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:225)ntat org.apache.catalina.core.ApplicationFilterChain.access$000(ApplicationFilterChain.java:47)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:148)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:144)ntat java.security.AccessController.doPrivileged(Native Method)ntat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:143)ntat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)ntat sun.reflect.GeneratedMethodAccessor43.invoke(Unknown Source)ntat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)ntat java.lang.reflect.Method.invoke(Method.java:498)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:282)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:279)ntat java.security.AccessController.doPrivileged(Native Method)ntat javax.security.auth.Subject.doAsPrivileged(Subject.java:549)ntat org.apache.catalina.security.SecurityUtil.execute(SecurityUtil.java:314)ntat org.apache.catalina.security.SecurityUtil.doAsPrivilege(SecurityUtil.java:253)ntat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:191)ntat org.apache.catalina.core.ApplicationFilterChain.access$000(ApplicationFilterChain.java:47)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:148)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:144)ntat java.security.AccessController.doPrivileged(Native Method)ntat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:143)ntat com.blazesoft.rmaserver.server.java.dmp.NdDMMeteringFilter.doFilter(:65)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:54)ntat com.blazesoft.rmaserver.server.java.dmp.NdDMK8sComponentFilter.doFilter(:110)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.DMPBatchFilter.doFilter(DMPBatchFilter.java:188)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.wsdl.FilterWSDL.doFilter(FilterWSDL.java:264)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.DMPComponentLCMFilter.doFilter(DMPComponentLCMFilter.java:618)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.DMPContextFilter.doFilter(DMPContextFilter.java:386)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.core.security.filter.DMPSecurityFilter.doFilter(DMPSecurityFilter.java:87)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.core.security.filter.SOAPTokenFilter.doFilter(SOAPTokenFilter.java:110)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.gzip.GZIP2WayFilter.doFilter(GZIP2WayFilter.java:59)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.DMPReadyCheckFilter.doFilter(DMPReadyCheckFilter.java:79)ntat com.fico.dmp.context.web.DMPFilterChain.doFilter(DMPFilterChain.java:51)ntat com.fico.dmp.context.web.DMPFilter.doFilter(DMPFilter.java:55)ntat sun.reflect.GeneratedMethodAccessor43.invoke(Unknown Source)ntat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)ntat java.lang.reflect.Method.invoke(Method.java:498)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:282)ntat org.apache.catalina.security.SecurityUtil$1.run(SecurityUtil.java:279)ntat java.security.AccessController.doPrivileged(Native Method)ntat javax.security.auth.Subject.doAsPrivileged(Subject.java:549)ntat org.apache.catalina.security.SecurityUtil.execute(SecurityUtil.java:314)ntat org.apache.catalina.security.SecurityUtil.doAsPrivilege(SecurityUtil.java:253)ntat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:191)ntat org.apache.catalina.core.ApplicationFilterChain.access$000(ApplicationFilterChain.java:47)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:148)ntat org.apache.catalina.core.ApplicationFilterChain$1.run(ApplicationFilterChain.java:144)ntat java.security.AccessController.doPrivileged(Native Method)ntat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:143)ntat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)ntat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)ntat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:543)ntat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)ntat org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:698)ntat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)ntat org.apache.catalina.valves.RemoteIpValve.invoke(RemoteIpValve.java:769)ntat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)ntat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:367)ntat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:639)ntat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)ntat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:882)ntat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1691)ntat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)ntat org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)ntat org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)ntat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)ntat java.lang.Thread.run(Thread.java:750)n"}],"responseStatus":"ERROR","callType":"DP_ELIGIBILITY","elapsedTime":0}}',
+            Is_Confirmed__c = false,Integration_CheckList__c = intCheck.Id,Loan_Application__c =loanAppl.Id
+             
+        ),true);
+        Pre_Approved_Offer__c preApproved = (Pre_Approved_Offer__c)TestFactory.createSObject(new Pre_Approved_Offer__c(
+            Loan_Application__c   = loanAppl.Id,
+            Is_Selected__c   = true,
+            MinLoanTenureinMonths__c  = 5
+        ),true);
+        Bureau_Results__c BureauRes = (Bureau_Results__c)TestFactory.createSObject(new Bureau_Results__c(
+           Applicant__c = appl.id,
+           Account_High_Credit_Amount__c = 100
+       ),true);
+         Document_Master__c   docuMaster = (Document_Master__c)TestFactory.createSObject(new Document_Master__c(
+            Name = 'AUWheels0001',
+            Document_Category__c = 'Application Document',
+            Document_Sub_Category__c = 'KYC', 
+            Document_Name__c = 'Application Aadhaar Picture',
+            Document_ID__c = 'AUWheels0001'
+            
+        ),true);
+        Document_Checklist__c docChkRecord1 = (Document_Checklist__c)TestFactory.createSObject(new Document_Checklist__c(
+            Applicant__c    = appl.Id
+        ),true);
+        
+        ContentVersion contentVersionObj = (ContentVersion)TestFactory.createSObject(new ContentVersion(VersionData = Blob.valueOf('Test Data'),Title = 'PDTelePD Questionare',ContentLocation= 's',
+                                                                                                     PathOnClient='testCases.txt',
+                                                                                                     FirstPublishLocationId = appl.Id), true);
+        
+        Integration_Master__c intmassearch1 = (Integration_Master__c)TestFactory.createSObject(new Integration_Master__c(
+            Name = 'Collateral Dedupe API',
+            Active__c = true,
+            Timeout__c = '120000',
+            End_Point_URL__c = 'https://serviceuatsfdc.aubankuat.in/CollateralModificationRestService/Modification',
+            HTTP_Method__c = 'POST',
+            API_Key__c = '12345',
+            Apiuser__c = 'SFDC'
+            
+        ),true);
+        
+        Integration_Checklist__c  intChecklist = (Integration_Checklist__c )TestFactory.createSObject(new Integration_Checklist__c(
+                is_Latest__c = true,
+                Request_Id__c='IC001001002',
+                Integration_Master__c = intmassearch1.Id,
+                Loan_Application__c = loanAppl.Id,
+                Response__c = '{"TransactionStatus":{"ResponseCode":"0","ResponseMessage":"Success","ExtendedErrorDetails":{"messages":[{"code":0,"message":null}]},"ValidationErrors":[null]}}'
+        ),true);
+        
+         Bank_Account_Records__c bank1 = (Bank_Account_Records__c)TestFactory.createSObject(new Bank_Account_Records__c(
+            applicant__c  = appl.Id,
+            No_of_Emi_Paid__c  = 8,
+            Amount_Overdue__c  = 8000,
+            RecordTypeId = Schema.SObjectType.Bank_Account_Records__c.getRecordTypeInfosByDeveloperName().get('CBS').getRecordTypeId()
+        ),true);
+
+        Bank_Account_Records__c bank2 = (Bank_Account_Records__c)TestFactory.createSObject(new Bank_Account_Records__c(
+            applicant__c  = appl.Id,
+            No_of_Emi_Paid__c  = 8,
+            Amount_Overdue__c  = 6000,
+            RecordTypeId = Schema.SObjectType.Bank_Account_Records__c.getRecordTypeInfosByDeveloperName().get('Cart').getRecordTypeId()
+        ),true);
+
+        Bank_Account_Records__c bank3 = (Bank_Account_Records__c)TestFactory.createSObject(new Bank_Account_Records__c(
+            applicant__c  = appl.Id,
+            No_of_Emi_Paid__c  = 8,
+            Amount_Overdue__c  = 8000,
+            RecordTypeId = Schema.SObjectType.Bank_Account_Records__c.getRecordTypeInfosByDeveloperName().get('CIBIL').getRecordTypeId()
+        ),true);
+        
+        Address__c  addInstance1 = (Address__c)TestFactory.createSObject(new Address__c(
+            Address_Line_1__c ='TestAddressline11',
+            Address_Line_2__c ='TestAddressline22',
+            Address_Line_3__c ='TestAddressline33',
+            State__c='MAHARASHTRA',
+            City__c='EAST DELHI',
+            Area_Name__c='JAGJIT NAGAR',
+            Area_Type__c='Urban',
+            Taluka__c='NA',
+            Pincode__c='110053',
+            Land_mark__c='Testing',
+            Applicant__c =appl.Id,
+            Status__c='Owned',
+            Address_Type__c='Current',
+            Type__c='Bungalow'
+        ),true);
+        Address__c  addInstanc2 = (Address__c)TestFactory.createSObject(new Address__c(
+            Address_Line_1__c ='TestAddressline112',
+            Address_Line_2__c ='TestAddressline222',
+            Address_Line_3__c ='TestAddressline332',
+            State__c='MAHARASHTRA',
+            City__c='EAST DELHI',
+            Area_Name__c='JAGJIT NAGAR',
+            Area_Type__c='Urban',
+            Taluka__c='NA',
+            Pincode__c='110053',
+            Land_mark__c='Testing',
+            Applicant__c =appl.Id,
+            Status__c='Owned',
+            Address_Type__c='Office',
+            Type__c='Bungalow'
+        ),true);
+        Address__c  addInstanc3 = (Address__c)TestFactory.createSObject(new Address__c(
+            Address_Line_1__c ='TestAddressline112',
+            Address_Line_2__c ='TestAddressline222',
+            Address_Line_3__c ='TestAddressline332',
+            State__c='MAHARASHTRA',
+            City__c='EAST DELHI',
+            Area_Name__c='JAGJIT NAGAR',
+            Area_Type__c='Urban',
+            Taluka__c='NA',
+            Pincode__c='110053',
+            Land_mark__c='Testing',
+            Applicant__c =appl.Id,
+            Status__c='Owned',
+            Address_Type__c='Touch Point',
+            Type__c='Bungalow'
+        ),true);
+    } 
+    
+    @isTest
+    public static void getLADetailsTest(){ 
+        Test.startTest();
+        Loan_Application__c loanAppl = [SELECT Id FROM Loan_Application__c LIMIT 1];
+        Applicant__c app = [SELECT Id FROM Applicant__c LIMIT 1];
+        List<Id> lstAppId = new List<Id>();
+        lstAppId.add(app.Id);
+        PageReference pageRef = Page.CAMReportVFPage;
+        test.setCurrentPageReference(pageRef);
+        pageRef.getParameters().put('id',loanAppl.Id);
+        pageRef.getParameters().put('factor','test');
+        CAMReportVFPageController.recordId = loanAppl.Id;
+        CAMReportVFPageController.applicantIds = lstAppId; 
+        CAMReportVFPageController.getLoan();
+        CAMReportVFPageController.getApplicant();
+        CAMReportVFPageController.handleCreditVerify();
+        CAMReportVFPageController.getApplicants();
+        CAMReportVFPageController.getFinancial();
+        CAMReportVFPageController.getFiStatusRecords();
+        CAMReportVFPageController cam = new CAMReportVFPageController();
+        Test.stopTest();
+    }
+    @isTest
+    public static void testControllerMethods1(){
+        Test.startTest();
+        Loan_Application__c loan = [SELECT Id FROM Loan_Application__c LIMIT 1];
+        CAMReportLWCController.runCAMReport(loan.Id);
+        CAMReportLWCController.getLatestCAMReport(loan.Id);
+        CAMReportLWCController.runCAMReportFromFutureMethod(loan.Id);
+        CAMReportLWCController.getActivePrimaryApplicants(loan.Id);
+        try{
+                    CAMReportLWCController.getCollaterals(loan.Id);
+        }Catch(Exception e){
+            
+        }
+        Test.stopTest();
+    }
+    
+}

@@ -1,0 +1,46 @@
+<template>
+    <template if:true={showpicklist}>
+        <lightning-combobox label={controllerFieldLabel}
+                            name={controllerFieldLabel}
+                            options={controllingPicklist} 
+                            value={selectedControlling}
+                            onchange={fetchDependentValue}
+                            required
+                            class="validate"
+                            >
+        </lightning-combobox>
+        <lightning-combobox data-id="dependedPickVal"
+                            label={dependentFieldLabel}
+                            name={dependentFieldLabel}
+                            options={finalDependentVal} 
+                            value={selectedControlling}
+                            disabled={dependentDisabled}
+                            onchange={handleDependentPicklist}
+                            required={isDependentValueRequired}    
+                            class="validate"                               
+                            >
+        </lightning-combobox>
+        <!--div class="slds-form-element">
+            <template if:true={isDependentValueRequired}>
+                <abbr title="required" class="slds-required">*</abbr>
+            </template>
+            <label class="slds-form-element__label">
+                <span class="">{dependentFieldLabel}</span>
+            </label>
+            <div class="slds-form-element__control">
+                <div class="slds-select_container">
+                    <select required={isDependentValueRequired}
+                            disabled={dependentDisabled}
+                            class="slds-select" 
+                            onchange={handleDependentPicklist} 
+                            >
+                            <option>Select an Option</option>
+                        <template for:each={finalDependentVal} for:item="option">
+                            <option key={option.label} class="uiInputSelectOption" style="overflow-wrap: break-word;" value={option.value}>{option.label}</option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+        </div-->
+    </template>
+</template>

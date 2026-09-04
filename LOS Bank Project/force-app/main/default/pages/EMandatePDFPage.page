@@ -1,0 +1,374 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 13px !important; sans-serif; color :333;}
+            </style>
+            
+            <div style="margin-bottom : 2%">
+              <!--<img src="{!URLFOR($Resource.E_Mandate_Status)}" height="350" width="700" align = "center"/>-->
+            </div>
+        </head>
+        <body class="slds-scope">
+            <div align="left">
+    <table border="1" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th colspan="2" scope="col">
+                    <p style="text-align: center;">Mandate : {!mandateReqId}</p>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <p>Mandate Primary Key</p>
+                </td>
+                <td>
+                    <p>{!mandateReqId}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>UMRN</p>
+                </td>
+                <td>
+                    <p>{!umrn}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Create Date</p>
+                </td>
+                <td>
+                    <p>{!callbackDate}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Create Time</p>
+                </td>
+                <td>
+                    <p>{!callbackTime}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Bank Name</p>
+                </td>
+                <td>
+                    <p>{!repaymentBankName}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Payment Mode</p>
+                </td>
+                <td>
+                    <p>{!loan.Emandate_Payment_Type__c}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Sponsor Bank Code</p>
+                </td>
+                <td>
+                    <p>{!sponserBankCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Sponsor Bank Name</p>
+                </td>
+                <td>
+                    <p>AU SMALL FINANCE BANK</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Account Type</p>
+                </td>
+                <td>
+                    <p>{!loan.Repayment_Account_Type__c}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Account Number</p>
+                </td>
+                <td>
+                    <p>{!loan.Repayment_Account_Number__c}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Bank Code</p>
+                </td>
+                <td>
+                    <p>{!bankCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Corporate Code</p>
+                </td>
+                <td>
+                    <p>{!serviceProviderCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Corporate Name</p>
+                </td>
+                <td>
+                    <p>AU SMALL FINANCE BANK</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Corporate Utility Code</p>
+                </td>
+                <td>
+                    <p>{!serviceProviderCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Service Provider ID</p>
+                </td>
+                <td>
+                    <p>{!Service_Provider_ID}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Corporate Utility Code Name</p>
+                </td>
+                <td>
+                    <p>{!Corporate_Utility_Code_Name}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer Ref Number</p>
+                </td>
+                <td>
+                    <p>{!loan.Application_Id__c}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Rel Reference Number</p>
+                </td>
+                <td>
+                    <p>{!refNumber}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Frequency Code</p>
+                </td>
+                <td>
+                    <p>{!frequencyCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Frequency Type</p>
+                </td>
+                <td>
+                    <p>{!frequencyType}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Start Date</p>
+                </td>
+                <td>
+                    <p>{!loan.First_EMI_Date__c}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>End Date</p>
+                </td>
+                <td>
+                    <p>Until Cancelled</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer Name</p>
+                </td>
+                <td>
+                    <p>{!custName}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer PAN</p>
+                </td>
+                <td>
+                    <p>{!pan}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer LandLine Number</p>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer Cell Number</p>
+                </td>
+                <td>
+                    <p>{!custNumber}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Customer Mail Id</p>
+                </td>
+                <td>
+                    <p><a href="{!custMailTo}">{!custMailId}</a></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Fixed Amount</p>
+                </td>
+                <td>
+                    <p>{!fixedAmount}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Category</p>
+                </td>
+                <td>
+                    <p>{!mandateCategory}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Type</p>
+                </td>
+                <td>
+                    <p>{!mandateType}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Accepted</p>
+                </td>
+                <td>
+                    <p>{!Accptd}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Accepted Ref. No.</p>
+                </td>
+                <td>
+                    <p>{!AccptRefNo}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Reason Code</p>
+                </td>
+                <td>
+                    <p>{!ReasonCode}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Reason Desc.</p>
+                </td>
+                <td>
+                    <p>{!ReasonDesc}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Rejected By</p>
+                </td>
+                <td>
+                    <p>{!RejectBy}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Amount</p>
+                </td>
+                <td>
+                    <p>{!mbAmount}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Status</p>
+                </td>
+                <td>
+                    <p>{!status}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Channel Type</p>
+                </td>
+                <td>
+                    <p>{!Mandate_Channel_Type}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Id</p>
+                </td>
+                <td>
+                    <p></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="text-align: center; font-weight:bold;">Operation</p>
+                </td>
+                <td>
+                    <p style="text-align: center;font-weight:bold;">Username</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate status updated to Active</p>
+                </td>
+                <td>
+                    <p>{!Mandate_Status_Active}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>NPCI Request Send</p>
+                </td>
+                <td>
+                    <p>{!username}</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Mandate Create</p>
+                </td>
+                <td>
+                    <p>{!username}</p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+        </body>
+    </html>
+</apex:page>

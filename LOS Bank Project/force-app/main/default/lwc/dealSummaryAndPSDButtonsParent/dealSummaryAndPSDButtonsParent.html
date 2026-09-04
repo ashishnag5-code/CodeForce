@@ -1,0 +1,11 @@
+<template>
+    
+    <c-ausf_-p-s-d-buttons-component record-id={recordId} ongenerateesignclick={hideDealSummary} onreturntosummary={showDealSummary}></c-ausf_-p-s-d-buttons-component>
+
+    <template if:true={displayDealSummary}>
+        <div class="slds-p-around_small">
+            <c-ausf_-loan-summary-d-d-e_-p-s-d record-id={recordId}></c-ausf_-loan-summary-d-d-e_-p-s-d>
+        </div>
+    </template>
+
+</template>

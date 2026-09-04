@@ -1,0 +1,27 @@
+<template>
+    <div style = "text-align :right;">
+        <template if:true={renderButtons.submitToMaker}>
+            <span style="margin:0.5%;">
+              <lightning-avatar src={submitToOpsMaker} size="large" onclick={handleReturnToMaker}></lightning-avatar>
+            </span>
+        </template>
+        <template if:true={renderButtons.generateButton}>
+            <span style="margin:0.5%;">
+            <lightning-avatar src={submitToOpsMaker} size="large" onclick={handleDocumentGenerate}></lightning-avatar>
+            </span>
+        </template>
+        <template if:true={renderButtons.cancelButton}>
+            <span style="margin:0.5%;">
+               <lightning-avatar src={submitToOpsMaker} size="large" onclick={handleCancelDocument}></lightning-avatar>
+            </span>
+        </template>
+        <template if:true={renderButtons.generateEsignButton}>
+            <span style="margin:0.5%;">
+                <c-generate-esign-component record-id={recordId}></c-generate-esign-component>
+            </span>
+        </template>
+    </div>    
+    <c-ausf_-generate-document-button-l-w-c onrefresh={handleRefresh}></c-ausf_-generate-document-button-l-w-c>
+    <c-ausf_-cancel-documents-button-l-w-c onrefresh={handleRefresh}></c-ausf_-cancel-documents-button-l-w-c>
+    <!--c-ausf_reject-document-button-l-w-c onrefresh={handleRefresh}></c-ausf_reject-document-button-l-w-c-->
+</template>

@@ -1,0 +1,56 @@
+<template>
+    <div class="slds-m-top_medium slds-m-bottom_x-large">
+        <div class="slds-p-around_medium slds-theme_default"> inside component
+          <template if:true={applicantRecord}>
+              <lightning-tile >
+                <dl class="slds-dl_horizontal">
+                  <dt class="slds-dl_horizontal__label"><b>Application Number</b></dt>
+                  <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.Application_Number__c}</dd>
+    
+                  <dt class="slds-dl_horizontal__label"><b>Product</b></dt>
+                  <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.Product__c}</dd>
+    
+                  <dt class="slds-dl_horizontal__label"><b>Loan Number </b></dt>
+                  <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.LAN__c}</dd>
+    
+                  <dt class="slds-dl_horizontal__label"><b>Customer Name</b></dt>
+                  <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Customer_Name__c}</dd>
+    
+                  <dt class="slds-dl_horizontal__label"><b>Customer Type</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.Customer_Type__c}</dd>
+      
+                    <dt class="slds-dl_horizontal__label"><b>Customer Mobile Number</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Mobile_Number__c}</dd>
+    
+                    <dt class="slds-dl_horizontal__label"><b>Application status</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.Stage__c}</dd>
+    
+                    <dt class="slds-dl_horizontal__label"><b>Date</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.CreatedDate}</dd>
+    
+                    <dt class="slds-dl_horizontal__label"><b>RO Name _ Code</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.RO__r.Name}</dd>
+    
+                    <dt class="slds-dl_horizontal__label"><b>RO Mobile Number</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.RO__r.MobilePhone}</dd>
+    
+                    <dt class="slds-dl_horizontal__label"><b>Branch Name _Code</b></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">{applicantRecord.Loan__r.Branch_Name_Code__r.Name}</dd>       
+    
+                    <dt class="slds-dl_horizontal__label"></dt>
+                    <dd class="slds-dl_horizontal__detail slds-tile__meta">
+                      <lightning-button label="view less" 
+                                        icon-name="utility:chevronleft"
+                                        onclick={viewLessHandler}>
+                      </lightning-button>
+                    </dd>
+                </dl>
+              </lightning-tile>
+          </template>
+          <lightning-button label="Back" 
+                            icon-name="utility:chevronleft"
+                            onclick={viewLessHandler}>
+          </lightning-button>
+        </div>
+    </div>
+</template>

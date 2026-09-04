@@ -1,0 +1,64 @@
+<apex:page renderAs="pdf" controller="DRFPDFPageController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+                table tr td{
+                font-weight:bold;
+                }
+            </style>
+        </head>
+        <body class="slds-scope">
+            
+            <p>To,</p>
+            <p style="font-weight:bold;">The Manager,</p>
+            <p>AU Small Finance Bank Limited</p>
+            <p>{!PDFWrapperData.branchName}</p>
+            <p style="font-weight:bold;">Sub: Request for disbursement of the Loan Amount</p>
+            <p>Dear Sir,</p>
+            <p style="text-align: justify;">We thank you for sanctioning the Loan of Rs. {!PDFWrapperData.totalAmount} (Rupees {!PDFWrapperData.totalAmountInWords}) vide Loan Application Form No {!PDFWrapperData.applicationNumber} dated {!PDFWrapperData.consentDate}.</p>
+            <p style="text-align: justify;">We request the Bank to kindly disburse the Loan Amount in the below mentioned person on my/our behalf.</p>
+            <table width="100%" border="1" cellpadding="0" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name Of Account Holder</th>
+                        <th>Account Number</th>
+                        <th>IFSC Code</th>
+                        <th>Bank Name</th>
+                        <th>Net Amount</th>
+                    </tr>
+                
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!PDFWrapperData.paymentRecords}" var="payment">
+                        <tr>
+                            <td>{!payment.Name__c}</td>
+                            <td>{!payment.Account_Number__c}</td>
+                            <td>{!payment.IFSC_Code__c}</td>
+                            <td>{!payment.Bank_Name_PMT__c}</td>
+                            <td>{!payment.Net_Amount__c}</td>
+                        
+                        </tr>
+                    </apex:repeat>
+                
+                </tbody>
+                
+            </table>
+            <p style="text-align: justify;">
+                The Bank may, before such disbursement, deduct the processing fee and other applicable charges from the Loan Amount as per the sanction terms.
+            </p>
+            <p style="text-align: justify;">
+                Further, I/We confirm and agree that the aforesaid disbursement made by the Bank in the aforesaid account pursuant to this request would be considered and deemed to be the disbursement made by the Bank to us/me under the terms of the MITC cum Key Fact Statement.
+            </p>
+            <p>Thanking You</p>
+            <br/>
+            <p>
+                
+            </p>
+            <p>
+                
+            </p>
+        </body>
+    </html>
+</apex:page>

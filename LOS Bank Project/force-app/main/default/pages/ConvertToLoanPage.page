@@ -1,0 +1,27 @@
+<apex:page standardController="Loan_Application__c" showHeader="false" sidebar="false">
+    
+    <!-- This loads the JavaScript file needed to use Lightning Components for Visualforce-->
+    
+    <apex:includeLightning />
+    
+    
+    <!-- div tag act as locator while calling Lightning.createComponent -->
+    
+    <div id="lightning" />
+    
+    <script>
+    
+    $Lightning.use("c:ConvertToLoanApp", function() {
+        
+        $Lightning.createComponent("c:LosWizardComponent",{
+         },
+         "lightning",
+         function(component) {
+             // do some stuff
+             component.set("v.recordId",'{!$CurrentPage.parameters.Id}');
+         });
+    });
+    
+    </script>
+    
+</apex:page>

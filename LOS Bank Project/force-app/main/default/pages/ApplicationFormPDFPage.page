@@ -1,0 +1,243 @@
+<apex:page controller="ApplicationFormPDFController" standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" renderAs="PDF">
+    <html>
+        <head>
+            <style type="text/CSS"> 
+                @page :first {
+                    margin-top: 0in;
+                }
+
+                @page {
+                    margin: 0in;
+                    background-color: #fde2d1;
+                    size: 12in 12in;
+                    margin-bottom: 70px;
+                    margin-top: 50px;
+                    @bottom-center {
+                        content: element(footer);
+                    }
+                }
+
+                body {
+                    margin: 0px;
+                }
+
+                div.footer {
+                    padding: 10px;
+                    display: block;
+                    height: 50px;
+                    background-color: #ea8b3e;
+                    position: running(footer);
+                    width: 12in;
+                }
+
+                .logoAndHeader {
+                    background-color: #4b1b44;
+                    height: 120px;
+                    padding: 40px;
+                    position: relative;
+                    font-family: Arial Unicode MS;
+                    margin-bottom: 30px;
+                }
+
+                .floatRightStyles {
+                    float: right;
+                    padding-top: 5%;
+                }
+
+                .logoStyles {
+                    width: 200px;
+                    height: 100px;
+                }
+
+                .floatLeftStyles {
+                    float: left;
+                    position: absolute;
+                    bottom: 25px;
+                    left: 25px;
+                }
+
+                .headerStyles {
+                    font-size: 20px;
+                    color: white;
+                    font-weight: bolder;
+                    font-family: sans-serif;
+                    font-weight: bold;
+                }
+
+                .subHeaderStyles {
+                    font-size: 12px;
+                    color: white;
+                }
+
+                .mainContentDiv {
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    font-family: Arial Unicode MS;
+                }
+
+                .subHeadingStyles {
+                    width: 100%;
+                    background-color: #ea8b3e;
+                    padding: 5px;
+                    color: #ffffff;
+                    font-size: 13px;
+                    font-family: sans-serif;
+                    font-weight: bold;
+                }
+
+                .whiteUncheckedBox {
+                    width: 15px;
+                    height: 15px;
+                    background-color: #ffffff;
+                }
+
+                .orangeUncheckedBox {
+                    width: 15px;
+                    height: 15px;
+                    background-color: #fde2d1;
+                }
+
+                .whiteBackground {
+                    width: auto;
+                    height: 15px;
+                    background-color: #ffffff;
+                    padding-left: 2px;
+                    padding-right: 2px;
+                }
+
+                .checkBoxStyles {
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .checkBoxStylesSmallest {
+                    width: 6px;
+                    height: 6px;
+                }
+
+                td, th {
+                    font-family: 'Quicksand', sans-serif;
+                    font-size : 12px;
+                    padding: 1px;
+                }
+
+                .verticalImageStyle {
+                    height: 130px;
+                    width: 15px;
+                }
+
+                .verticalImageStyleLong {
+                    height: 180px;
+                    width: 15px;
+                }
+
+                .verticalImageStyleShort {
+                    height: 50px;
+                    width: 15px;
+                }
+
+                .purpleFont {
+                    color: #4b1b44;
+                    font-family: sans-serif;
+                    font-weight: bold;
+                    font-size: 13px;
+                }
+
+                .pslTextInBold {
+                    font-family: sans-serif;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+
+                .pslTextInNormalFont {
+                    font-family: sans-serif;
+                    font-size: 12px;
+                }
+
+                .whatsAppIconStyles {
+                    width: 30px;
+                    height: 30px;
+                }
+
+                table {
+                    page-break-inside: avoid;
+                }
+            </style>
+        </head>
+        <div>
+            <div class="logoAndHeader">
+                <div class="floatLeftStyles">
+                    <div class="headerStyles">LOAN APPLICATION FORM</div>
+                    <div class="subHeaderStyles"></div>
+                </div>
+                <div class="floatRightStyles">
+                    <apex:image styleclass="logoStyles" url="{!URLFOR($Resource.ApplicationForm, 'Logo.png')}"/>
+                </div>
+            </div>
+            <body >  
+                <div class="footer" name="footer"></div>
+                <div class="mainContentDiv">
+                    <!-- FACILITY DETAILS SECTION STARTS HERE -->
+                    <c:applicationDetails loanRecord="{!loanRecord}" dateStringList="{!dateStringList}"/>
+                    <br/>
+                    <!-- FACILITY DETAILS SECTION ENDS HERE -->
+                    <!-- CO-APPLICANT DETAILS BEGINS HERE -->
+                    <c:applicantDetails applicant="{!primaryApplicant}" currentAddress="{!addressMap[primaryApplicant.Id]['Current']}"
+                        permanentAddress="{!addressMap[primaryApplicant.Id]['Permanent']}" applicantFinancial="{!applicantFinancialsMap[primaryApplicant.Id]}"
+                        applicantPhoto="{!mapApplicantImage[primaryApplicant.Id]}" annualIncome="{!incomeMap[primaryApplicant.Id]}" workExperienceMap="{!workExpMap[primaryApplicant.Id]}"
+                        officeAddress="{!addressMap[primaryApplicant.Id]['Office']}" beneficialOwners="{!beneficialOwners}" entityProofMap="{!entityProofMap}"
+                        loan="{!loanRecord}"/>
+                    <!-- CO-APPLICANT DETAILS BEGINS HERE - CALL THIS IN A REPEAT FOR CO-APP LIST - USING PRIMARY ONLY FOR TESTING -->
+                    
+                    <apex:repeat value="{!coApplicant}" var="coApp">           
+                        <c:applicantDetails applicant="{!coApp}" applicantFinancial="{!applicantFinancialsMap[coApp.Id]}"
+                            currentAddress="{!addressMap[coApp.Id]['Current']}" permanentAddress="{!addressMap[coApp.Id]['Permanent']}"
+                            applicantPhoto="{!mapApplicantImage[coApp.Id]}" annualIncome="{!incomeMap[coApp.Id]}" workExperienceMap="{!workExpMap[coApp.Id]}"
+                            officeAddress="{!addressMap[coApp.Id]['Office']}" beneficialOwners="{!blankBO}" entityProofMap="{!entityProofMap}"
+                            loan="{!loanRecord}"/>
+                    </apex:repeat>
+                    <!-- REFERENCES DETAILS STARTS HERE -->
+                    <c:referenceDetails references="{!references}"/>
+                    <!-- REFERENCES SECTION ENDS HERE -->
+                    <!-- PSL SECTION STARTS HERE -->
+                    <c:pslDetails bsrDetails="{!bsrDetails}"/>
+                    <!-- PSL DETAILS END HERE -->
+                    <div>
+                        <!-- GUARANTOR DETAILS BEGINS HERE -->
+                        <!-- THIS SHOULD GO IN A REPEAT -->
+                        <p class="subHeadingStyles">E. GUARANTOR&apos;S DETAILS (Leave space between two words)</p>
+                        <apex:repeat value="{!guarantors}" var="applicant"> <!--need to replace with gurantors-->
+                            <c:guarantorDetails applicant="{!applicant}" addressMap="{!addressMap}" entityProofMap="{!entityProofMap}" mapApplicantImage="{!mapApplicantImage}"/>
+                        </apex:repeat>
+                        <!-- GUARANTOR SECTION ENDS HERE -->
+    
+                        <!-- SUB SECTIONS FOR EXISTING LOANS & VEHICLES STARTS HERE -->
+                        <c:existingLoanDetails lstFleet="{!lstFleet}" bankAccounts="{!bankAccounts}"/>
+                        <!-- SUB SECTIONS FOR EXISTING LOANS & VEHICLES END HERE -->
+    
+                        <!-- COLLATERAL DETAILS START HERE -->
+                        <!--yash change-->
+                        <c:collateralDetails collateral="{!collateral}" lstPropertyOffered="{!lstPropertyOffered}" marginMoney="{!marginMoneyStr}"/>
+                        <!-- COLLATERAL DETAILS END HERE -->
+    
+                        <!-- DOCUMENT CHECKLIST SECTION STARTS HERE -->
+                        <!--yash change-->
+                        <p class="subHeadingStyles">J. DOCUMENT CHECKLIST</p>
+                        <c:documentDetails documents="{!documentChecklists}"/>
+                        <!-- DOCUMENT CHECKLIST ENDS HERE -->
+                        
+                        <!-- DETAILS OF FEES & CHARGES -->
+                        <!--yash change-->
+                        <c:feeDetails loanRecord="{!loanRecord}"/>
+                        <!-- DETAILS OF FEES & CHARGES ENDS HERE -->
+    
+                        <!-- DECLARATION AND OTHER DETAILS START HERE -->
+                        <!--yash change-->
+                        <c:declaration declarationWrap="{!declarationWrap}" applicant="{!primaryApplicant}"/>
+                        <!-- DECLARATION AND OTHER DETAILS END HERE -->
+                    </div>
+                </div>
+            </body>
+       </div> 
+    </html>
+</apex:page>

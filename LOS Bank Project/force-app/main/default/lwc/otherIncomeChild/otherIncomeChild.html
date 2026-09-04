@@ -1,0 +1,184 @@
+<template>
+    
+    <div class="slds-border_top">
+        <div class="slds-p-top_medium">
+          <lightning-card>
+                <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                    <lightning-accordion-section name="A" label='OTHER INCOME' class="accordClass">
+                        <template if:true={edit}>
+                            <span slot="actions">
+                                <lightning-icon title="Edit Other Income Detail" 
+                                icon-name="action:edit" size="x-small" 
+                                alternative-text="" 
+                                access-key={index}
+                                class="slds-m-right_small"
+                                onclick={handleEdit}></lightning-icon>
+                            </span>
+                            <!-- Added in R2-->
+                            <template if:true={isDelete}>
+                            <span slot="actions">
+                                <lightning-icon title="Delete Other Income Detail" 
+                                icon-name="action:delete" size="x-small" 
+                                alternative-text="" 
+                                access-key={index}
+                                class="slds-m-right_small"
+                                onclick={handleDeleteRow}></lightning-icon>
+                            </span>
+                             </template>
+                        </template>
+
+                        <!--<template if:false={item.readOnly}>
+                            <template if:true={displayButtons}>
+                                        <span slot="actions">
+                                            <lightning-icon title="Delete Other Income Detail" 
+                                            icon-name="action:close" size="x-small" 
+                                            alternative-text="" 
+                                            data-id="icon"
+                                            access-key={index}
+                                            class="slds-m-around_small"
+                                            onclick={handleClose}></lightning-icon>
+                                        </span>
+                                        </template>
+                                    
+                        </template>
+                        <template if:true={item.edit}>
+                                    <span slot="actions">
+                                        <lightning-icon title="Edit Other Income Detail" 
+                                        icon-name="action:edit" size="x-small" 
+                                        alternative-text="" 
+                                        access-key={index}
+                                        class="slds-m-around_small"
+                                        onclick={handleEdit}></lightning-icon>
+                                    </span>
+                        </template>-->
+
+                        <template if:true={showRecordViewForm}>
+                            <div class="slds-form">
+                                <lightning-layout multiple-rows>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Other Income</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text"  readonly="" value={Other_Income_Picklist__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <template if:true={isIncomeTypeOther}>
+                                            <div class="slds-form-element slds-form-element_stacked">
+                                                <label class="slds-form-element__label" for="stacked-input-id-01">Other</label>
+                                                <div class="slds-form-element__control">
+                                                  <input type="text"   value={Other_If_Any__c} readonly="" class="slds-input" />
+                                                </div>
+                                              </div>
+                                            </template>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Monthly Income</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text"  readonly="" value={Monthly_Income__c} class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Method of Assessment</label>
+                                            <div class="slds-form-element__control">
+                                              <input type="text"  value ={Method_Of_Assesment__c} readonly="" class="slds-input" />
+                                            </div>
+                                          </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>                 
+                        </template>
+
+                        <template if:false={showRecordViewForm}>
+                            <lightning-layout multiple-rows>
+                        
+                                    
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                    <lightning-combobox name="Other_Income_Picklist__c"
+                                    label="Other Income"
+                                    options={otherIncomeOptions}
+                                    value={Other_Income_Picklist__c}
+                                    onchange={handleChange}
+                                    class="component slds-hide"
+                                    data-id="Other_Income_Picklist__c"
+                                    access-key={index}
+                                    read-only={readOnly}
+                                    ></lightning-combobox>
+                                </lightning-layout-item>
+
+                                <template if:true={isIncomeTypeOther}>
+                                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                        
+                                            <lightning-input name="Other_If_Any__c" type="text" 
+                                                            label="Other" value={Other_If_Any__c} 
+                                                            class="component"
+                                                            read-only={readOnly}
+                                                            onchange={handleChange} 
+                                                            data-id="Other_If_Any__c" access-key={index}></lightning-input>
+                                        
+                                    </lightning-layout-item>
+                                </template>
+
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                    <lightning-input type="number" label="Monthly Income" read-only={readOnly}
+                                                        class="component slds-hide"
+                                                        value={Monthly_Income__c} name="Monthly_Income__c"
+                                                        onchange={handleChange} data-id="Monthly_Income__c" 
+                                                        access-key={index}></lightning-input>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                    <lightning-combobox name="Method_Of_Assesment__c"
+                                                        read-only={readOnly}
+                                                        label="Method of Assessment"
+                                                        options={methodOfAssessmentOptions}
+                                                        value={Method_Of_Assesment__c}
+                                                        onchange={handleChange}
+                                                        class="component slds-hide"
+                                                        data-id="Method_Of_Assesment__c" access-key={index}></lightning-combobox>
+                                </lightning-layout-item>
+
+            
+                            
+                        </lightning-layout>
+
+                        </template>
+                        <div class="slds-align--absolute-center">
+                            <template if:false={edit}>
+                                <!--<template if:false={displayButtons}>
+                                    <lightning-icon title="Close Other Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                                     access-key={index}></lightning-icon>
+                                 </template>
+                                 <template if:true={displayButtons}>
+                                     <lightning-icon  title="Delete Other Income" class="slds-m-around_small" icon-name="action:delete" size="x-small" alternative-text="" id={index} 
+                                     access-key={item.idVal} onclick={handleDeleteRow}></lightning-icon>
+                                 </template>-->
+                                <!-- <lightning-icon title="Close Other Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                                     access-key={index}></lightning-icon>
+                                 <lightning-icon title="Save Other Income" class="slds-m-around_small" icon-name="action:approval" size="x-small" alternative-text="" id={index} 
+                                 access-key={index} onclick={saveIncome}></lightning-icon>-->
+                                 <lightning-icon title="Close Other Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                                 access-key={index}></lightning-icon> 
+                                 <lightning-icon  title="Save Other Income" class="slds-m-around_small" icon-name="action:approval" size="x-small" alternative-text="" id={index} 
+                                 access-key={index} onclick={saveIncome}></lightning-icon>
+                                 <!--<lightning-button label="Close Other Income Detail" variant="brand" title="Close Other Income Detail"  id={index} onclick={handleClose}  access-key={index}
+                                     class="slds-m-left_x-small buttonClass disabled-submit-button">
+                                 </lightning-button>-->
+                                 <!--<lightning-button label="Save Other Income"  class="buttonClass slds-m-left_x-small disabled-submit-button" variant="brand" id={index} 
+                                 access-key={index}
+                                 onclick={saveIncome}></lightning-button>-->
+                            </template>
+                            
+                        </div>
+                                
+                            </lightning-accordion-section>
+                
+                        </lightning-accordion>
+            </lightning-card>
+        </div>
+    </div>
+</template>

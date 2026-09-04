@@ -1,0 +1,11 @@
+.verify-button{
+        margin-top: 20px;
+   }
+
+.term.slds-text-title{
+    text-align: left !important;
+    font: normal normal normal 13px/20px Roboto;
+    letter-spacing: 0px !important;
+    color: #757575 ;
+    overflow-wrap: anywhere;
+   }

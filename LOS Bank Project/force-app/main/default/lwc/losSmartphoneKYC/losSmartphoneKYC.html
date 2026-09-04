@@ -1,0 +1,56 @@
+<template>
+    <lightning-card title="KYC - Smartphone" icon-name="standard:lead">
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template-->
+        <template if:false={showOCRDetails}>
+        <div class="slds-m-around_small">
+            <div class="slds-m-around_small slds-m-bottom_large">
+                <a onclick={showKYCOptions} class="slds-float--right slds-m-right_small">Back
+                    <!--<lightning-icon icon-name="utility:back" onclick={showKYCOptions} class="slds-float--right"
+                        size="x-small" alternative-text="Close" title="Close"></lightning-icon>-->
+                </a>
+            </div><br />
+             <lightning-layout multiple-rows class="slds-p-horizontal_small slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="7"
+                    class="slds-m-bottom_medium" flexibility="auto">
+                    <lightning-input type="text" value={aadhaarNumberOnUi} disabled="true" label="Aadhaar Number/VID’"></lightning-input>
+                    <template if:true={consent}>
+                        <c-los-generic-document-upload isliveonly={trueValue} isdocmanager={trueValue} show-upload-component={trueValue}  show-input-box={falseValue} loan-id ="" applicant-id={applicant.Id} doc-name ={label.DocumentAadhaar} ondocumentsuccess={handleSuccessUpload} is-model-needed={falseValue} uploadtypename ={label.DocumentAadhaar} isapplicant-page={falseValue} hidefiledetails={trueValue}></c-los-generic-document-upload>
+                    </template>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="7"
+                    class="slds-m-top_medium" flexibility="auto">
+                    <c-los-k-y-c-consent kyctype={kyc} onsetconsent={updateConsent} consent={consent}></c-los-k-y-c-consent>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </template>
+    </lightning-card>
+    <template if:true={showOCRDetails}>
+    	<lightning-card icon-name="standard:account"
+			class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+			<template if:true={isloading}>
+				<lightning-spinner alternative-text="Loading"></lightning-spinner>
+			</template>
+			<template for:each={dataValues} for:item="data">
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+					<div class="slds-size_1-of-2">
+						<b>{data.key}</b>
+					</div>
+					<div class="slds-size_1-of-2 textContent">
+						{data.value}
+					</div>
+				</div>
+			</template>
+			<div class="slds-align_absolute-center slds-var-m-top_large">
+				<lightning-button label="Ok" disabled={disableOkButton} variant="brand" title="Ok" onclick={okClick}
+					class="slds-var-m-left_x-small">
+				</lightning-button>
+				<!--<lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+                </lightning-button>-->
+			</div>
+		</lightning-card>
+	</template>
+</template>

@@ -1,0 +1,33 @@
+.buttonIn {
+    width: 100%;
+    position: relative;
+    border: none;
+}
+.button {
+    
+    position: absolute;
+    top: 0px;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    cursor: pointer;
+    transform: translateX(2px);
+    right: 2px;
+}
+.buttonClass{
+    --sds-c-button-neutral-color-background: #f37435;
+    --sds-c-button-brand-color-background: #f37435;
+    --sds-c-button-text-color: #FFF2F0;
+}
+.my-card{
+    display: block;
+    width: 100%;
+}
+
+.divComp{
+    width: 100%;
+}
+.textContent{
+    white-space: initial;
+}

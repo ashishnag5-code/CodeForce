@@ -1,0 +1,44 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <h4 style="text-align: center;">
+                Annexure I
+            </h4>
+            <p style="text-align: center;">(To be printed on stamp Paper)</p>
+            <p>To,<br/>
+            The Branch Manager<br/>
+            AU Small Finance Bank Ltd.</p>
+            <p>Subject: Payment of Loan amount in favor of {!btPayment.Beneficiary_Name__c}</p>
+            <p>Dear Sir,</p>
+            <p>Refer to my loan application no. {!loan.Application_Id__c} dated {!createdDate} for finance on
+vehicle model {!collateral.Make__c} {!collateral.Model__c} bearing Registration no. {!collateral.Registration_Number__c}, I
+would like to inform you that I have purchased the above said vehicle from
+___________________ S/O _______________ resident
+_____________________________________________ Registered owner
+of the said vehicle is {!collateral.Current_Owner_Name__c}
+S/O____________________.</p>
+            <p>I request you kindly make the payment of Rs. <apex:outputField value="{!btPayment.Net_Amount__c}"/>
+from the sanctioned loan amount of Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>,
+I do not have any objection in this.</p>
+            <p>Any dispute arises due to any reason related to the above said vehicle,
+should be my own responsibility. I will not hold EMI repayment due to any
+legal dispute in transfer of vehicle or and legal case related to the above. I
+also confirm that the above said vehicle is in my possession.</p>
+            <p>Thanking You<br/><br/><br/><br/>
+            Signature<br/>
+            {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}<br/>
+            {!customerCurrentAddress.Address_Line_1__c},&nbsp;
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_2__c))}">{!customerCurrentAddress.Address_Line_2__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_3__c))}">{!customerCurrentAddress.Address_Line_3__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.District__c))}">{!customerCurrentAddress.District__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.City__c))}">{!customerCurrentAddress.City__c},&nbsp;</apex:outputText>{!customerCurrentAddress.State__c},&nbsp;{!customerCurrentAddress.Pincode__c}
+            </p>
+        </body>
+    </html>
+</apex:page>

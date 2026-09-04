@@ -1,0 +1,649 @@
+<apex:page >
+            <div style=" height:150px;width:100vw;">
+                <div style="position:absolute;">
+                    <h3>
+                        LOANAPPLICATIONFORM
+                    </h3>
+                    <p>
+                        Please fill the form in CAPITAL LETTERS with BLACK inc only
+                    </p>
+                </div>
+                <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align="right" />
+
+
+                <!--apex:image url="{!URLFOR($Resource.AUBankLogoSanction)}" style="margin-left : 17%; text-align:right;" height="100" width="150"></apex:image-->
+            </div>
+            <p style="width:100%;background-color:#fc9403;padding:2px;color:#ffffff;font-size:13px;">
+                APPLICATION DETAILS
+            </p>
+            <!-- <div class="footer" name="footer">
+                <apex:image url="{!URLFOR($Resource.SantionFooter)}" width="300%" height="90"></apex:image>
+            </div> -->
+            <div align="left">
+                <table width="100%">
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image> WHEELS
+                        </th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Commercial Vehicle
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Auto
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Two- Wheeler
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Tractor
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Construction Equipment
+                        </td>
+                        <td class="applicationFormtdtr"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>New
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Used
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Re-Finance
+                        </td>
+                        <td class="applicationFormtdtr"></td>
+                        <td class="applicationFormtdtr"></td>
+                        <td class="applicationFormtdtr"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>SECURED BUSINESS LEADING
+                        </th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Overdraft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Term Loan
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Dropline Overdraft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Other
+                        </td>
+                        <td class="applicationFormtdtr"></td>
+                        <td class="applicationFormtdtr"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image> BUSINESS BANKING
+                        </th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Case Draft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Term Loan
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Letter of Credit
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Bank Guarantee
+                        </td>
+                        <td class="applicationFormtdtr"></td>
+                        <td class="applicationFormtdtr"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Overdraft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Dropline Overdraft
+                        </td>
+                        <td class="applicationFormtdtr" colspan="3">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Other ______________________________________
+                        </td>
+                        <td class="applicationFormtdtr" style="width:15%;">Date ___________<br />
+                            <apan style="font-size : 8px;">(All fields are mandatory)</apan>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>AGRI BUSINESS
+                        </th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Case Draft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Term Loan
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Letter of Credit
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Bank Guarantee
+                        </td>
+                        <td class="applicationFormtdtr"></td>
+                        <td class="applicationFormtdtr"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Overdraft
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Dropline Overdraft
+                        </td>
+                        <td class="applicationFormtdtr" colspan="3">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Other _______________________________________
+                        </td>
+                        <td class="applicationFormtdtr" style="width:15%;"></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>HOME LOAN
+                        </th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Purchase
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Extension/ Renovation
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Self Construction
+                        </td>
+                        <td class="applicationFormtdtr" colspan="3">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px;"></apex:image>Other _________________________________________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th colspan="7">CREDIT LOAN FACILITIES APPLIED FOR
+                            ____________________________________________________________________________</th>
+                    </tr>
+
+
+                </table>
+                <div style="height:90px;">
+
+                    <table width="50%" border="1" cellpadding="0" cellspacing="0" style="float:left;margin-top:25px;">
+                        <tr class="applicationFormtdtr">
+                            <th>Type of Facilities</th>
+                            <th>Amount(INR)</th>
+                            <th>Tenure (Months)</th>
+                            <th>Collateral/ Security Offred (yes/no)</th>
+                        </tr>
+                        <tr class="applicationFormtdtr">
+                            <td class="applicationFormtdtr">Vehicle Loan/ Term Loan</td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                        </tr>
+                        <tr class="applicationFormtdtr">
+                            <td class="applicationFormtdtr">Cash Credit/ Overdue</td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                        </tr>
+                        <tr class="applicationFormtdtr">
+                            <td class="applicationFormtdtr">Home Loan</td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                        </tr>
+                    </table>
+                    <table width="49%" border="1" cellpadding="0" cellspacing="0" style="float:right;margin-top:25px">
+                        <tr class="applicationFormtdtr">
+                            <th>Type of Facilities</th>
+                            <th>Amount(INR)</th>
+                            <th>Tenure (Months)</th>
+                            <th>Collateral/ Security Offred (yes/no)</th>
+                        </tr>
+                        <tr class="applicationFormtdtr">
+                            <td class="applicationFormtdtr">Letter of Credit/ Bank Guarantee</td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                        </tr>
+                        <tr class="applicationFormtdtr">
+                            <td class="applicationFormtdtr">Other</td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                            <td class="applicationFormtdtr"></td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <br />
+                <p style="width:100%;background-color:#fc9403;padding:2px;color:#ffffff;font-size:13px; float:left;">
+                    A. APPLICATION DETAILS (Leave space between two words)
+                </p>
+
+                <table width="100%" style="margin-top:50px">
+                    <tr class="applicationFormtdtr">
+                        <th>Existing Customer</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Yes
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> No
+                            Account. No/CIF No. ____________________________________ CKYCR No.__________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Constitution</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Individual
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Proprietorship
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Partnership Firm
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Pvt. Ltd.
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Public Ltd.
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Others
+                            ______________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Name</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            ____________________________________________________________________________________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Father's OR <br />
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Spouse Name
+                        </th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            ___________________________________________________________________________________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Mother's Name</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            ___________________________________________________________________________________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Mobile No. +91</th>
+                        <th colspan="2">
+                            ___________________
+                            Telephone No.(R) ______ ______________
+                            Telephone No.(O) ______ ______________
+                        </th>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Email ID</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            ____________________________________________________________________________________________________
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Religion</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Hindu
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Muslim
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Sikh
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Christian
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Buddhist
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Zorastrian
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Other ____________
+                            Gender <span style="border:1px solid gray; padding:0px 2px; margin-left:5px;">M</span> <span
+                                style="border:1px solid gray; padding:0px 2px; margin-left:7px;">F</span> <span
+                                style="border:1px solid gray; padding:0px 2px; margin-left:7px;">T</span>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Category</th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> General
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> SC
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> ST
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> OBC
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Other ______________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th style="width:20%">Marital Status</th>
+                        <td class="applicationFormtdtr" style="width:70%">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Married
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Single
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Widow(er)
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Divorced
+                            <strong>Nationality</strong>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Indian
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Other _____________
+                        </td>
+                        <td class="applicationFormtdtr" style="width:5%">
+
+                            <strong><span>Date of Birth/ Incorporation______________</span></strong>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr" colspan="3">
+                            <strong>Place of Birth/ Incorporation_____________________________</strong> <strong>Date of
+                                Commencement of Business _____________________________</strong>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>PAN No. </th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            _____________________
+                            Form 60
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>
+                            &nbsp;&nbsp;&nbsp;
+                            <Strong>Residential Status</Strong>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Resident
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Non-Resident
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>PIO
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>OCI
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Foreign National
+                            <br />
+                            <span style="font-size:8px;">(please provide form 49A if PAN applied)</span>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Education. </th>
+                        <td class="applicationFormtdtr" colspan="2">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Illiterate
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Undergraduate
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Graduate
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Postgraduate
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Professional degree
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image> Others__________________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr" colspan="3">
+                            <strong>Are you related party to AU Small Finance Bank, as Defined under GST</strong>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Yes
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>No
+
+                            <strong>*Do you want this account to be seeded with Aadhaar</strong>
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Yes
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>No
+                        </td>
+                    </tr>
+
+                </table>
+                <br /><br /><br /><br /><br /><br /><br />
+                <table width="100%">
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="6" style="background:gray;color:#ffffff;"><span
+                                style="transform:rotate(90deg);">A<br />D<br />D<br />R<br />E<br />S<br />S</span></th>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Address Line 1</td>
+                        <td class="applicationFormtdtr">
+                            ___________________________________________________________________________________________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Landmark</td>
+                        <td class="applicationFormtdtr">_____________________________________________ City
+                            ________________________________________</td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">District</td>
+                        <td class="applicationFormtdtr">___________________________ State ___________________________
+                            PIN Code ____________________</td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Country</td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>India
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>
+                            Others_____________ &nbsp;&nbsp; Number of years of stay at current city
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of years of stay at current Residence
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Property Status</td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Self-Owned
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Rented
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Company Provided
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Parental
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Others________________
+
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="5" style="background:gray;color:#ffffff;"><span
+                                style="transform:rotate(90deg);">A<br />D<br />D<br />R<br />E<br />S<br />S</span></th>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Address Line 1</td>
+                        <td class="applicationFormtdtr">
+                            ___________________________________________________________________________________________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Landmark</td>
+                        <td class="applicationFormtdtr">_____________________________________________ City
+                            ________________________________________</td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">District</td>
+                        <td class="applicationFormtdtr">___________________________ State ___________________________
+                            PIN Code ____________________</td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">Country</td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>India
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>
+                            Others_____________ &nbsp;&nbsp; Number of years of stay at current city
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number of years of stay at current Residence
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </td>
+                    </tr>
+
+                </table>
+
+                <h4>
+                    KYC
+                    DETAILS---------------------------------------------------------------------------------------------------------------
+                </h4>
+                <table width="100%">
+                    <tr class="applicationFormtdtr">
+                        <th rowspan="2">Proof of Identity</th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Passport
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Drivind Licence
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Aadhaar
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>PAN
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Voter Id
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Others_________________
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">
+                            ID No.______________________________________________________
+                        </td>
+                        <td class="applicationFormtdtr">
+                            Expiry Date ___________________ (If applicable)
+                        </td>
+
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th>Proof of Address</th>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Passport
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Drivind Licence
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Aadhaar
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>PAN
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Voter Id
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Others_________________
+                        </td>
+                    </tr>
+
+                </table>
+                <table width="100%">
+                    <tr class="applicationFormtdtr">
+                        <th colspan="5">
+                            Occupation---------------------------------------------------------------------------------------------------------------
+                        </th>
+                        <td class="applicationFormtdtr" rowspan="5"><span></span></td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Salaried
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Govt.<br />
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Private <br />
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Public <br />
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Self-Employed<br />
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Agri
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Self-employed<br /> Professional
+                        </td>
+                        <td class="applicationFormtdtr">
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Retired
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Student
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Housewife
+                            <apex:image url="{!URLFOR($Resource.checkbox_unchecked)}" height="10" width="10"
+                                style="margin-right:2px; margin-left:2px;"></apex:image>Others _________
+                            <br />
+                            <strong>Annual Income (INR) ___________________________</strong>
+                        </td>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <th colspan="5">EMPLOYER/ BUSINESS DETAILS
+                            ------------------------------------------------------------------------------------------------
+                        </th>
+                    </tr>
+                    <tr class="applicationFormtdtr">
+                        <td class="applicationFormtdtr" colspan="3">Entity/ Employer Name
+                            ____________________________________</td>
+                        <td class="applicationFormtdtr">Total Experiance <br />in Job/Business</td>
+                        <td class="applicationFormtdtr"> __ __ Years__ __Months</td>
+                    </tr>
+                </table>
+            </div>
+</apex:page>

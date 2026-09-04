@@ -1,0 +1,388 @@
+<template>
+    <c-common-toast></c-common-toast>
+
+    <template if:true={IsFiComponentActive}>
+
+      <article class="slds-card">
+        <div class="slds-page-header">
+          <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+              <div class="slds-media">
+                <div class="slds-media__figure">
+                  <span class="slds-icon_container slds-icon-standard-opportunity">
+                    <lightning-icon icon-name="standard:today" alternative-text="Approved"></lightning-icon>
+                  </span>
+                </div>
+                <div class="slds-media__body">
+                  <div class="slds-page-header__name">
+                    <div class="slds-page-header__name-title">
+                      <h1>
+                        <span class="slds-page-header__title slds-truncate">Field Investigation</span>
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                  <div class="slds-page-header__controls">
+                    <div class="slds-page-header__control">
+                      <ul class="slds-button-group-list">
+                        <li>
+                          <template if:false={isMobile}>
+                            <lightning-button variant="brand" data-id="printButton" class="slds-m-top_small buttonColor" label={label.fiPrintButton}
+                                              onclick={handlePrint}>
+                            </lightning-button>
+
+                          </template>
+                          
+                          <template if:true={isPermissionSetCompleted}>
+                            <c-field-investigation-agent-mapping record-id={recordId} 
+                                                               object-api-name={objectApiName} 
+                                                               is-retrigger-permission={isRetriggerPermissionGranted}
+                                                               is-reassign-permission={isReassignPermissionGranted}
+                                                               application-record-type={vehicleType}
+                                                               ></c-field-investigation-agent-mapping>
+
+                            <c-field-investigation-retrigger application-stage={applicationStage} object-api-name = {objectApiName} record-id={recordId}  is-reassign-permission={isReassignPermissionGranted} is-retrigger-permission={isRetriggerPermissionGranted}></c-field-investigation-retrigger>
+                            <template if:false = {isFiProfile}>
+                              <c-ausf_-send-back-field-investigation record-id={recordId}></c-ausf_-send-back-field-investigation>
+                            </template>
+                            <template if:true={isFiProfile}>
+                              <template if:false={isTwoWheelerFI}>
+                                <c-ausf_-reject_-cancel-f-i record-id={recordId}></c-ausf_-reject_-cancel-f-i>
+
+                              </template>
+                              
+
+                            </template>
+                             
+
+                          </template>
+                          
+
+                          
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="slds-card__body slds-card__body_inner">
+          <template if:true={blnSavedSuccess}>
+            <article class="slds-card" style="color:green;padding:5px;text-align:center">
+              <div class="slds-card__body slds-card__body_inner">
+                  <h3>{errorMsg}</h3>
+                </div>
+              </article>
+          </template>
+          <template if:false={blnSavedSuccess}>
+            <lightning-record-edit-form object-api-name="Field_Investigation__c" onsuccess={handleSuccess}
+                                        onsubmit={onSubmitHandler} 
+                                        record-id={recordId} 
+                                        onload={handleOnLoad} 
+                                        onerror={handlError}>
+              <div if:true={isLoaded}>
+                <lightning-spinner alternative-text="Loading..." variant="brand">
+                </lightning-spinner>
+              </div>
+              <lightning-messages>
+              </lightning-messages>
+
+
+              <lightning-accordion active-section-name={section} onsectiontoggle={handleSectionToggle} allow-multiple-sections-open>
+                <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+                  <!--Basic Details Section-->
+                    <lightning-accordion-section name="Basic Details" label="Basic Details" class="accordClass">
+                      <lightning-output-field field-name='Loan_Application__c' label="number"></lightning-output-field>
+                      <lightning-output-field field-name='FI_Allocation_Date_Time__c'></lightning-output-field>
+                      <lightning-output-field field-name='FI_Submission_Date_Time__c'></lightning-output-field>
+
+
+                      <template if:false={checkCustomerTypeForIndividual}>
+                        <lightning-output-field field-name='Company_Name__c'></lightning-output-field>
+                        <lightning-output-field field-name='Date_of_Establishment__c'></lightning-output-field>
+                        <lightning-output-field field-name='Key_Contact_Name__c'></lightning-output-field>
+                        <lightning-output-field field-name='Mobile_No__c'></lightning-output-field>
+                        <div class='slds-form-element slds-form-element_horizontal slds-is-editing '>
+                          <label class="slds-form-element__label slds-m-left_xx-small">Name of {applicantType}</label>
+                          <lightning-output-field field-name='Name_of_Party__c' variant="label-hidden" class="slds-m-left_xx-small"></lightning-output-field>
+                        </div>
+                        <!--<lightning-output-field field-name='Applicant_Type__c'></lightning-output-field>-->
+                        <lightning-output-field field-name='Branch_Name_Code_Formula__c'></lightning-output-field>
+                        <lightning-output-field field-name='Proposed_vehicle__c'></lightning-output-field>
+                        <lightning-output-field field-name='Loan_Amount__c'></lightning-output-field>
+                        <lightning-output-field field-name='Loan_Type__c'></lightning-output-field>
+                        <lightning-output-field field-name='LandMark__c'></lightning-output-field>
+                        <lightning-output-field field-name='Type_of_address__c'></lightning-output-field>
+
+                        <lightning-output-field field-name='Full_Allocated_Address__c'></lightning-output-field>
+                        <!--lightning-output-field field-name='Loan_Type__c'></lightning-output-field-->
+                        <lightning-output-field field-name='Area_Name__c'></lightning-output-field>
+                      </template>
+
+
+                      <template if:true={checkCustomerTypeForIndividual}>
+                        <div class='slds-form-element slds-form-element_horizontal slds-is-editing '>
+                          <label class="slds-form-element__label slds-m-left_xx-small">Name of {applicantType}</label>
+                          <lightning-output-field field-name='Name_of_Party__c' variant="label-hidden" class="slds-m-left_x-small"></lightning-output-field>
+                        </div>
+                        <!-- <lightning-output-field field-name='Applicant_Type__c'></lightning-output-field>-->
+                        <lightning-output-field field-name='DOB__c'></lightning-output-field>
+                        <lightning-output-field field-name='Gender__c'></lightning-output-field>
+                        <lightning-output-field field-name='Father_Husband_Name__c'></lightning-output-field>
+                        <lightning-output-field field-name='Mobile_No__c'></lightning-output-field>
+                        <lightning-output-field field-name='Branch_Name_Code_Formula__c'></lightning-output-field>
+                        <lightning-output-field field-name='Proposed_vehicle__c'></lightning-output-field>
+                        <lightning-output-field field-name='Loan_Amount__c'></lightning-output-field>
+                        <lightning-output-field field-name='Loan_Type__c'></lightning-output-field>
+                        <lightning-output-field field-name='LandMark__c'></lightning-output-field>
+                        <lightning-output-field field-name='Type_of_address__c'></lightning-output-field>
+                        <lightning-output-field field-name='Full_Allocated_Address__c'></lightning-output-field>
+                        <lightning-output-field field-name='Area_Name__c'></lightning-output-field>
+                        <lightning-output-field field-name='Business_Name__c'></lightning-output-field>
+                      </template>
+
+                      <!--div class="slds-border_top slds-m-vertical_medium"></div-->
+
+                    </lightning-accordion-section>
+
+                    <!--FI SUmmary Section-->
+                    <lightning-accordion-section name="FI Summary" label="FI Summary" class="accordClass">
+                      <template if:true={isFormEdit}>
+                        <lightning-input-field data-id="openingRemarks" field-name='Opening_Remarks__c' required={openingMarksRequired}
+                        onchange={handleConditions} disabled={isDisabledField}></lightning-input-field>
+                        <template if:true={showQuestionnaireLink}>
+                          <lightning-button variant="base" label={QuestionnaireLinkName} title="Looks like a link"
+                          onclick={handleQuestionaireComponent} class="slds-m-left_x-small"></lightning-button>
+                        </template>
+                        <lightning-input-field field-name='Remarks__c' required={isRemarksMandatory} disabled={isDisabledField}></lightning-input-field>
+                        <lightning-input-field data-id="addressMatch" field-name='Address_Match__c'
+                          onchange={handleConditions} disabled={isDisabledField}></lightning-input-field>
+                        <lightning-input-field field-name='Address__c' required={isAddressMandatory} disabled={isDisabledField}></lightning-input-field>
+                        <template if:true={isMobile}>
+                            <lightning-input-field field-name='Punch_the_Location_for_Geo_tag__c' data-id="geolocation" 
+                                                    value={currentLocation} required="true"
+                                                   disabled="true"></lightning-input-field>
+                            <lightning-button variant="base" label="Capture Location" onclick={geolocation}
+                            class="slds-m-left_x-small"></lightning-button>
+                        </template>
+                        <template if:false={isMobile}>
+                          <!--div class="slds-grid"-->
+                            <div class="slds-form-element">
+                              <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                  <lightning-button-icon size="x-small" class="iconpointerevetns slds-icon slds-input__icon slds-input__icon_right slds-icon-text-default" 
+                                                  onclick={geolocation} title="Search Location" 
+                                                  icon-name="utility:search">
+                                  </lightning-button-icon>
+                                  <lightning-input-field field-name='Punch_the_Location_for_Geo_tag__c' data-id="geolocation" value={currentLocation}
+                                    disabled="true"></lightning-input-field>
+                              </div>
+                            </div>
+                            <!--lightning-input-field field-name='Punch_the_Location_for_Geo_tag__c' data-id="geolocation" value={currentLocation}
+                            disabled="true"></lightning-input-field>
+                            <lightning-button variant="base" label="Capture Location" onclick={geolocation}
+                            class="slds-m-left_x-small" style="margin-left:-10%;"></lightning-button-->
+                          <!--/div-->
+                        </template>
+                        <lightning-input-field field-name='Distance__c' data-id="distance" disabled="true"></lightning-input-field>
+                        <template if:false={isFiProfile}>
+                          <lightning-input-field data-id="fiStatus" field-name='FI_Status__c'
+                          onchange={handleFiStatus}></lightning-input-field>
+                        </template>
+      
+                        <template if:true={isFiProfile}>
+                          <lightning-input-field data-id="fiStatus" field-name='FI_Profile_Status__c' 
+                          onchange={handleFiStatus}></lightning-input-field>
+                          </template>
+                          
+                        <template if:false = {isFiProfile}>
+                          <lightning-input-field disabled={disableWaiveOffReason} data-id="waiveOffReason" field-name='Waive_Off_Reason__c' onchange={checkWaivedOffCondn} required={waiveOffMandatory}></lightning-input-field>
+                          <lightning-input-field disabled={disableOtherWaiveOffReason} data-id="waiveOffOtherReason" field-name='Waive_Off_Reason_Other__c' required={reqWaiveOffOtherReason}></lightning-input-field>
+                        </template>
+                        
+      
+                        <lightning-input-field field-name='Stage__c' disabled="true" data-id="stage"></lightning-input-field>
+                        
+                        <template if:false={isNegativeReasonDisable}>
+                        <div class="slds-form-element slds-form-element_horizontal">
+                          <label class="slds-form-element__label">Profile Negative Reason</label>
+                          <div class="slds-form-element__control">
+                            <lightning-combobox variant="label-hidden"
+                                                name="progress"
+                                                data-id="Profile_Negative_Reason"
+                                                label="Profile Negative Reason"
+                                                value={negativeReasonsSelectedValue.Profile_Negative_Reason}
+                                                placeholder="Select Reason"
+                                                options={negativeProfileReasonOptions}
+                                                onchange={handleNegativePicklistCHange}
+                                                disabled={isNegativeReasonDisable} >
+                            </lightning-combobox>
+                              
+                              <template if:true={negativeReasonsSelectedMultipleValuesObject.Profile_Negative_Reason}>
+                                <template for:each={negativeReasonsSelectedMultipleValuesObject.Profile_Negative_Reason} for:item="reason">
+                                  <p key={reason}>
+                                    <lightning-pill label={reason} data-id={reason} data-key="Profile_Negative_Reason" onremove={handlePillRemove}>
+                                      <lightning-icon icon-name="standard:account" alternative-text={reason}></lightning-icon>
+                                    </lightning-pill>
+                                  </p>
+                                </template>
+                              </template>
+                          </div>
+                        </div>
+      
+                        <div class="slds-form-element slds-form-element_horizontal">
+                          <label class="slds-form-element__label">Address Negative Reason</label>
+                          <div class="slds-form-element__control">
+                            <lightning-combobox variant="label-hidden"
+                                                name="progress"
+                                                data-id="Address_Negative_Reason"
+                                                label="Address Negative Reason"
+                                                placeholder="Select Reason"
+                                                value={negativeReasonsSelectedValue.Address_Negative_Reason}
+                                                options={negativeAddressReasonOptions}
+                                                onchange={handleNegativePicklistCHange} 
+                                                disabled={isNegativeReasonDisable}>
+                            </lightning-combobox>
+                              <template if:true={negativeReasonsSelectedMultipleValuesObject.Address_Negative_Reason}>
+                                <template for:each={negativeReasonsSelectedMultipleValuesObject.Address_Negative_Reason} for:item="reason">
+                                  <p key={reason}>
+                                    <lightning-pill label={reason} data-id={reason} data-key="Address_Negative_Reason" onremove={handlePillRemove}>
+                                      <lightning-icon icon-name="standard:account" alternative-text={reason}></lightning-icon>
+                                    </lightning-pill>
+                                  </p>
+                                </template>
+                              </template>
+                              
+                          </div>
+                        </div>
+                        </template>
+                        <!--/lightning-input-field-->
+                        <lightning-input-field field-name='Remark__c' required={trueValue}></lightning-input-field>
+                        <template if:true={renderSendBackComments}>
+                          <lightning-input-field field-name='Send_Back_Comments__c' disabled={trueValue}></lightning-input-field>
+                        </template>
+      
+                        <lightning-button style="display: inline-block; margin-left:49%;" variant="brand" class="slds-m-top_small slds-align--absolute-center buttonColor"  type="submit" label="Submit">
+                        </lightning-button>
+                      
+      
+                    </template>
+                    <template if:false={isFormEdit}>
+                      <lightning-output-field field-name='Opening_Remarks__c'></lightning-output-field>
+                      <lightning-output-field field-name='Remarks__c'></lightning-output-field>
+                      <lightning-output-field field-name='Address_Match__c'></lightning-output-field>
+                      <lightning-output-field field-name='Address__c'></lightning-output-field>
+                      <lightning-output-field field-name='Punch_the_Location_for_Geo_tag__c'></lightning-output-field>
+                      <lightning-output-field field-name='Distance__c'></lightning-output-field>
+                      <template if:false={isFiProfile}>
+                        <lightning-output-field field-name='FI_Status__c'></lightning-output-field>
+                      </template>
+                      <template if:true={isFiProfile}>
+                        <lightning-output-field field-name='FI_Profile_Status__c'></lightning-output-field>
+                      </template>
+                      <template if:false = {isFiProfile}>
+                        <lightning-output-field field-name='Waive_Off_Reason__c'></lightning-output-field>
+                        <lightning-output-field field-name='Waive_Off_Reason_Other__c'></lightning-output-field>
+
+                      </template>
+                      
+                      <lightning-output-field field-name='Stage__c'></lightning-output-field>
+                      <lightning-output-field field-name='Profile_Negative_Reasons__c'></lightning-output-field>
+                      <lightning-output-field field-name='Address_Negative_Reason__c'></lightning-output-field>
+                      <lightning-output-field field-name='Remark__c'></lightning-output-field>
+                      <template if:true={renderSendBackComments}>
+                        <lightning-output-field field-name='Send_Back_Comments__c'></lightning-output-field>
+                      </template>
+                      
+      
+                    </template>
+
+                    </lightning-accordion-section>
+
+                </div>
+                
+              </lightning-accordion>
+              
+              
+            
+             
+
+              
+
+            </lightning-record-edit-form>
+          </template>
+        </div>
+        <template if:true={error}>
+          <article class="slds-card" style="color:red;padding:5px;text-align:center">
+            <div class="slds-card__body slds-card__body_inner">
+                <h3>{errorMsg}</h3>
+              </div>
+            </article>
+        </template>
+
+        <c-common-toast></c-common-toast>
+        <template if:true={isImagesVisible}>
+          <!--     <template for:each={imagesList} for:item="documentKey">
+            <div class="slds-text-link" key={documentKey.contentDocId}>
+            {documentKey.contentDocTitle}
+          </div>
+          </template>-->
+          <c-fi-preview-doc object-api-name={objectApiName} record-id={recordId}
+                            onisuploadcomponentvisible={handleUploadCompVisiblity}>
+          </c-fi-preview-doc>
+        </template>
+        
+        <template if:true={isFormEdit}>
+          <template if:true={isPermissionSetCompleted}>
+            <template if:true={isUploadPermissionGranted}>
+              <template if:false={blnSavedSuccess}>
+                <template if:true={showUploadPhotoOption}>
+                  <template if:false={isUploadImages}>
+                    <lightning-button class="slds-m-top_small slds-m-left_small slds-m-bottom_small" onclick={handleSuccessUpload}
+                      label="Add More Photos"></lightning-button>
+                  </template>
+                  <!-- <c-los-document-manager object-api-name={objectApiName} record-id={recordId}></c-los-document-manager>
+                <lightning-button class="slds-m-top_small" onclick={getUploadedFiles} label="Photo"></lightning-button>-->
+                  <template if:true={isUploadImages}>
+                    <c-los-generic-document-upload isdocmanager={falseValue} show-upload-component={trueValue}
+                      show-input-box={falseValue} loan-id="" field-invetigation-id={recordId} applicant-id={applicantId}
+                      doc-name={label.fiphotodocmaster} ondocumentsuccess={handleSuccessUpload} uploadtypename="FI Photos"
+                      hidefiledetails={trueValue}></c-los-generic-document-upload>
+                  </template>
+                </template>
+              </template>
+  
+            </template>
+          </template>
+
+        </template>
+        
+        
+      </article>
+
+    </template>
+
+
+  <template if:true={IsQuestionnaireComponentActive}>
+    <template if:true={isTractor}>
+      <lightning-button style="display: inline-block; margin-left:49%;" variant="brand" class="slds-m-top_small slds-align--absolute-center buttonColor" label="Back" onclick={hideQuestionnaireForTractor}>
+      </lightning-button>
+      <c-personal-discussion-questionnaire record-id={recordId} fi-mode=true></c-personal-discussion-questionnaire>
+    </template>
+    <template if:false={isTractor}>
+      <c-field-investigation-questionaire opening-remarks={openingRemarks} onback={handleChildResponse}
+      onsave={handleChildResponse} record-id={recordId} applicant-type={applicantType}
+      proposed-vehicle={proposedVehicle} type-of-address={typeOfAddress}
+      is-fi-profile={isFiProfile}
+      userwithempcode={userwithempcode}
+      ficunducteddatetime={ficunducteddatetime}></c-field-investigation-questionaire>
+    </template>
+  </template>
+
+</template>

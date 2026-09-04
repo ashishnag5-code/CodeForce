@@ -1,0 +1,1508 @@
+<apex:page renderAs="pdf" controller="WelcomeLetterPDFController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+        <apex:variable value="{!1}" var="rowNumForSOC"/>
+
+    <html>
+        <head>
+            <style type="text/CSS" media="print">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 13px !important; sans-serif; color :333;}
+                
+                .heading-container{
+                width:100%;
+                border-radius: 25px;
+                background:#5d1f8c;
+                color:#ffffff;
+                text-align: center;
+                padding: 5px;
+                }
+                
+                @page {
+                margin-bottom: 3cm;
+                
+                @bottom-left {
+                content: element(footer);
+                }
+                }
+                
+                
+                div.footer {
+                display: block;
+                position: running(footer);
+                margin-bottom: 10px;
+                align-content: left;
+                margin-top: 5%;
+                }
+                table tr td{
+                padding: 2px 3px;
+                }
+                .emi-table{
+                font-size : 10px;
+                }
+            </style>
+        </head>
+        <div style="margin-bottom : 16%">
+            <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "right"/>
+        </div>
+        <body class="slds-scope">
+            <div class="footer" name="footer">
+                <apex:image url="{!URLFOR($Resource.SantionFooter)}" width="300%" height="90"></apex:image>
+            </div>
+            
+            
+            
+            <div class="header">
+                <p><strong>Date: </strong>{!dateString}</p>
+                <p>To,</p>                
+                <p>
+                    <apex:outputText escape="false" value="{!applicantData.applicant.Title__c}" ></apex:outputText> &nbsp; <apex:outputText escape="false" value="{!applicantData.fullName}" ></apex:outputText>, <br/>
+                    <apex:outputText escape="false" value="{!applicantData.address.addressLine1}"></apex:outputText>,&nbsp;
+                    <apex:outputPanel rendered="{!applicantData.address.addressLine2 <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.addressLine2}"></apex:outputText>,&nbsp;
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicantData.address.addressLine3 <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.addressLine3}"></apex:outputText>,&nbsp;
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicantData.address.areaName <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.areaName}" ></apex:outputText>,
+                    </apex:outputPanel><br/>
+                    <apex:outputPanel rendered="{!applicantData.address.landmark <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.landmark}" ></apex:outputText>, &nbsp;
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicantData.address.city <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.city}"></apex:outputText>, &nbsp;
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicantData.address.districe <> ''}">
+                        <apex:outputText escape="false" value="{!applicantData.address.districe}" ></apex:outputText> &nbsp;-&nbsp;
+                    </apex:outputPanel>
+                    <apex:outputText escape="false" value="{!applicantData.address.pinCode}" ></apex:outputText>, &nbsp;
+                    <apex:outputText escape="false" value="{!applicantData.address.state}" ></apex:outputText>, &nbsp;India.<br/>
+                    Ph: &nbsp;<apex:outputText escape="false" value="{!applicantData.phone}" ></apex:outputText>
+                    <!--
+Milkstones Switicheck PVT. LTD., 97 Udiog Vihar <br/>
+Phase 1, Near Kapashera, Gurgaon - 122 016,<br/>
+Haryana, India. <br/>
+Ph:
+-->
+                    
+                </p>
+            </div>
+            <p>Dear &nbsp;
+                <apex:outputText escape="false" value="{!applicantData.fullName}" ></apex:outputText>,</p>
+            
+            <p>Nayi gaadi ki hardik shubhkamnayein!</p>
+            <p>It’s time to welcome your new <strong>{!collateralData.variant}</strong> home and celebrate. <!-- {!collateralData.make} {!collateralData.model}  - removed for R2-2862 -->
+                <apex:outputPanel rendered="{!CONTAINS(loanData.loanRecord.RecordType.Name, 'Four')}">
+                    Buying a car is a milestone that opens the doors to a world of travel and freedom. 
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{!CONTAINS(loanData.loanRecord.RecordType.Name, 'Two')}">
+                    Owning a Two-wheeler is not just about convenience or prestige anymore, it offers you liberty, ease of mobility, navigation, and parking convenience wherever you go. 
+                </apex:outputPanel>
+                It is a dream come true, and <strong>AU Small Finance Bank</strong> is honored to be in this journey with you.</p>
+            <p>
+                For your convenience, here is a summary of all your
+                <strong>
+                    <apex:outputPanel rendered="{!CONTAINS(loanData.loanRecord.RecordType.Name, 'Four')}">Car Loan</apex:outputPanel>
+                    <apex:outputPanel rendered="{!CONTAINS(loanData.loanRecord.RecordType.Name, 'Two')}">Two Wheeler Loan</apex:outputPanel>
+                </strong>details:
+            </p>
+
+            <div align="left" style="page-break-after: always">
+                <apex:panelGrid columns="2" id="theGrid">
+                    
+                    <apex:outputText >
+                        <table style="background-color: #d3d3d3" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Particular
+                                    </th>
+                                    <th>
+                                        Values
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td width="60%">
+                                        Loan Tenure (Months)
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!loanData.loanTenure}" ></apex:outputText><br/>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="60%">
+                                        EMI Start Date
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!loanData.PEMIEMIStartDate}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="60%">
+                                        EMI Payable
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!loanData.EMIPayable}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="60%">
+                                        Rate Type
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!loanData.interestType}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="60%">
+                                        {!loanData.roiLabel}
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!loanData.rateofInterest}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                
+                                <apex:outputText rendered="{!NOT(loanData.isFixedInterestType)}">
+                                    <tr>
+                                        <td>
+                                            Date of First Reset of Interest
+                                        </td>
+                                        <td>
+                                            {!loanData.firstResetOfFrequencyDate}
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Reset Frequency
+                                    </td>
+                                    <td>
+                                        Every 3 Months
+                                    </td>
+                                </tr>
+
+                                </apex:outputText>
+                                
+                                <tr>
+                                    <td width="60%">
+                                        Loan Maturity Date
+                                    </td>
+                                    <td width="60%">
+                                        <apex:outputText escape="false" value="{!lastRepaymentDate}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </apex:outputText>
+                    <apex:outputText >
+                        <table style="background-color: #d3d3d3; margin-left:20% !important;" width="96%">
+                            <thead>
+                                <tr>
+                                    <th style="width:47%;">
+                                        Particular
+                                    </th>
+                                    <th style="width:53%;">
+                                        Values
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Loan Account Number
+                                    </td>
+                                    <td>
+                                        <apex:outputText escape="false" value="{!loanData.loanAccountNumber}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Loan Sanction Amount
+                                    </td>
+                                    <td>
+                                        Rs. <apex:outputText escape="false" value="{!loanData.loanSanctionAmount}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Loan Disbursal Amount
+                                    </td>
+                                    <td>
+                                        Rs. <apex:outputText escape="false" value="{!loanData.loanDisbursalAmount}" ></apex:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Cumulative Disbursement Amount
+                                    </td>
+                                    <td>
+                                        Rs. <apex:outputField value="{!loanData.loanRecord.Total_Loan_Amount__c}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Total charges deducted (Details in the below table)
+                                    </td>
+                                    <td>
+                                        Rs. <apex:outputField value="{!loanData.loanRecord.Total_Charges__c}" ></apex:outputField>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Net Payment Amount
+                                    </td>
+                                    <td>
+                                        Rs. {!loanData.netPaymentAmount}
+                                    </td>
+                                </tr>
+                                <!--tr>
+                                    <td>
+                                    Parent / Linked Loan Number
+                                    </td>
+                                    <td>
+                                    &lt;XXXXXXXXXXXX&gt;
+                                    </td>
+                                </tr-->
+                                <apex:outputText rendered="{!collateralData.showVehicleNumber}">
+                                    <tr>
+                                        <td>
+                                            Vehicle Registration Number
+                                        </td>
+                                        <td>
+                                            <apex:outputText escape="false" value="{!collateralData.vehicleRegistrationNumber}" ></apex:outputText>
+                                        </td>
+                                    </tr>
+                                </apex:outputText>
+                            </tbody>
+                        </table>
+                    </apex:outputText>
+                </apex:panelGrid>  
+                <p>
+                We, at AU Bank, believe in complete transparency. The below table describes the charges deducted in your loan:
+            </p> 
+            </div>
+            
+            
+            <br/>
+            <div align="left">
+                <table style="background:#cacaca" width="70%">
+                    <thead>
+                        <tr>
+                            <th style="width:40%;">
+                                Type of Charges
+                            </th>
+                            <th style="width:60%;">
+                                Amount
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!chargesData}" var="charges" id="chargeId">
+                            <tr>
+                                <td><apex:outputText escape="false" value="{!charges.chargeName}" ></apex:outputText></td>
+                                <td><apex:outputText escape="false" value="{!charges.totalAmount}" ></apex:outputText></td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </div>
+            
+            
+            <p>
+                *A 5% charge is applicable if pre-payment is done within one year. Applicable taxes will be charged extra. If you have any questions, please feel free to get in touch with us via any of the below channels:
+            </p>
+            <div class="heading-container">
+                Call  your  Relationship Officer | Visit www.aubank.in | E-mail us at customercare@aubank.in |<br/> Visit your nearest AU Bank Branch | Connect with Customer Care on 1800 1200 1200
+            </div>
+            <p>
+                We look forward to helping you build a brighter future and hope we can serve you on the road to success.
+            </p>
+            <br/>
+            <p>
+                Warm Regards, <br/>
+                AU Small Finance Bank Team
+            </p>
+            
+            <div style="page-break-after:always;"/>
+            <div class="heading-container">
+                <strong>Important Information</strong>  
+            </div>
+            <br/>
+            <apex:outputText escape="false" value="{!objGenericMaster[0].Letter_Content__c}" ></apex:outputText>
+            
+            <div style="page-break-after:always;"/>
+            <div class="heading-container">
+                <strong>Repayment Schedule</strong>  
+            </div>
+            <br/>
+            
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:25%;">
+                            Customer Name
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!applicantData.fullName}" ></apex:outputText>
+                        </td> 
+                        <th style="width:25%;">
+                            Account No
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!loanData.loanRecord.LAN__c}" ></apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width:25%;">
+                            Customer Address
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!applicantData.address.addressLine1}"></apex:outputText>,&nbsp;
+                            <apex:outputPanel rendered="{!applicantData.address.addressLine2 <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.addressLine2}"></apex:outputText>,&nbsp;
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicantData.address.addressLine3 <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.addressLine3}"></apex:outputText>,&nbsp;
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicantData.address.areaName <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.areaName}" ></apex:outputText>,
+                            </apex:outputPanel><br/>
+                            <apex:outputPanel rendered="{!applicantData.address.landmark <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.landmark}" ></apex:outputText>, &nbsp;
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicantData.address.city <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.city}"></apex:outputText>, &nbsp;
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicantData.address.districe <> ''}">
+                                <apex:outputText escape="false" value="{!applicantData.address.districe}" ></apex:outputText> &nbsp;-&nbsp;
+                            </apex:outputPanel>
+                            <apex:outputText escape="false" value="{!applicantData.address.pinCode}" ></apex:outputText>, &nbsp;
+                            <apex:outputText escape="false" value="{!applicantData.address.state}" ></apex:outputText>, &nbsp;India.
+                        </td>
+                        <th style="width:25%;">
+                            Customer ID
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!applicantData.cifNo}" ></apex:outputText> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width:25%;">
+                            Period in Months
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!loanData.loanTenure}" ></apex:outputText>
+                        </td>
+                        <th style="width:25%;">
+                            Maturity Date
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!lastRepaymentDate}" ></apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width:25%;">
+                            Total Loan Sanctioned
+                        </th>
+                        <td style="width:25%;">
+                            Rs. <apex:outputText escape="false" value="{!loanData.loanSanctionAmount}" ></apex:outputText>
+                        </td>
+                        <th style="width:25%;">
+                            Current Int Rate(%)
+                        </th>
+                        <td style="width:25%;">
+                            <apex:outputText escape="false" value="{!loanData.rateofInterest}" ></apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width:25%;">
+                            Total Loan Disbursed
+                        </th>
+                        <td style="width:25%;">
+                            Rs. <apex:outputText escape="false" value="{!loanData.loanDisbursalAmount}" ></apex:outputText>
+                        </td>
+                        <th style="width:25%;">
+                            Currency
+                        </th>
+                        <td style="width:25%;">
+                            INR
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            
+            
+            <table width="100%" border="1" cellpadding="0" cellspacing="0" class="emi-table">
+                <tbody>
+                    <tr style="background:#5d1f8c;
+                               color:#ffffff;">
+                        <!--<td style="width:7%;">Installment Number</td>
+<td style="width:3%;">PEMI/EMI</td>
+<td style="width:10%;">Start Date</td>
+<td style="width:10%;">Repayment Date</td>
+<td style="width:10%;">Interest Rate(%)</td>
+<td style="width:10%;">Principal</td>
+<td style="width:10%;">Interest</td>
+<td style="width:10%;">Premium</td>
+<td style="width:10%;">Total Installment</td>
+<td style="width:10%;">Outstanding Balance</td>
+<td style="width:10%;">Days</td>-->
+                        
+                        <!--td style="width:7%;">Stage</td-->
+                        <td style="width:3%;">Installment Number</td>
+                        <td style="width:3%;">PEMI /EMI</td>
+                        <td style="width:10%;">Start Date</td>
+                        <td style="width:10%;">Repayment Date</td>
+                        <td style="width:10%;">Interest Rate(%)</td>
+                        <td style="width:10%;">Principal</td>
+                        <td style="width:10%;">Interest</td>
+                        <!--td style="width:10%;">Subsidy Amount</td>
+                        <td style="width:10%;">Premium Amount</td>
+                        <td style="width:10%;">Service Charge</td>
+                        <td style="width:10%;">Capitalized Amount</td-->
+                        <td style="width:10%;">Total Installment</td>
+                        <td style="width:10%;">Outstanding Balance</td>
+                        <td style="width:10%;">Days</td>
+                    </tr>
+                    <apex:repeat value="{!EMISchedule.RepaymentRecords}" var="resp" id="repeatedVal">
+                        <tr>
+                            
+                            
+                            <!--td><apex:outputText escape="false" value="{!resp.StageNumber}" ></apex:outputText></td-->
+                            <td><apex:outputText escape="false" value="{!resp.InstallmentCounter}" ></apex:outputText></td>
+                            <td>EMI</td>
+                            <td><apex:outputText escape="false" value="{!resp.InstallmentStartDate}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.InstallmentDate}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.InterestRate}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.PrincipalAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.InterestAmount}" ></apex:outputText></td>
+                            <!--td><apex:outputText escape="false" value="{!resp.SubsidyAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.PremiumAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.ServiceChargeAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.CapitalizedAmount}" ></apex:outputText></td-->
+                            <td><apex:outputText escape="false" value="{!resp.InstallmentAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.PrincipalBalanceAmount}" ></apex:outputText></td>
+                            <td><apex:outputText escape="false" value="{!resp.NumberOfDays}" ></apex:outputText></td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+
+            <div style="margin-top:10%;">
+                <strong>*To overcome operational issues, holidays etc. It is advised to keep sufficient balance in bank accounts 2-3 days prior to due date of EMI, for clearance of EMI on due dates, to avoid penal Interest and other charges and avoid delinquency status.</strong>
+            </div>
+            
+            <div style="page-break-after:always;"/>
+            <div style="text-align: center;">
+                <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "center"/>
+                <h4>
+                    AU Small Finance Bank Limited <br/>
+                    Corporate Office-BKC, Mumbai-400 070<br/>
+                    Schedule of charges for Wheels Product (Vehicle Loans)
+                    
+                </h4>
+            </div>
+            <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+                <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">SCHEDULE OF CHARGES(SOC)</span>
+            </div>
+            <br/>
+            <div>
+                <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                    <thead>
+                        <th colspan="8" style="background-color: rgb(109,48,120);
+                                        color: white; font-size:15px; text-align:center; ">Charges Applicable as Per Product</th>
+                        <tr style="background-color:#ed7d31; font-size:15px">
+                            <th>SNo.</th>
+                            <th>Parameter</th>
+                            <th>{!socVehicleHeader}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!socChargesData}" var="soc">
+                            <tr>
+                                <td colspan="1">
+                                    <div>
+                                        {!rowNumForSOC}
+                                        <apex:variable var="rowNumForSOC" value="{!rowNumForSOC + 1}"/>
+                                        
+                                    </div>
+                                </td>
+                                <td colspan="1">
+                                    <div>
+                                        
+                                        {!soc.Parameters__c}
+                                    </div>
+                                </td>
+                                
+                                <td colspan="1">
+                                    <div>
+                                        
+                                        {!soc.Charge_Value__c}
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </apex:repeat>
+                    
+                    </tbody>
+                </table>
+                <b>*If stamp duty is purchased by Bank on behalf of customer.</b>
+                <br/><br/>
+
+                <apex:outputText escape="false" value="{!objGenericMaster[1].Letter_Content__c}" ></apex:outputText>
+            </div>
+
+                <!-- New SCOC Table added-->
+            <!--div style="page-break-after:always;"/>
+            <div style="text-align: center;">
+                <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "center"/>
+                <h4>
+                    AU Small Finance Bank Limited <br/>
+                    Corporate Office-BKC, Mumbai-400 070<br/>
+                    Schedule of charges for Wheels Product (Vehicle Loans)
+                    
+                </h4>
+            </div>
+            <br/>
+            <div align="left" >
+                <table width="100%" border="1" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr style="background:#5d1f8c;
+                                   color:#ffffff;">
+                            <td rowspan="2">
+                                S.
+                                No.
+                            </td>
+                            <td rowspan="2">
+                                Parameters
+                            </td>
+                            <td colspan="5" style="text-align:center;">
+                                Charges applicable as per product
+                            </td>
+                        </tr>
+                        <tr style="background:#5d1f8c;
+                                   color:#ffffff;">
+                            <td>
+                                Two- Wheeler
+                            </td>
+                            <td>
+                                Three - Wheeler
+                            </td>
+                            <td>
+                                Car
+                            </td>
+                            <td>
+                                Commercial Vehicle &amp; Const. Equipment
+                            </td>
+                            <td>
+                                Tractor Finance
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                Loan Processing Charges
+                            </td>
+                            <td>
+                                Up to 4% of Loan Amount
+                            </td>
+                            <td>
+                                Up to 2% of Loan Amount
+                            </td>
+                            <td>
+                                Up to 2% of Loan Amount
+                            </td>
+                            <td>
+                                Up to 2% of Loan Amount
+                            </td>
+                            <td>
+                                Up to 2% of Loan Amount
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                Documentation Charges
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                            <td>
+                                Up to ₹ 2000
+                            </td>
+                            <td>
+                                Up to ₹ 5000
+                            </td>
+                            <td>
+                                Up to ₹ 5000
+                            </td>
+                            <td>
+                                Up to ₹ 5000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                Overdue Interest
+                            </td>
+                            <td>
+                                3% per month on outstanding amount
+                            </td>
+                            <td>
+                                3% per month on outstanding amount
+                            </td>
+                            <td>
+                                3% per month on outstanding amount
+                            </td>
+                            <td>
+                                3% per month on outstanding amount
+                            </td>
+                            <td>
+                                3% per month on outstanding amount
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">
+                                4
+                            </td>
+                            <td rowspan="2">
+                                Prepayment/Fore- closure charges
+                            </td>
+                            <td>
+                                5% of Balance amount, if paid before 12 months
+                            </td>
+                            <td>
+                                5% of Balance amount, if paid before 12 months
+                            </td>
+                            <td>
+                                5% of Balance amount, if paid before 12 months
+                            </td>
+                            <td>
+                                5% of Balance amount, if paid before 12 months
+                            </td>
+                            <td>
+                                5% of Balance amount, if paid before 12 months
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3% of Balance amount, if paid after 12 months
+                            </td>
+                            <td>
+                                3% of Balance amount, if paid after 12 months
+                            </td>
+                            <td>
+                                3% of Balance amount, if paid after 12
+                                months
+                            </td>
+                            <td>
+                                3% of Balance amount, if paid after 12 months
+                            </td>
+                            <td>
+                                3% of Balance amount, if paid after 12
+                                months
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                5
+                            </td>
+                            <td>
+                                Part Foreclosure
+                            </td>
+                            <td>
+                                Not allowed
+                            </td>
+                            <td>
+                                Not allowed
+                            </td>
+                            <td>
+                                Not allowed
+                            </td>
+                            <td>
+                                Not allowed
+                            </td>
+                            <td>
+                                Not allowed
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                6
+                            </td>
+                            <td>
+                                Collection Charges
+                            </td>
+                            <td>
+                                ₹ 600 per visit
+                            </td>
+                            <td>
+                                ₹ 600 per visit
+                            </td>
+                            <td>
+                                ₹ 600 per visit
+                            </td>
+                            <td>
+                                ₹ 600 per visit
+                            </td>
+                            <td>
+                                ₹ 600 per visit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                7
+                            </td>
+                            <td>
+                                Cheque/SI/ACH/ECS Return Charges
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                8
+                            </td>
+                            <td>
+                                Issuance of Duplicate NOC
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                9
+                            </td>
+                            <td>
+                                Statement of Account
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                10
+                            </td>
+                            <td>
+                                Duplicate Amortisation/Repayment Schedule
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                11
+                            </td>
+                            <td>
+                                Swap Charges (Replacement of
+                                PDC/Change of Bank)
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                12
+                            </td>
+                            <td>
+                                Stamp Duty
+                            </td>
+                            <td>
+                                As per State&rsquo;s
+                                Stamp Act
+                            </td>
+                            <td>
+                                As per State&rsquo;s
+                                Stamp Act
+                            </td>
+                            <td>
+                                As per
+                                State&rsquo;s
+                                Stamp Act
+                            </td>
+                            <td>
+                                As per State&rsquo;s
+                                Stamp Act
+                            </td>
+                            <td>
+                                As per
+                                State&rsquo;s
+                                Stamp Act
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br/><br/><br/><br/><br/><br/><br/><br/>
+            <div align="left">
+                <table width="100%" border="1" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr style="background:#5d1f8c;
+                                   color:#ffffff;">
+                            <td rowspan="2">
+                                S.
+                                No.
+                            </td>
+                            <td rowspan="2">
+                                Parameters
+                            </td>
+                            <td colspan="5" style="text-align:center;">
+                                Charges applicable as per product
+                            </td>
+                        </tr>
+                        <tr style="background:#5d1f8c;
+                                   color:#ffffff;">
+                            <td>
+                                Two- Wheeler
+                            </td>
+                            <td>
+                                Three - Wheeler
+                            </td>
+                            <td>
+                                Car
+                            </td>
+                            <td>
+                                Commercial Vehicle &amp; Const.
+                                Equipment
+                            </td>
+                            <td>
+                                Tractor Finance
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                13
+                            </td>
+                            <td>
+                                Stamping expenses*
+                            </td>
+                            <td>
+                                ₹100
+                                (including GST)
+                            </td>
+                            <td>
+                                ₹100
+                                (including GST)
+                            </td>
+                            <td>
+                                ₹100
+                                (including GST)
+                            </td>
+                            <td>
+                                ₹100
+                                (including GST)
+                            </td>
+                            <td>
+                                ₹100
+                                (including GST)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                14
+                            </td>
+                            <td>
+                                Foreclosure statement charges
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                15
+                            </td>
+                            <td>
+                                Change in Instalment date
+                            </td>
+                            <td>
+                                ₹ 500 plus difference period interest (if any)
+                            </td>
+                            <td>
+                                ₹ 500 plus difference period interest (if any)
+                            </td>
+                            <td>
+                                ₹ 500 plus difference period interest (if any)
+                            </td>
+                            <td>
+                                ₹ 500 plus difference period interest (if any)
+                            </td>
+                            <td>
+                                ₹ 500 plus difference period interest (if any)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                16
+                            </td>
+                            <td>
+                                Duplicate Copy of Property/ Loan Document
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                            <td>
+                                ₹ 1,000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                17
+                            </td>
+                            <td>
+                                Valuation Charges for Used/Refinance Vehicles
+                            </td>
+                            <td>
+                                Not applicable
+                            </td>
+                            <td>
+                                Up to ₹ 1000
+                            </td>
+                            <td>
+                                Up to ₹ 1000
+                            </td>
+                            <td>
+                                Up to ₹ 1000
+                            </td>
+                            <td>
+                                Up to ₹ 1000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                18
+                            </td>
+                            <td>
+                                Special NOC without removing of Hypothecation
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                            <td>
+                                ₹ 500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                19
+                            </td>
+                            <td>
+                                Vintage Model Fees (applicable if vehicle model is more than 10 years old in 4W &amp; 6 years in 3W) (including GST)
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                ₹ 1,500
+                            </td>
+                            <td>
+                                ₹ 1,500
+                            </td>
+                            <td>
+                                ₹ 1,500
+                            </td>
+                            <td>
+                                ₹ 1,500
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                20
+                            </td>
+                            <td>
+                                Legal/Sarfaesi /Incidental Charges
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                21
+                            </td>
+                            <td>
+                                Repossession Charges
+                            </td>
+                            <td>
+                                Up to ₹ 6500
+                            </td>
+                            <td>
+                                Up to ₹ 8000
+                            </td>
+                            <td>
+                                Up to ₹
+                                10000
+                            </td>
+                            <td>
+                                Up to ₹ 15000
+                            </td>
+                            <td>
+                                Up to ₹ 15000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                22
+                            </td>
+                            <td>
+                                Tele Collection Charges
+                            </td>
+                            <td>
+                                ₹ 40
+                            </td>
+                            <td>
+                                ₹ 40
+                            </td>
+                            <td>
+                                ₹ 40
+                            </td>
+                            <td>
+                                ₹ 40
+                            </td>
+                            <td>
+                                ₹ 40
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                23
+                            </td>
+                            <td>
+                                Ledger Folio charge (including GST)
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                            <td>
+                                Up to ₹ 3000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                24
+                            </td>
+                            <td>
+                                Legal &amp; Courier Charges
+                            </td>
+                            <td>
+                                ₹ 1,100
+                            </td>
+                            <td>
+                                ₹ 1,100
+                            </td>
+                            <td>
+                                ₹ 1,100
+                            </td>
+                            <td>
+                                ₹ 1,100
+                            </td>
+                            <td>
+                                ₹ 1,100
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                25
+                            </td>
+                            <td>
+                                Default collection charge
+                            </td>
+                            <td>
+                                ₹ 708
+                            </td>
+                            <td>
+                                ₹ 708
+                            </td>
+                            <td>
+                                ₹ 708
+                            </td>
+                            <td>
+                                ₹ 708
+                            </td>
+                            <td>
+                                ₹ 708
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                26
+                            </td>
+                            <td>
+                                RC charge
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                ₹ 100
+                            </td>
+                            <td>
+                                ₹ 100
+                            </td>
+                            <td>
+                                ₹ 100
+                            </td>
+                            <td>
+                                ₹ 100
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                27
+                            </td>
+                            <td>
+                                RTO charge
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                28
+                            </td>
+                            <td>
+                                Repo Charges and Other Related Charges
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                29
+                            </td>
+                            <td>
+                                Vehicle Shifting Charges
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                            <td>
+                                At Actuals
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                30
+                            </td>
+                            <td>
+                                ROC filling Charges
+                            </td>
+                            <td>
+                                ₹ 2,000
+                            </td>
+                            <td>
+                                ₹ 2,000
+                            </td>
+                            <td>
+                                ₹ 2,000
+                            </td>
+                            <td>
+                                ₹ 2,000
+                            </td>
+                            <td>
+                                ₹ 2,000
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                31
+                            </td>
+                            <td>
+                                SPDC waiver charge
+                            </td>
+                            <td>
+                                ₹ 1,500
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                32
+                            </td>
+                            <td>
+                                PDD charge
+                            </td>
+                            <td>
+                                ₹ 550
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                            <td>
+                                NA
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                33
+                            </td>
+                            <td>
+                                Cash Collection Charges on more than Rs 20,000/- (at the time of Prepayment/foreclosure only)
+                            </td>
+                            <td>
+                                ₹ 5 per thousand for cash collection
+                            </td>
+                            <td>
+                                ₹ 5 per thousand for cash collection
+                            </td>
+                            <td>
+                                ₹ 5 per thousand for cash collection
+                            </td>
+                            <td>
+                                ₹ 5 per thousand for cash collection
+                            </td>
+                            <td>
+                                ₹ 5 per thousand for cash collection
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                34
+                            </td>
+                            <td>
+                                Cheque/Disbursement/Loan cancelation
+                            </td>
+                            <td>
+                                ₹ 1000 (within
+                                7 days of cheque issue date)
+                            </td>
+                            <td>
+                                ₹ 1000 (within
+                                7 days of cheque issue date)
+                            </td>
+                            <td>
+                                ₹ 1000
+                                (within 7 days of cheque issue date)
+                            </td>
+                            <td>
+                                ₹ 1000 (within
+                                7 days of cheque issue date)
+                            </td>
+                            <td>
+                                ₹ 1000 (within
+                                7 days of cheque issue date)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                ₹ 1000 plus interest up to cancelation period
+                            </td>
+                            <td>
+                                ₹ 1000 plus interest up to cancelation period
+                            </td>
+                            <td>
+                                ₹ 1000 plus interest upto cancelation period
+                            </td>
+                            <td>
+                                ₹ 1000 plus interest up to cancelation period
+                            </td>
+                            <td>
+                                ₹ 1000 plus interest up to cancelation period
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    *If stamp duty is purchased by Bank on behalf of customer.
+                </p>
+                
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                
+                
+                
+            </div-->
+            
+            
+            
+        </body>
+    </html>
+    
+</apex:page>

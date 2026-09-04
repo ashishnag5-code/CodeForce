@@ -1,0 +1,17 @@
+.header {
+    color:#6d3078;
+}
+.slds-modal__content{
+    max-height: 80% !important;
+    width:100% !important;
+    
+}
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+}
+/*.slds-modal__container{
+    max-height: 30% !important;    
+}*/

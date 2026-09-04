@@ -1,0 +1,35 @@
+.mainContent{
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+.scores {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+.checkname{
+    font-size: 14px;
+    font-weight: 700;
+}
+.header_content {
+    font-size: 15px;
+    font-weight: 700;
+    padding-bottom: 13px;
+}
+.errorMessgaeCss {
+    margin-left: auto;
+    min-width: var(--slds-c-toast-sizing-min-width, var(--sds-c-toast-sizing-min-width, 20rem));
+}
+.content {
+    padding: 10px; 
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.cibil {
+    margin-top: 2rem;
+}
+
+.onClickRefresh {
+    cursor: pointer;
+}

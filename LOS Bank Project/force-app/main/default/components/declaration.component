@@ -1,0 +1,259 @@
+<apex:component >
+    <apex:attribute name="declarationWrap" description="ID/Address Proof details of applicants" type="DocumentChecklistWrapper" required="false"/>
+    <apex:attribute name="applicant" description="Applicant Record for displaying applicant info" type="Applicant__c" required="true"/>
+
+
+    <!-- DECLARATION STARTS HERE -->
+    <p class="subHeadingStyles">L. DECLARATION</p>
+    <ol style="font-size: 12px">
+        <li>I/We declare that all the particulars and information and details given/filled in this application form are true, correct, complete and up-to-date in all respects and that I/We have not withheld any information whatsoever.</li>
+        <li>I/We confirm that no insolvency proceeding or suit for recovery of outstanding dues or monies whatsoever or for attachment of my/our assets or properties and or proceeding have been initiated and /or are pending against me/us and that I/We have never been adjudicated insolvent by any court or other authorities.</li>
+        <li>No action nor other steps have been taken or legal proceedings started by or against me/us in any court of law/other authorities for winding up, dissolution, administration or re-organization or for the appointment of a receiver, trustee or similar officer or for my/our assets.</li>
+        <li>I/We understand and acknowledge that AU Small Finance Bank Ltd. shall have the absolute discretion without assigning any reason (unless required by applicable law) to reject my/our application and that AU Small Finance Bank Ltd. shall not be responsible/liable in any manner whatsoever to me/us for such rejection or any delay in notifying me/us of such rejection. Any costs, losses, damages or expenses, or other consequences, caused by reason of such rejection of our application.</li>
+        <li>AU Small Finance Bank Ltd. its group companies reserves the right to retain the photographs and documents submitted and will not return the same of the applicant</li>
+        <li>I/We are neither related to any of the directors of AU Small Finance Bank Ltd. nor I/We are his/her relatives as defined under Companies Act, 2013.</li>
+        <li>I/We hereby represent, warrant and confirm that the offers and purpose is a valid purpose and also agree and undertake to utilize the loan only for the above mentioned purpose and that the loan shall not be used for any illegal and/or anti-social and/or speculative purpose including but not limited to participating in stock market/IPOs</li>
+        <li>I/We have been explained the product features for which I/We have applied for. I/We have read and understood the terms and conditions of the loan product of AU Small Finance Bank Ltd. and I/We agree to abide by them. All the terms and conditions set out in the Facility Terms shall govern and apply to the facility and all my/our obligations (as well in AU Small Finance Bank Ltd.'s rights and remedies) in relation thereto, if the facility applied for by me/us herein is sanctioned and granted by AU Small Finance Bank Ltd. based on my/our application.</li>
+        <li>I/We further authorize AU Small Finance Bank Ltd., and or its associates/subsidiaries/affiliates and has NO OBECTIONs to verify any information by visiting at my office/residence and/or contact me and/or my family members and/or my employer/Banker/Credit Bureau and to conduct internal checks for all my submitted documents and for other information pertaining to the policies of AU Small Finance Bank Ltd.. I/We also authorize AU Small Finance Bank Ltd. to conduct ROC search and charge creation against the facilities availed by me/us.</li>
+        <li>I/We undertake to inform AU Small Finance Bank Ltd. regarding any changes whatsoever in my/our address, email ID, contact number as specified herein above.</li>
+        <li>I/We acknowledge and agree that the grant of the facility by AU Small Finance Bank Ltd. to me/shall be subject to compliance by me/us of the terms and conditions set out under this Application Form, Sanction Letter and its schedules (collectively, the "Facility Terms")</li>
+        <li>I/We confirm that the Processing Fee paid by me/us is Non-refundable under any circumstances whatsoever including but not limited to decline/part disbursement/disbursement of the Loan.</li>
+        <li>
+            From time to time, AU Small Finance Bank Ltd. communicates various features/products/promotional offers which offer significant benefits to its customer and may use the services of third party agencies to do so. Do you wish to be informed about such benefits?
+            <apex:panelGrid columns="2">
+                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                
+                <apex:outputText value="I/We expressly authorize AU Small Finance Bank Ltd. to use information or data relating to me/us, for communicating marketing offers as outlined above. (Please tick)"/>
+                <div class="whiteUncheckedBox"></div>
+                <apex:outputText value="I/We do not wish to receive offers as outlined above. (Please tick)"/>
+            </apex:panelGrid>
+        </li>
+        <li> 
+            <apex:panelGrid columns="6">
+                <apex:outputText value="I/We is a relative/known to an AU Bank Employee"/>
+                <apex:outputPanel rendered="{!applicant.AU_Employee__c == 'Yes'}">
+                   <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                </apex:outputPanel>
+                 <apex:outputPanel rendered="{!applicant.AU_Employee__c <> 'Yes'}">
+                   <div class="whiteUncheckedBox"></div>
+                </apex:outputPanel>
+                <apex:outputText value="Yes"/>
+
+                <apex:outputPanel rendered="{!applicant.AU_Employee__c == 'No'}">
+                   <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                </apex:outputPanel>
+                 <apex:outputPanel rendered="{!applicant.AU_Employee__c <> 'No'}">
+                   <div class="whiteUncheckedBox"></div>
+                </apex:outputPanel>
+                <apex:outputText value="No"/>
+
+                <apex:outputPanel rendered="{!applicant.AU_Employee__c == 'No'}">
+                   <apex:outputText value="If Yes, then details are: _____________________"/>
+                </apex:outputPanel>
+                 <apex:outputPanel rendered="{!applicant.AU_Employee__c <> 'No'}">
+                   <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!applicant.AU_Employee_ID__c}</span></apex:outputText>
+                </apex:outputPanel>
+                
+            </apex:panelGrid>
+        </li>
+        <li>It is stated that the Customer/Account holder has provided consent that the Bank can extract his/her personal details, or any details as required by the Bank under law from CERSAI or any other authority by way of submission of his/her CKYCR number, in accordance with RBI guidelines or any other relevant law.</li>
+    </ol>
+    <!-- DECLARATION ENDS HERE -->
+
+    <!-- TnC for AAADHAAR STARTS HERE -->
+    <apex:panelGrid columns="1">
+        <span class="pslTextInBold">Terms &amp; Conditions: AADHAAR</span>
+        <apex:outputText >I/We hereby give my consent to AU Small Finance Bank Ltd. to obtain my Aadhaar Number, Name and Fingerprint /iris for authentication with UIDAI. Bank has informed me that my identity information would only be used for KYC and also informed that my biometrics will not be stored/shared and will be submitted to CIDR only for that purpose of authentication.</apex:outputText>
+    </apex:panelGrid>
+    <table width="100%">
+        <tr width="100%">
+            <td><apex:image styleclass="whatsAppIconStyles" url="{!URLFOR($Resource.ApplicationForm, 'WhatsApp.png')}"/></td>
+            <td>I hereby grant my consent to subscribe and receive promotional campaigns, and important information and updates relating to my bank account, loan, insurance &amp; other products and communications from the bank on my WhatsApp mobile/alternative mobile no <span style="text-decoration:none; border-bottom: 1px dotted #000;">{!applicant.Mobile_Number__c}</span></td>
+        </tr>
+    </table>
+    <table cellspacing="4" cellpadding="4" width="100%">
+        <apex:repeat value="{!declarationWrap.declarationMap}" var="eachDeclarationList">
+            <tr width="100%" style="line-height:40px;background-color:white;">
+                <apex:repeat value="{!eachDeclarationList}" var="eachApp">
+                    <!--apex:outputText rendered="{!eachDeclarationList[0] <> ''}"-->
+                        <td width="33%" style="text-align: center;color:#a89f9e;"><br/>Signature of {!eachDeclarationList[eachApp]}</td>
+                    <!--/apex:outputText-->
+                </apex:repeat>
+            </tr>
+        </apex:repeat>
+    </table>
+    <!-- TnC for AAADHAAR ENDS HERE -->
+
+    <!-- BANK INTERNAL USE SOURCING SECTION STARTS HERE -->
+    <!-- Commenting this out as its no longer required -->
+    <!-- p class="subHeadingStyles">FOR BANK'S INTERNAL USE ONLY</p>
+    <!--table width="100%">
+        <tr width="100%">
+            <td width="70%">
+                <apex:panelGrid columns="7">
+                    <apex:outputText value="Risk Level of the applicant based on KYC-AML guidelines:  "/>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Low"/>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Medium"/>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="High"/>
+                </apex:panelGrid>
+            </td>
+            <th width="10%">Lead Number</th>
+            <td width="20%" style="background-color: white">Lead Number</td>
+        </tr>
+        <tr width="100%">
+            <td width="70%">
+                <apex:panelGrid columns="2">
+                    <apex:outputText value="Loan Account No. "/>
+                    <div class="whiteBackground" style="width: 100px"></div>
+                </apex:panelGrid>
+            </td>
+            <th width="10%">Promo Code 1</th>
+            <td width="20%" style="background-color: white">Promo Code 1</td>
+        </tr>
+        <tr width="100%">
+            <td width="70%">
+                <apex:panelGrid columns="6">
+                    <apex:outputText ><span class="pslTextInBold">LG Code </span></apex:outputText>
+                    <div class="whiteBackground" style="width: 50px"></div>
+                    <apex:outputText ><span class="pslTextInBold">LC Code </span></apex:outputText>
+                    <div class="whiteBackground" style="width: 50px"></div>
+                    <apex:outputText ><span class="pslTextInBold">TL Emp. ID </span></apex:outputText>
+                    <div class="whiteBackground" style="width: 50px"></div>
+                </apex:panelGrid>
+            </td>
+            <th width="10%">Promo Code 2</th>
+            <td width="20%" style="background-color: white">Promo Code 2</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <apex:panelGrid columns="11">
+                    <apex:outputText ><span>Sourcing Channel </span></apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText ><span>Branch </span></apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText ><span>CA </span></apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText ><span>Dealer </span></apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText ><span>Referral Sales </span></apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText ><span>Other Channels __________________________</span></apex:outputText>
+                </apex:panelGrid>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <apex:panelGrid columns="11">
+                    <span>Dealer/CA/BC Name __________________________</span>
+                    <span>Dealer SE Name __________________________</span>
+                </apex:panelGrid>
+            </td>
+        </tr>
+    </table>
+    <table width="100%" cellspacing="4" cellpadding="4">
+        <tr width="100%">
+            <th/>
+            <th>Customer ID</th>
+            <th/>
+            <th>Document Submitted</th>
+            <th/>
+            <th>Customer ID</th>
+            <th/>
+            <th>Document Submitted</th>
+        </tr>
+        <tr>
+            <th>Applicant</th>
+            <td style="background-color: white"></td>
+            <td/>
+            <td>
+                <apex:panelGrid columns="6">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >ID Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Add Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Photo</apex:outputText>
+                </apex:panelGrid>
+            </td>
+            <th>Co-Applicant</th>
+            <td style="background-color: white"></td>
+            <td/>
+            <td>
+                <apex:panelGrid columns="6">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >ID Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Add Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Photo</apex:outputText>
+                </apex:panelGrid>
+            </td>
+        </tr>
+        <tr>
+            <th>Guarantor</th>
+            <td style="background-color: white"></td>
+            <td/>
+            <td>
+                <apex:panelGrid columns="6">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >ID Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Add Proof</apex:outputText>
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText >Photo</apex:outputText>
+                </apex:panelGrid>
+            </td>
+            <th>Group ID</th>
+            <td style="background-color: white"></td>
+            <td/>
+            <td/>
+        </tr>
+    </table>
+    <table cellspacing="4" cellpadding="4" width="100%">
+        <tr>
+            <td colspan="7">I confirm that I have visited the communication address(es) of the applicant(s) mentioned in the Application Form and the Applicant/Co-Applicant/Guarantor has signed in my presence</td>
+        </tr>
+        <tr width="100%" style="line-height:40px;">
+            <td width="5%"/>
+            <td width="40%" style="text-align: center;color:#a89f9e;background-color:white;"><br/>Signature of BSM/ABM/BM</td>
+            <td width="5%"/>
+            <td width="20%" style="text-align: center;color:#a89f9e;background-color:white;"><br/>RPC/CPC Stamp with Date</td>
+            <td width="5%"/>
+            <td width="20%" style="text-align: center;color:#a89f9e;background-color:white;"><br/>RCU Signature &amp; Date</td>
+            <td width="5%"/>
+        </tr>
+    </table-->
+    <!-- BANK INTERNAL USE SOURCING SECTION ENDS HERE -->
+
+    <!-- ACKNOWLEDGEMENT STARTS HERE -->
+    <!--table width="100%">
+        <tr><td colspan="2"><span class="pslTextInBold">Application ID: _________________ </span></td></tr>
+        <tr>
+            <td colspan="2">We acknowledge that we have received an application dated _______________ from Mr./Ms/M/s _______________ resident of/situated at ____________ for a loan of INR __________ under _________________ and decision on sanction or rejection shall be communicated within 30 days from receipt of this application &amp; all other relevant particulars by the Bank.</td>                            
+        </tr>
+        <tr>
+            <td><span class="pslTextInBold">For AU Small Finance Bank Ltd.</span></td>
+            <td width="30%" rowspan="4" style="text-align: center;color:#a89f9e;background-color:white">
+                <br/>(Sign &amp; Employee ID) Authorized Sign
+            </td>
+        </tr>
+        <tr>
+            <td><span class="pslTextInBold">Please Note that:</span></td>
+        </tr>
+        <tr>
+            <td>
+                <ol>
+                    <li>This is only an acknowledgement for having received the application and this should not be construed as an indication for our acceptance of the proposal. A decision on which will be taken only after due consideration of the proposal on its merit and/or fulfillment of conditions if any, that may be stipulated by the Bank.</li>
+                    <li>The application will be taken for consideration only after all the particulars/date/documents as may be required are received by the Bank.</li>
+                    <li>In case the proposal is rejected/not considered, the reasons for the same will be intimated to the applicant.</li>
+                </ol>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="pslTextInBold">In case of query, you can drop us a mail at customercare@aubank.in or call us at Toll Free No.: 1800 1200 1200</span></td>
+        </tr>
+    </table-->
+</apex:component>

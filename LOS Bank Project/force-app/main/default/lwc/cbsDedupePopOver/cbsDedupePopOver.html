@@ -1,0 +1,35 @@
+<template>
+
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="standard:avatar" size="medium" class="slds-m-around_small"></lightning-icon>
+            {applicantName}
+        </h3>
+        <span slot="actions">
+          <lightning-button-icon onclick={closeData} size="small" icon-name="utility:close"  variant="container"></lightning-button-icon>
+        </span>
+        <div class="slds-m-around_small">
+          <template if:true={boolCamReportTypeCBS}>
+            <c-lead-dedupe-parent bool-from-cam-report={boolFromCamReport} bool-cam-report-type-c-b-s={boolCamReportTypeCBS} record-id={recordId}></c-lead-dedupe-parent>
+          </template>
+          <template if:true={boolCamReportTypeLead}>
+            <c-lead-dedupe-parent bool-from-cam-report={boolFromCamReport} bool-cam-report-type-c-b-s={boolCamReportTypeCBS} record-id={recordId}></c-lead-dedupe-parent>
+          </template>
+          <template if:true={boolCamReportTypeVehicle}>
+            <c-ausf-vehicle-record-card bool-from-cam-report={boolFromCamReport} search-data={vehicleData}></c-ausf-vehicle-record-card>
+          </template>
+          <div slot="footer">
+                  <!--<lightning-badge label="Tag1"></lightning-badge>
+                  <lightning-badge label="Tag2"></lightning-badge>
+                  <lightning-badge label="Tag3"></lightning-badge>-->
+          </div>
+          <p class="slds-p-horizontal_small"></p>
+        </div>
+       
+    </lightning-card>
+
+  
+
+        
+    
+</template>

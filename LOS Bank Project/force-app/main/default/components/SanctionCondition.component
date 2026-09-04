@@ -1,0 +1,80 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="sanctionConditionRecords" description="This is the value for the component."
+                    type="Sanction_Condition__c[]" assignTo="{!sanctionConditions}"/>    
+    <apex:attribute name="productDetailsValue" description="This is the value for the component."
+                    type="String" assignTo="{!productDetails}"/>
+    <apex:attribute name="subPageValue" description="This is the value for the component."
+                    type="String" assignTo="{!subPage}"/>
+    <apex:attribute name="subProductValue" description="This is the value for the component."
+                    type="String" assignTo="{!subProduct}"/>
+    <apex:attribute name="isSectionEnabledForCECVSCVCAR" description="This is the value for the component."
+                    type="boolean" required="false" assignTo="{!isSectionEnabledForCV_CE_SCV_Product}"/>
+                   
+    <div style='{!pageBlockSectionCSS}'>
+        <!--R2-1170,1769 - updated display condition-->
+        <!--R2-1767 - updated condition for Tractor-->
+        <apex:pageBlockSection showHeader="true" title="Sanction Conditions" columns="1" rendered="{!((productDetails=='Four Wheeler' && subPage=='Credit' && subProduct != 'New') || (productDetails=='Four Wheeler' && subPage!='Credit') || (productDetails=='Two Wheeler') || (subPage = 'Commercial' && subProduct != 'New') || (subPage = 'Tractor' && subProduct != 'New') || (productDetails=='Tractor' && subPage!='Tractor') || (isSectionEnabledForCV_CE_SCV_Product))}">
+            <!-- Added the code under pageBlockSection - R2 2067 -->
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <!--R2-1170,1769 - updated display condition-->
+                    <!--R2-1767 - updated condition for Tractor-->
+                    <div style="display: {!IF(((productDetails=='Four Wheeler' && subPage=='Credit' && subProduct != 'New') || (productDetails=='Four Wheeler' && subPage!='Credit') || (productDetails=='Two Wheeler') || (subPage = 'Commercial' && subProduct != 'New') || (subPage = 'Tractor' && subProduct != 'New') || (productDetails=='Tractor' && subPage!='Tractor') || (isSectionEnabledForCV_CE_SCV_Product)), 'inline', 'none')};">
+                        <table style="{!tableStyle}">
+                            <tr style="{!tableRowStyle}">
+                                <th style="{!tableHeadDataStyle} width:15% !important">Sanction Condition</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Raised by User ID + NAME</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Compiled by User ID + NAME</th>
+                                <th style="{!tableHeadDataStyle} width:20% !important">Remarks</th>
+                            </tr>
+                            <apex:repeat value="{!sanctionConditions}" var="sanction">
+                                <tr style="{!tableRowStyle}">
+                                    <td style="{!tableDataStyle}">{!sanction.Sanction_Condition__c}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Date_Time__c}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Raised_By__r.Employee_Code__c} {!sanction.Raised_By__r.Name}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Completed_By__r.Employee_Code__c} {!sanction.Completed_By__r.Name}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Remarks__c}</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+    </div>        
+    <div style='{!pageBlockSectionCSS}'>
+        <!--R2-1170,1769 - updated display condition-->
+        <apex:pageBlockSection showHeader="true" columns="1" title="Sanction Conditions" rendered="{!((productDetails=='Four Wheeler' && subPage=='Credit' && subProduct == 'New') || (subPage = 'Tractor' && subProduct == 'New') || (subPage = 'Commercial' && subProduct == 'New'))}">
+            <!-- Added the code under pageBlockSection - R2 2067 -->
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <!--R2-1170,1769 - updated display condition-->
+                    <div style="display: {!IF(((productDetails=='Four Wheeler' && subPage=='Credit' && subProduct == 'New') || (subPage = 'Tractor' && subProduct == 'New') || (subPage = 'Commercial' && subProduct == 'New')), 'inline', 'none')};">
+                        <table style="{!tableStyle}">
+                            <tr style="{!tableRowStyle}">
+                                <th style="{!tableHeadDataStyle} width:15% !important">Sanction Condition</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Raised by User ID + NAME</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Compiled by User ID + NAME</th>
+                                <th style="{!tableHeadDataStyle} width:20% !important">Remarks</th>
+                                <th style="{!tableHeadDataStyle} width:10% !important">Action</th>
+                            </tr>
+                            <apex:repeat value="{!sanctionConditions}" var="sanction">
+                                <tr style="{!tableRowStyle}">
+                                    <td style="{!tableDataStyle}">{!sanction.Sanction_Condition__c}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Date_Time__c}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Raised_By__r.Employee_Code__c} {!sanction.Raised_By__r.Name}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Completed_By__r.Employee_Code__c} {!sanction.Completed_By__r.Name}</td>
+                                    <td style="{!tableDataStyle}">{!sanction.Remarks__c}</td>
+                                    <td style="{!tableDataStyle}"></td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>        
+    </div>        
+</apex:component>

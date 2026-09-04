@@ -1,0 +1,67 @@
+<apex:page renderAs="PDF" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                body { font-family: 'Quicksand'; font-size : 18px !important; sans-serif; color :333;}
+                .container{
+                    margin: 0px 60px;
+                }
+                .sub-class{
+                    text-align: justify;
+                }
+                .main-content{
+                    text-align: justify;
+                }
+                .latter-heading h3{
+                    text-align: center;
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                
+        <div class="latter-heading">
+            <br/>
+            <h3>
+                Dealer Consent Letter
+            </h3>
+            <p>To<br/> 
+            M/s. AU Small Finance Bank.<br/>
+            {!loan.Branch_Master__r.Account_Name__c}.</p>
+        </div>
+
+        <div class="sub-class">
+            <p>Dear Sir,</p>
+            <p><strong>Sub: </strong> Undertaking for Transfer of Vehicle Registration and Physical Possession for
+Vehicle bearing registration number {!collateral.Registration_Number__c}</p>
+        </div>
+        <div class="main-content">
+            <p>I agree and undertake that I shall be responsible to transfer the registration
+certificate (RC) and vehicle insurance in buyer’s name and ensure that the
+endorsement of hypothecation of AU Small Finance Bank Limited is recorded in
+the RC within 30 days.
+            
+            </p>
+            <p>I confirm that physical possession of the captioned vehicle will be handed over to
+{!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c} in good condition once I/seller will receive full payment of
+the consideration amount towards sale of the vehicle.
+            </p>
+
+            <p>Thanking you
+            </p>
+
+             <p>
+                ___________________________
+             
+             </p>
+             <p>
+               Seller/used car Dealer Name and Sign: 
+            </p>
+
+        </div>
+            </div>
+        </body>
+    </html>
+    
+</apex:page>

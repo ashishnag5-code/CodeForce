@@ -1,0 +1,54 @@
+<!--
+@Name : ausf_SendBackFieldInvestigation
+@Description: Send Back Field Investigation record to FI Agent/Agency - SFAU-2999
+@ Logs:
+Modified By         :       Modified Date           :       Description
+Mohit M.            :       14-June-2023            :       SFAU-2999
+-->
+<template>
+    <c-common-toast></c-common-toast>
+
+    <!-- HIDE THIS PORTION WHEN THE CODE IS COMING FROM MOBILE(PARENT) -->
+    <template if:false={fromMobile}>
+        <template if:true={renderSendBackButton}>
+            <lightning-button variant="brand" data-id="sendback" 
+                            class="slds-m-top_small buttonColor slds-m-left--small" label="Send Back To FI"
+                            onclick={openSendBackModal} disabled={disableSendBackButton}>
+            </lightning-button>
+        </template>
+    </template>
+
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Send Back</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div>
+                        <lightning-textarea name="SendBackComment" label="Send Back Comment" 
+                                            value={sendBackComments} 
+                                            onchange={handleSendBackComments} required></lightning-textarea>
+
+                    </div>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand buttonColor" onclick={handleSendback} title="OK">Send Back</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

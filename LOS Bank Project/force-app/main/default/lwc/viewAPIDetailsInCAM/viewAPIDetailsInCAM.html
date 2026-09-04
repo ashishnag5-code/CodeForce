@@ -1,0 +1,10 @@
+<template>
+    <template if:true={loadCmp}>
+        <lightning-card icon-name="standard:people" title={applicantName}>
+        <c-generic-data-display onback={closeData} display-type={dispType} identifier-documents={identifierDocuments} 
+        pan-response={apiResponse} match-score={matchScore} api-response={apiResponse} type={type}>
+        </c-generic-data-display>
+        </lightning-card>
+    </template>
+    
+</template>

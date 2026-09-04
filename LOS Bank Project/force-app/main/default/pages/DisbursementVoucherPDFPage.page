@@ -1,0 +1,608 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+<apex:variable value="{!0}" var="rowNum"/>
+<apex:variable value="{!0}" var="rowNumForPayment"/>
+
+<html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 13px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <div style="margin-bottom : 1%; text-align:center">
+                                <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" />
+                                <!--apex:image url="{!URLFOR($Resource.AUBankLogoSanction)}" style="margin-left : 17%; text-align:right;" height="100" width="150"></apex:image-->
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <h2 style="text-align: center; font-weight:bold">DISBURSAL VOUCHER</h2>
+                        </td>
+                    </tr>
+                    <tr></tr>
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center;">CASE SUMMARY</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%; font-weight:bold">SF Application</td>
+                        <td style="width: 25%">{!loan.Application_Id__c}</td>
+                        <td style="width: 25%; font-weight:bold">Date</td>
+                        <td style="width: 25%">
+                            <apex:outputText value="{0,date,dd/MM/yyyy}"> 
+                                <apex:param value="{!NOW()}" /> 
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Product</td>
+                        <td>{!loan.Product__c}</td>
+                        <td style="font-weight:bold">Constitution Type</td>
+                        <td>
+                            <div style="display: {!IF(applicant.Customer_Type__c=='Individual','inline','none')}">
+                                Individual
+                            </div>
+                            <div style="display: {!IF(applicant.Customer_Type__c=='Non Individual','inline','none')}">
+                                Non Individual_{!applicant.Constitution_Type__c}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Name of Applicant</td>
+                        <td>{!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</td>
+                        <td style="font-weight:bold">Balance Transfer Type</td>
+                        <td>{!loan.BT_Type__c}_{!collateral.SVSH_SVOH__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Father/Husband Name</td>
+                        <td><div style="display: {!IF(AND(applicant.Marital_Status__c=='Married',applicant.Gender__c == 'Female'),'inline','none')}">
+                                {!applicant.Spouse_Name__c}
+                            </div>
+                            <div style="display: {!IF(applicant.Marital_Status__c!='Married','inline','none')}">
+                                {!applicant.Father_Name__c}
+                            </div>
+                            <div style="display: {!IF(AND(applicant.Marital_Status__c=='Married',applicant.Gender__c == 'Male'),'inline','none')}">
+                                {!applicant.Father_Name__c}
+                            </div>
+                        </td>
+                        <td style="font-weight:bold">PSL/BSR</td>
+                        <td>{!pslRecord.PSL_Classification_Type__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Final Grade</td>
+                        <td>{!applicant.Customer_Grade__c}</td>
+                        <td style="font-weight:bold">Region</td>
+                        <td>{!loan.Branch_Master__r.Region__r.Account_Name__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">State</td>
+                        <td>{!loan.Branch_Master__r.State__r.Account_Name__c}</td>
+                        <td style="font-weight:bold">Branch</td>
+                        <td>{!loan.Branch_Master__r.Account_Name__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Hub</td>
+                        <td>{!loan.Branch_Master__r.Business_Hub__r.Account_Name__c}</td>
+                        <td style="font-weight:bold">Pricing Authority</td>
+                        <td>{!pricing.Approver__r.Name}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Loan Stage</td>
+                        <td>
+                            {!loan.Stage__c}
+                        </td>
+                        <td style="font-weight:bold">Loan Account Number</td>
+                        <td>{!loan.LAN__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Deal Approved By</td>
+                        <td>
+                            <div style="display: {!IF(loan.BRE_Decision__c!='STP','inline','none')}">
+                                {!credit.Approver__r.Name}
+                            </div>
+                            <div style="display: {!IF(loan.BRE_Decision__c=='STP','inline','none')}">
+                                STP
+                            </div>
+                        </td>
+                        <td style="font-weight:bold">DO Date</td>
+                        <td>
+                            <apex:outputText value="{0,date,dd-MM-yyyy}">
+                                <apex:param value="{!collateral.DO_Generation_Date__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Application Flow</td>
+                        <td>{!loan.Ops_Output__c}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center;">CUSTOMER ONBOARDING MODE</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>KYC Mode</td>
+                        <td>Loan Agreement</td>
+                        <td>Customer Type</td>
+                    </tr>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <tr>
+                            <td style="font-weight:bold">{!applicant.RecordType.Name}</td>
+                            <td>{!applicant.KYC_Type__c}</td>
+                            <td>{!loan.Esign_Type__c}</td>
+                            <td>
+                                <div style="display: {!IF(applicant.Existing_Customer__c=='Yes','inline','none')}">
+                                    ETB_ {!applicant.CIF_No__c} Update
+                                </div>
+                                <div style="display: {!IF(applicant.Existing_Customer__c=='No','inline','none')}">
+                                    NTB_ {!applicant.CIF_No__c}
+                                </div>
+                            </td>
+                            
+                        </tr>
+                    </apex:repeat>
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center;">ASSET DETAILS</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Product</td>
+                        <td>{!loan.Product__c}</td>
+                        <td style="font-weight:bold">Product Type</td>
+                        <td>{!collateral.Collateral_Name__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Make</td>
+                        <td>{!collateral.Make__c}</td>
+                        <td style="font-weight:bold">Model</td>
+                        <td>{!collateral.Model__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Variant</td>
+                        <td>{!collateral.Variant__c}</td>
+                        <td style="font-weight:bold">Vehicle Manufacture Year</td>
+                        <td>{!LEFT(collateral.Manufacture_year_month__c,4)}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Vehicle No</td>
+                        <td>
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                           
+                                {!collateral.Vehicle_Number__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                AF
+                            </div>
+                        </td>
+                        <td style="font-weight:bold">Insurance Type</td>
+                        <td>
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                <!-- R2-2634 -->
+                                {!collateral.Existing_Policy_Type__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                Comperessive
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Asset Category</td>
+                        <td>{!collateral.Vehicle_Category__c}</td>
+                        <td style="font-weight:bold">Valuation Type</td>
+                        <td>{!valuation.Valuer_Name_Code__c}</td>
+                    </tr>
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center; ">SOURCING DETAILS</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Source Channel</td>
+                        <td>{!loan.Sourcing_channel__c}</td>
+                        <td style="font-weight:bold">Sourcing Channel Name</td>
+                        <td>{!sourcingChannel.Account_Name__c}</td>
+                    </tr>
+                    <!--<tr>
+                        <td>Dealer Bank Name</td>
+                        <td>{!sourcingChannel.Bank_Name__c}</td>
+                        <td>Dealer Account Number</td>
+                        <td>{!sourcingChannel.Benificiary_Account_Number__c}</td>
+                    </tr>-->
+                    <tr>
+                        <td style="font-weight:bold">RO Code</td>
+                        <td>{!RO.Employee_Code__c}</td>
+                        <td style="font-weight:bold">RO Name</td>
+                        <td>{!RO.Name}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Scheme</td>
+                        <td>{!loan.Scheme__r.Scheme_Name__c}</td>
+                        <td style="font-weight:bold"></td>
+                        <td></td>
+                    </tr>
+                    <!--<tr>
+                        <td>Source of Lead</td>
+                        <td></td>
+                        <td>Other Source of Lead</td>
+                        <td></td>
+                    </tr>-->
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center; ">DEALER DETAILS</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Dealer Name</td>
+                        <td>{!dealer.Account_Name__c}</td>
+                        <td style="font-weight:bold">Dealer Category</td>
+                        <td>{!dealer.Dealer_Type__c}</td>
+                        
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Dealer Bank Name</td>
+                        <td>{!dealer.Bank_Name__c}</td>
+                        <td style="font-weight:bold">Dealer Account Number</td>
+                        <td>{!dealer.Benificiary_Account_Number__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Dealer IFSC Code</td>
+                        <td>{!dealer.IFSC_Code__c}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                        <td colspan="4" style="text-align:center; ">FINANCIAL DETAILS</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Asset Cost</td>
+                        <td><!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                            
+                                {!collateral.Vehicle_Cost__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                {!collateral.Net_of_Discount_Price__c}
+                            </div>
+                        </td>
+                        <td style="font-weight:bold">
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                            
+                                Final Vehicle Cost
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                On Road Price
+                            </div>
+                        </td>
+                        <td><!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                            
+                                {!collateral.Final_Cost__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                {!collateral.On_Road_Price__c}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Certified Value</td>
+                        <td>
+                            {!collateral.Certified_Value__c}
+                        </td>
+                        <td style="font-weight:bold">IDV Value</td>
+                        <td>
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                                {!collateral.IDV__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                NA
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">IBB Value</td>
+                        <td>
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                                {!collateral.IBB_Value__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                NA
+                            </div>
+                        </td>
+                        <td style="font-weight:bold">Valuation Amount</td>
+                        <td>
+                            <!-- R2-2634 -->
+                            <!-- <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || productDetails.Sub_Product__c=='Cash on Wheels','inline','none')}"> -->
+                                <div style="display: {!IF(productDetails.Sub_Product__c=='Used' || CONTAINS($Label.COW_Product_Names, productDetails.Sub_Product__c),'inline','none')}">
+                                    <!-- R2-2634 --> 
+                                {!collateral.Valuation_Amount__c}
+                            </div>
+                            <div style="display: {!IF(productDetails.Sub_Product__c=='New','inline','none')}">
+                                NA
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Margin Money</td>
+                        <td>{!ROUND((marginMoneyValue),0)}</td>
+                        <td style="font-weight:bold">Loan Amount</td>
+                        <td>{!ROUND(loan.Total_Loan_Amount__c,0)}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Ex Showroom LTV</td>
+                        <td>{!(collateral.LTV_offered_Ex_showroom__c)} {!IF(collateral.LTV_offered_Ex_showroom__c!=null,'%','')}</td>
+                        <td style="font-weight:bold">ON Road LTV</td>
+                        <td>{!(collateral.LTV_offered_On_road__c)} {!IF(collateral.LTV_offered_On_road__c!=null,'%','')}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Final Cost LTV</td>
+                        <td>{!(collateral.LTV_offered_On_final_cost__c)} {!IF(collateral.LTV_offered_On_final_cost__c!=null,'%','')}</td>
+                        <td style="font-weight:bold">EMI Frequency</td>
+                        <td>{!loan.EMI_Frequency__c}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">No of EMI/Tenure</td>
+                        <td>{!loan.Tenure__c} months</td>
+                        <td style="font-weight:bold">EMI Amount</td>
+                        <td>{!ROUND(loan.EMI__c,0)}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Rack Rate</td>
+                        <td>{!loan.RBP__c} %</td>
+                        <td style="font-weight:bold">IRR</td>
+                        <td>{!loan.ROI__c} %</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Deviation IRR</td>
+                        <td>{!(loan.RBP__c-loan.ROI__c)}</td>
+                        <td style="font-weight:bold">First EMI Date</td>
+                        <td>
+                            <apex:outputText value="{0,date,dd-MM-yyyy}"> 
+                                <apex:param value="{!loan.First_EMI_Date__c}" /> 
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold">Total Charges</td>
+                        <td>{!ROUND(loan.Total_Charges__c,0)}</td>
+                        <td style="font-weight:bold">Repayment Mode</td>
+                        <td>{!loan.Repayment_Mode__c}</td>
+                    </tr>
+                    <!--<tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Au Swasthya Suraksha Insurance_ABHI</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>AU Swasthya Suraksha &ndash; Chola MS</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Au Swasthya Suraksha Insurance &ndash; Care</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Chola MS General (Vehicle)</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Chola MS GIC remittance GL - Health</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Documentation Charges</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>GPA and Hospi Cash _Wheel_ Care</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>GPA and Hospi Cash _Wheel_ABHI</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Insurance Premium</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Ledger Folio Charge Wheels</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>PDC Charges</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Processing Fees CV Loading (Cash on Wheels)</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>RC Charges</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Roc Charge Creation Expenses</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>RTO Charges</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Stamp Duty</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Stamping Expenses</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>TATA GCI and PA Insurance_Wheel</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Valuation Charges</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Vintage Model Fees</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>09-21-22</td>
+                        <td>Deduct</td>
+                        <td>Wheels LS- HDFC Life Credit Protect Plus</td>
+                        <td>0</td>
+                    </tr>-->
+                </tbody>
+            </table>
+            <div style="page-break-before:always;">
+            <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                <tr style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px">
+                    <th  colspan="4" style="text-align:center ">CHARGES DETAILS</th>
+                </tr>
+                <apex:repeat value="{!chargeList}" var="charge">
+                    <tr>
+                        <td>
+                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                            {!rowNum}
+                        </td>
+                        <td>Deduct</td>
+                        <td>{!charge.Charges_Name__c}</td>
+                        <td>{!ROUND(charge.Total_Amount__c,0)}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+            
+            
+
+            <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td colspan="8" style="background-color: rgb(109,48,120);
+                  color: white; font-size:15px; text-align:center; ">DISBURSAL DETAILS</td>
+                    </tr>
+                    <tr style="background-color:#ed7d31; font-size:15px">
+                        <td>Sr No</td>
+                        <td>Beneficiary Name</td>
+                        <td>Bank Name</td>
+                        <td>A/C Details</td>
+                        <td>IFSC code</td>
+                        <td>Payment Mode</td>
+                        <td>Amount</td>
+                        <td>CMS Print Location</td>
+                    </tr>
+                    <apex:repeat value="{!paymentFavourings}" var="payment">
+                    <tr>
+                        <td colspan="1">
+                            <div>
+                                <apex:variable var="rowNumForPayment" value="{!rowNumForPayment + 1}"/>
+                                {!rowNumForPayment}
+                            </div>
+                        </td>
+                        <td colspan="1">
+                            <div>{!payment.Name__c}</div>
+                        </td>
+                        <td colspan="1">
+                            <div>{!payment.Bank_Name_PMT__c}</div>
+                        </td>
+                        <td colspan="1">
+                            <div>{!payment.Account_Number__c}</div>
+                        </td>
+                        <!--<td>2021229928151023</td>-->
+                        <td colspan="1">
+                            <div>{!payment.IFSC_Code__c}</div>
+                        </td>
+                        <td colspan="1">
+                            <div>{!payment.Payment_Mode__c}</div>
+                        </td>
+                        <td colspan="1">
+                            <div>{!ROUND(payment.Net_Amount__c,0)}</div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </apex:repeat>
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td>Charge</td>
+                        <td>{!loan.Total_Charges__c}</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>NA</td>
+                        <td>Deduction</td>
+                        <td>{!loan.Total_Charges__c}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,123 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="loanAppApproverRecordDetails" description="This is the value for the component."
+                    type="Loan_Application_Approval__c[]" required="true" assignTo="{!loanAppApprovalRecords}"/>
+    <apex:attribute name="productDetailsValue" description="This is the value for the component."
+                    type="String" required="true" assignTo="{!productDetails}"/>
+    <apex:attribute name="loanApp" description="This is the value for the component."   
+                    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="collateralDetails" description="This is the value for the component."
+                    type="Collateral__c" required="true" assignTo="{!collateral}"/>
+    <apex:attribute name="isSectionEnabledForCECVSCVCAR" description="This is the value for the component."
+                    type="boolean" required="false" assignTo="{!isSectionEnabledForCV_CE_SCV_Product}"/>
+    <div style='{!pageBlockSectionCSS}'>
+        <!--R2-1767 added condition for Tractor-->
+        <apex:pageBlockSection showHeader="true" columns="1" title="Approval Flow" rendered="{!productDetails=='Four Wheeler' || productDetails=='Tractor' || isSectionEnabledForCV_CE_SCV_Product}">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <div style="display: {!IF(productDetails=='Four Wheeler' || productDetails=='Tractor' || isSectionEnabledForCV_CE_SCV_Product, 'inline', 'none')};">
+                        <table style="{!tableStyle}">
+                            <tr style="{!tableRowStyle}">
+                                <th style="{!tableHeadDataStyle} width:5%;">Decision</th>
+                                <th style="{!tableHeadDataStyle} width:10%;">Remarks</th>
+                                <th style="{!tableHeadDataStyle} width:10%;">Username + ID</th>
+                                <th style="{!tableHeadDataStyle} width:15%;">Loan Details</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">Start Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">End Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">Work step Name/level</th>
+                            </tr>
+                            <apex:repeat value="{!loanAppApprovalRecords}" var="approvalRecord">
+                                <tr style="{!tableRowStyle}">
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approval_Status__c}</td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Remarks__c}</td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approver__r.Name} {!approvalRecord.Approver__r.Employee_Code__c} 
+                                        <!--<br/> {!LEFT(approvalRecord.Approver__r.Username,(FIND('@', approvalRecord.Approver__r.Username)-1))}--></td>
+                                    <!-- SFAU-5131 -->
+                                    
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputPanel rendered="{!approvalRecord.Loan_Details__c <> ''}">
+                                            {!approvalRecord.Loan_Details__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!approvalRecord.Loan_Details__c == ''}">
+                                            {!ROUND(loan.Loan_Amount__c, 0)} / {!ROUND(loan.Tenure__c, 0)} months / {!ROUND(loan.ROI__c, 2)} % / {!ROUND(collateral.LTV_offered_On_road__c,2)} %
+                                        </apex:outputPanel>
+                                    </td>
+                                    <!-- <td style="{!tableDataStyle}">{!ROUND(loan.Loan_Amount__c, 0)} / {!ROUND(loan.Tenure__c, 0)} months / {!ROUND(loan.ROI__c, 2)} % / {!ROUND(collateral.LTV_offered_On_road__c,2)} %</td> -->
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputField value="{!approvalRecord.LastModifiedDate}"></apex:outputField>
+                                        <!--<apex:outputText value="{0,date,yyyy-MM-dd}">
+<apex:param value="{!approvalRecord.LastModifiedDate}" />
+</apex:outputText>-->
+                                    </td>
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputField value="{!approvalRecord.Decision_Date_Time__c}"></apex:outputField>
+                                        <!--<apex:outputText value="{0,date,yyyy-MM-dd}">
+<apex:param value="{!approvalRecord.Decision_Date_Time__c}" />
+</apex:outputText>-->
+                                    </td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approver_Level__c} {!approvalRecord.Deviation_Level__c}</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+        
+        <apex:pageBlockSection showHeader="true" columns="1" title="Approval Flow" rendered="{!productDetails=='Two Wheeler'}">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <div style="display: {!IF(productDetails=='Two Wheeler', 'inline', 'none')};">
+                        <table style="{!tableStyle}">
+                            <tr style="{!tableRowStyle}">
+                                <th style="{!tableHeadDataStyle} width:5%;">Decision</th>
+                                <th style="{!tableHeadDataStyle} width:10%;">Remarks</th>
+                                <th style="{!tableHeadDataStyle} width:10%;">Username + ID</th>
+                                <th style="{!tableHeadDataStyle} width:15%;">Loan Details</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">Start Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">End Date + Time</th>
+                                <th style="{!tableHeadDataStyle} width:5%;">Work step Name/level</th>
+                            </tr>
+                            <apex:repeat value="{!loanAppApprovalRecords}" var="approvalRecord">
+                                <tr style="{!tableRowStyle}">
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approval_Status__c}</td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Remarks__c}</td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approver__r.Name}  {!approvalRecord.Approver__r.Employee_Code__c}
+                                        <!--{!LEFT(approvalRecord.Approver__r.Username,(FIND('@', approvalRecord.Approver__r.Username) + 1))}--> </td>
+                                    <!-- SFAU-5131 - Loan details gets changed for approved record when BRE re-runs -->
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputPanel rendered="{!approvalRecord.Loan_Details__c <> ''}">
+                                            {!approvalRecord.Loan_Details__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!approvalRecord.Loan_Details__c == ''}">
+                                            {!ROUND(loan.Loan_Amount__c, 0)} / {!ROUND(loan.Tenure__c, 0)} months / {!ROUND(loan.ROI__c, 2)} % / {!ROUND(collateral.LTV_offered_On_road__c,2)} %
+                                        </apex:outputPanel>
+                                        
+                                        <!--<apex:outputText value="{!loan.Loan_Amount__c}"></apex:outputText>&nbsp;/&nbsp;
+<apex:outputText value="{!loan.Tenure__c}"></apex:outputText>&nbsp;/&nbsp;
+<apex:outputText value="{!loan.ROI__c}"></apex:outputText>&nbsp;/&nbsp;
+<apex:outputText value="{!collateral.LTV_offered_On_road__c}"></apex:outputText>-->
+                                    </td>
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputField value="{!approvalRecord.LastModifiedDate}"></apex:outputField>
+                                        <!--<apex:outputText value="{0,date,yyyy-MM-dd}">
+<apex:param value="{!approvalRecord.LastModifiedDate}" />
+</apex:outputText>-->
+                                    </td>
+                                    <td style="{!tableDataStyle}">
+                                        <apex:outputField value="{!approvalRecord.Decision_Date_Time__c}"></apex:outputField>
+                                        <!--<apex:outputText value="{0,date,yyyy-MM-dd}">
+<apex:param value="{!approvalRecord.Decision_Date_Time__c}" />
+</apex:outputText>-->
+                                    </td>
+                                    <td style="{!tableDataStyle}">{!approvalRecord.Approver_Level__c}</td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                    </div>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+    </div>        
+</apex:component>

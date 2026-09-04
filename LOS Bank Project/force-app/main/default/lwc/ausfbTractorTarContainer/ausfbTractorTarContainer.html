@@ -1,0 +1,253 @@
+<!--
+  @description       : Tractor TAR Form
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 12-18-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} lwc:if={isComponentVisible}>
+        <lightning-accordion-section name="A" label="Tractor Advancing Report" >
+            <c-custom-spinner
+                show-spinner={isLoading}
+                record-id={recordId}
+                spinner-image={spinnerImage}
+            >
+            </c-custom-spinner>
+            <!-- <lightning-spinner 
+                alternative-text="Loading" 
+                size="medium"
+                variant="brand"
+                lwc:if={isLoading}
+                >
+            </lightning-spinner> -->
+            <lightning-card >
+                
+                <!-- Input form for manual input-->
+                <!-- <lightning-record-edit-form object-api-name="Collateral__c" record-id={collateralId}>
+                    
+                    <lightning-layout multiple-rows>
+                        <template for:each={fieldsDisplay} for:item="fieldMetaData">
+                            <lightning-layout-item key={fieldMetaData.fieldApi} size="12" small-device-size="6"
+                                padding="around-small">
+                                <lightning-input-field field-name={fieldMetaData.fieldApi}
+                                    disabled={fieldMetaData.isDisabled} data-apiname={fieldMetaData.fieldApi}
+                                    onchange={handleFieldChange}> </lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+                
+                </lightning-record-edit-form> -->
+                <lightning-layout multiple-rows>
+                    <template for:each={fieldsDisplay} for:item="fieldMetaData">
+                        <lightning-layout-item key={fieldMetaData.fieldApi} size="12" small-device-size="6"
+                            padding="around-small">
+                            <lightning-combobox lwc:if={fieldMetaData.isPickList}
+                                label={fieldMetaData.fieldLabel}
+                                value={fieldMetaData.fieldValue}
+                                options={typeOfPlaceVisit}
+                                data-apiname={fieldMetaData.fieldApi}
+                                disabled={fieldMetaData.isDisabled}
+                                onchange={handleFieldChange}
+                                variant="label-inline"
+                                >
+                            </lightning-combobox>
+                            <lightning-input lwc:else
+                                data-apiname={fieldMetaData.fieldApi}
+                                label={fieldMetaData.fieldLabel}
+                                type={fieldMetaData.type}
+                                value={fieldMetaData.fieldValue}
+                                class={fieldMetaData.fieldApi}
+                                disabled={fieldMetaData.isDisabled}
+                                onchange={handleFieldChange}
+                                variant="label-inline"
+                                >
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+                
+                <!-- Input form for manual input-->
+
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item  size="12" padding="around-small">
+                        <div class="slds-text-align_center slds-text-title_bold">
+                            Engine No. & Chasis No. Tracing / Impression (All below photo will be mandatory)
+                        </div>
+                    </lightning-layout-item>
+
+                    <!-- For documents -->
+                    <lightning-layout-item  size="12"  padding="around-small">
+                        <lightning-layout multiple-rows>
+                            
+                            <template for:each={imageFields} for:item="imageMetadata">
+                                <lightning-layout-item key={imageMetadata.documentId} size="12" small-device-size="6" padding="around-small">
+                                    
+                                    <lightning-layout multiple-rows horizontal-align = "center">
+                                        
+                                        <lightning-layout-item  size="4" padding="around-small">
+                                            {imageMetadata.documentName}
+                                        </lightning-layout-item>
+                                        
+                                        <lightning-layout-item  size="8" padding="around-small">
+                                             <!-- Reusing LOS generic upload component -->
+                                                <c-los-generic-document-upload 
+                                                is-form60={trueValue} 
+                                                isloading ={trueValue} 
+                                                isdocmanager={trueValue} 
+                                                show-upload-component ={trueValue} 
+                                                collateral-id={collateralId}  
+                                                show-input-box={falseValue} 
+                                                doc-name ={imageMetadata.documentId}
+                                                ondocumentsuccess={handleDocumentUploadSuccess} 
+                                                uploadtypename={imageMetadata.documentName}
+                                                >
+                                            </c-los-generic-document-upload>
+                                            <!-- Reusing LOS generic upload component -->
+                                        </lightning-layout-item>
+                                        <lightning-layout-item  size="12" padding="around-small">
+                                            <template 
+                                                for:each={imageMetadata.uploadedDocuments} 
+                                                for:item="fileRecord" 
+                                                for:index="fileIndex">
+                                                <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                                    <lightning-button variant="base" label={fileRecord.fileName}
+                                                        name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                                        data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                                        title="Document Name" onclick={handlePreviewClick}
+                                                        class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                                    </lightning-button>
+                                                    <a  target="_blank" 
+                                                        class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl}
+                                                        download>
+                                                        <lightning-icon icon-name="utility:download" size="x-small"
+                                                            alternative-text="Download" title="Download"></lightning-icon>
+                                                    </a>
+                                                </div>
+                                            </template>
+                                        </lightning-layout-item>
+                                    
+                                    </lightning-layout>
+                            
+                                </lightning-layout-item>
+                            </template>
+                        </lightning-layout>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+                <div slot="footer" class="slds-grid slds-align_absolute-center" >
+                    
+                    <div slot="footer" class="slds-text-align_center" >
+                        <lightning-button variant="brand" label="Save TAR" title="Save TAR" disabled={isComponentDisabled} onclick={handleSaveTARData}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    
+                    <div slot="footer" class="slds-text-align_center" >
+                        <lightning-button variant="brand" label="Submit TAR"  disabled={isComponentDisabled} title="Submit TAR" onclick={handleSubmitTARData}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    
+                </div>
+                
+            </lightning-card>
+            
+        </lightning-accordion-section>
+        <lightning-accordion-section name="B" class="slds-form-element_horizontal" 
+                    label="Approval Details">
+                    <br>
+            <template if:false={isApprovalExist}>
+                <lightning-textarea name="input7" required value="" placeholder="Enter remarks here"  
+                        label="Remarks" maxlength="250" onchange={populateComments}
+                        message-when-too-long="A maximum of 250 characters are allowed in a remarks." 
+                        message-when-value-missing="An empty Approval cannot be allowed." >
+                </lightning-textarea>
+
+                <br>
+                <div class="slds-grid slds-align_absolute-center" >
+                    <div slot="footer" class="slds-text-align_center" >
+                        <lightning-button variant="brand" style="background: #6D3078;" label="Submit For Approval" title="Submit For Approval" 
+                            onclick={submitForApproval} disabled={disableSubmitForApprovalButton}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <!-- <div slot="footer" class="slds-text-align_center" >
+                        <lightning-button variant="brand" style="background: #6D3078;" label="Submit For Approval" title="Submit For Approval" 
+                        onclick={submitForApproval} disabled={disableButton}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <div slot="footer" class="slds-text-align_center" lwc:else>
+                        <lightning-button variant="brand" style="background: #6D3078;" label="Submit For Approval" title="Submit For Approval" 
+                        onclick={submitForApproval} disabled={disableButton}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div> -->
+                </div>
+            </template>
+            <template if:true={isApprovalExist}>
+                <template if:true={isCurrentuserApprover}>
+                    <div class="slds-text-align_right" >
+                        <lightning-button variant="brand" style="background: #6D3078;" label="Approve" title="Approve" 
+                            onclick={approveRecord} disabled={disableallButton}
+                            class="slds-m-left_x-small"></lightning-button>
+                    
+                        <lightning-button variant="brand" style="background: #6D3078;" label="Reject" title="Reject" 
+                            onclick={rejectRecord} disabled={disableallButton}
+                            class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                    <template if:true={approveOrRejReq}>
+                        <br>
+                        <div class="slds-align_absolute-center">
+                            {approverejectMsg}
+                        </div>
+                        <br>
+                        <div class="slds-grid slds-align_absolute-center">
+                            <br>
+                            <div class="slds-size_1-of-2">
+                                <lightning-input type="text" label="Enter Comments" onchange={populateAppRejComment}></lightning-input>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="slds-text-align_center" >
+                            <lightning-button variant="brand" style="background: #6D3078;" label="Submit" title="Submit" 
+                                onclick={approverecandSubmit} disabled={disableallButton}
+                                class="slds-m-left_x-small"></lightning-button>
+                        
+                            <lightning-button variant="brand" style="background: #6D3078;" label="Cancel" title="Cancel" 
+                                onclick={cancelrecord} disabled={disableallButton}
+                                class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </template>
+                    
+                </template>
+                <br>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+                        <lightning-input name="textield"   type="text" value={approvalRemarks}
+                            readonly = true label="Remarks :">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+                        <lightning-input name="textield"  type="text" value={approvalStatus}
+                        readonly = true label="Approval Status :">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+                        <lightning-input name="textield"  type="text" value={approvalApprover}
+                            readonly = true label="Approved By :">
+                        </lightning-input>
+                    </div>
+                    <template if:true={approversList}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3 slds-large-size_1-of-3">
+                            <lightning-input name="textield"  type="text" value={approversList}
+                                readonly = true label="Pending Approval From :">
+                            </lightning-input>
+                        </div>
+                    </template>
+                </div>
+                    
+            </template>
+        </lightning-accordion-section>
+        <div class="slds-m-top_small">
+            <c-generic-credit-verify-button record-id={recordId} document-type="TAR"></c-generic-credit-verify-button>
+        </div>
+    </lightning-accordion>
+</template>

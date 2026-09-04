@@ -1,0 +1,307 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={loadComponents}>
+        <div>
+        <template if:true={displayValidatePayments}>
+            <c-payment-details-ops-author completed-stage={completedStage} display-validate-button={displayButtonOnPayment} display-release-button={dontDisplayButtonOnPayment} user-type={userType} loan-app-id={loanAppId} onenabledodisburse={handleEnableDoDisburse}
+            parent-id={paymentFavouringParentId} onrefreshonpaymentreleased={handlePaymentFavouringOnDoDisburse} disbursement-amount={paymentFavouringDisbursementAmount} total-charges={paymentFavouringTotalCharges}></c-payment-details-ops-author>
+        </template>
+    </div>
+        <lightning-accordion active-section-name='DisbursementDetails' allow-multiple-sections-open>
+            <lightning-accordion-section name="DisbursementDetails" label="Disbursement Details" class="accordClass">
+               
+                <lightning-card>
+                   <!-- <h1 slot="title">
+                        <div class="slds-p-around_small">
+                            <lightning-icon icon-name="custom:custom41" size="medium" class="slds-m-right_small"></lightning-icon>
+                            Disbursement Details
+                        </div>-->
+                        
+                        <!--<div class="demo-only" style="width:30rem">
+                            <article class="slds-tile slds-media">
+                                <div class="slds-media__figure">
+                                    <span class="slds-icon_container" title="description of icon when needed">
+                                        <lightning-icon icon-name="custom:custom41" size="medium"></lightning-icon>
+                                    </span>
+                                </div>
+                                <div class="slds-media__body">
+                                    <h3 class="slds-tile__title slds-truncate" title="Loan Details">
+                                        <p>Disbursement Details</p>
+                                    </h3>
+                                    <div class="slds-tile__detail">
+                                        <dl class="slds-list_horizontal slds-wrap">
+                                            <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-body_small"
+                                                title=""></dt>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>-->
+                    <!--</h1>-->
+            
+                    <lightning-layout multiple-rows vertical-align="end">
+                        <lightning-layout-item data-id="Addendum_Status__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="12">
+                            <span class="slds-form-element__label">Addendum Status &nbsp;&nbsp;
+                                <template if:true={isUserMaker}>
+                                <lightning-icon size="x-small" icon-name="utility:refresh" onclick={checkLatestAddedumStatus}></lightning-icon>
+                                </template>
+                            </span>
+                            <div class="slds-form-element__control">
+                                <div class="slds-form-element__static">
+                                    <template if:true={isAddedumStatusPending}>
+                                        <lightning-icon size="large" icon-name="utility:signature" variant="warning"></lightning-icon><br/>
+                                        <template if:true={isUserMaker}>
+                                        <lightning-button variant="base" data-id="reinitiateEsign" label="Re-initiate Esign" onclick={reinitiateAddendum}></lightning-button>
+                                    </template>
+                                    </template>
+                                    <template if:false={isAddedumStatusPending}>
+                                        <lightning-icon size="large" icon-name="utility:signature" variant="success"></lightning-icon>
+                                    </template>
+                                </div>
+                            </div>
+                            
+                        </lightning-layout-item>
+        
+                        <lightning-layout-item data-id="Disbursement_Category__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <lightning-combobox name="Disbursement_Category__c" label="Disbursement Category" data-id="disableAtOpsAuthor"
+                                options={disbursementCategoryOptions}
+                                value={loanApp.Disbursement_Category__c} onchange={handleChange} required></lightning-combobox>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Total_Loan_Amount__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <lightning-input type="number" required label="Disbursement Amount" name="Total_Loan_Amount__c" data-id="disableAtOpsAuthor"
+                                value={disbursementAmount} onchange={handleChange} disabled></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Mode_of_Disbursement__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <lightning-combobox type="number" required label="Mode of Disbursement" name="Mode_of_Disbursement__c" data-id="disableAtOpsAuthor"
+                                options={modeOfDisbursementOptions} onchange={handleChange}
+                                value={loanApp.Mode_of_Disbursement__c}></lightning-combobox>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Disbursement_Cheque_Print_Location__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-input type="text" label="Disbursement Cheque Print Location" data-id="disableAtOpsAuthor"
+                                name="Disbursement_Cheque_Print_Location__c" onchange={handleChange} access-key="chequePrintLocation"
+                                value={loanApp.Disbursement_Cheque_Print_Location__c} required={chequePrintLocationRequired}></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Disbursement_Date__c" size="12" class="component slds-hide" padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-input type="date" label="Disbursement Date" name="Disbursement_Date__c" onchange={handleChange} data-id="disableAtOpsAuthor"
+                                value={loanApp.Disbursement_Date__c} disabled></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item class="component slds-hide" data-id="ROI__c" size="12" small-device-size="12" padding="around-small"
+                            large-device-size="4">
+                                <!--<lightning-slider class="sliderColor" name="ROI__c" label="Applied ROI" value={loanApp.ROI__c} data-id="disableAtOpsAuthor"
+                                    onchange={handleChange} min={minROI} max={maxROI} step=0.01>
+                                </lightning-slider>-->
+                                <lightning-input min={minROI} max={maxROI} message-when-range-underflow={ROIUnderFlowError} label="Applied ROI"
+                                    message-when-range-overflow={ROIOverFlowError} required type="number" data-id="disableAtOpsAuthor"
+                                    step=0.01 name="ROI__c" value={loanApp.ROI__c} onchange={handleChange} data-name="ROI__c"></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Schedule_Name__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-combobox label="Schedule Type" type="text" name="Schedule_Name__c" onchange={handleChange} data-id="disableAtOpsAuthor"
+                                value={loanApp.Schedule_Name__c} options={scheduleNameOptions} required></lightning-combobox>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="EMI_Date__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <!--<lightning-input type="text" label="First EMI Date" name="EMI_Date__c" onchange={handleChange} data-id="disableAtOpsAuthor"
+                                value={loanApp.EMI_Date__c} required></lightning-input>-->
+                            <lightning-combobox name="EMI_Date__c"
+                                label="EMI Date"
+                                required
+                                disabled
+                                data-name="EMI_Date__c"
+                                data-id="disableAtOpsAuthor"
+                                options={emiDateOptions}
+                                value={loanApp.EMI_Date__c}
+                                onchange={handleChange}></lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item data-id="First_EMI_Date__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-input label="First EMI Date" 
+                            type="date" 
+                            data-id="disableAtOpsAuthor"
+                            data-name="First_EMI_Date__c"
+                            required
+                            name="First_EMI_Date__c"
+                            value={loanApp.First_EMI_Date__c}
+                            onchange={handleChange}
+                            field-level-help="Repayment Start Date"></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Moratorium_Period__c" class="component slds-show" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-combobox label="Moratorium Period" type="number" onchange={handleChange} data-id="disableAtOpsAuthor"
+                                name="Moratorium_Period__c" value={loanApp.Moratorium_Period__c}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+            
+                        <!--<lightning-layout-item data-id="General_Ledger__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-combobox name="General_Ledger__c" label="Account Number (GL)" data-id="disableAtOpsAuthor"
+                                required value={loanApp.General_Ledger__c} options={generalLedgerOptions}
+                                onchange={handleChange}></lightning-combobox>
+                        </lightning-layout-item>-->
+
+                        <lightning-layout-item data-id="General_Ledger__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <!--<lightning-combobox name="General_Ledger__c" label="Account Number (GL)" data-id="disableAtOpsAuthor"
+                                required value={loanApp.General_Ledger__c} options={generalLedgerOptions}
+                                onchange={handleChange}></lightning-combobox>-->
+                                <lightning-input name="General_Ledger__c" label="Account Number (GL)" value={loanApp.General_Ledger__c} data-id="disableAtOpsAuthor" disabled
+                                onchange={handleChange}></lightning-input>
+                        </lightning-layout-item>
+            
+                        <lightning-layout-item data-id="Narration__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-input name="Narration__c" label="Narration" value={loanApp.Narration__c} max-length="40" message-when-range-overflow="Character Limit Reached" data-id="disableAtOpsAuthor"
+                                onchange={handleChange}></lightning-input>
+                        </lightning-layout-item>
+        
+                        
+            
+                        <lightning-layout-item data-id="Remaining_Sanction_Amount__c" class="component slds-hide" size="12"
+                            padding="around-small" small-device-size="12" large-device-size="4">
+                            <lightning-input name="Remaining_Sanction_Amount__c" label="Remaining Sanction Amount" data-id="disableAtOpsAuthor"
+                                value={loanApp.Remaining_Sanction_Amount__c} onchange={handleChange}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!--<div class="slds-align_absolute-center">
+                        <lightning-button disabled data-id="fetchEMIDetails" label="Fetch EMI Schedule" variant="brand" class="disableAtOpsAuthor slds-m-around_medium" onclick={handleFetchEMISchedule}></lightning-button>
+                    </div>-->
+                    <lightning-layout multiple-rows vertical-align="end">
+                        <lightning-layout-item data-id="Total_Charges__c" class="component slds-hide" size="12" padding="around-small" 
+                            small-device-size="12" large-device-size="4">
+                            <lightning-input name="Total_Charges__c" label="Total Charges" type="number" disabled
+                                value={loanApp.Total_Charges__c} onchange={handleChange}></lightning-input><!--data-id="disableAtOpsAuthor"-->
+                        </lightning-layout-item>
+                        <lightning-layout-item data-id="Total_Charges__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <lightning-input name="Total_Charges__c" label="Net Deduction" type="number" disabled
+                                value={loanApp.Total_Charges__c} onchange={handleChange}></lightning-input><!--data-id="disableAtOpsAuthor"-->
+                        </lightning-layout-item>
+                        <lightning-layout-item data-id="Total_Charges__c" class="component slds-hide" size="12" padding="around-small"
+                            small-device-size="12" large-device-size="4">
+                            <lightning-input name="Net Disbursement Amount" label="Net Disbursement Amount" type="number" disabled
+                                value={netDisbursementAmount} onchange={handleChange}></lightning-input><!--data-id="disableAtOpsAuthor"-->
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!--<template if:true={displayPayments}>
+                        <c-payment-details-ops-author completed-stage={completedStage} user-type={userType} loan-app-id={loanAppId} onenabledodisburse={handleEnableDoDisburse}
+                        parent-id={paymentFavouringParentId} onrefreshonpaymentreleased={handlePaymentFavouringOnDoDisburse} disbursement-amount={paymentFavouringDisbursementAmount} total-charges={paymentFavouringTotalCharges}></c-payment-details-ops-author>
+                    </template>-->
+                    <div class="slds-align_absolute-center">
+                        <lightning-button data-id="initiateDisbursement" label="Initiate Disbursement" variant="brand" disabled class="disableAtOpsAuthor slds-m-around_small buttonColor" onclick={handleDisbursementDetails}></lightning-button>
+                        <lightning-button data-id="disbursementStage" label="Get Disbursement Stage" variant="brand" disabled class="disableAtOpsAuthor slds-m-around_small buttonColor" onclick={handleDisbursementStage}></lightning-button>
+                        <lightning-button data-id="repaymentSchedule" label="Repayment Schedule View" variant="brand" disabled class="slds-m-around_small buttonColor" onclick={handleRepaymentSchedule}></lightning-button>
+                    </div>
+            
+                    <div class="slds-align_absolute-center">
+                        <lightning-button data-id="disburseLoan" disabled label="Disburse Loan" variant="brand" onclick={handleDoDisbursement} class="visibleAtOpsAuthor slds-m-around_small slds-hide buttonColor"></lightning-button>
+                        <lightning-button data-id="disbursePayment" disabled label="Disburse Payment" variant="brand" onclick={handleDisbursePayment} class="slds-m-around_small slds-hide buttonColor"></lightning-button>
+                        <lightning-button data-id="disbursePaymentCheque" disabled label="Disburse Payment Cheque" variant="brand" onclick={handleDisbursePayment} class="slds-m-around_small slds-hide buttonColor"></lightning-button>
+
+                    </div>
+            
+                    <template if:true={displayLoanDisbursementDetails}>
+                        <div class="slds-box slds-box_x-small slds-theme_shade">
+                            <lightning-icon data-id='chevron' icon-name="utility:chevrondown" size="x-small"></lightning-icon>
+                            &nbsp;<b>Loan Balance Response</b>
+                    
+                        </div>					 				
+                        <lightning-card>
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Customer Short Name" value={loanBalanceResponse.CustomerShortName}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Account Currency" value={loanBalanceResponse.AccountCurrency}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Maturity Date" value={loanBalanceResponse.MaturityDate}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Account Status" value={loanBalanceResponse.AccountStatus}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Next Due Date" value={loanBalanceResponse.NextDueDate}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Next Installment Due" value={loanBalanceResponse.NextInstallmentDueAmount}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Principal Balance" value={loanBalanceResponse.PrincipalBalance}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Unbilled Principal Balance" value={loanBalanceResponse.UnbilledPrincipalBalance}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Amount Disbursed Today" value={loanBalanceResponse.AmountDisbursedToday}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Installment Arrears" value={loanBalanceResponse.InstallmentArrears}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Other Arrears" value={loanBalanceResponse.OtherArrears}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Min Amount Due" value={loanBalanceResponse.MinAmountDue}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Uncollected Interest" value={loanBalanceResponse.UncollectedInterest}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Penalty Arrears" value={loanBalanceResponse.PenaltyArrears}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Unbilled Penalty Interest" value={loanBalanceResponse.UnbilledPenaltyInterest}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Unbilled Service Charge" value={loanBalanceResponse.UnbilledServiceCharge}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Amount Paid Today" value={loanBalanceResponse.AmountPaidToday}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Amount Paid Today" value={loanBalanceResponse.AmountPaidToday}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="RPA Balance" value={loanBalanceResponse.RpaBalance}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Unbilled Interest" value={loanBalanceResponse.UnbilledInterest}></lightning-input>
+                                </lightning-layout-item>		
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Uncleared Funds" value={loanBalanceResponse.UnclearedFunds}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Available Balance" value={loanBalanceResponse.AvailableBalance}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" padding="around-small" large-device-size="4" small-device-size="12">
+                                    <lightning-input disabled label="Total Outstandings" value={loanBalanceResponse.TotalOutstandings}></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+            
+                        </lightning-card>
+            
+                    </template>
+                    <template if:true={displayReleasePayments}>
+                        <c-payment-details-ops-author completed-stage={completedStage} display-release-button={displayButtonOnPayment} display-validate-button={dontDisplayButtonOnPayment} user-type={userType} loan-app-id={loanAppId} onenabledodisburse={handleEnableDoDisburse}
+                        parent-id={paymentFavouringParentId} onrefreshonpaymentreleased={handlePaymentFavouringOnDoDisburse} disbursement-amount={paymentFavouringDisbursementAmount} total-charges={paymentFavouringTotalCharges}></c-payment-details-ops-author>
+                    </template>
+                </lightning-card>
+            </lightning-accordion-section>
+        </lightning-accordion>
+        
+    </template>
+</template>

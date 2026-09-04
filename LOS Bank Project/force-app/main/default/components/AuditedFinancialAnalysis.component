@@ -1,0 +1,91 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="auditedFinancialResult" description="This is the value for the component."
+    type="Applicant_Financials_Details__c[]" required="true" assignTo="{!commercialfinancialDetails}"/>
+
+    <apex:outputPanel rendered="{!commercialfinancialDetails.size > 0}">
+        <div style='{!pageBlockSectionCSS}'>
+            <apex:pageBlockSection showHeader="true" title="Audited Financial Analysis">							
+            </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}"><strong>STRATEGIC FINANCIAL NORMS</strong></td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">
+                            <strong>
+                                <apex:outputText value="{0,date,dd.MM.yyyy}">
+                                    <apex:param value="{!fiRecord.Credit_Financial_Date__c}" />
+                                </apex:outputText>
+                            </strong>
+                        </td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Net worth to be +ve</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Net_worth_to_be_ve__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Secured Loans</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Secured_Loans__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Fixed Assets</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Fixed_Assets__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Turnover</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Turnover__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">PBT</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_PBT__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Cash Profit</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Cash_Profit__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">YOY Turnover to be +ve</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_YOY_Turnover_to_be_ve__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Cash Profit of current year to be positive</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Cash_Profit_of_current_year_to__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">DSCR should be greater than 1.1</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.DSCR_should_be_1_1__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Debt Equity Ratio {including proposed} to be less or equal to 3 times</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Debt_Equity_Ratio_including_p__c}</td>
+                    </apex:repeat>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <td style="{!tableHeadStyle}">Drs. Turnover should be less or equal to 90 days</td>
+                    <apex:repeat value="{!commercialfinancialDetails}" var="fiRecord">
+                        <td style="{!tableDataStyle}">{!fiRecord.Strategic_Drs_Turnover_should_be_90__c}</td>
+                    </apex:repeat>
+                </tr>
+            </table>
+        </div>
+    </apex:outputPanel>
+</apex:component>

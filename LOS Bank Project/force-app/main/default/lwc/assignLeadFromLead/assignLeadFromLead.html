@@ -1,0 +1,14 @@
+<template>
+    <template if:false={directlaunch}>
+        <template if:false={showassignbtn}>
+            <lightning-button class="slds-m-top_small slds-m-left_small slds-m-bottom_small" onclick={handleLaunchFlow}
+                label="Assign Lead">
+            </lightning-button>
+        </template>
+    </template>
+    <template if:true={showassignbtn}>
+        <lightning-flow flow-api-name='Lead_Assignment_List_View_Flow'
+            flow-input-variables={ids} onstatuschange={handleStatusChange}>
+        </lightning-flow>
+    </template>
+</template>

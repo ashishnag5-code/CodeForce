@@ -1,0 +1,168 @@
+<template>
+    <lightning-card title="Customer Information" icon-name="standard:lead">
+        <!-- <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template> -->
+        <c-custom-spinner
+            show-spinner={isloading}
+            spinner-image={spinnerImage}
+            >
+        </c-custom-spinner>
+
+        <template if:true={aplicantRecord}>
+            <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                active-section-name={activeSections}>
+                <lightning-accordion-section name="A" label="BASIC DETAILS">
+
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+
+                            <lightning-combobox name="Existing_Customer__c" label="Existing Customer" required
+                                class="validate" value={aplicantRecord.Existing_Customer__c}
+                                placeholder="Select Customer" options={existingCustomerPicklistValues}
+                                onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-combobox name="Title__c" label="Title" value={aplicantRecord.Title__c}
+                                placeholder="Select Title" options={titlePicklistValues} onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="First Name" required
+                                class="validate" value={aplicantRecord.First_Name__c} name="First_Name__c">
+                            </lightning-input>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="Middle Name"
+                                value={aplicantRecord.Middle_Name__c} name="Middle_Name__c">
+                            </lightning-input>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="Last Name" required
+                                class="validate" value={aplicantRecord.Last_Name__c} name="Last_Name__c">
+                            </lightning-input>
+
+
+                            <lightning-combobox name="Gender__c" label="Gender" value={aplicantRecord.Gender__c}
+                                required class="validate" placeholder="Select Gender" options={genderPicklistValues}
+                                onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-input type="date" onchange={handleValuChange} label="Date Of Birth" required
+                                class="validate" value={aplicantRecord.Dob__c} name="Dob__c">
+                            </lightning-input>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="Age"
+                                value={aplicantRecord.Age__c} readonly name="Age__c">
+                            </lightning-input>
+
+
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input type="text" onchange={handleValuChange} label="Father Name" required
+                                class="validate" value={aplicantRecord.Father_Name__c} name="Father_Name__c">
+                            </lightning-input>
+
+                            <!--<lightning-input type="text" onchange={handleValuChange} label="Husband Name"
+                            value={aplicantRecord.Husband_Name__c} name="Husband_Name__c">
+                        </lightning-input>-->
+
+                            <lightning-input type="text" onchange={handleValuChange} label="Spouse Name"
+                                value={aplicantRecord.Spouse_Name__c} name="Spouse_Name__c">
+                            </lightning-input>
+
+                            <lightning-combobox name="High_risk_Profile__c" label="High risk Profile" required
+                                class="validate" value={aplicantRecord.High_risk_Profile__c}
+                                placeholder="Select Profile" options={highRiskProfilePicklistValues}
+                                onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-combobox name="Residential_Status__c" label="Residential Status" required
+                                class="validate" value={aplicantRecord.Residential_Status__c}
+                                placeholder="Select Residential Status" options={residentialStatusPicklistValues}
+                                onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-combobox name="AU_Employee__c" label="AU Employee"
+                                value={aplicantRecord.AU_Employee__c} placeholder="Select Employee Type"
+                                options={auEmployeePicklistValues} onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="Name of Employee (AU)"
+                                value={aplicantRecord.Name_of_Employee_AU__c} name="Name_of_Employee_AU__c">
+                            </lightning-input>
+
+                            <lightning-input type="text" onchange={handleValuChange} label="AU Employee ID"
+                                value={aplicantRecord.AU_Employee_ID__c} name="AU_Employee_ID__c">
+                            </lightning-input>
+
+                            <lightning-combobox name="AU_Employment_status__c" label="AU Employment status"
+                                value={aplicantRecord.AU_Employment_status__c} placeholder="Select Employment Status"
+                                options={employmentStatusPicklistValues} onchange={handleValuChange}>
+                            </lightning-combobox>
+
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-accordion-section>
+                <lightning-accordion-section name="B" label="CONTACT DETAILS">
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input type="tel" onchange={handleValuChange} label="Mobile Number" readonly
+                                value={aplicantRecord.Mobile_Number__c} name="Mobile_Number__c">
+                            </lightning-input>
+                            <lightning-input type="tel" onchange={handleValuChange} label="Alternate Mobile Number"
+                                value={aplicantRecord.Alternate_Mobile_Number__c} name="Alternate_Mobile_Number__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+
+                            <div class="slds-is-relative ">
+                                <label class="slds-form-element__label">Email
+                                </label>
+                                <div class="buttonIn">
+                                    <lightning-input type="email" variant="label-hidden" required data-id="mobileinput"
+                                        class="validate input mobilebutton" label="Emails" name="Email__c"
+                                        onchange={handleValuChange} value={aplicantRecord.Email__c}>
+                                    </lightning-input>
+                                    <template if:true={boolSendOtp}>
+                                        <lightning-button variant="base" label="VERIFY" disabled={boolCheckMobileNumber}
+                                            title="Looks like a link" onclick={handleSendOTP} class="button">
+                                        </lightning-button>
+                                    </template>
+                                    <template if:true={isVerified}>
+                                        <lightning-icon size="small" variant="success" class="button"
+                                            icon-name="utility:success" title="Mobile"></lightning-icon>
+                                    </template>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        </template>
+        <!--div class="slds-align_absolute-center">
+            <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={handleCancel}
+                class="slds-m-left_x-small"></lightning-button>
+            <lightning-button variant="brand" label="Save" title="Save" onclick={handleSave}
+                class="slds-m-left_x-small"></lightning-button>
+        </div-->
+
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                    onclick={handleCancel}></lightning-icon>
+                <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                    class="slds-m-left_small" onclick={handleSave}></lightning-icon>
+
+                <!--<lightning-button variant="base" label="Cancel" onclick={handleRecordUpdateCancel}>
+                </lightning-button>
+                <lightning-button class="slds-m-left_small" type="submit" variant="base" label="Save">
+                </lightning-button>-->
+            </div>
+        </lightning-layout>
+    </lightning-card>
+</template>

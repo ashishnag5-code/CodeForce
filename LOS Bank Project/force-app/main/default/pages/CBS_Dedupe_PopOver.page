@@ -1,0 +1,15 @@
+<apex:page >
+
+
+<apex:includeLightning />
+
+<script>
+    $Lightning.use("c:connectVFAndLWC", function() {
+        $Lightning.createComponent("c:cbsDedupePopOver",{open:true, recordId: '{!$CurrentPage.parameters.id}'},"lightningvf",function(cmp) {
+            console.log("component was created");
+        });
+    });
+</script>
+
+<div style="padding:30px" id="lightningvf"></div>
+</apex:page>

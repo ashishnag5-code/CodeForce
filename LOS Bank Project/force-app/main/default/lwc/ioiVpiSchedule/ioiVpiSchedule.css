@@ -1,0 +1,8 @@
+.slds-popover_edit .slds-popover__body{
+    /* size: 100cm; */
+    width: 95px !important;
+}
+
+.THIS .slds-th__action{ justify-content: center }
+
+.THIS .slds-grid_align-end { justify-content: center !important; }

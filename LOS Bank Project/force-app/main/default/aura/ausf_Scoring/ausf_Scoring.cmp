@@ -1,0 +1,143 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+	    access="global">
+    <aura:attribute name="valrecs" type="list" default="[{'Type__c':'Valuation', 'Status__c':'Completed'}, {'Type__c':'FI', 'Status__c':'In Progress'}, {'Type__c':'RTO', 'Status__c':'In Progress'}]"/>
+    <div class="main_content">
+        <lightning:card iconName="custom:custom66" title="Highlights">
+            <!--<aura:set attribute="actions">
+                <lightning:button label="Evaluate Rules" onclick="{!c.runFlow}"/>
+            </aura:set>-->
+            <div class="content">
+                    <div class="slds-grid slds-wrap scores">
+                        <div
+                            class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                            CFR Status
+                        </div>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+							<lightning:icon iconName="action:check" size="x-small" />
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap scores">
+                        <div
+                            class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                            Negative Check Status
+                        </div>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                <lightning:icon iconName="action:check" size="x-small" />
+                        </div>
+                    </div>
+                    <div class="slds-grid slds-wrap scores">
+                        <div
+                            class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                            Related Party Status
+                        </div>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <lightning:icon iconName="action:close" size="x-small" />
+                        </div>
+                    </div>
+                        <div class="slds-grid slds-wrap scores">
+                            <div
+                                class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                                AML Status
+                            </div>
+                            <!--<div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                    <lightning:icon iconName="action:check" size="x-small" />
+                            </div>-->
+                        </div>
+                        <div class="slds-grid slds-wrap scores">
+                            <div
+                                class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                                Credit Score
+                            </div>
+                            <div
+                                class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 credit_score">
+                                826
+                            </div>
+                        </div>
+                  <!--  <div class="slds-grid slds-wrap scores">
+                            <div
+                                class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                               Vaahan check
+                            </div>
+                            <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                <lightning:icon iconName="action:check" size="x-small" />
+                            </div>
+                        </div>
+                    comment <c:DE_valuations recordId="{!v.recordId}"/>
+                    <br></br>
+                    <aura:iteration items="{!v.valrecs}"  var="abc">
+                   
+                        
+                        <div class="slds-grid slds-wrap scores">
+                            <div
+                                class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                               {!abc.Type__c}
+                            </div>
+                            <div
+                                class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 ">
+                                {!abc.Status__c}
+                               comment <a id="{!abc.Id}"  styel=" text-decoration: underline;">{!abc.Status__c}</a>
+                                
+                            </div>
+                        </div>
+                    </aura:iteration>
+                    
+                    <div class="slds-grid slds-wrap scores">
+                            <div
+                                class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 check_name">
+                              AML
+                            </div>
+                            <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                    In Progress                                
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap scores">
+                            <div class="slds-col slds-size_12-of-12">
+                                <a target="_blank">Download Complete Report From
+                                    Here</a>
+                                comment href="{!$Resource.SampleCreditReport}"
+                            </div>
+                        </div>-->
+            </div>
+        </lightning:card>
+    </div>
+    
+    <!--Flow Modal-->
+                    
+        <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->   
+       <!-- <aura:if isTrue="{!v.isOpen}">
+            
+            ###### MODAL BOX Start###### 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    ###### MODAL BOX HEADER Start ######
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Evaluation Rules</h2>
+                    </header>
+                    ###### MODAL BOX BODY Part Start######
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                     <lightning:flow aura:id="flowData" />
+                    </div>
+                    ###### MODAL BOX FOOTER Part Start ######
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{!c.closeModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="Finish"
+                                          title="Finish"
+                                          onclick="{!c.finishFlow}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            ###### MODAL BOX Part END Here ######
+            
+        </aura:if>-->
+
+</aura:component>

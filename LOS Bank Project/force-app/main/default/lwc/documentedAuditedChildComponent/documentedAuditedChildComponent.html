@@ -1,0 +1,230 @@
+<template>
+    <!--New Form-->
+    <template if:false={showEditView}>
+        <lightning-accordion-section name="A" label="Year">
+            <template if:true={isR2}>
+            <template if:true={readAttribute}>
+                <div slot="actions">
+                    <lightning-icon icon-name=action:edit size="x-small" onclick={handleEdit}></lightning-icon>
+                </div>
+            </template>
+            </template>
+             <!-- Added in R2-->
+             <template if:true={isDelete}>
+                <template if:true={readAttribute}>
+                    <span slot="actions" class="slds-p-left--small">
+                        <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                            alternative-text="" access-key={index} class="slds-m-right_small"
+                            onclick={handleDeleteRow}></lightning-icon>
+                    </span>
+                </template>
+            </template>
+            <!--End-->
+            
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Company_Name__c">
+                        <lightning-input type="text" name="Company_Name__c" value={bnameVal} min-length="3"
+                            max-length="250" read-only={readAttribute}
+                            message-when-too-short="Please enter minimum three letters to proceed"
+                            onchange={handleChange} placeholder="please enter the business name..."
+                            label="Business Name"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small"  size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Year__c">
+                        <lightning-input type="text" min-length="4" max-length="4" pattern="[0-9]+" name="Year__c" value={yearVal} read-only={readAttribute} class="validate" required
+                            onchange={handleChange} placeholder="please enter the year..." label="Year">
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Annual_Turnover__c">
+                        <label class="slds-form-element__label">
+                            Gross Turnover/Receipts (₹)</label>
+                        <lightning-input type="number" name="Annual_Turnover__c" value={turnOver} min-length="1"
+                            read-only={readAttribute} max-length="10"
+                            message-when-too-short="Please enter minimum one digits to proceed" onchange={handleChange}
+                            step="0.01" label="Annually"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Turnover__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Turnover__c" value={grossturnoverMonthly}
+                            read-only={readAttribute} label="Monthly" step="0.01" onchange={handleChange} disabled>
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Annual_Net_Profit__c">
+                        <label class="slds-form-element__label">
+                            Net Profit As Per ITR (₹)
+                        </label>
+                        <lightning-input type="number" name="Annual_Net_Profit__c" value={annualNetProfit} min-length="1"
+                            max-length="10" read-only={readAttribute} onchange={handleChange} step="0.01"
+                            label="Annually"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Net_Profit__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Net_Profit__c" value={monthlyNetProfit}
+                            label="Monthly" read-only={readAttribute} step="0.01" onchange={handleChange} disabled>
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Annual_Depreciation__c">
+                        <label class="slds-form-element__label">
+                            Depreciation (₹)
+                        </label>
+                        <lightning-input type="number" name="Annual_Depreciation__c" value={annualDepreciation}
+                            min-length="1" max-length="10" read-only={readAttribute} onchange={handleChange} step="0.01"
+                            label="Annually"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Depreciation__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Depreciation__c" value={monthlyDepreciation}
+                            read-only={readAttribute} label="Monthly" step="0.01" onchange={handleChange} disabled>
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Annual_Interest_Paid_On_Loans__c">
+                        <label class="slds-form-element__label">
+                            Interest Paid On Loans (₹)
+                        </label>
+                        <lightning-input type="number" name="Annual_Interest_Paid_On_Loans__c" value={annualInterestLoan}
+                            min-length="1" max-length="10" read-only={readAttribute} onchange={handleChange} step="0.01"
+                            label="Annually">
+
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Interest_Paid_on_Loans__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Interest_Paid_on_Loans__c"
+                            value={monthlyInterestLoan} read-only={readAttribute} label="Monthly" step="0.01"
+                            onchange={handleChange} disabled></lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Annual_Non_Cash_Expenses__c">
+                        <label class="slds-form-element__label">
+                            Other Non-Cash Expenses (₹)
+                        </label>
+                        <lightning-input type="number" name="Annual_Non_Cash_Expenses__c" value={annualnonchash}
+                            min-length="1" max-length="10" read-only={readAttribute} onchange={handleChange} step="0.01"
+                            label="Annually"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Non_Cash_Expenses__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Non_Cash_Expenses__c" value={monthlynoncash}
+                            read-only={readAttribute} label="Monthly" step="0.01" onchange={handleChange} disabled>
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item  padding="around-small" size="12" small-device-size="12" large-device-size="2"
+                    class="slds-m-top--x-large">
+
+                    <lightning-button variant="brand" label="Calculate" title="t" icon-name="utility:advanced_function"
+                        class="slds-m-left_x-small" onclick={calculateTotalIncome}></lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item  padding="around-small" size="12" small-device-size="12" large-device-size="4">
+                    <div class="component slds-hide" data-id="Annual_Total_Income__c">
+                        <label class="slds-form-element__label">
+                            Total Income (₹)
+                        </label>
+                        <lightning-input type="number" name="Annual_Total_Income__c" value={annualtotalIncome} disabled
+                            onchange={handleChange} step="0.01" label="Annually"></lightning-input>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small"  size="12" small-device-size="12" large-device-size="6">
+                    <div class="component slds-hide" data-id="Monthly_Total_Income__c">
+                        <label class="slds-form-element__label slds-hidden">
+                            Monthly
+                        </label>
+                        <lightning-input type="number" name="Monthly_Total_Income__c" value={monthlytotalIncome}
+                            read-only={readAttribute} label="Monthly" step="0.01" onchange={handleChange} disabled>
+                        </lightning-input>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                    large-device-size="6">
+                    <c-bank-statement-upload-financials loan-app-id={loanAppId} parent-name='financial' showonly-itr=true
+                applicant-id={applicantId} document-type='ITR Statement'
+                read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                 applicant-record-id={applicantId}
+                onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                </lightning-layout-item>
+            </lightning-layout>
+        
+
+            
+        </lightning-accordion-section><br>
+
+      
+        <!--Buttons Section-->
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                <template if:false={isR2}> <!-- FOR R2 Back button is not required-->
+                <lightning-button label="Back" title="Back" 
+                onclick={redirectHome}  class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                 </template>
+                <lightning-button label="Save Income"  class="buttonClass disabled-submit-button slds-m-left_x-small" variant="brand" name='save' disabled={isButtonDisabled}
+                onclick={handleSubmit}></lightning-button>
+
+            </div>
+        </lightning-layout>
+        <!--End-->
+    </template>
+    <!--End-->
+
+    <!--Edit Form-->
+    <template if:true={showEditView}>
+        <!--Calling Audited Edit Child Component-->
+     <template for:each={existingDetails} for:item="item" for:index="index">
+           <c-audited-edit-view key={item.id} is-r2={isR2} instance={item} loan-app-id={loanAppId}  applicant-id={applicantId}  onhome={redirectHome} onotherincome={handleOtherIncome} is-delete={isDelete} ondeletedrecord={handleEditDelete}></c-audited-edit-view>
+        </template>
+    </template>
+    <!--End-->
+
+</template>

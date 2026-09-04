@@ -1,0 +1,39 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="cbsRecordsDetailsFD" description="This is the value for the component."
+    type="Bank_Account_Records__c[]" required="true" assignTo="{!cbsRecordsFD}"/>
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Accounts/FD - AU bank">
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                        <th style="{!tableHeadDataStyle} width:15% !important">Customer Name</th>
+                    <!--</apex:outputPanel> commented this condition as a part of JIRA 4309-->
+                    <th style="{!tableHeadDataStyle} width:10% !important">Ownership</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Account Type</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Account No.</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Account Opening Date</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Current Status</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Current Balance</th>
+                </tr>
+                <apex:repeat value="{!cbsRecordsFD}" var="bank">
+                    <tr style="{!tableRowStyle}">
+                        <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                            <td style="{!tableDataStyle}">{!bank.Applicant__r.First_Name__c} {!bank.Applicant__r.Middle_Name__c} {!bank.Applicant__r.Last_Name__c}</td>
+                        <!--</apex:outputPanel>  commented this condition as a part of JIRA 4309-->
+                        <td style="{!tableDataStyle}">{!bank.Customer_Relationship__c}</td>
+                        <td style="{!tableDataStyle}">{!bank.Account_Type__c}</td>
+                        <td style="{!tableDataStyle}">{!bank.Account_Number__c}</td>
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}"> 
+                                <apex:param value="{!bank.Account_Opening_Date__c}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td style="{!tableDataStyle}">{!bank.Current_Status__c}</td>
+                        <td style="{!tableDataStyle}">{!bank.Current_Balance__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div>    
+</apex:component>

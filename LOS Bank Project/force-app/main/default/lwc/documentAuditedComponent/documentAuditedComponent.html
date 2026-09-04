@@ -1,0 +1,28 @@
+<template>
+    <c-custom-spinner show-spinner={isLoaded} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={rendeauditedFinaceTemplate}>
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+            <template for:each={itemList} for:item="item" for:index="index">
+            <!--<lightning-card title="With Audited Financial Details" icon-name="action:adjust_value" key={item.id}>-->
+                <lightning-accordion allow-multiple-sections-open class="example-accordion"  key={item.id}
+                    active-section-name={activeSections}>
+                    <!--<c-documented-audited-child-component key-value={item.id} financial-id={financialId} applicant-id={applicantId} ondocauditedsubmit={passtoparent} onauditedupdate={handlepasstoparentUpdate} onparentedit={handlepasstoparentParentView} ></c-documented-audited-child-component>-->
+                    <c-documented-audited-child-component is-r2 ={isR2} key-value={item.id} financial-id={financialId} loan-id={loanAppId} applicant-id={applicantId} ondocauditedsubmit={passtoparent} onauditedupdate={handlepasstoparentUpdate} existing-details={existingDetails} onhome={navigateToHome} spinner-image={spinnerImage}  loan-app-id ={loanAppId} is-mobile={isMobile} onotherincome={handleOtherIncome}  ondeletedrecord={handleDeleteRecord}></c-documented-audited-child-component>
+                </lightning-accordion>
+                
+                    <template if:true={showYearIcons}>
+                   <div class="slds-align--absolute-center slds-text-heading_small"  key={item.id}>
+                        Add Year<lightning-icon icon-name="action:new" size="x-small" alternative-text="" access-key={item.id} id={index}
+                           class="slds-m-left_small" onclick={addNewRow}></lightning-icon>
+                
+                       &nbsp; Cancel Year <lightning-icon icon-name="action:delete" size="x-small" alternative-text="" access-key={item.id} id={index}
+                           class="slds-m-left_small" onclick={removeRow}></lightning-icon>
+                        </div>       
+                    </template>                 
+           <!-- </lightning-card>-->
+            </template>                               
+            
+        </div>
+    </template>
+</template>

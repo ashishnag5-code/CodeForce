@@ -1,0 +1,134 @@
+<template>
+
+    <template if:true={loadComponent}>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small" flexibility="auto">
+                <template if:false={isMobileScreen}>
+                    <label class="slds-form-element__label"></label>
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <div class="slds-grid slds-wrap">
+
+                                <div class="slds-col slds-size_1-of-5"> <abbr class="slds-required" title="required">*
+                                    </abbr>
+                                    Same As</div>
+                                <template for:each={sameAsOptions} for:item="option">
+                                    <div class="slds-col slds-size_1-of-5" key={option}>
+                                        <div class="slds-checkbox">
+                                            <input type="checkbox" required class="chckBox" id={option.label}
+                                                name={option.label} value={option.label} data-name={option.label}
+                                                onclick={handleCopyInfo} />
+                                            <label class="slds-checkbox__label" for={option.label}>
+                                                <span class="slds-checkbox_faux"></span>
+                                                <span class="slds-form-element__label slds-wrap">{option.label}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={isMobileScreen}>
+
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-1">
+                            <span>
+                                <abbr class="slds-required" title="required">* </abbr> Same As
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="slds-grid slds-gutters slds-var-m-left_small slds-var-m-right_small">
+                        <!--<div class="slds-col slds-size_12-of-12">-->
+                            <template for:each={sameAsOptions} for:item="option">
+                                <div class="slds-col" key={option}>
+                                    <span class="slds-var-m-left_small slds-var-m-right_small" style="width:25% !important; text-align:center">
+                                        <input type="checkbox" required class="chckBox validate" id={option.label}
+                                            name={option.label} value={option.label} data-name={option.label}
+                                            onclick={handleCopyInfo} />
+                                        <div class="slds-form-element__control">
+                                            <span class="slds-form-element__static">{option.label}</span>
+                                        </div>
+                                    </span>
+                                </div>
+                            </template>
+                        <!--</div>-->
+                        
+                    </div>
+
+                </template>
+            </lightning-layout-item>
+
+            <template if:false={isMobileScreen}>
+                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                    padding="around-small"></lightning-layout-item>
+            </template>
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <c-generic-custom-lookup name="State__c" data-name="State__c" record-type-name="State" label='State'
+                    default-record-id={stateId} search-fields="" stepid="0" fieldapi="Name" object-name="Village Master"
+                    is-required=true s-object-api-name="Village_Master__c" onlookupselect={handleLookupSelect}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <c-generic-custom-lookup name="District__c" data-name="District__c" record-type-name="District"
+                    label='District' search-fields="" stepid="0" default-record-id={districtId} fieldapi="Name"
+                    object-name="Village Master" s-object-api-name="Village_Master__c" dependent-field-api="State__c"
+                    onlookupselect={handleLookupSelect} dependent-picklist-value={stateId} is-required=true>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <c-generic-custom-lookup data-name="Taluka__c" name="Tehsil__c" record-type-name="Tehsil" label='Taluka'
+                    search-fields="" stepid="0" default-record-id={tehsilId} fieldapi="Name"
+                    object-name="Village Master" s-object-api-name="Village_Master__c" dependent-field-api="State__c"
+                    dependent-picklist-value={stateId} is-required=true onlookupselect={handleLookupSelect}
+                    dependent-field-second-api="District__c" dependent-picklist-second-value={districtId}>
+                </c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <c-generic-custom-lookup data-name="Village__c" name="Village__c" record-type-name="Village"
+                    label='Village' search-fields="" stepid="0" default-record-id={villageId} fieldapi="Name"
+                    object-name="Village Master" s-object-api-name="Village_Master__c" dependent-field-api="State__c"
+                    dependent-picklist-value={stateId} is-required=true onlookupselect={handleLookupSelect}
+                    dependent-field-second-api="District__c" dependent-picklist-second-value={districtId}
+                    dependent-field-third-api="Tehsil__c"
+                    dependent-picklist-third-value={tehsilId}></c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <c-generic-custom-lookup data-name="Khata_Khasara_Survey_Number__c"
+                    name="Khata_Khasara_Survey_Number__c" record-type-name="Survey Number"
+                    label='Khata No. / Khasara No. / Survey No.' search-fields="" stepid="0"
+                    default-record-id={surveyId} fieldapi="Name" object-name="Village Master" is-required=true
+                    s-object-api-name="Village_Master__c" dependent-field-api="State__c"
+                    dependent-picklist-value={stateId} onlookupselect={handleLookupSelect}
+                    dependent-field-second-api="District__c" dependent-picklist-second-value={districtId}
+                    dependent-field-third-api="Tehsil__c" dependent-picklist-third-value={tehsilId}
+                    dependent-field-fourth-api="Village__c"
+                    dependent-picklist-fourth-value={villageId}></c-generic-custom-lookup>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <lightning-input label="Pincode" name="Pincode__c" data-name="Pincode__c" value={landAddress.Pincode__c}
+                    onchange={handleChange} type="text" pattern="[0-9]{6}" min-length="6" max-length="6"
+                    message-when-pattern-mismatch="Entered Pincode is Invalid" required=true class="validate"
+                    message-when-too-long="Pincode cannot exceed 6 digits"
+                    message-when-too-short="Pincode must contain 6 digits"></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small">
+                <lightning-input data-name="Land_mark__c" name="Land_mark__c" label="Land mark" max-length="35"
+                    value={landAddress.Land_mark__c} onchange={handleChange}></lightning-input>
+            </lightning-layout-item>
+
+
+
+        </lightning-layout>
+    </template>
+
+
+</template>

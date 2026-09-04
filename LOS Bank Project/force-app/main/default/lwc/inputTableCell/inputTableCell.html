@@ -1,0 +1,12 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-15-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:true={isText}>
+        <lightning-input type={type} variant="label-hidden" label={field} name={field} value={value} onchange={handleInputChange}></lightning-input>
+    </template>
+</template>

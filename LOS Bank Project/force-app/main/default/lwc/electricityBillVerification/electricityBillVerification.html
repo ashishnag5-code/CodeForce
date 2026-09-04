@@ -1,0 +1,225 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+
+    <template if:true={received}>
+        <template if:true={fetchDetailsReceived}>
+            <c-generic-data-display onverified={handleDocumentVerified} onnotverified={handleBack}
+                cpv-documents={cpvDocuments} match-score={matchScore} onback={handleonBack} label={label}
+                display-type="Electricity Bill Details" type="Electricity Bill" api-response={electricityBillResponse}>
+            </c-generic-data-display>
+        </template>
+        <template if:false={fetchDetailsReceived}>
+            <template if:false={hideButtons}>
+                <lightning-layout>
+                    <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                        <div class="slds-align--absolute-center">
+                            <lightning-button-icon variant="brand" icon-name="utility:upload" onclick={handleUploadFile}>
+                            </lightning-button-icon>
+                        </div>
+                        <div class="slds-align--absolute-center slds-p-top_x-small">Upload</div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                        <div class="slds-align--absolute-center">
+                            <lightning-button-icon variant="brand" onclick={handleFetchApi} icon-name="utility:download">
+                            </lightning-button-icon>
+                        </div>
+                        <div class="slds-align--absolute-center slds-p-top_x-small">Fetch</div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+
+            <lightning-layout>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <lightning-card>
+                        <b>
+                            <lightning-formatted-text value={label}></lightning-formatted-text>
+                        </b>
+                        <b>
+                            <lightning-formatted-number class="slds-m-left_xx-small" format-style="currency"
+                                value={amount}></lightning-formatted-number>
+                        </b>
+                        <template if:false={hideButtons}>
+                            <template if:false={fetchFailed}>
+                                <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:success"
+                                    alternative-text="Success!" variant="success"></lightning-icon>
+                            </template>
+                            <template if:true={fetchFailed}>
+                                <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:error"
+                                    alternative-text="Failed!" variant="error"></lightning-icon>
+                            </template>
+                        </template>
+                    </lightning-card>
+                    <!--<lightning-card>
+                        <b>
+                            <lightning-formatted-text value={label}></lightning-formatted-text>
+                        </b>
+                        <b>
+                            <lightning-formatted-number class="slds-m-left_xx-small" format-style="currency"
+                                value={amount}></lightning-formatted-number>
+                        </b>
+                        <template if:false={hideButtons}>
+                            <template if:false={fetchFailed}>
+                                <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:success"
+                                    alternative-text="Success!" variant="success"></lightning-icon>
+                            </template>
+                            <template if:true={fetchFailed}>
+                                <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:error"
+                                    alternative-text="Failed!" variant="error"></lightning-icon>
+                            </template>
+                        </template>
+                    </lightning-card>-->
+                </lightning-layout-item>
+            </lightning-layout>
+            <!--lightning-icon size="x-small" class="slds-m-around_small" icon-name="action:back" onclick={handleClose}
+                alternative-text="Back"></lightning-icon-->
+        </template>
+    </template>
+
+    <template if:false={received}>
+        <template if:false={hideButtons}>
+            <lightning-layout>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                    <div class="slds-align--absolute-center">
+                        <lightning-button-icon variant="brand" icon-name="utility:upload" onclick={handleUploadFile}>
+                        </lightning-button-icon>
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Upload</div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                    <div class="slds-align--absolute-center">
+                        <lightning-button-icon variant="brand" onclick={handleFetchApi} icon-name="utility:download">
+                        </lightning-button-icon>
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Fetch</div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+
+        <template if:true={isUploadFile}>
+            <div class="slds-m-around_small">
+                <c-upload-multiple-files onhandleclose={handleClose} ondetailsreceived={handleEvent}
+                    applicant-id={applicantId} loan-app-id={selectedApp} document-type={documentType}
+                    heading-value={headingValue} document-master-name="Electricity_Bill"></c-upload-multiple-files>
+            </div>
+        </template>
+
+        <template if:true={isFetchApi}>
+            <template if:true={isVerified}>
+                <lightning-layout>
+                    <lightning-layout-item size="12" small-device-size="12"
+                        large-device-size="4">
+                        <!--<div class="slds-size_1-of-1 slds-small-size_1-of-1 slds-large-size_1-of-1">-->
+                        <article class="slds-box">
+                            <lightning-card>
+                                <h3 slot="title" style="text-align:center">
+                                    <lightning-icon icon-name="utility:success" variant="success" size="medium"></lightning-icon>
+                                    &nbsp;&nbsp;{consumerId}
+                                    
+                                </h3>
+                                <div slot="footer">
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning-icon variant="brand" label="View" title="View Details" size="x-small"
+                                                onclick={displayMoreDetails} icon-name="action:preview" class="buttonColor slds-m-around_small"></lightning-icon>
+                                    
+                                            </span><br/>
+                                            Preview
+                                        </div>     
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning-icon variant="brand" label="Edit" title="Edit Details" size="x-small"
+                                                onclick={editElectricityDetails} icon-name="action:edit" class="buttonColor slds-m-around_small"></lightning-icon>
+                                            </span><br/>
+                                            Edit
+                                        </div>
+                                        <div class="slds-col">
+                                            <span>
+                                                <lightning-icon label="Back" class="buttonColor slds-m-around_small" size="x-small" icon-name="action:reject" variant="brand" onclick={handleClose}></lightning-icon>
+                                            </span><br/>
+                                            Close
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="slds-align_absolute-center">-->
+        
+                                    <!--</div>-->
+                                </div>
+                                <!--<p class="slds-p-horizontal_small">Address Match Score : {matchScore}</p>-->
+                            </lightning-card>
+
+
+                            <!--<div class="slds-card__body slds-card__body_inner">
+                                <div class="slds-form-element">
+                                    <lightning-layout multiple-rows>
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="4">
+                                            <span class="slds-form-element__label">Electricity Bill</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{consumerId}</div>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="4">
+                                            <span class="slds-form-element__label">Verification Status</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">Verified <lightning-icon
+                                                        size="x-small" class="slds-m-left_x-small"
+                                                        icon-name="utility:success" alternative-text="Success!"
+                                                        variant="success"></lightning-icon>
+                                                </div>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="4">
+                                            <span class="slds-form-element__label">Address Match Score</span>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-form-element__static">{matchScore}
+                                                </div>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </div>
+                            </div>-->
+                            
+
+                            <!--<b>
+                                    <lightning-formatted-text value={label}></lightning-formatted-text>
+                                </b>
+                                <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:success"
+                                    alternative-text="Success!" variant="success"></lightning-icon>
+                            -->
+
+                        </article>
+                        <!--</div>-->
+
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </template>
+
+        <template if:true={editDetails}>
+            <div class="slds-size_1-of-1 slds-small-size_1-of-1 slds-large-size_1-of-2">
+                <lightning-combobox required label="State/UT" value={selectedState} options={states}
+                    onchange={handleChange} name="State" class="validate"></lightning-combobox>
+                <lightning-combobox data-id="Service_Provider" required label="Service Provider"
+                    value={selectedServiceProvider} options={serviceProviders} onchange={handleChange}
+                    name="Service_Provider" disabled class="validate"></lightning-combobox>
+                <lightning-input required label="Document Number" value={consumerId} type="text" onchange={handleChange}
+                    data-id="Document_Number__c" name="Document_Number__c" disabled class="validate"></lightning-input>
+                <!--<c-generic-custom-lookup name="Service Provider"
+                    record-type-name="Electricity Bill Service Providers" fieldapi="Name" search-fields=""
+                    stepid="0" label="Choose the Service Provider" object-name="Generic Master"
+                    s-object-api-name="Generic_Master__c" onlookupselect={handleLookupSelect}>
+                </c-generic-custom-lookup>-->
+                <div class="slds-align_absolute-center">
+                    <lightning-icon class="slds-m-around_small" size="x-small" variant="brand" onclick={handleEditClose}
+                        icon-name="action:reject"></lightning-icon>
+                    <template if:false={isVerified}>
+                        <lightning-icon class="slds-m-around_small" size="x-small" variant="brand"
+                            onclick={fetchDetails} icon-name="action:approval"></lightning-icon>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+</template>

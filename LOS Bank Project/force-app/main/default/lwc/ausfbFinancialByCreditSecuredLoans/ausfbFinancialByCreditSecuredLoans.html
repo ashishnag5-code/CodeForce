@@ -1,0 +1,149 @@
+<!--
+  @description       : 
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 11-10-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <lightning-card lwc:if={isComponentVisible}>
+        <lightning-button if:false={isComponentNotEditable} label="Add" slot="actions" disabled={isComponentNotEditable}
+            onclick={addSecuredLoans}></lightning-button>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right"
+            aria-label="Example default base table of Opportunities">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <div class="slds-truncate">
+                            Break-up of Secured loans
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="POS as on 31 st Mar 2022">
+                            POS as on <lightning-formatted-date-time value={lastYearDataDate} ></lightning-formatted-date-time>
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Count of months in FY">
+                            Count of months in FY
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Balance Tenor (years)">
+                            Balance Tenor (years)
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Principal Paid liability">
+                            Principal Paid liability
+                        </div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Action">
+
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody lwc:if={isSecuredLoanAdded}>
+                <template for:each={securedLoans} for:item="item" for:index="indexVar">
+                    <tr class="slds-hint-parent" key={item.index}>
+                        <th data-label="Opportunity Name" scope="row">
+                            <div class="slds-truncate">
+                                <lightning-input class="secured-loan-input" required disabled={isComponentNotEditable}
+                                    type="text" value={item.loanName} variant="label-hidden" label="Enter some text"
+                                    data-index={indexVar} data-field="loanName"
+                                    onchange={handleInputSecuredLoanChange}></lightning-input>
+                            </div>
+                        </th>
+                        <td data-label="Account Name">
+                            <div class="slds-truncate">
+                                <lightning-input class="secured-loan-input" required disabled={isComponentNotEditable}
+                                    type="number" value={item.pos} variant="label-hidden" label="Enter some text"
+                                    data-index={indexVar} data-field="pos"
+                                    onchange={handleInputSecuredLoanChange}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="Close Date">
+                            <div class="slds-truncate">
+                                <lightning-input class="secured-loan-input" required disabled={isComponentNotEditable}
+                                    type="number" value={item.countOfMonth} variant="label-hidden"
+                                    label="Enter some text" data-index={indexVar} data-field="countOfMonth"
+                                    onchange={handleInputSecuredLoanChange}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="Prospecting">
+                            <div class="slds-truncate">
+                                <lightning-input class="secured-loan-input" required disabled={isComponentNotEditable}
+                                    type="number" value={item.balanceTenure} variant="label-hidden"
+                                    label="Enter some text" data-index={indexVar} data-field="balanceTenure"
+                                    onchange={handleInputSecuredLoanChange}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="Confidence">
+                            <div class="slds-truncate">
+                                <lightning-input class="secured-loan-input" required disabled={isComponentNotEditable}
+                                    type="number" value={item.principalPaidLiability} variant="label-hidden"
+                                    label="Enter some text" data-index={indexVar} data-field="principalPaidLiability"
+                                    onchange={handleInputSecuredLoanChange}></lightning-input>
+                            </div>
+                        </td>
+                        <td data-label="Confidence">
+                            <div class="slds-truncate">
+                                <div lwc:if={isComponentNotEditable}></div>
+                                <lightning-button lwc:else label="Delete" variant="destructive" title="Delete"
+                                    onclick={handleDeleteSecuredLoanClick} data-index={indexVar}>
+                                </lightning-button>
+                            </div>
+                        </td>
+                    </tr>
+                </template>
+                <tr class="slds-hint-parent">
+                    <th data-label="Opportunity Name" scope="row">
+                        <div class="slds-truncate">
+                            Total Secured Loans
+                        </div>
+                    </th>
+                    <td data-label="Account Name">
+                        <div class="slds-truncate">
+                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                disabled={formulaFieldOnFormDisable} value={totalPOS}
+                                label="Disabled number field"></lightning-input>
+                        </div>
+                    </td>
+                    <td data-label="Close Date">
+                        <div class="slds-truncate">
+                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                disabled={formulaFieldOnFormDisable} value={totalCountOfMonthFY}
+                                label="Disabled number field"></lightning-input>
+                        </div>
+                    </td>
+                    <td data-label="Prospecting">
+                        <div class="slds-truncate">
+                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                disabled={formulaFieldOnFormDisable} value={totalBalanceTenor}
+                                label="Disabled number field"></lightning-input>
+                        </div>
+                    </td>
+                    <td data-label="Confidence">
+                        <div class="slds-truncate">
+                            <lightning-input type="number" name="input5" variant="label-hidden"
+                                disabled={formulaFieldOnFormDisable} value={totalPrincipal}
+                                label="Disabled number field"></lightning-input>
+                        </div>
+                    </td>
+                    <td data-label="Confidence">
+                        <div class="slds-truncate">
+                            <div></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody lwc:else>
+                <th class="" scope="col" colspan="5">
+                    <div class="slds-align_absolute-center" style="height:5rem">No Secured loans added</div>
+                </th>
+            </tbody>
+        </table>
+    </lightning-card>
+</template>

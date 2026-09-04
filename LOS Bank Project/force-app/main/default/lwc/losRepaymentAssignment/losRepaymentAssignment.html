@@ -1,0 +1,751 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-16-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <!--template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template-->
+    <template if:true={renderInitialRepaymentForm}>
+        <lightning-card>
+            <h3 slot="title">
+                <lightning-icon icon-name="standard:lead" alternative-text="Utility image" title="Image"></lightning-icon>
+                &nbsp;&nbsp;&nbsp; Repayment Details
+            </h3>
+            <template if:true={displayRepaymentSection}>
+            <template if:true={showSubmit}>
+                <div slot="footer">
+                    <div class="slds-align_absolute-center slds-var-m-top_large">
+                        <!--<lightning-button  label="Enquire" variant="brand" title="Enquire" onclick={enquireStatus} class="slds-var-m-left_x-small">
+                        </lightning-button>-->
+                        <lightning-button label="Submit" variant="brand" title="Submit" onclick={submitClick}
+                            class="slds-var-m-left_x-small">
+                        </lightning-button>
+                    </div>
+                </div>
+            </template>
+            <div class="c-container">
+                <lightning-layout multiple-rows class="x-large">
+                    <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <lightning-input type="text" label="Loan Number" value={loanNumber} name="Loan Number" disabled>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <lightning-input type="text" label="EMI Start Date" value={emiDate} name="EMI Start Date" disabled>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <lightning-input type="number" label="EMI Amount" value={emiAmount} name="EMI Amount" disabled>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <lightning-combobox name="Repayment Mode" data-sequence="1" label="Repayment Mode"
+                            value={repaymentMode} placeholder="Select Repayment Mode" options={repaymentModeOption}
+                            onchange={handleChange} disabled>
+                        </lightning-combobox>
+                        <!--<lightning-input name="Repayment_Mode__c" label="Repayment Mode" value={repaymentMode} disabled></lightning-input>-->
+                    </lightning-layout-item>
+                    <template if:true={isEMandate}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Emandate Journey</label>
+                            <lightning-combobox name="With_User" data-sequence="1" label="Emandate Journey" value={userValue}
+                                variant="label-hidden" placeholder="Select By Customer/By RO " options={userOption}
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Payment Type</label>
+                            <lightning-combobox name="Payment Type" data-sequence="1" label="Payment Type"
+                                variant="label-hidden" value={paymentType} placeholder="Select Payment Type"
+                                options={paymentTypeOption} onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </template>
+                    <template if:true={isCountVisible}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <lightning-input type="number" label="Count of ACH / SI" value={countACHSI}
+                                name="Count of ACH / SI" onchange={achSIChange} max="10"
+                                message-when-range-overflow="Value cannot be more than 10"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <!--<template if:true={showBankAccount}>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                <lightning-input type="text" label="Bank Account" value={countACHSI} name="Count of ACH / SI" onchange={achSIChange} max="10" message-when-range-overflow="Value cannot be more than 10"></lightning-input>
+                                <lightning-combobox name="BankAccount" data-sequence="1" label="Bank Account" value={bankAccountValue}
+                                placeholder="Select Bank Account" options={bankAccountOptions} onchange={handleChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                <lightning-input type="text" label="Mobile Number" value={mobileNumber} name="mobileNumber" onchange={handleChange} max="10"></lightning-input>
+                            </lightning-layout-item>
+                        </template>-->
+                    <!--Mobile Number OTP request-->
+                    <template if:true={showMobile}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <div class="slds-is-relative ">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">* </abbr>Mobile</label>
+                                <div class="buttonIn">
+                                    <lightning-input type="tel" data-id="mobileinput" name="Mobile_Number__c"
+                                        class="validate input mobilebutton" value={casaMobileNumber} variant="label-hidden"
+                                        onchange={handleChangePhoneNumber} max-length="10" pattern="[6-9]{1}[0-9]{9}"
+                                        disabled=true read-only={isReadOnly}
+                                        message-when-pattern-mismatch="Please enter a valid phone number">
+                                    </lightning-input>
+                                    <template if:true={boolSendOtp}>
+                                        <lightning-button variant="base" label="SEND OTP" disabled={boolCheckMobileNumber}
+                                            title="Looks like a link" onclick={handleSendOTP} class="button">
+                                        </lightning-button>
+                                    </template>
+                                    <template if:true={boolResendOtp}>
+                                        <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                                            onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button">
+                                        </lightning-button>
+                                    </template>
+                                    <template if:true={isVerified}>
+                                        <lightning-icon size="small" variant="success" class="button"
+                                            icon-name="utility:success" title="Mobile"></lightning-icon>
+                                    </template>
+                                </div>
+    
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <div class="slds-m-top_medium">
+                                <template if:true={isEnterOtp}>
+                                    <div class="slds-is-relative">
+    
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+                                        <div class="buttonIn">
+                                            <lightning-input type="text" max-length="4" pattern="[0-9]{4}"
+                                                class="validate checkValidity" placeholder="Enter OTP here"
+                                                value={enterOTPValue} variant="label-hidden" onchange={handleChangeOtp}
+                                                message-when-pattern-mismatch="Please enter a valid OTP." label="Enter OTP">
+                                            </lightning-input>
+                                            <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                                                onclick={handleVerify} disabled={boolVerify} class="button">
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+                                    <div class="slds-align_absolute-center slds-m-top_small">
+                                        <template if:true={boolRequestOtp}>
+                                            Request OTP in&nbsp;<b>{increse1Second}</b>s
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+                <template if:true={isEMandate}>
+                    <div class="slds-align_absolute-center slds-var-m-top_large">
+                        <lightning-button label="Register" variant="brand" title="Register" onclick={registerAPI}
+                            class="slds-var-m-left_x-small" disabled={disableRegisterButton}>
+                        </lightning-button> &nbsp;
+                        <lightning-button label="Fetch Details" variant="brand" title="Fetch Details"
+                            onclick={fetchCallbackDetails} class="slds-var-m-left_x-small" disabled={disableFetchButton}>
+                        </lightning-button>
+                    </div>
+                </template>
+                <template if:true={isSINACH}>
+                    <div class="slds-align_absolute-center slds-var-m-top_large">
+                        <template if:true={isSmallDevice}>
+                            <div class="slds-col slds-m-around_small">
+                                <span>
+                                    <lightning-avatar src={generateFormIcon} size="large"
+                                        onclick={generatePDF} disabled={isGenerateDisabled}></lightning-avatar>
+                                </span><br />
+                                <span style="font-size: x-small;">
+                                    Generate
+                                </span>
+                            </div>
+                            <template if:true={displayEsignButton}>
+                                <div class="slds-col slds-m-around_small" data-id="signDeskEsignButton">
+                                    <span>
+                                        <lightning-avatar src={generateEsignIcon} size="large"
+                                            onclick={generateEsign}></lightning-avatar>
+                                    </span><br />
+                                    <span style="font-size: x-small;">
+                                        Generate Esign
+                                    </span>
+                                </div>
+                            </template>
+                            
+    
+                            <!---->
+                        </template>
+                        <template if:true={isLargeDevice}>
+                            <lightning-button label="Generate" variant="brand" title="Generate" onclick={generatePDF}
+                                class="slds-var-m-left_x-small" disabled={isGenerateDisabled}>
+                            </lightning-button> &nbsp;
+                            <template if:true={displayEsignButton}>
+                                <lightning-button label="Generate Esign" disabled={disableEsign} variant="brand"
+                                title="Generate Esign" onclick={generateEsign} data-id="signDeskEsignButton" class="slds-var-m-left_x-small">
+                                </lightning-button>&nbsp;
+                            </template>
+                            
+                            <!--<lightning-button label="Generate" variant="brand" title="Generate" onclick={generatePDF}
+                            class="slds-var-m-left_x-small">
+                            </lightning-button> &nbsp;
+                            <lightning-button label="Generate Esign" disabled={disableEsign} variant="brand" title="Generate Esign" onclick={generateEsign}
+                                class="slds-var-m-left_x-small">
+                            </lightning-button>&nbsp;-->
+                        </template>
+    
+                        <!--<div class="slds-p-top_large slds-var-m-left_x-small">
+                            <c-generate-esign-component record-id={recordId} disable-button={disableEsign} esign-type={esignType}></c-generate-esign-component> &nbsp;
+                        </div>-->
+    
+                        <!-- <lightning-file-upload
+                                name="fileUploader"
+                                record-id={recordId}
+                                onuploadfinished={handleUploadFinished}
+                                style="padding-bottom: 20px;"
+                        ></lightning-file-upload> -->
+                        <template if:true={docDataReceived}>
+                            <template if:false={doc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                <c-los-generic-document-upload isloading={isloading} isdocmanager="true"
+                                    show-upload-component="true" applicant-id={doc.docName.Applicant__c}
+                                    ondocumentsuccess={handleSuccess} doc-name={doc.docName.Document_Master__r.Name}
+                                    uploadtypename={doc.docName.Document_Master__r.Document_Name__c}>
+                                </c-los-generic-document-upload>
+    
+                            </template>
+    
+                            <template if:true={doc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                <template for:each={doc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                        <a target="_blank" class="slds-col slds-align_absolute-center"
+                                            href={fileRecord.downloadurl} download> <lightning-icon
+                                                icon-name="utility:download" size="x-small" alternative-text="Download"
+                                                title="Download"></lightning-icon></a>
+                                        <lightning-icon class="slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete"
+                                            title="Delete" name={fileRecord.contentVerId}
+                                            onclick={handleClickDelete}></lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </template>
+                        </template>
+                    </div>
+                </template>
+                
+                <template if:true={showPDF}>
+    
+                    <!--<section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                        aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                        <div class="slds-modal__container"
+                            style="width: 80% !important; max-width:80% !important; height: 80% !important; max-height:80% !important;">
+                            <header class="slds-modal__header">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                    title="Close" onclick={closeModal}>
+                                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                        size="small"></lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                            </header>
+                            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"
+                                style="height: 100%;">
+                                <iframe src={iframeSrc} height="100%" width="100%" class="pdfFrame"></iframe>
+                            </div>
+                        </div>
+                    </section>
+    
+                    <div class="slds-backdrop slds-backdrop_open"></div>-->
+    
+                </template>
+                <lightning-layout multiple-rows class="x-large">
+                    <!--<lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="12">-->
+                    <!--<lightning-combobox name="Repayment Mode" data-sequence="1" label="Repayment Mode" value={repaymentMode}
+                        placeholder="Select Repayment Mode" options={repaymentModeOption} onchange={handleChange}>
+                        </lightning-combobox>-->
+                    <!--<lightning-input name="Repayment_Mode__c" label="Repayment Mode" value={repaymentMode} disabled></lightning-input>
+                    </lightning-layout-item>
+                        <template if:true={isEMandate}>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="12">
+                                <lightning-combobox name="With_User" data-sequence="1" label="With User" value={userValue}
+                                placeholder="Select Yes/No " options={userOption} onchange={handleChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                            <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="12">
+                                <lightning-combobox name="Payment Type" data-sequence="1" label="Payment Type" value={paymentType}
+                                placeholder="Select Payment Type" options={paymentTypeOption} onchange={handleChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                        </template>-->
+                    <template if:true={isfullpdc}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="12">
+                            <span><b>PDC Details</b></span><br /><br />
+                            <!-- Document Upload -->
+                            <template if:true={docDataReceived}>
+                                <template if:false={pdc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                    <c-los-generic-document-upload isloading={isloading} isdocmanager="true"
+                                        show-upload-component="true" applicant-id={pdc.docName.Applicant__c}
+                                        ondocumentsuccess={handleSuccess} doc-name={pdc.docName.Document_Master__r.Name}
+                                        uploadtypename={pdc.docName.Document_Master__r.Document_Name__c}>
+                                    </c-los-generic-document-upload>
+    
+                                </template>
+                            </template>
+    
+                            <template if:true={pdc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                <template for:each={pdc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                    <div class="slds-float_left slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="slds-size_3-of-5 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                        <a target="_blank" class="slds-size_1-of-5 slds-col slds-align_absolute-center"
+                                            href={fileRecord.downloadurl} download> <lightning-icon
+                                                icon-name="utility:download" size="x-small" alternative-text="Download"
+                                                title="Download"></lightning-icon></a>
+                                        <lightning-icon class="slds-size_1-of-5 slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete"
+                                            title="Delete" name={fileRecord.contentVerId}
+                                            onclick={handleClickDelete}></lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </template>
+    
+                            <table
+                                class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover ">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <!--<th class="slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate slds-cell-wrap" title="sno">S No.</div>
+                                        </th>-->
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="bankName">Bank Name of PDC</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="bankName">Bank Account Number</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="ifsc">IFSC Code</div>
+                                        </th>
+                                        <!--<th class="slds-size_4-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="chequeNumber">PDC Cheque Number</div>
+                                        </th>-->
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="chequeNumber">PDC Cheque Number From</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="chequeNumber">PDC Cheque Number To</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate slds-cell-wrap" title="countpdc">Count of PDCs</div>
+                                        </th>
+                                        <th class="slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="delete"></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={listOfPDC} for:item="rec" for:index="loadIndex">
+                                        <tr key={rec} class="slds-hint-parent">
+                                            <!--<td class="slds-cell-wrap " data-label="SNo" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="SNo">
+                                                    <lightning-formatted-number value={rec.index}></lightning-formatted-number>.
+                                                </div>
+                                            </td>-->
+                                            <td class="slds-cell-wrap" data-label="Bank Name of PDC"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important; overflow: visible;">
+                                                <div class="slds-cell-wrap" title="Bank Name of PDC">
+                                                    <template if:true={isSmallDevice}><br></template>
+                                                    <!--<lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="PDC" name="bankName"
+                                                        value={rec.bankName} onchange={handleInputChange}></lightning-input>-->
+                                                    <c-generic-custom-lookup name="bankName" label="" record-type-name="Bank Master" data-id={rec.key}
+                                                        search-fields="" stepid="0" fieldapi="Bank_Name__c" object-name="Generic Master" data-title="PDC"
+                                                        s-object-api-name="Generic_Master__c" loan-app={loanApplicantionRecord} 
+                                                        onlookupselect={handleInputChange}></c-generic-custom-lookup>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="Bank Account Number"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="Bank Account Number">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="PDC" name="bankNumber"
+                                                        value={rec.bankNumber}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="ifsc code" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="ifsc code">
+                                                    <lightning-input type="text" variant="label-hidden" label="" data-id={rec.index} data-title="PDC" name="ifsc" value={rec.ifsc} onchange={handleInputChange} max-length="11"
+                                                    pattern="^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$" min-length="11"
+                                                    message-when-pattern-mismatch="Please enter valid IFSC Code"></lightning-input>
+                                                </div>
+                                            </td>
+                                            <!--<td class="slds-cell-wrap" data-label="PDC Cheque Number" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="PDC Cheque Number">
+                                                    <lightning-input type="text" variant="label-hidden" label="" data-id={rec.index} pattern="[0-9]+(,[0-9]+)+" data-title="PDC" name="pdcChequeNumber" value={rec.pdcChequeNumber} onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>-->
+                                            <td class="slds-cell-wrap" data-label="PDC Cheque Number From"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="PDC Cheque Number From">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="PDC" name="pdcChequeNumberFrom"
+                                                        value={rec.pdcChequeNumberFrom}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="PDC Cheque Number To"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="PDC Cheque Number To">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="PDC" name="pdcChequeNumberTo"
+                                                        value={rec.pdcChequeNumberTo}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap " data-label="Count of PDCs"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="Count of PDCs">
+                                                    <lightning-input type="number" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="PDC" name="countPDC"
+                                                        value={rec.countPDC} onchange={handleInputChange} disabled></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label=""
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="">
+                                                    <lightning-button-icon icon-name="utility:delete" data-id="PDC"
+                                                        alternative-text="Remove" title="Remove" name={rec.index}
+                                                        onclick={removeRow}></lightning-button-icon>
+                                                    <lightning-button-icon  label="" data-id="PDC"
+                                                        title="add additional row" icon-name="utility:add"
+                                                        onclick={addNewRow}></lightning-button-icon>
+                                                    <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                                        alternative-text="upload" title="Upload" data-name={docName}
+                                                        name={rec.index} onclick={hanldeUploadClickPDC}></lightning-button-icon>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <!--<div class="slds-align_absolute-center slds-var-m-top_large">
+                                <lightning-button variant="neutral" label="add additional row" data-id="PDC"
+                                    title="add additional row" icon-name="utility:add"
+                                    onclick={addNewRow}></lightning-button>
+                            </div>-->
+                        </lightning-layout-item>
+                    </template>
+                    <template if:true={isWithoutpdc}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12"
+                            large-device-size="12">
+                            <span><b>SPDC Details</b></span><br /><br />
+                            
+                            <template if:true={docDataReceived}>
+                                <!-- <label class="slds-form-element__label">Add Cheque</label>
+                            <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} 
+                                                        isdocmanager={trueValue} show-upload-component ={trueValue}  
+                                                        show-input-box={falseValue} doc-name ={docName} applicant-id={spdc.docName.Applicant__c}
+                                                        ondocumentsuccess={handleChequeSuccess} uploadtypename ={docTypeName}></c-los-generic-document-upload> -->
+                                <template if:false={spdc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                    <c-los-generic-document-upload isloading={isloading} 
+                                        show-upload-component="true" applicant-id={spdc.docName.Applicant__c}
+                                        ondocumentsuccess={handleSuccess} doc-name={spdc.docName.Document_Master__r.Name}
+                                        uploadtypename={spdc.docName.Document_Master__r.Document_Name__c}>
+                                    </c-los-generic-document-upload>
+    
+                                </template>
+                            </template>
+    
+                            <!--template if:true={spdc.isUploded} class="slds-cell-wrap" title="Document Name">
+                                <template for:each={spdc.filesList} for:item="fileRecord" for:index="fileIndex">
+                                    <div class="slds-grid slds-gutters slds-float_left" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="slds-size_3-of-5 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                                        <a target="_blank" class="slds-size_1-of-5 slds-col slds-align_absolute-center"
+                                            href={fileRecord.downloadurl} download> <lightning-icon
+                                                icon-name="utility:download" size="x-small" alternative-text="Download"
+                                                title="Download"></lightning-icon></a>
+                                        <lightning-icon class="slds-size_1-of-5 slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete"
+                                            title="Delete" name={fileRecord.contentVerId}
+                                            onclick={handleClickDelete}></lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </template-->
+                            <table
+                                class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover ">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="bankName">Bank Name of SPDC</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="bankName">Bank Account Number</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="ifsc">IFSC Code</div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="chequeNumberFrom">SPDC Cheque Number From
+                                            </div>
+                                        </th>
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="chequeNumberTo">SPDC Cheque Number To</div>
+                                        </th>
+                                        
+                                        <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate slds-cell-wrap" title="countpdc">Count of SPDCs</div>
+                                        </th>
+                                        <th class="slds-cell-fixed" scope="col">
+                                            <div class="slds-truncate" title="delete"></div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={listOfSPDC} for:item="rec" for:index="loadIndex">
+                                        <tr key={rec} class="slds-hint-parent">
+                                            <!--<td class="slds-cell-wrap " data-label="SNo" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="SNo">
+                                                    <lightning-formatted-number value={rec.index}></lightning-formatted-number>.
+                                                </div>
+                                            </td>-->
+                                            
+                                            <!--<td class="slds-cell-wrap" data-label="PDC Cheque Number" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="PDC Cheque Number">
+                                                    <lightning-input type="text" variant="label-hidden" label="" pattern="[0-9]+(,[0-9]+)+" data-id={rec.index} data-title="SPDC" name="spdcChequeNumber" value={rec.spdcChequeNumber} onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>-->
+                                            <td class="slds-cell-wrap" data-label="Bank Name of SPDC"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="Bank Name of SPDC">
+                                                    <!--<lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="SPDC" name="bankName"
+                                                        value={rec.bankName} onchange={handleInputChange}></lightning-input>-->
+                                                    <c-generic-custom-lookup name="bankName" label="" record-type-name="Bank Master" data-id={rec.key} data-index={rec.index}
+                                                        search-fields="" stepid="0" fieldapi="Bank_Name__c" object-name="Generic Master" data-title="SPDC"
+                                                        s-object-api-name="Generic_Master__c" loan-app={loanApplicantionRecord}
+                                                        onlookupselect={handleInputChange}></c-generic-custom-lookup>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="Bank Account Number"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="Bank Account Number">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="SPDC" name="bankNumber"
+                                                        value={rec.bankNumber}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="ifsc code" style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="ifsc code">
+                                                    <lightning-input type="text" variant="label-hidden" label="" data-id={rec.index} data-title="SPDC" name="ifsc" value={rec.ifsc} onchange={handleInputChange} max-length="11"
+                                                    pattern="^[A-Za-z]{4}[0][a-zA-Z0-9]{6}$" min-length="11"
+                                                    message-when-pattern-mismatch="Please enter valid IFSC Code"></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="SPDC Cheque Number From"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="SPDC Cheque Number From">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="SPDC" name="spdcChequeNumberFrom"
+                                                        value={rec.spdcChequeNumberFrom}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label="SPDC Cheque Number To"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="SPDC Cheque Number To">
+                                                    <lightning-input type="text" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="SPDC" name="spdcChequeNumberTo"
+                                                        value={rec.spdcChequeNumberTo}
+                                                        onchange={handleInputChange}></lightning-input>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="slds-cell-wrap " data-label="Count of SPDCs"
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="Count of SPDCs">
+                                                    <lightning-input type="number" variant="label-hidden" label=""
+                                                        data-id={rec.index} data-title="SPDC" name="countSPDC"
+                                                        value={rec.countSPDC} min="2"
+                                                        onchange={handleInputChange} disabled></lightning-input>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-wrap" data-label=""
+                                                style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                                <div class="slds-cell-wrap" title="">
+                                                    <lightning-button-icon icon-name="utility:delete" data-id="SPDC"
+                                                        alternative-text="Remove" title="Remove" name={rec.index}
+                                                        onclick={removeRow}></lightning-button-icon>
+                                                    <lightning-button-icon label="" data-id="SPDC"
+                                                        title="Add additional row" icon-name="utility:add"
+                                                        onclick={addNewRow}></lightning-button-icon>
+                                                    <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                                        alternative-text="upload" title="Upload" data-name={docName}
+                                                        name={rec.index} onclick={hanldeUploadClick}>
+                                                </lightning-button-icon>
+                                                    <!--<template if:true={showGenericUpload}>-->
+                                                        
+                                                    <!--</template>-->
+                                                </div>
+                                            </td>
+                                            <!--<td class="slds-cell-wrap" data-label=""
+                                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                                            <div class="slds-cell-wrap" title="">
+                                                <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} 
+                                                        isdocmanager={trueValue} show-upload-component ={trueValue}  
+                                                        show-input-box={falseValue} loan-id ={recordId} doc-name ={docName} 
+                                                        ondocumentsuccess={handleChequeSuccess} uploadtypename ={docTypeName}></c-los-generic-document-upload>
+                                            </div>
+                                            </td>-->
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <!--<div class="slds-align_absolute-center slds-var-m-top_large">
+                                <lightning-button variant="neutral" label="add additional row" data-id="SPDC"
+                                    title="add additional row" icon-name="utility:add"
+                                    onclick={addNewRow}></lightning-button>
+                            </div>-->
+                        </lightning-layout-item>
+                    </template>
+                    <!--<template if:true={isCountVisible}>
+                        <lightning-layout-item flexibility="auto" padding="around-small" size="12" small-device-size="12" large-device-size="12">
+                            <lightning-input type="number" label="Count of ACH / SI" value={countACHSI} name="Count of ACH / SI" onchange={achSIChange} max="10"></lightning-input>
+                        </lightning-layout-item>
+                    </template>-->
+                </lightning-layout>
+                
+            </div>
+            </template>
+        </lightning-card>
+        <div data-id="htmlContent" class="htmlContent"></div>
+    
+        <template if:true={displayGenerateEsign}>
+            <c-generate-esign-component record-id={recordId} esign-type={esignType} ongenerateesignclick={hideRepaymentSection} onreturntosummary={showRepaymentSection}></c-generate-esign-component>
+            &nbsp;
+        </template>
+        <template if:true={showGenericUpload}>
+                    
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" onclick={handleCloseModal}></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <label class="slds-form-element__label">Add Cheque</label>
+                        <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} 
+                            isdocmanager={trueValue} show-upload-component ={trueValue}  
+                            show-input-box={falseValue} doc-name ={docName} applicant-id={spdc.docName.Applicant__c}
+                            ondocumentsuccess={handleChequeSuccess} uploadtypename ={docTypeName}>
+                        </c-los-generic-document-upload>
+                    </div>
+                </div>
+            </section>
+        
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        
+        </template>
+        <template if:true={showGenericUploadPdc}>
+                    
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" onclick={handleCloseModal}></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <label class="slds-form-element__label">Add Cheque</label>
+                        <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} 
+                            isdocmanager={trueValue} show-upload-component ={trueValue}  
+                            show-input-box={falseValue} doc-name ={docName} applicant-id={pdc.docName.Applicant__c}
+                            ondocumentsuccess={handleChequeSuccess} uploadtypename ={docTypeName}>
+                        </c-los-generic-document-upload>
+                    </div>
+                </div>
+            </section>
+        
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        
+        </template>
+
+    </template>
+    
+    <!--New component added for Charges SPDC-->
+    <template if:true={renderChargesInstructionModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeSPDCModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" onclick={handleCloseModal}></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                    You are requested to ad SPDC Charges to proceed?
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeSPDCModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={renderChargesComponent} title="Add Charges">Add Charges</button>
+                </footer>
+            </div>
+        </section>
+    
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+
+    </template>
+
+    <!--render logic for charges component-->
+    <template if:true={isChargeComponentLoaded}>
+        <c-charges record-id={loanRecordId} is-rendered-from-repayment="true" onsavecharge={handleNavigateToPaymentFavouring}></c-charges>
+    </template>
+
+    <!--Render logic for Payment favourung-->
+    <template if:true={isPaymentfavouringComponentLoaded}>
+        <c-related-payment-favourings-component record-id={loanRecordId} is-rendered-from-repayment="true" onnavigateback={handleBackToRepayment}></c-related-payment-favourings-component>
+    </template>
+
+
+</template>

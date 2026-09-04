@@ -1,0 +1,38 @@
+<template>
+    <!-- <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template> -->
+    <c-custom-spinner
+        show-spinner={isloading}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+    <template if:false={isCreditPopOver}>
+        <lightning-button variant="brand" label="Fetch Exposure Details" onclick={handleLoanODDetails}
+            class="slds-m-left_x-small buttonColor" disabled={isDisabled}></lightning-button>
+    </template>
+
+    <template lwc:if={showBRE}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">BRE
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <c-bre-component class="component" record-id={loanId} stage-name={stage} onnext={nextHandler}>
+                    </c-bre-component>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <lightning-button-group>
+                        &nbsp; <lightning-button label="Back" title="Back" icon-name="action:back"
+                            onclick={closeModal} icon-position="right"></lightning-button>
+                    </lightning-button-group>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -1,0 +1,13 @@
+<apex:component >
+    <!-- apex:attribute name="lstDetails" description="" type="01p71000000EcVH[]"/>
+    <table border ="1">
+        <apex:repeat value="{!lstDetails}" var="veh" id="idvehicle">
+            <tr>
+                <td style="width:2%;"><apex:outputLabel value="{!veh.counter}"/></td>
+                <td style="width:70%;"><apex:outputLabel value="{!veh.helpText}" /></td>
+                <td><apex:outputLabel value="{!veh.data}"/></td>
+            </tr>
+        </apex:repeat>
+    </table -->
+
+</apex:component>

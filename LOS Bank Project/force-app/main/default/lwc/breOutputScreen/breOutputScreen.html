@@ -1,0 +1,254 @@
+<template>
+
+	<template if:true={isloading}>
+		<lightning-spinner alternative-text="Loading"></lightning-spinner>
+	</template>
+
+	<article class="slds-card slds-text-body_small">
+			<header class="slds-media slds-media_center slds-has-flexi-truncate slds-m-left_small">
+				<div class="slds-media__figure">
+					<span class="slds-icon_container" title="BRE Output">
+						<lightning-avatar src={breOutput} size="large"></lightning-avatar>
+						<span class="slds-assistive-text">BRE Output</span>
+					</span>
+				</div>
+				<div class="slds-media__body">
+					<h2 class="slds-card__header-title">
+						<a href="#" class="slds-truncate" title="BRE Output">
+							<b><span>BRE Output</span></b>
+						</a>
+					</h2>
+				</div>
+			</header>
+
+
+	<!-- <div class="slds-media__body" part="title">
+		<lightning-avatar src={breOutput} size="large"></lightning-avatar>
+		<h2 class="slds-card__header-title"><span class="slds-text-heading_small slds-truncate">BRE
+				Output</span>
+		</h2>
+	</div>  -->
+
+	<template if:true={isBreStatusRecieved}>
+		<template if:false={breResponse}>
+			<center>
+				<div style="color:red;"> BRE Response is not available. Please try again or contact your system
+					administrator.</div>
+			</center>
+
+		</template>
+		<template if:true={breResponse}>
+			<template if:false={isShowErrorReasons}>
+				<template if:false={isShowDeclineReasons}>
+					<!--<lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>-->
+						<!--<lightning-accordion-section name="A" label="Application">-->
+
+							<div class="slds-box slds-theme_default">
+							<div class="slds-grid slds-wrap">
+								<div class="slds-size_1-of-2" style="
+								padding-right: 6px;">
+								Application Decision
+								</div>
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">{applicantDecision}</label></b>
+								</div>
+							</div>
+							<div class="slds-grid slds-wrap ">
+								<div class="slds-size_1-of-2" style="
+								padding-right: 6px;">
+									Customer Grade
+								</div>
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">{AppcustGrade}</label></b>
+								</div>
+							</div>
+						</div>
+							<!--
+
+							<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">Application UW authority</label></b>
+								</div>
+								<div class="slds-size_1-of-2">
+									{uwAuthority}
+								</div>
+							</div>
+							-->
+
+							<!--
+							<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">Decision Date Time</label></b>
+								</div>
+								<div class="slds-size_1-of-2">
+									{decisionDateTime}
+								</div>
+							</div>
+							-->
+							<!--
+							<lightning-layout horizontalAlign="spread" multipleRows="true">
+									<lightning-layout-item padding="around-small" smallDeviceSize="12">
+										<b><label>FI required at</label></b>
+									</lightning-layout-item>
+							</lightning-layout>
+							-->
+						<!--</lightning-accordion-section>-->
+
+					<!--<lightning-accordion-section name="B" label="Applicant">-->	
+
+						
+
+							<template if:true={showApplicants}>
+								
+									<c-generic-card-pagination-display displayuwcriteria={renderuwcriteria}
+										object-list={applicantArray} is-decline-response={isShowDeclineReasons}
+										card-title="FI required at"></c-generic-card-pagination-display>
+						
+							</template>
+					
+
+					<!--	</lightning-accordion-section>-->
+
+						<!--<lightning-accordion-section name="C" label="Product">
+
+							<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">Product Decision</label></b>
+								</div>
+								<div class="slds-size_1-of-2">
+									{productDecision}
+								</div>
+							</div>
+-->
+
+<div class="slds-box slds-theme_default slds-m-around_x-small slds-var-m-around_xxx-small">
+	<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+		<div class="slds-size_1-of-2">
+		Approval Authority
+	</div>
+		<div class="slds-size_1-of-2">
+			<b>
+				<label class="slds-form-element__label">{uwAuthority}</label>
+			</b>
+		</div>
+	</div>
+	</div>
+
+
+							<template if:true={showSchemeDecision}>
+					
+								<c-generic-card-pagination-display displayuwcriteria={renderuwcriteria}
+								object-list={schemeDecisionArray} is-decline-response={isShowDeclineReasons}
+								enable-selection={isEnableSchemeSelection} record-id={loanAppId}
+								bre-response-id={breResponseId} loan-scheme-code={loanSchemeCode} 
+								card-title="Eligible Schemes"
+								 scheme-add-details={schemeMap} 
+								 scheme-deviations={deviationsMap}
+								 disableshemeselection={isEnableSchemeSelection}
+								class="comwidth" schem-id={schemId}>
+								</c-generic-card-pagination-display>
+					
+							</template>
+						
+
+					<!--	</lightning-accordion-section>-->
+				<!--	</lightning-accordion>-->
+				</template>
+
+				
+
+				<template if:true={isShowDeclineReasons}>
+					<lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+						<lightning-accordion-section name="A" label="Application">
+
+							<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">Application Decision</label></b>
+								</div>
+								<div class="slds-size_1-of-2">
+									{applicantDecision}
+								</div>
+							</div>
+
+
+							<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+								<div class="slds-size_1-of-2">
+									<b><label class="slds-form-element__label">Decision Date Time</label></b>
+								</div>
+								<div class="slds-size_1-of-2">
+									{decisionDateTime}
+								</div>
+							</div>
+
+
+						</lightning-accordion-section>
+						<template if:true={renderuwcriteria}>
+							<lightning-accordion-section name="B" label="UW Criterias">
+								<template if:true={showApplicants}>
+									<lightning-card>
+										<c-generic-card-pagination-display displayuwcriteria={renderuwcriteria}
+											object-list={uwCriteriaArray} is-decline-response={isShowDeclineReasons}
+											card-title="UW Criteria"></c-generic-card-pagination-display>
+									</lightning-card>
+								</template>
+	
+							</lightning-accordion-section>
+						</template>
+
+					</lightning-accordion>
+
+				</template>
+			</template>
+			<template if:true={isShowErrorReasons}>
+				<lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+					<lightning-accordion-section name="A" label="Application">
+
+						<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+							<div class="slds-size_1-of-2">
+								<b><label class="slds-form-element__label">Application Decision</label></b>
+							</div>
+							<div class="slds-size_1-of-2">
+								{applicantDecision}
+							</div>
+						</div>
+
+
+						<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+							<div class="slds-size_1-of-2">
+								<b><label class="slds-form-element__label">Decision Date Time</label></b>
+							</div>
+							<div class="slds-size_1-of-2">
+								{decisionDateTime}
+							</div>
+						</div>
+
+
+					</lightning-accordion-section>
+
+					<lightning-accordion-section name="B" label="Errors">
+
+						<template if:true={showErrors}>
+							<lightning-card>
+								<c-generic-card-pagination-display displayuwcriteria={renderuwcriteria}
+									object-list={errorDeatilsArray} is-decline-response={isShowDeclineReasons}
+									card-title="Error Details"></c-generic-card-pagination-display>
+							</lightning-card>
+						</template>
+
+					</lightning-accordion-section>
+				</lightning-accordion>
+			</template>
+		</template>
+	</template>
+	<template if:true={isBreStatusPending}>
+		<center>
+			<div style="color:red;"> Last BRE run at {lastBreRunAt} and response not received yet</div>
+		</center>
+	</template>
+	<template if:true={isBreStatusNull}>
+		<center>
+			<div style="color:red;"> BRE is not run yet. Please edit Loan and Run BRE.</div>
+		</center>
+	</template>
+</article>
+</template>

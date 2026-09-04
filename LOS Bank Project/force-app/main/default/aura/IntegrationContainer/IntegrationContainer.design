@@ -1,0 +1,10 @@
+<!--
+ - Created by ngundurao on 17/09/22.
+ -->
+
+<design:component>
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Large"/>
+        <design:supportedFormFactor type="Small"/>
+    </design:supportedFormFactors>
+</design:component>

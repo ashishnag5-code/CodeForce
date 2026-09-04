@@ -1,0 +1,49 @@
+<template>
+    <div class="slds-card__body slds-card__body_inner">
+        <div class="slds-form-element">
+            <span class="slds-form-element__label">Member Details</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {strentityType}
+                </div>
+            </div>
+
+            <span class="slds-form-element__label">Type of Employment</span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {relatedRecord.Type_Of_Employment__c}
+                </div>
+            </div>
+
+            <span class="slds-form-element__label">Method Of Assesment </span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {relatedRecord.Method_Of_Assesment__c}
+                </div>
+            </div>
+            <span class="slds-form-element__label">Company/Business Name </span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {relatedRecord.Company_Name__c}
+                </div>
+            </div>
+
+            <span class="slds-form-element__label">Consider Income for
+                Eligibility </span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {relatedRecord.Consider_Income_for_Eligibility__c}
+                </div>
+            </div>
+
+            <span class="slds-form-element__label">Customer Grade </span>
+            <div class="slds-form-element__control">
+                <div class="slds-form-element__static">
+                    {relatedRecord.Customer_Grade__c}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</template>

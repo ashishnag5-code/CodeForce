@@ -1,0 +1,26 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item>
+            <!--<lightning-button label="Previous" 
+            icon-name="utility:chevronleft"
+            onclick={previousHandler} label="Next" 
+            disabled={disablePrevious}></lightning-button>-->
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="grow">
+            <p class="slds-text-align_center">{currentPage} of {totalPage} Page</p>
+        </lightning-layout-item>
+        <lightning-layout-item>
+            <lightning-button-group>
+                <lightning-button
+                icon-name="utility:chevronleft"
+                onclick={previousHandler}
+                disabled={disablePrevious}></lightning-button>
+                <lightning-button 
+                icon-name="utility:chevronright"
+                icon-position="right"
+                onclick={nextHandler}
+                disabled={disableNext}></lightning-button>
+            </lightning-button-group>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

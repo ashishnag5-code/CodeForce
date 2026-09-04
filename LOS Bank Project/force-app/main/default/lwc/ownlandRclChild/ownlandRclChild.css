@@ -1,0 +1,6 @@
+:host{
+    --slds-c-accordion-summary-color-background : #6D3078; 
+    --slds-c-accordion-heading-text-color : #FFF2F0;   
+    --slds-c-accordion-section-spacing-inline-start : 0.23rem;
+    --slds-c-accordion-section-spacing-inline-end : 0.1rem;
+}

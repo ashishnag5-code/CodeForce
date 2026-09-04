@@ -1,0 +1,302 @@
+<apex:component controller="CAMReportChildComponentsController">    
+    
+    <apex:attribute name="loanApp" description="This is the value for the component."
+    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="applicantDetails" description="This is the value for the component."
+    type="Applicant__c" required="true" assignTo="{!applicant}"/>
+    <apex:attribute name="productDetailsValue" description="This is the value for the component."
+    type="String" required="true" assignTo="{!productDetails}"/>
+    <apex:attribute name="ltvValue" description="LTV Value"
+    type="String" assignTo="{!ltv}"/>
+    <apex:attribute name="financialParentValue" description="This is the value for the component."
+    type="Applicant_Financials_Details__c" assignTo="{!financialParent}"/>
+     <apex:attribute name="subPageValue" description="This is the value for the component."
+    type="String" assignTo="{!subPage}"/>
+    <apex:attribute name="RODetails" description="This is the value for the component."
+    type="User" assignTo="{!RO}"/>
+    <apex:attribute name="subProductValue" description="This is the value for the component."
+    type="String" assignTo="{!subProduct}"/>
+    <apex:attribute name="vahaanValue" description="This is the value for the component."
+    type="String" assignTo="{!vahaanPdf}"/>
+    <apex:attribute name="valReportValue" description="This is the value for the component."
+    type="String" assignTo="{!valReportPdf}"/>
+    <apex:attribute name="valuationDetails" description="This is the value for the component."
+    type="Valuation__c" required="false" assignTo="{!valuation}"/>
+    <apex:attribute name="pslDetailsRecord" description="This is the value for the component."
+        type="BSR_PSL_Details__c" required="false" assignTo="{!pslDetails}"/>
+
+          
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection title="Case Summary" columns="3" rendered="{!(subProduct=='New')}">
+    
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Application Number" for="Application_Id__c"/>
+                <apex:outputText label="Application Number" value="{!loan.Application_Id__c}" id="Application_Id__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Branch" for="Branch_Master__r"/>
+                <apex:outputText value="{!loan.Branch_Master__r.Account_Name__c}" id="Branch_Master__r"/> 
+            </apex:pageBlockSectionItem>
+            
+             <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Total Funding till Date" for="Wheels_Exposure__c"/>
+                <apex:outputText value="{!loan.Wheels_Exposure__c}" id="Wheels_Exposure__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Product" for="Product__c"/>
+                <apex:outputText value="{!loan.Product__c}" id="Product__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" >
+                <apex:outputLabel value="Sourcing Channel Name" for="Sourcing_Channel_Name__r"/>
+                <apex:outputText value="{!loan.Sourcing_Channel_Name__r.Account_Name__c}" id="Sourcing_Channel_Name__r"/> 
+            </apex:pageBlockSectionItem> <!--data to be updated-->
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="POS of all Live loans" for="POS_of_all_Live_Loans__c"/>
+                <apex:outputText value="{!loan.POS_of_all_Live_Loans__c }" id="POS_of_all_Live_Loans__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Make /Mode /Variant" for="Make__c"/>
+                {!collateral.Make__c}/{!collateral.Model__c}/{!collateral.MMV_Master__r.Name}
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="RO Name" for="Name"/>
+                <apex:outputText value="{!RO.Name}" id="Name"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="POS As On Date Wheels" for="Wheels_Exposure__c3"/>
+                <apex:outputText value="{!loan.POS_As_On_Date_Two_Wheeler__c}" id="Wheels_Exposure__c3"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Offered LTV (Ex showroom)" for="Name"/>
+                <apex:outputText value="{!ltv}" id="Name"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Scheme" for="Scheme__c"/>
+                <apex:outputText value="{!loan.Scheme__r.Scheme_Name__c}" id="Scheme__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Approved but not disbursed" for="Approved_but_not_Disbursed__c"/>
+                <apex:outputText value="{!loan.Approved_but_not_Disbursed__c}" id="Approved_but_not_Disbursed__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Tenure" for="Tenure__c"/>
+                <apex:outputText value="{!loan.Tenure__c } months" id="Tenure__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Customer Grade" for="Customer_Grade__c"/>
+                <!--<apex:outputText value="{!applicant.Customer_Grade__c }" id="Customer_Grade__c"/> -->
+                <apex:outputText value="{!loan.Customer_Grade__c}" id="Customer_Grade__c"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Proposed Exposure" for="Loan_Amount__c"/>
+                <apex:outputText value="{!loan.Total_Loan_Amount__c}" id="Loan_Amount__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF(subPage=='Tractor',true,false)}">
+                <apex:outputLabel value="EMI Pattern" for="Emi_Frequency__c"/>
+                <apex:outputText value="{!loan.Emi_Frequency__c}" id="Emi_Frequency__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF(subPage=='Tractor',true,false)}">
+                <apex:outputLabel value="Customer Subgrade" for="Sub_Grade__c"/>
+                <apex:outputText value="{!loan.Sub_Grade__c}" id="Sub_Grade__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF((subPage=='Commercial' && financialParent.HireVsBuy_Decision__c == null),true,false)}">
+                <apex:outputLabel value="FCF/EMI" for="financialDetail"/>
+                <apex:outputText value="{!financialParent.FCF_EMI__c}" id="financialDetail"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF((subPage=='Commercial' && financialParent.HireVsBuy_Decision__c != null),true,false)}">
+                <apex:outputLabel value="Hire Vs Buy" for="financialDetailHire"/>
+                {!financialParent.HireVsBuy_Amt__c} ({!financialParent.HireVsBuy_Decision__c})
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF(subPage=='Commercial',true,false)}">
+                <apex:outputLabel value="Sub Category" for="Sub_Grade__c"/>
+                <apex:outputText value="{!loan.Sub_Grade__c}" id="Sub_Grade__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Total Exposure" for="Final_Exposure__c"/>
+                <apex:outputText value="{!loan.Final_Exposure__c}" id="Final_Exposure__c"/> 
+            </apex:pageBlockSectionItem>        
+        </apex:pageBlockSection>    
+    
+    </div>
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection title="Case Summary" columns="3" rendered="{!(subProduct!='New')}">
+    
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Application Number" for="Application_Id__c"/>
+                <apex:outputText label="Application Number" value="{!loan.Application_Id__c}" id="Application_Id__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Branch" for="Branch_Master__r"/>
+                <apex:outputText value="{!loan.Branch_Master__r.Account_Name__c}" id="Branch_Master__r"/> 
+            </apex:pageBlockSectionItem>
+            
+             <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Total Funding till Date" for="Wheels_Exposure__c"/>
+                <apex:outputText value="{!loan.Wheels_Exposure__c}" id="Wheels_Exposure__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Product" for="Product__c"/>
+                <apex:outputText value="{!loan.Product__c}" id="Product__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" >
+                <apex:outputLabel value="Sourcing Channel Name" for="Sourcing_Channel_Name__r"/>
+                <apex:outputText value="{!loan.Sourcing_Channel_Name__r.Account_Name__c}" id="Sourcing_Channel_Name__r"/> 
+            </apex:pageBlockSectionItem> <!--data to be updated-->
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="POS of all Live loans" for="POS_of_all_Live_Loans__c"/>
+                <apex:outputText value="{!loan.POS_of_all_Live_Loans__c }" id="POS_of_all_Live_Loans__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Make /Mode /Variant" for="Make__c"/>
+                {!collateral.Make__c}/{!collateral.Model__c}/{!collateral.MMV_Master__r.Name}
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Sourcing Channel Type" for="Sourcing_Channel__c"/>
+                    <apex:outputText value="{!loan.Sourcing_channel__c}" id="Sourcing_Channel__c"/>
+            </apex:pageBlockSectionItem>            
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="POS As On Date Wheels" for="Wheels_Exposure__c3"/>
+                <apex:outputText value="{!loan.POS_As_On_Date_Two_Wheeler__c}" id="Wheels_Exposure__c3"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Grid / Depreciated Value" for="Grid_Depreciated_Value__c"/>
+                    <apex:outputText value="{!collateral.Grid_Depreciated_Value__c}" id="Grid_Depreciated_Value__c"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Dealer Name" for="IBB_Value__c"/>
+                <apex:outputText value="{!loan.Dealer_Master__r.Account_Name__c}" id="IBB_Value__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Approved but not disbursed" for="Approved_but_not_Disbursed__c"/>
+                <apex:outputText value="{!loan.Approved_but_not_Disbursed__c}" id="Approved_but_not_Disbursed__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="IDV" for="IDV__c"/>
+                    <apex:outputText value="{!collateral.IDV__c}" id="IDV__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="RO Name" for="Name"/>
+                <apex:outputText value="{!RO.Name}" id="Name"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Proposed Exposure" for="Loan_Amount__c"/>
+                <apex:outputText value="{!loan.Total_Loan_Amount__c}" id="Loan_Amount__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!valReportPdf != null}">                
+                <apex:outputLabel value="Valuation" for="Valuation_Amount__c"/>
+                <apex:outputLink value="{!valReportPdf}" target="_blank">{!collateral.Valuation_Amount__c} (View Valuation Report)</apex:outputLink>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!valReportPdf == null}">                
+                <apex:outputLabel value="Valuation" for="Valuation_Amount__c"/>
+                <apex:outputText value="{!collateral.Valuation_Amount__c}" id="Valuation_Amount__c"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Scheme" for="Scheme__c"/>
+                <apex:outputText value="{!loan.Scheme__r.Scheme_Name__c}" id="Scheme__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Total Exposure" for="Final_Exposure__c"/>
+                <apex:outputText value="{!loan.Final_Exposure__c}" id="Final_Exposure__c"/> 
+            </apex:pageBlockSectionItem>  
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Offered LTV (Vehicle Cost)" for="Name"/>
+                <apex:outputText value="{!ltv}" id="Name"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Customer Grade" for="Customer_Grade__c"/>
+                <apex:outputText value="{!loan.Customer_Grade__c}" id="Customer_Grade__c"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF(subPage=='Tractor',true,false)}">
+                <apex:outputLabel value="EMI Pattern" for="Emi_Frequency__c"/>
+                <apex:outputText value="{!loan.Emi_Frequency__c}" id="Emi_Frequency__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!IF(subPage=='Commercial',true,false)}">
+                <apex:outputLabel value="EMI Amount" for="EMI__c"/>
+                <apex:outputText value="{!loan.EMI__c}" id="EMI__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!vahaanPdf != null}">
+                <apex:outputLabel value="Vehicle No." for="Name"/>
+                <apex:outputLink value="{!vahaanPdf}" target="_blank">{!collateral.Vehicle_Number__c} (View Vaahaan Report)</apex:outputLink> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}" rendered="{!vahaanPdf == null}">
+                <apex:outputLabel value="Vehicle No." for="Name"/>
+                <apex:outputText value="{!collateral.Vehicle_Number__c}" id="Name"/>
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Valuation Done By" for="Valuer_Name_Code__c"/>
+                <apex:outputText value="{!valuation.Valuer_Name_Code__c}" id="Valuer_Name_Code__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Tenure" for="Tenure__c"/>
+                <apex:outputText value="{!loan.Tenure__c } months" id="Tenure__c"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="RC Owner as per Vahan" for="Name"/>
+                <apex:outputText value="{!collateral.Current_Owner_Name__c}" id="Name"/> 
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Name of valuer" for="Valuer_Name_Code__c"/>
+                {!IF(valuation.Valuer_Name_Code__c=='Other valuation',valuation.Coordinate_for_valuation_POC__c,'NA')}
+                <!--<apex:outputText value="{!valuation.Valuer_Name_Code__c}" id="Valuer_Name_Code__c"/> -->
+            </apex:pageBlockSectionItem>
+            
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="HPN detail as per Vahan" for="HPN_With_Financiers_Name__c"/>
+                <apex:outputText value="{!collateral.HPN_With_Financiers_Name__c}" id="HPN_With_Financiers_Name__c"/> 
+            </apex:pageBlockSectionItem>
+            
+                  
+        </apex:pageBlockSection>    
+    
+    </div>
+    
+</apex:component>

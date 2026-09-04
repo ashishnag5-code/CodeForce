@@ -1,0 +1,103 @@
+<!--
+  @description       : 
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 12-14-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+  <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+  <!-- Financials Sections-->
+  <div>
+    <template if:true={displayFinancialComponent}>
+      <c-financial-information onproducteligblefordlcheck={handleProductEligbleForDLCheck} record-val={recordId} spinner-image={spinnerImage} inside-record-page={insideRecordPage} onnext={handleSuccess}></c-financial-information>
+    </template>
+  </div>
+
+
+  <!-- Adhoc DL input popup with message in of new CE and FTU -->
+  <div lwc:if={showDLModal}>
+    <section  role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+      <div class="slds-modal__container">
+        <lightning-icon
+            icon-name="utility:close"
+            size="medium"
+            variant="inverse"
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            alternative-text="Indicates close"
+            onclick={handleCancelDLModalWithFiringNextAction}
+          >
+          </lightning-icon>
+          <span class="slds-assistive-text">Close</span>
+       <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          <p lwc:if={messageDisplay}>Please add DL otherwise S4 deviation will be raised</p>
+          <div lwc:else>
+            <!-- Porting DL logic from LosAddIndNonInd file -->
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+              <lightning-layout-item size="12" small-device-size="12" large-device-size="12" flexibility="auto"
+              class="slds-p-horizontal_small">
+                <div class="slds-m-top_medium">
+                  <div class="slds-is-relative ">
+                    <label class="slds-form-element__label">
+                      <abbr class="slds-required" title="required">* </abbr>Driving Licence</label>
+                    <div class="buttonIn">
+                      <!-- <lightning-input type="text" required="true" variant="label-hidden"
+                        onchange={handleValuChange} class="validate checkValidity input kyc"
+                        label="Driving Licence" name="Driving_License_Id__c" min-length="6"
+                        max-length="25" pattern="[a-zA-Z0-9]*"
+                        message-when-pattern-mismatch="Enter valid DL number"
+                        >
+                      </lightning-input> -->
+                      <lightning-input type="text" required="true"  variant="label-hidden"
+                        onchange={handleValuChange} class="validate checkValidity input kyc" value={drivingLicense}
+                        label="Driving Licence" max-length="25" min-length="6"  pattern="[a-zA-Z0-9]*" message-when-pattern-mismatch="Enter valid DL number"  name="Driving_License_Id__c" 
+                        >
+                      </lightning-input>
+                      <div class="button slds-align_absolute-center">
+                        <template if:true={isMobile}>
+                          <lightning-button-icon style="float: right;" class="slds-hide"
+                            icon-name="utility:cases" alternative-text="ocr" title="ocr"
+                            data-id={label.DocumentDL} data-name={label.DocumentDL}
+                            onclick={hanldeOcrClick}>
+                          </lightning-button-icon>
+                        </template>
+                        <lightning-icon size="small" icon-name="utility:preview"
+                          data-id={DocumentDLPreview} class="slds-hide" alternative-text="preview"
+                          title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                        <lightning-button-icon style="float: right;" icon-name="utility:upload" if:false={isStageNotQDE}
+                          alternative-text="upload" title="Upload" data-name={label.DocumentDL}
+                          onclick={hanldeUploadClick}>
+                        </lightning-button-icon>
+                      </div>
+
+                      
+                    </div><br/>
+
+                    <p style="word-break:break-word">{dummyMessage}</p>
+                  </div>
+                </div>
+              </lightning-layout-item>
+
+            </lightning-layout>
+            <!-- Porting DL logic from LosAddIndNonInd file -->
+          </div>
+        </div>
+        <div class="slds-modal__footer">
+          <button class="slds-button slds-button_neutral" style="color: #6D3078;" onclick={handleCancelDLModal} aria-label="Cancel and close">Proceed without DL</button>
+          <button class="slds-button slds-button_brand" style="background: #6D3078;" lwc:if={messageDisplay} onclick={handleOpenDLForm}>Add DL</button>
+          <button class="slds-button slds-button_brand" style="background: #6D3078;" lwc:else onclick={updateRecords}>Save DL</button>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+  </div>
+  <!-- Adhoc DL input popup with message in of new CE and FTU -->
+
+
+  <template  if:true={showUploadComponent}>
+    <c-los-generic-document-upload class="losGenericCmp"  show-upload-component={trueValue} isapplicant-page={trueValue} isdocmanager={trueValue}
+      show-input-box={falseValue} applicant-id={applicantId} doc-name={docName} ondocumentsuccess={handleSuccessDocUpload}
+      oncancel={hanleCancel} uploadtypename="" is-model-needed={modelNeeded} onocrbutton={handleOCRButton}>
+    </c-los-generic-document-upload>
+  </template>
+</template>

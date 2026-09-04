@@ -1,0 +1,179 @@
+<template>
+    <div style="border: 1px solid #00000042; padding:0.5rem;">
+        <lightning-card title={title}>
+            <template if:false={isInfoMissing}>
+                <template if:false={isWizard}>
+                    <template if:true={isEditable}>
+                        <lightning-icon icon-name="action:close" class="slds-m-left_small"  onclick={handleCancel} size="x-small" slot="actions" ></lightning-icon>
+                    </template>
+                    <template if:false={isEditable}>
+                        <template if:true={allowEdit}>
+                            <lightning-icon icon-name="action:edit" onclick={handleEdit} size="x-small" slot="actions"></lightning-icon>
+                        </template>
+                    </template>
+                </template>
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                </template>
+                <template for:each={displayList} for:item="item1">
+                    <div class="slds-section slds-is-open" key={item1.sectionName}>
+                        <h3 class="slds-section__title sectionStyles">
+                          <span class="slds-truncate slds-p-horizontal_small" title={item1.sectionName}>{item1.sectionName}</span>
+                        </h3><br/>
+                        <div class="slds-section__content">
+                            <template for:each={item1.pdqs} for:item="item">
+                                <div key={item.Order__c} class="slds-m-horizontal_small">
+                                    <template if:false={item.isHidden}>
+                                        <template if:true={item.isTabularInput}>
+                                            <div class="slds-m-bottom_small">
+                                                <template if:true={isEditable}>
+                                                    <label class="slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                    <c-edit-datatable-utility record-id={recordId} field-value={item.value.value} hide-icons=true item={item}
+                                                        field-name={item.QualifiedApiName} key={item.Table_Definition_LOVs__c.fieldName} is-edited={isEditable} 
+                                                        field-label={item.Question_Label__c} onapplicantselect={handleApplicantSelect}>
+                                                    </c-edit-datatable-utility>
+                                                </template>
+                                                <template if:false={isEditable}>
+                                                    <div class="slds-form__item" role="listitem">                                        
+                                                        <label class="slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                    </div>
+                                                    <c-edit-datatable-utility record-id={recordId} field-value={item.value.value} hide-icons=true item={item}
+                                                        field-name={item.QualifiedApiName} key={item.Table_Definition_LOVs__c.fieldName} is-edited={isEditable} 
+                                                        field-label={item.Question_Label__c}>
+                                                    </c-edit-datatable-utility>
+                                                </template>
+                                            </div>
+                                        </template>
+                                        <template if:true={item.isComplexTable}>
+                                            <template for:each={item.values} for:item="eachItem">
+                                                <template if:true={isEditable}>
+                                                    <label key={eachItem.recordKey} class="slds-form-element__label"><strong>{eachItem.recordLabel}</strong></label>
+                                                    <c-edit-datatable-utility field-value={eachItem.recordValue.value} hide-icons=true item={item}
+                                                        field-name={item.QualifiedApiName} key={eachItem.recordKey} is-edited={isEditable} field-type="complexTable"
+                                                        field-label={item.Question_Label__c} field-key={eachItem.recordKey}>
+                                                    </c-edit-datatable-utility>
+                                                </template>
+                                                <template if:false={isEditable}>
+                                                    <div key={eachItem.recordKey} class="slds-form__item" role="listitem">                                        
+                                                        <label class="slds-form-element__label"><strong>{eachItem.recordLabel}</strong></label>
+                                                    </div>
+                                                    <c-edit-datatable-utility field-value={eachItem.recordValue.value} hide-icons=true item={item}
+                                                        field-name={item.QualifiedApiName} key={eachItem.recordKey} is-edited={isEditable}
+                                                        field-label={item.Question_Label__c}>
+                                                    </c-edit-datatable-utility>
+                                                </template>
+                                            </template>
+                                        </template>
+                                        <template if:true={isEditable}>
+                                            <template if:false={item.isTabularInput}>
+                                                <template if:false={item.isDropdown}>
+                                                     <template if:false={item.isText}>
+                                                         <template if:false={item.isNumber}>
+                                                            <abbr if:true={item.isMandatory__c} title="required" class="slds-required">*</abbr>
+                                                            <label class="slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                         </template>
+                                                     </template>
+                                                </template>
+                                            </template>
+                                            <template if:true={item.isRichText}>
+                                                <lightning-input-rich-text class="as slds-m-bottom_small" name={item.QualifiedApiName}
+                                                required={item.isMandatory__c} value={item.value} disabled-categories="FORMAT_TEXT,FORMAT_FONT"></lightning-input-rich-text>            
+                                            </template>
+                                            <template if:true={item.isDropdown}>
+                                                <label class="custom-combobox-label slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                <lightning-combobox class="as slds-m-bottom_small" name={item.QualifiedApiName}
+                                                    value={item.value} required={item.isMandatory__c} label={item.Question_Label__c} variant="label-hidden"
+                                                    options={item.Table_Definition_LOVs__c}></lightning-combobox>
+                                            </template>
+                                            <template if:true={item.isDate}>
+                                                <lightning-input class="as topPad slds-m-bottom_small" type="date" name={item.QualifiedApiName}
+                                                    value={item.value}></lightning-input>
+                                            </template>
+                                            <template if:true={item.isRadioButtons}>
+                                                <lightning-radio-group class="as slds-m-bottom_small" variant="label-hidden"
+                                                    name={item.QualifiedApiName}  options={item.Table_Definition_LOVs__c}
+                                                    value={item.value} required={item.isMandatory__c}
+                                                    type="radio"></lightning-radio-group>
+                                            </template>
+                                            <template if:true={item.isCheckboxes}>
+                                                <lightning-checkbox-group class="as slds-m-bottom_small" name={item.QualifiedApiName}  variant="label-hidden"
+                                                options={item.Table_Definition_LOVs__c} value={item.value} required={item.isMandatory__c}></lightning-checkbox-group>
+                                            </template>
+                                            <template if:true={item.isImageCheckBoxes}>
+                                               <c-image-based-checkbox-or-radio-options item={item} ></c-image-based-checkbox-or-radio-options>
+                                            </template>
+                                            <template if:true={item.isImageRadio}>
+                                                <c-image-based-checkbox-or-radio-options item={item}></c-image-based-checkbox-or-radio-options>
+                                             </template>
+                                             <template if:true={item.isText}>
+                                                <label class="slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                <lightning-input type="text" class="as slds-m-bottom_small" name={item.QualifiedApiName}  value={item.value} 
+                                                label={item.Question_Label__c} required={item.isMandatory__c} variant="label-hidden" disabled={item.Disabled__c}></lightning-input>
+                                             </template>
+                                             <template if:true={item.isNumber}>
+                                                <label class="slds-form-element__label"><strong>{item.Question_Label__c}</strong></label>
+                                                <lightning-input type="Number" class="as slds-m-bottom_small" name={item.QualifiedApiName}  value={item.value} 
+                                                label={item.Question_Label__c} required={item.isMandatory__c} variant="label-hidden"></lightning-input>
+                                             </template>
+                                             <template if:true={item.isLongTextArea}>
+                                                <lightning-textarea class="as topPad slds-m-bottom_small" name={item.QualifiedApiName}  value={item.value} required={item.isMandatory__c} ></lightning-textarea>
+                                            </template>
+                                            <template if:true={item.isFileUpload}>
+                                                <c-file-upload-p-d-q item={item} record-id={recordId} show-upload-option="Yes"></c-file-upload-p-d-q>
+                                            </template>
+                                        </template>
+                                        <template if:false={isEditable}>
+                                            <template if:false={item.isTabularInput}>
+                                                <div class="slds-form__item" role="listitem">
+                                                    <div class="slds-form-element slds-form-element_edit slds-form-element_readonly slds-form-element_stacked slds-hint-parent">
+                                                    <strong><span class="slds-form-element__label">{item.Question_Label__c}</span></strong>
+                                                    <div class="slds-form-element__control">
+                                                        <div class="slds-form-element__static">
+                                                            <template if:false={item.isFileUpload}>
+                                                                <template if:false={item.isImageRadio}>
+                                                                    <template if:false={item.isImageCheckBoxes}>
+                                                                        <template if:false={item.isDate}>
+                                                                            <lightning-formatted-rich-text value={item.value}></lightning-formatted-rich-text>
+                                                                        </template>
+                                                                    </template>
+                                                                </template>
+                                                            </template>
+                                                            <template if:true={item.isDate}>
+                                                                <lightning-formatted-date-time value={item.value} year="numeric" month="2-digit" day="2-digit"></lightning-formatted-date-time>
+                                                            </template>
+                                                             <template if:true={item.isImageRadio}>
+                                                                <c-image-based-checkbox-or-radio-options-view item={item} ></c-image-based-checkbox-or-radio-options-view>
+                                                            </template>
+                                                            <template if:true={item.isImageCheckBoxes}>
+                                                                <c-image-based-checkbox-or-radio-options-view item={item} ></c-image-based-checkbox-or-radio-options-view>
+                                                            </template>
+                                                            <template if:true={item.isFileUpload}>
+                                                                <c-file-upload-p-d-q item={item} record-id={recordId} show-upload-option="No"></c-file-upload-p-d-q>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div> 
+                                            </template>
+                                        </template>
+                                    </template>
+                                </div>
+                            </template>
+                        </div><br/><br/>
+                    </div>
+                </template>
+                <template if:true={isEditable}>
+                    <template if:false={isWizard}>
+                        <div class="printDoc slds-align_absolute-center">
+                            <lightning-icon icon-name="action:close" class="slds-m-left_small" onclick={handleCancel} size="x-small" slot="actions" ></lightning-icon>
+                            <lightning-icon icon-name="action:approval" onclick={handleSave} class="slds-m-left_small" size="x-small" slot="actions"></lightning-icon>
+                        </div>
+                    </template>
+                </template>
+            </template>  
+            <template if:true={isInfoMissing}>
+                <span  class="slds-grid slds-wrap slds-align_absolute-center">Please add Vehicle Details to proceed</span>
+            </template>  
+        </lightning-card>
+    </div>
+</template>

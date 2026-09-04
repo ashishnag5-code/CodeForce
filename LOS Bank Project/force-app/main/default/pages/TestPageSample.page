@@ -1,0 +1,4 @@
+<apex:page renderAs="pdf">
+    <apex:include pageName="SystemGeneratedDocumentsForEsign"/>
+    <apex:include pageName="SanctionPDFPage"/>
+</apex:page>

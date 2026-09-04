@@ -1,0 +1,17 @@
+<template>
+    <lightning-card>
+        <lightning-layout>
+                    <lightning-layout-item>
+                        <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                            class="slds-m-left_small" disabled={disablePrevious}></lightning-button>
+                    </lightning-layout-item>
+                <lightning-layout-item flexibility="grow">
+                </lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right"
+                            onclick={nextHandler} class="slds-m-right_small" disabled={disableNext}></lightning-button>
+                    </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+
+</template>

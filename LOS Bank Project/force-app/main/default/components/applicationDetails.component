@@ -1,0 +1,348 @@
+<apex:component >
+    <apex:attribute name="loanRecord" description="Loan Record for displaying product details" type="Loan_Application__c" required="true"/>
+    <apex:attribute name="dateStringList" description="Date literals for displaying in boxes" type="String[]" required="true"/>
+
+    <p class="subHeadingStyles">APPLICATION DETAILS</p>
+    <table width="100%" class="regularTables">
+        <tr>
+            <th rowspan="2" width="6%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="WHEELS"/>
+                </apex:panelGrid>
+            </th>
+            <td rowspan="2" width="1%">
+                <div style="font-size: 40px;text-align: center">{</div>
+            </td>
+            <td width="15%">
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName == 'Commercial_Vehicle'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName <> 'Commercial_Vehicle'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Commercial Vehicle"/>
+                </apex:panelGrid>
+            </td>
+            <td width="15%">
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName == 'Four_Wheeler'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName <> 'Four_Wheeler'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Auto"/>
+                </apex:panelGrid>
+            </td>
+            <td width="15%">
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName == 'Two_Wheeler'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName <> 'Two_Wheeler'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Two-Wheeler"/>
+                </apex:panelGrid>
+            </td>
+            <td width="15%">
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName == 'Tractor'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!loanRecord.RecordType.DeveloperName <> 'Tractor'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Tractor"/>
+                </apex:panelGrid>
+            </td>
+            <td width="15%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Construction Equipment"/>
+                </apex:panelGrid>
+            </td>
+            <td rowspan="2" style="font-size: 15px; text-align: right; color: red; font-family: sans-serif; font-weight: bold;">{!loanRecord.Application_Id__c}</td>
+        </tr>
+        <tr>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!CONTAINS(loanRecord.Product__c, 'New')}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(CONTAINS(loanRecord.Product__c, 'New'))}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="New"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!CONTAINS(loanRecord.Product__c, 'Used')}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(CONTAINS(loanRecord.Product__c, 'Used'))}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Used"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <!-- //R2-2634 -->
+                    <!-- <apex:outputPanel rendered="{!CONTAINS(loanRecord.Product__c, 'Cash on Wheels')}"> -->
+                    <apex:outputPanel rendered="{!OR(CONTAINS($Label.AUSFCowScreen, loanRecord.Product__c), CONTAINS($Label.AUSFCowScreenR2, loanRecord.Product__c))}">                        
+                    <!-- //R2-2634 -->
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <!-- //R2-2634 -->
+                    <!-- <apex:outputPanel rendered="{!NOT(CONTAINS(loanRecord.Product__c, 'Cash on Wheels'))}"> -->
+                        <apex:outputPanel rendered="{!OR(NOT(CONTAINS($Label.AUSFCowScreen, loanRecord.Product__c)),NOT(CONTAINS($Label.AUSFCowScreenR2, loanRecord.Product__c)))}">                        
+                    <!-- //R2-2634 -->
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Re-Finance"/>
+                </apex:panelGrid>
+            </td>
+            <td/><td/>
+        </tr>
+        <tr>
+            <th colspan="3">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="SECURED BUSINESS LENDING"/>
+                </apex:panelGrid>
+            </th>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Term Loan"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Dropline Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Other"/>
+                </apex:panelGrid>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <th rowspan="2" width="6%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="BUSINESS BANKING"/>
+                </apex:panelGrid>
+            </th>
+            <td rowspan="2" width="1%">
+                <div style="font-size: 40px;text-align: center">{</div>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Cash Credit"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Term Loan"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Letter of Credit"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Bank Guarantee"/>
+                </apex:panelGrid>
+            </td>
+            <td colspan="2">
+                <div style="float: right; font-size: 15px">
+                <table cellspacing="2" cellpadding="2">
+                    <tr>
+                        <td style="text-align: center; font-size: 15px">Date</td>
+                        <apex:repeat value="{!dateStringList}" var="each">
+                            <td style="background-color: white; text-align: center; font-size: 15px"><div class="whiteUncheckedBox">{!each}</div></td>
+                        </apex:repeat>
+                    </tr>
+                </table></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Dropline Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td colspan="3">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Others ___________________"/>
+                </apex:panelGrid>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <th rowspan="2" width="6%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="AGRI BUSINESS"/>
+                </apex:panelGrid>
+            </th>
+            <td rowspan="2" width="1%">
+                <div style="font-size: 40px;text-align: center">{</div>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Cash Credit"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Term Loan"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Letter of Credit"/>
+                </apex:panelGrid>
+            </td>
+            <td width="12%">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Bank Guarantee"/>
+                </apex:panelGrid>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Dropline Overdraft"/>
+                </apex:panelGrid>
+            </td>
+            <td colspan="3">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Others ___________________"/>
+                </apex:panelGrid>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <th width="6%" colspan="2">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="HOME LOAN"/>
+                </apex:panelGrid>
+            </th>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Purchase"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Extension/ Renovation"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Self Construction"/>
+                </apex:panelGrid>
+            </td>
+            <th colspan="3">
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="OTHERS ___________________"/>
+                </apex:panelGrid>
+            </th>
+        </tr>
+        <tr/>
+        <tr>
+            <th colspan="8">
+                CREDIT LOAN FACILITIES APPLIED FOR ____________________________________________________________________________________________________
+            </th>
+        </tr>
+    </table>
+    <table width="100%" cellpadding="2" cellspacing="2">
+        <tr style="text-align: center;">
+            <th style="background-color: white" width="15%">Type of Facilities</th>
+            <th style="background-color: white" width="10%">Amount (INR)</th>
+            <th style="background-color: white" width="8%">Tenure (Months)</th>
+            <th style="background-color: white" width="15%">Collateral/ Security Offered (Yes/No)</th>
+            <th style="background-color: none" width="3%"/>
+            <th style="background-color: white" width="17%">Type of Facilities</th>
+            <th style="background-color: white" width="10%">Amount (INR)</th>
+            <th style="background-color: white" width="8%">Tenure (Months)</th>
+            <th style="background-color: white" width="15%">Collateral/ Security Offered (Yes/No)</th>
+        </tr>
+        <tr>
+            <td style="background-color: white"><div style="padding:5px">Vehicle Loan/ Term Loan</div></td>
+            <td style="background-color: white;text-align:center"><apex:outputField value="{!loanRecord.Total_Loan_Amount__c}"/></td>
+            <td style="background-color: white;text-align:center"><apex:outputField value="{!loanRecord.Tenure__c}"/></td>
+            <td style="background-color: white;text-align:center">Yes</td>
+            <td style="background-color: none"/>
+            <td style="background-color: white"><div style="padding:5px">Letter of Credit/ Bank Guarantee</div></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+        </tr>
+        <tr>
+            <td style="background-color: white"><div style="padding:5px">Cash Credit/ Overdue</div></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: none"/>
+            <td style="background-color: white"><div style="padding:5px">Other</div></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+        </tr>
+        <tr style="background-color: white">
+            <td style="background-color: white"><div style="padding:5px">Home Loan</div></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+            <td style="background-color: white"></td>
+        </tr>
+    </table>
+</apex:component>

@@ -1,0 +1,19 @@
+.sliderColor {
+    --sds-c-slider-track-color-background: rgb(112, 110, 110);
+    --sds-c-slider-thumb-color-foreground: rgb(255, 165, 0);
+}
+.inputSlider {
+    color: rgb(255, 165, 0);
+}
+
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+}
+
+:host{
+    --slds-c-accordion-summary-color-background : #6D3078; 
+    --slds-c-accordion-heading-text-color : #FFF2F0;
+}

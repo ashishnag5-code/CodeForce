@@ -1,0 +1,97 @@
+<template>
+    <lightning-card title="Customer Information" icon-name="standard:lead">
+
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto" alignment-bump="center">
+                <img src={aadhaarIcon} width="50%" height="50%" class="imageCss" data-id="Aadhaar">
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto" alignment-bump="center">
+                <img src={ckycIcon} width="35%" height="35%" class="imageCss" data-id="CKYC">
+            </lightning-layout-item>
+        </lightning-layout>
+        <!--<p>Applicant Id : {applicantIdInput}</p>-->
+        <lightning-record-edit-form record-id={applicantIdInput} object-api-name="Applicant__c" onsuccess={handleSuccess}
+            onsubmit={nextHandler}>
+            <lightning-messages>
+            </lightning-messages>
+            <h1 class="slds-section-title--divider">Basic Details</h1>
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <!--<div class="slds-is-relative ">-->
+                        <lightning-input-field field-name="Existing_Customer__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Title__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="First_Name__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Middle_Name__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Last_Name__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Dob__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Age__c">
+                        </lightning-input-field>
+
+                   <!--</div>-->
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <!--<div class="slds-is-relative ">-->
+                        <lightning-input-field field-name="Gender__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Father_Name__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Spouse_Name__c">
+                        </lightning-input-field>
+                        <lightning-input-field field-name="High_risk_Profile__c">
+                        </lightning-input-field>
+                        <lightning-output-field field-label="AU employee">
+                        </lightning-output-field>
+                        <lightning-input-field field-name="AU_Employee_ID__c">
+                        </lightning-input-field>
+                        <!--<label for="fieldid">Name of Employee (AU)</label> variant="label-hidden"-->
+                        <lightning-input-field field-name="First_Name__c" >
+                        </lightning-input-field>
+                        <lightning-input-field field-name="AU_Employment_status__c">
+                        </lightning-input-field>
+                    <!--</div>-->
+                </lightning-layout-item>
+            </lightning-layout>
+            <h3 class="slds-section-title--divider">Contact Details</h3>
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <div class="slds-is-relative ">
+
+                        <lightning-input-field field-name="Mobile_Number__c">
+                        </lightning-input-field>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <div class="slds-is-relative ">
+                        <lightning-input-field field-name="Email__c" onchange={onEmailChange}>
+                        </lightning-input-field>
+                        <template if:true={showerror}>
+                            <div class="slds-form-element__help">{errorStr}</div>
+                        </template>
+                        <lightning-button variant="base" label="VERIFY" onclick={emailVerificationHandler}
+                            class="emailBtn"></lightning-button>
+                        <template if:true={isVerify}>
+                            <lightning-button-icon icon-name="action:approval" alternative-text="Approved"
+                                title="Approved" class="slds-form-element__label "></lightning-button-icon>
+                        </template>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+
+        </lightning-record-edit-form>
+    </lightning-card>
+
+
+</template>

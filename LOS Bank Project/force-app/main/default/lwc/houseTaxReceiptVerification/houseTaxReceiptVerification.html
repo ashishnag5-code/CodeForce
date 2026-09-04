@@ -1,0 +1,52 @@
+<template>
+    
+    <!--template if:true={loadSpinner}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template-->
+    <c-custom-spinner show-spinner={loadSpinner} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={received}>
+        <lightning-layout>
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <lightning-card>
+                    <lightning-formatted-text value={label}></lightning-formatted-text>
+                    <lightning-formatted-number class="slds-m-left_xx-small" format-style="currency" value={amount}></lightning-formatted-number>
+                    <lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:success" alternative-text="Success!" variant="success"></lightning-icon>        
+                </lightning-card>            
+            </lightning-layout-item>
+        </lightning-layout>
+	<template if:false={hideButtons}>
+            <lightning-layout>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                    <div class="slds-align--absolute-center">
+                        <lightning-button-icon variant="brand" icon-name="utility:upload" 
+                        onclick={handleUploadFile}></lightning-button-icon> 
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Upload</div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+        <!--lightning-icon size="x-small" class="slds-m-around_small" icon-name="action:back" onclick={handleClose} alternative-text="Back"></lightning-icon-->
+    </template>
+
+    <template if:false={received}>
+        <template if:false={hideButtons}>
+            <lightning-layout>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                    <div class="slds-align--absolute-center">
+                        <lightning-button-icon variant="brand" icon-name="utility:upload" 
+                        onclick={handleUploadFile}></lightning-button-icon> 
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Upload</div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+                
+        <template if:true={isUploadFile}>
+            <div class="slds-m-around_small">
+                <c-upload-multiple-files onhandleclose={handleClose} ondetailsreceived={handleEvent} applicant-id={applicantId}
+                loan-app-id={loanAppId} document-master-name="House_Tax" document-type={documentType} heading-value={headingValue}></c-upload-multiple-files>
+            </div>
+        </template>
+    </template>
+</template>

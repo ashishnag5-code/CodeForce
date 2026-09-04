@@ -1,0 +1,19 @@
+<template>
+    <template if:true={showSpinner}>
+        <div class="spinnerContainer">
+            <span class="spinnerGif">
+                <img src={spinnerImage} width="180" height="180"/>
+            </span>
+        </div>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        <!--<div style="background-color:#16325c;position:relative">
+            <div class="slds-spinner_container slds-is-fixed">
+            <div role="status" class="slds-spinner slds-spinner_medium">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+            </div>
+            </div>
+        </div>-->
+    </template>
+</template>

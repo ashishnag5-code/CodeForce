@@ -1,0 +1,56 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 12-26-2022
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <div class="slds-var-m-around_medium slds-align_absolute-center">
+        <lightning-input type="file" variant="label-hidden"
+        accept={acceptedFormat}
+        label="File" onchange={handleFilesChange} data-id="fileId"></lightning-input>
+    </div>
+    <template if:true={showPasswordInput}>
+        <lightning-badge class="slds-var-m-top_small slds-var-m-bottom_small slds-align_absolute-center" label="Enter Password if the File is Password Protected"></lightning-badge>
+        <lightning-input type="password" 
+                                label="Password" 
+                                onchange={handlePasswordChange}
+                                value={password}></lightning-input>
+    </template>
+    <!--<template if:true={fileData}>
+        <p class="slds-align_absolute-center">{fileData.filename}</p>
+    </template>-->
+    <template if:true={filesUploaded}>
+        <template for:each={uploadedFiles} for:item="item">
+            <div key={item.key}>
+                <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                    <lightning-accordion-section name="A" label="File Details">
+                        <lightning-layout multiple-rows=true>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="text" readonly label="File Name" value={item.name}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="text" readonly label="File Size" value={item.size}></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12">
+                                <lightning-input type="text" readonly label="File Status" value={item.status}></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                        
+                    </lightning-accordion-section>
+                </lightning-accordion>
+                <div class="slds-align_absolute-center">
+                    <template if:true={showButtons}>
+                    <lightning-button size="x-small" disabled={disableDelete} label="Delete File" class="slds-var-m-around_small" icon-name="action:delete" onclick={handleDeleteFile}></lightning-button>
+                   <lightning-button label="Submit File" size="x-small" class="slds-var-m-around_small" icon-name="action:approval" onclick={doSave}></lightning-button>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </template>
+    <lightning-button variant="brand" label="Submit" title="Submit" onclick={doSave} class="slds-var-m-left_x-small slds-align_absolute-center slds-var-m-top_large slds-var-m-bottom_large"></lightning-button>
+</template>

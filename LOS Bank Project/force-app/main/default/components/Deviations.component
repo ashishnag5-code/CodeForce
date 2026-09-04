@@ -1,0 +1,40 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="deviationRecordDetails" description="This is the value for the component."
+    type="Deviation__c[]" required="true" assignTo="{!deviationRecords}"/>
+
+    <div style='{!pageBlockSectionCSS}'>
+    <apex:pageBlock >
+        <apex:pageBlockSection showHeader="true" title="Deviations" collapsible="true" columns="1">
+        <apex:outputPanel style="width:100%">        
+            <table style="{!tableStyle} border-collapse: collapse !important">
+                <tr style="{!tableRowStyle} ">
+                    <th style="{!tableHeadDataStyle}  width:10% !important;">Department</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Rule Type</th>
+                    <th style="{!tableHeadDataStyle} width:20% !important">Deviation Description</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Policy Value</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Actual Value</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Variance</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Deviation level</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Mitigates</th>
+                </tr>
+                <apex:repeat value="{!deviationRecords}" var="deviation">
+                    <tr style="{!tableRowStyle}">
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!deviation.Department__c}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!deviation.Deviation_Type__c}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!deviation.Details__c}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">
+                            {!ROUND(deviation.Policy_Value__c, 2)}
+                        
+                        </td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!ROUND(deviation.Actual_Value__c, 2)}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!ROUND(deviation.Variance__c, 2)}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!deviation.Level__c}</td>
+                        <td style="{!tableDataStyle} padding:bottom:0px !important">{!deviation.Mitigates__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </apex:outputPanel>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </div>        
+</apex:component>

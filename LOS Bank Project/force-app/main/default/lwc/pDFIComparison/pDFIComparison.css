@@ -1,0 +1,14 @@
+.tablecss th{
+        background-color: rgb(109,48,120);
+        color: white;
+        height: 35px;
+        font-weight: bold;
+        font-size: medium;
+    }
+    .tablecss td{
+        height: 30px;
+    }
+
+    .tablecss td{
+        border:0.5px solid white;
+    }

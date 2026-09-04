@@ -1,0 +1,170 @@
+<template>
+    <div class="slds-m-top--small">
+        <div if:true={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+            
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+            <lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name={activeSubSections}
+            >
+            <lightning-accordion-section name="B" label="FOIR Details">
+                <br/>
+                    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                       <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Total_Monthly_Income__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                   Total Monthly Income
+                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                        <span class="slds-form-element__static  slds-text-title_bold">{totalMonthlyIncome}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Current_Obligation__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Current Obligation
+                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                        <span class="slds-form-element__static slds-text-title_bold">{currentObj}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+
+                       
+                    </div>
+
+                    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                       <!-- <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Free_Monthly_Cashflow__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Free Monthly Cashflow
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{freemonthcash}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>-->
+
+
+                        <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Proposed_EMI__c">
+                             <span>
+                                 <lightning-layout-item flexibility="auto">
+                                    Proposed EMI
+                                     <div class="slds-form-element__control slds-p-around--xx-small">
+                                         <span class="slds-form-element__static slds-text-title_bold">{proposed}</span>
+                                     </div>
+                                 </lightning-layout-item>
+                             </span>
+                         </div>
+                         <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Consolidated_Obligation__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                   Consolidated Obligation
+                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                        <span class="slds-form-element__static slds-text-title_bold">{consolidationObj}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                         
+                     </div>
+
+                     <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                      
+
+
+                        <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Total_Loan_Amount__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                   Total Loan Amount
+                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                        <span class="slds-form-element__static slds-text-title_bold">{totalLoanAmt}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-2 slds-hide" data-id="FOIR__c">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                 FOIR
+                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                        <span class="slds-form-element__static slds-text-title_bold">{foirperc} % </span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                            <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Free_Monthly_Cashflow__c">
+                                
+                            </div>
+
+                        </div>
+                        <template if:true={showCustGrade}>
+                            <template if:true={isCustGradeEditable}>
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                Customer Grade
+                                                <div class="slds-form-element__control">
+                                                    <lightning-combobox 
+                                                        name="Customer_Grade__c"
+                                                        variant="label-hidden"
+                                                        label="Customer Grade"
+                                                        value={custGrade}
+                                                        options={gradeOptions}
+                                                        onchange={handleCustGradeChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={isCustGradeEditable}>
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                Customer Grade
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static slds-text-title_bold">{custGrade}</span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                            <div class="slds-col slds-size_1-of-2 slds-hide" data-id="Total_Verified_Income__c">
+                                <span>
+                                    <lightning-layout-item flexibility="auto">
+                                    Total Verified Income
+                                        <div class="slds-form-element__control slds-p-around--xx-small">
+                                            <span class="slds-form-element__static slds-text-title_bold">{totalVerifiedIncome}</span>
+                                        </div>
+                                    </lightning-layout-item>
+                                </span>
+                            </div>
+                        </div>
+                        </lightning-accordion-section>
+                        </lightning-accordion>
+                        <template if:true={isCustGradeEditable}>
+                            <template if:true={customerGradeChanged}>
+                                <lightning-button label="Save" title="Save" class="slds-align_absolute-center buttonClass" onclick={handleSave}></lightning-button>
+                            </template>
+                        </template>
+                  
+                </div>
+              
+        
+    </div>
+</template>

@@ -1,0 +1,54 @@
+<template>
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <template if:false={addBT}>
+        <article class="slds-card slds-card_boundary">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate" title="Balance Transfer Internal"
+                                onclick={handleGotoRelatedList}>
+                                <span>BT Internal ({recordCount})</span>
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning-icon icon-name=action:new size="xx-small" onclick={handleAddNewBTInternalRecord}></lightning-icon>
+                    </div>
+                </header>
+            </div>
+
+            <div class="slds-p-top_small">
+                <div class="slds-card__body slds-card__body_inner">
+                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <template for:each={btList} for:item="relatedRecord" for:index="index">
+                            <li class="slds-size_1-of-2 slds-small-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small" key={keyIndex}>
+                                <c-balance-transfer-internal-child is-record-saved={relatedRecord.isSaved} ondeletebt={handleDeleteAction} inserted-bt={relatedRecord} onrowaction={handleRowAction} add-b-t={addBT}  key-id={relatedRecord.keyId} loan-app={loanApp}></c-balance-transfer-internal-child>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+
+            <lightning-card class="slds-align_absolute-center slds-p-around_small">
+                <h1 slot="title" class="slds-align_absolute-center">
+                    Total POS: <span class="slds-badge badgeProperty">
+                                <lightning-formatted-number value={totalPOS} format-style="currency" 
+                                                            currency-code="INR"></lightning-formatted-number>
+                        </span>
+                </h1>
+            </lightning-card>
+        </article>
+    </template>
+
+    <template if:true={addBT}>
+            <c-balance-transfer-internal-child type={type} collateral={collateral} product-details={productDetails} inserted-bt={btRecord} ondeletebt={handleDeleteAction} onrowaction={handleRowAction} add-b-t={addBT} onsavebt={handleSave} key-id={keyId} loan-app={loanApp}></c-balance-transfer-internal-child>
+    </template>
+        
+</template>

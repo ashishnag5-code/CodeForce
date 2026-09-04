@@ -1,0 +1,45 @@
+<template>
+    <lightning-card title="KYC" icon-name="standard:lead">
+        <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>-->
+
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <label class="slds-form-element__label textSize">Aadhar</label>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <lightning-button label="Verify" variant="brand"  class="slds-m-left_xx-small"></lightning-button>
+                </lightning-layout-item> <br/>
+
+            <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <label class="slds-form-element__label textSize">Pan</label>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <lightning-button label="Verify" variant="brand" class="slds-m-left_xx-small"></lightning-button>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <label class="slds-form-element__label textSize">Additional Documents</label>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="6"
+                class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                <lightning-button-icon icon-name="utility:add"   alternative-text="Add Document" class="slds-m-left_xx-small" title="Add Document"></lightning-button-icon>
+                </lightning-layout-item>
+        </lightning-layout>
+
+       <!-- <p slot="footer">
+            <lightning-button label="Save" variant="brand" onclick={createApplicant}></lightning-button>
+        </p>-->
+
+    </lightning-card>
+    
+
+</template>

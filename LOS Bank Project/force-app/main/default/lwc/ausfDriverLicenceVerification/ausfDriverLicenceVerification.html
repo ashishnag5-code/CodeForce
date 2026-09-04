@@ -1,0 +1,105 @@
+<template>
+    <!--<div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>-->
+    <!-- <div if:true={isloading}>
+        <lightning-spinner alternative-text="Loading...">
+        </lightning-spinner>
+    </div> -->
+
+    <c-custom-spinner
+        show-spinner={isloading}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+
+    <lightning-layout>
+        <template if:false={showVoterIdData}>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+            <div class="slds-card__body slds-card__body_inner">
+                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-var-p-horizontal_small slds-var-p-bottom_small"
+                            data-record-name="ViewMoreInformation">
+                            <article class="slds-box">
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <!--<div class="slds-media__figure">
+                                            <lightning-icon icon-name=custom:custom31 size="small">
+                                            </lightning-icon>
+                                        </div>-->
+                                        <div class="slds-media__body">
+                                            <h2 class="slds-card__header-title">DL Verification
+                                            </h2>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <template if:false={isVerified}>
+                                                <lightning-button  style="display:flex;" type="neutral" disabled={isdisableVerifyButton}
+                                                name="Voter_Id__c" label="Verify" onclick={handleVerify}>
+                                                </lightning-button>
+                                            </template>
+                                            <template if:true={isVerified}>
+                                                <lightning-icon size="small" variant="success"
+                                                    icon-name="utility:success"></lightning-icon>
+                                            </template>
+                                        </div>
+                                    </header>
+
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-form-element">
+                                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                            <!--<div class="slds-size_1-of-2">
+                                                <span class="slds-form-element__label">Voter
+                                                    Id</span>
+                                            </div>-->
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr>Driver Licence Id</label>
+                                                        <div class="buttonIn">
+                                                            <lightning-input type="text" required="true" label="Driving License Id" disabled
+                                                                value={docCheckRecord.Document_Number__c} variant="label-hidden"
+                                                                name="Driving_License_Id__c" min-length="8" max-length="16" pattern="[a-zA-Z0-9]*"
+                                                                message-when-pattern-mismatch="Enter valid VoterId number">
+                                                            </lightning-input><!--onchange={handleValueChange}-->
+                                                            <lightning-button-icon class="button" icon-name="utility:upload"
+                                                                alternative-text="upload" title="Upload">
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <!--<label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>Expiry date</label>
+                                                            <lightning-input type="date" name="Document_Expiry_Date__c" variant="label-hidden" required 
+                                                            label="Expiry date" min={todaysDate} message-when-range-underflow="Past date is not allowed" onchange={handleValueChange} class="validate" value={docCheckRecord.Document_Expiry_Date__c}></lightning-input>-->
+                                                            <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr>Date of Birth</label>
+                                                            <lightning-input type="date" name="Dob__c" variant="label-hidden" required 
+                                                                label="Date of Birth" max={todaysDate} message-when-range-underflow="Future date is not allowed" onchange={handleDobChange} class="validate" value={applicant.Dob__c} disabled={isVerified}></lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                </ul>
+            </div>
+        </lightning-layout-item>
+    </template>
+        <template if:true={showVoterIdData}>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <c-generic-data-display identifier-documents={identifierDocuments} onverified={handleIdentifierVerification} onback={showDetails} display-type={dispType} pan-response={response}>
+                </c-generic-data-display>
+             </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

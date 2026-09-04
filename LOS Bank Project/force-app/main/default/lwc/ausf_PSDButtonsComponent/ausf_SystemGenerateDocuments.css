@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .text {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .backgroundInverse {
+    position: relative;
+    background-color: #16325c;
+    height: 80px;
+}

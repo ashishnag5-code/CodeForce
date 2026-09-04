@@ -1,0 +1,518 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} onsectiontoggle={handleSectionToggle}>
+        <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+
+            <lightning-accordion-section name="A" label="Application Details" class="accordClass">
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Application No
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.applicationNo}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2" data-id="HUB">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Branch/ HUB/ State
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.branchHub}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="Customer_Name">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Customer Name and Profile
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.customerName}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Type of Employment
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.employmentType}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="customerGrade">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Customer Grade
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.customerGrade}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    
+                    <div class="slds-col slds-size_1-of-2" data-id="residenceState">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Residence State & Stability
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{applicantWrapper.residenceState}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="cibil">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                CIBIL Score
+                                <div class="slds-form-element__control"><!--{applicantWrapper.cibilUrl}-->
+                                    <span class="slds-form-element__static"><a href="" target="_blank" onclick={handleClick}>{applicantWrapper.cibil}</a></span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <!--1788,82-->
+                    <template if:false={isTractorCommercial}>
+                        <div class="slds-col slds-size_1-of-2" data-id="cibil">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    OPS FTR/FTNR
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{applicantWrapper.opsFTR}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    </template>
+                     <!--1788,82-->
+                </div>
+                <br/>
+                 <!--1788,82-->
+                <template if:false={isTractorCommercial}>
+                    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-2" data-id="cibil">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Credit FTR/FTNR
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{applicantWrapper.creditFTR}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    </div>
+                </template>
+                 <!--1788,82-->
+                
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="B" label="Vehicle Details" class="accordClass">
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Product and Loan Type
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{vehicleWrapper.productType}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2" data-id="HUB">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Make/Model/Variant- Year of MFG
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{vehicleWrapper.make_model}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    
+                    
+                </div>
+                <br/>
+            
+                
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="C" label="Loan Details" class="accordClass">
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Scheme Name
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.schemeName}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2" data-id="loanAmount">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Loan amount/ IRR/ Tenure
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.loanAmount}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="loanAmount">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                RBP
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.rbp}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2" data-id="ltv">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                LTV on Road
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.ltvOnRoad} %</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    
+                    <div class="slds-col slds-size_1-of-2" data-id="pf">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                PF
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.pf}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                DC
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.dc}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    
+
+                    <div class="slds-col slds-size_1-of-2" data-id="otherCharges">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Other charges
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.otherCharges}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2" data-id="pf">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                LS
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{loanDetailsWrapper.ls}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    
+                    <!--div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Motor insurance with AU
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">NA</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div-->
+                </div>
+
+                
+               
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="D" label="Sourcing and Dealer Details" class="accordClass">
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Sourcing channel
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.sourcingChannel}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2" data-id="dealerName">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Dealer name & TA/NTA
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.dealerName}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                     <!--1788,82-->
+                    <template if:false={isTractorCommercial}>
+                        <div class="slds-col slds-size_1-of-2" data-id="loanAmount">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Show dealer scheme-Payouts
+                                    <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                    <div class="slds-form-element__control">
+                                        <span class="slds-form-element__static">{sourceDetailsWrappr.dealerSchemePayout}</span>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    </template>
+                     <!--1788,82-->
+                    <div class="slds-col slds-size_1-of-2">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                DSM Payout:
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.dsmPayout}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                </br>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="dealerName">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Mapped Dealer/DSA payout
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.dsePayout} %</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2" data-id="loanAmount">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                Payout on this deal
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.payOutOnDeal}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+                <br/>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-2" data-id="roName">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                RO Name_ Mobile
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.roName_Mobile}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-2" data-id="bmName">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                BM Name_ Mobile
+                                <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                <div class="slds-form-element__control">
+                                    <span class="slds-form-element__static">{sourceDetailsWrappr.bmName_Mobile}</span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+
+                
+                   
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="E" label="Performance" class="accordClass">
+                <br/>
+                <!--table width="100%" style = "border: solid 2px #6D3078;
+                                                         border-collapse: separate;
+                                                         width: 100% !important;
+                                                         text-align: center;
+                                                         border-radius: 7px !important;padding-top:7px;">
+                        <thead>
+                            <tr>
+                                <th style="width:30%"></th>
+                                <th style="width:30%">WIRR Current Month</th>
+                                <th style="width:30%">WIRR Last Month</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="height : 29px !important; padding-left : 10px;"><strong>{performanceDetailsWrapper.branch}</strong></td>
+                                <td>{wirrData.branchCurrentWIRR}</td>
+                                <td>{wirrData.branchLastWIRR}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="height : 29px !important; padding-left : 10px;"><strong>RPM-RO</strong></td>
+                                <td>{wirrData.roWIRRCurrent}
+                                </td>
+                                <td>{wirrData.roWIRRLast}
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                     </table-->
+                     <table width="100%" style = "border: solid 2px #6D3078;
+                                                         border-collapse: separate;
+                                                         width: 100% !important;
+                                                         text-align: center;
+                                                         border-radius: 7px !important;padding-top:7px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30%"></th>
+                                        <th style="width:30%">Current Month</th>
+                                        <th style="width:30%">Last Month</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch Aggregate</td>
+                                        <td>{pricingWrapper.aggregateBranchWIRRCurrMonth}</td>
+                                        <td>{pricingWrapper.aggregateBranchWIRRPrevMonth}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px">RO Aggregate</td>
+                                        <td>{pricingWrapper.aggregateROWIRRCurrMonth}</td>
+                                        <td>{pricingWrapper.aggregateROWIRRPrevMonth}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch {pricingWrapper.branchLoanLabel}</td>
+                                        <td>{pricingWrapper.wirrCurrentMonth}</td>
+                                        <td>{pricingWrapper.wirrLastMonth}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch {pricingWrapper.branchOverallLoanLabel}</td>
+                                        <td>{pricingWrapper.overall4_2WCurrMonth}</td>
+                                        <td>{pricingWrapper.overall4_2WPrevMonth}</td>
+                                        
+                                    </tr>
+                                </tbody>
+                             </table>
+                <br/>
+
+            </lightning-accordion-section>
+             <!--1788,82-->
+            <template if:true={isTractorCommercial}>
+                <lightning-accordion-section name="F" label="Approvals" class="accordClass">
+                    <br/>
+                    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                        <div class="slds-col slds-size_1-of-2" data-id="Credit_Deviation">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Credit Deviations Name of Authority
+                                    <div class="slds-form-element__control">
+                                        <template for:each={approvalWrapper.creditApprover} for:item="approver">
+                                            <div key={approver.Id} class="slds-form-element__static">
+                                                {approver.approverLevel} &nbsp; {approver.approverName}
+                                            </div>
+                                        </template>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+    
+                        <div class="slds-col slds-size_1-of-2" data-id="Pricing_Deviation">
+                            <span>
+                                <lightning-layout-item flexibility="auto">
+                                    Pricing & Charges 
+                                    <!-- <label class="slds-form-element__label">HUB: </label> -->
+                                    <div class="slds-form-element__control">
+                                        <template for:each={approvalWrapper.pricingApprover} for:item="approver">
+                                            <div key={approver.Id} class="slds-form-element__static">
+                                                {approver.approverLevel} &nbsp; {approver.approverName}
+                                            </div>
+                                        </template>
+                                    </div>
+                                </lightning-layout-item>
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                </lightning-accordion-section>
+
+            </template>
+             <!--1788,82-->
+            
+
+        </div>
+    </lightning-accordion>
+
+    <template if:true={showCibilReport}>
+        <c-cibil-report-pop-over record-id={applicantWrapper.applicantId} onback={handleBackFromCibil} hide-share-button="true" render-back-to-summary="true"></c-cibil-report-pop-over>
+    </template>
+    
+</template>

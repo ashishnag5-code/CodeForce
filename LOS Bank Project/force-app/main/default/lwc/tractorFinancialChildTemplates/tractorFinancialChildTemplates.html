@@ -1,0 +1,64 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <lightning-card>
+        <lightning-accordion allow-multiple-sections-open active-section-name="A">
+            <lightning-accordion-section name="A" label="IV PROFILE" class="accordClass">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small"
+                        class="slds-hide" data-id="Total_Income__c">
+                        <lightning-input class="validate" type="number" name="Total_Income__c" required
+                            value={parentFinancialRecord.Total_Income__c} step=0.01 onchange={handleChange}
+                            data-name="Total_Income__c" label="Total Annual Income"></lightning-input>
+                    </lightning-layout-item>
+                    <template if:true={showViabilityFields}>
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small"
+                        data-id="Annual_Total_Income__c">
+                            <lightning-input class="validate" type="number" name="Annual_Total_Income__c" required
+                                value={parentFinancialRecord.Annual_Total_Income__c} step=0.01 onchange={handleChange}
+                                data-name="Annual_Total_Income__c" disabled
+                                label="Annual Income from Proposed Asset"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small"
+                        class="slds-hide" data-id="Proposed_Installment__c">
+                        <lightning-input class="validate" type="number" name="Proposed_Installment__c" required
+                            value={parentFinancialRecord.Proposed_Installment__c} step=0.01 onchange={handleChange} disabled
+                            data-name="Proposed_Installment__c" label="Proposed Installment"></lightning-input>
+                    </lightning-layout-item>
+                    <template if:true={showViabilityFields}>
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12" padding="around-small"
+                        data-id="FCF_Ratio__c">
+                            <lightning-input class="validate" type="number" step=0.01 name="FCF_Ratio__c" required={fcfRatioMandatory}
+                                value={parentFinancialRecord.FCF_Ratio__c} disabled onchange={handleChange} data-name="FCF_Ratio__c"
+                                label="FCF Ratio"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+                <template if:false={considerIncome}>
+                    <lightning-button class="slds-var-p-around_small slds-align_absolute-center" label="Save Income" onclick={handleSaveIncome} variant="brand"></lightning-button>
+                </template>
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </lightning-card>
+
+    <template if:true={renderSPHViabilitySheet}>
+        <lightning-card class="slds-var-m-top_medium">
+            <c-viability-of-harvester child-records={childRecords} applicant-data={currentApplicant} is-mobile={isMobile} parent-financial={parentFinancialRecord}
+            onchildfinancialsubmit={handleChildSubmit}></c-viability-of-harvester>
+        </lightning-card>
+    </template>
+    <template if:true={renderTRSmallViabilitySheet}><!--R2-2849-->
+        <c-viability-sheet-chhote-wala child-records={childRecords} current-applicant={currentApplicant} is-mobile={isMobile} parent-financial-record={parentFinancialRecord}
+            onchildfinancialsubmit={handleChildSubmit} is-tractor-template={renderTRSmallViabilitySheet} loan-id={loanApplication.Id} loan-application={loanApplication}></c-viability-sheet-chhote-wala>
+    </template>
+    <template if:true={renderEmpTemplates}>
+        <lightning-card class="slds-var-m-top_medium">
+            <article class="slds-box">
+                <c-templates-based-on-emp-type child-records={childRecords} applicant-financial-id={parentFinancialRecord.Id} current-applicant-id={currentApplicant.Id} is-mobile={isMobile}
+                loan-id={loanId} onchildfinancialsubmit={handleChildSubmit}></c-templates-based-on-emp-type>
+            </article>
+        </lightning-card>
+    </template>
+</template>

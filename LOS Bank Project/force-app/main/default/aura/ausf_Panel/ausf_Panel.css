@@ -1,0 +1,63 @@
+.THIS .tab_content {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.THIS .header {
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.THIS .loan_field {
+    margin-bottom: 10px;
+    text-decoration: underline;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.THIS .loan_desctription {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.THIS .loan_image {
+    display: inline-block;
+}
+
+.THIS .loan {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+}
+
+.THIS .loan_description {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.THIS .slds-table_bordered{
+    border-collapse: separate;
+    border: 1px solid #ccc !important;
+}
+
+.THIS .icn svg{
+    fill:green;
+}
+
+.THIS .slds-table thead th {
+    background-color: rgb(250, 250, 249);
+    color: rgb(81, 79, 77);
+    padding: 2px 2px;
+    font-size: 9px;
+}
+
+.THIS .slds-table_cell-buffer tr>th:first-child{
+    padding-left:2px;
+}

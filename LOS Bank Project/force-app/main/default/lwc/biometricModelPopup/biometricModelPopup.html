@@ -1,0 +1,82 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 11-24-2022
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-button variant="brand" label="Upload Biometric"
+                        title="Upload Biometric" onclick={showModalBox}>
+    </lightning-button>
+    <lightning-button-icon class="button" icon-name="utility:upload" alternative-text="upload"
+                                title="Upload" onclick={showModalBox}>
+    </lightning-button-icon>
+
+   <!-- modal start -->      
+   <template if:true={isShowModal}>
+
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+       <div class="slds-modal__container">
+        <!-- modal header start -->
+          <header class="slds-modal__header">
+             <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                <lightning-icon icon-name="utility:close"
+                   alternative-text="close"
+                   variant="inverse"
+                   size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+             </button>
+             <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Bridge App Model</h2>
+          </header>
+      
+          <!-- modal body start -->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            
+            <template if:false={isMobile}>
+               <lightning-radio-group name="radioGroup"
+                          label="Radio Group"
+                          options={options}
+                          value={radiovalue} variant="label-inline"
+                          onchange={handleChange}
+                          type="radio"></lightning-radio-group>
+                
+                <!--Name:-  &nbsp;<lightning-formatted-text value={fullName} ></lightning-formatted-text> -->
+                <br/>
+                <!--<lightning-button variant="brand" label="Fetch Applicant Details"
+                        title="Fetch Applicant Details" onclick={getApplicantDetails}>
+                     </lightning-button>-->
+                     <div class="slds-align_absolute-center">
+                     <lightning-button variant="brand" label="Upload Document"
+                        title="Upload Document Mobile" onclick={openBridgeApp}>
+    </lightning-button>
+    <lightning-button class="slds-m-left_x-small" variant="brand" label="Do OCR"
+                        title="Do OCR Mobile" onclick={showModalBox}>
+    </lightning-button>
+                     </div>
+            </template>
+            <template if:true={isMobile}>
+               <div class="slds-align_absolute-center">
+                        <lightning-button variant="brand" label="Upload Document"
+                                 title="Upload Document Desktop" onclick={openBridgeApp}>
+               </lightning-button>
+               <lightning-button class="slds-m-left_x-small" variant="brand" label="Do OCR"
+                                    title="Do OCR Desktop" onclick={showModalBox}>
+               </lightning-button>
+            </div>
+               </template>
+
+          </div>
+
+          <!-- modal footer start-->
+          <footer class="slds-modal__footer">
+             <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+          </footer>
+       
+       </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+ </template>
+ <!-- modal end -->
+
+</template>

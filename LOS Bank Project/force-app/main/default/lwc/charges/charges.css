@@ -1,0 +1,14 @@
+.button {
+    --slds-c-button-brand-color-background: #603084;
+    --slds-c-button-brand-color-border:     #603084;
+    --slds-c-button-brand-color-background-hover: #603084;
+    --slds-c-button-brand-color-border-hover:     #603084;
+}
+.no-wrap {
+    white-space: normal;
+}
+.charge-list-scroll {
+    height: 80vh;
+    overflow-y: scroll;
+    position: relative;
+}

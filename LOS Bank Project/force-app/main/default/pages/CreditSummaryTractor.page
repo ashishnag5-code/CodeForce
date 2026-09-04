@@ -1,0 +1,44 @@
+<apex:page controller="CAMReportVFPageController" readOnly="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false">
+    <!-- Begin Default Content REMOVE THIS -->
+    
+    <html>
+        <head>
+            
+            <style>
+                body{
+                border:1px;
+                border-block-start: 2px;
+                border-block-start-color: rgb(222, 222, 222);
+                border-block-end-style: solid; 
+                }
+                .pbSubheader{
+                background-color: rgb(109,48,120);
+                font-size: medium;
+                
+                }
+                .pbSubheader h3{
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-size: 14px;
+                }
+                
+            </style>
+        </head>
+        <body>
+            <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+            <apex:pageBlock title="">
+                <c:CaseSummaryVF loanApp="{!loan}" applicantDetails="{!applicant}"
+                                 productDetailsValue="{!productDetails}" subPageValue="{!productType}" RODetails="{!RO}" subProductValue="{!subProduct}" vahaanValue="{!vahaanPdf}" valReportValue="{!valReportPdf}" valuationDetails="{!valuation}" ltvValue="{!caseDealSummaryLTV}" financialParentValue="{!financialParent}"></c:CaseSummaryVF>
+                <div style="display: {!IF(productDetails=='Tractor', 'inline', 'none')};">
+                    <c:creditVerificationTabs loanApp="{!loan}" applicantList="{!applicants}" productDetailsValue="{!productDetails}"></c:creditVerificationTabs>
+                </div>
+                <c:CustomerDetailsVF factorDetails="{!factor}" addressRecords="{!addressList}" productDetailsValue="{!productDetails}" subProductValue="{!subProduct}" collateralDetails="{!collateral}" fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}" subPageValue="{!productType}" bureauScore="{!bureauScore}"></c:CustomerDetailsVF>
+                <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!productType}" subProductValue="{!subProduct}"></c:SanctionCondition>
+                <c:ApprovalFlowVF loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}"></c:ApprovalFlowVF>
+                <c:QuerySummary queryRecords="{!queries}"></c:QuerySummary>                
+            </apex:pageBlock>  
+        </body>
+    </html>    
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

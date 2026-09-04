@@ -1,0 +1,176 @@
+<template>
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <lightning-badge class="slds-m-around_small" label={initialLabel}></lightning-badge>
+   
+        <template if:true={received}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="12">
+                    <lightning-card>
+                        <!--<lightning-formatted-text value={label}></lightning-formatted-text>-->
+                        <!--<lightning-formatted-number class="slds-m-left_xx-small" format-style="currency" value={amount}></lightning-formatted-number>-->
+                        <!--<lightning-icon size="x-small" class="slds-m-left_small" icon-name="utility:success" alternative-text="Success!" variant="success"></lightning-icon>  -->      
+                        <!--<lightning-button variant="base" onclick={viewLatestBankStatement} label='View Statement' class="slds-m-left_small" ></lightning-button>  -->
+                        <div class="slds-m-around_small">
+                            <lightning-card>
+                                <span slot="title">
+                                    <h3>
+                                        View Uploaded Bank Statement
+                                    </h3>
+    
+                                </span>
+                                <lightning-layout>
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                        <thead>
+                                          <tr class="slds-line-height_reset">
+                                            <th class="" scope="col">
+                                              <div class="slds-truncate" title="File Name">File Name</div>
+                                            </th>
+                                            <th class="" scope="col">
+                                                <div class="slds-truncate" title="File Name"></div>
+                                              </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody> 
+                                            <tr class="slds-hint-parent">
+                                                <th data-label="File Name" scope="row">
+                                                    <div class="slds-truncate" title="File Name">
+                                                        <lightning-button variant="base" onclick={viewLatestBankStatement} label='View Statement'></lightning-button>
+                                                    </div>
+                                                    <div class="slds-truncate" title="File Name">
+                                                        <lightning-icon icon-name="utility:delete" size="small" onclick={deleteFile} name="openConfirmation"></lightning-icon>
+                                                    </div>
+                                                </th>
+                                            </tr> 
+                                            <template if:true={removeViewStatement}>
+                                                <tr class="slds-hint-parent">
+                                                    <th data-label="File Name" scope="row">
+                                                    </th>
+                                                </tr> 
+                                            </template> 
+                                        </tbody>
+                                    </table>
+                                    
+                                       
+                        
+                                </lightning-layout>
+        
+                            </lightning-card>      
+    
+                        </div>
+                        
+                    </lightning-card>            
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="4" data-id="fetchButton">
+                    <div class="slds-align--absolute-center" >
+                        <lightning-button-icon variant="brand" onclick={handleFetchApi}
+                        icon-name="utility:download"></lightning-button-icon>
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Fetch</div>
+                </lightning-layout-item>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="4" data-id="fetchButton">
+                    <div class="slds-align--absolute-center" >
+                        <lightning-button-icon variant="brand" onclick={handleClose}
+                        icon-name="utility:close"></lightning-button-icon>
+                    </div>
+                    <div class="slds-align--absolute-center slds-p-top_x-small">Close</div>
+
+                    <!--<div class="slds-align--absolute-center">
+                        <lightning-icon size="x-small"  icon-name="action:reject" onclick={handleClose} alternative-text="Back"></lightning-icon>      
+                    </div>-->
+                </lightning-layout-item>            
+        </template>
+
+        <template if:false={received}>
+
+            <template if:false={hideButtons}>
+                <lightning-layout>
+                    <lightning-layout-item size="6" small-device-size="6" large-device-size="2">
+                        <div class="slds-align--absolute-center">
+                            <lightning-button-icon variant="brand" icon-name="utility:upload" 
+                            onclick={handleUploadFile}></lightning-button-icon> 
+                        </div>
+                        <div class="slds-align--absolute-center slds-p-top_x-small">Upload</div>
+                    </lightning-layout-item>
+                    
+                </lightning-layout>
+            </template>
+       
+            
+            <template if:true={isUploadFile}>
+                <template if:true={displayITRS}>
+                    <div class="slds-m-around_small">
+                    <lightning-card title="View Uploaded ITR Statements">
+                        <lightning-layout>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                  <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                      <div class="slds-truncate" title="File Name">File Name</div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={itrStatements} for:item="itr">
+                                        <tr class="slds-hint-parent" key={itr.ContentDocumentId}>
+                                            <th data-label="File Name" scope="row">
+                                              <div class="slds-truncate" title="File Name">
+                                                  <lightning-button label={itr.Title} variant="base" access-key={itr.ContentDocumentId}
+                                                  onclick={handleViewITRDocument}></lightning-button>
+                                              </div>
+                                            </th>
+                                          </tr>
+                                    </template>
+                                    
+                                </tbody>
+                            </table>
+                            
+                               
+                
+                        </lightning-layout>
+
+                    </lightning-card>
+                    </div>
+                </template>
+                <div class="slds-m-around_small">
+                    <c-upload-multiple-files onhandleclose={handleClose} ondetailsreceived={handleEvent} loan-app-id={loanId}
+                     applicant-id={applicantId} showonly-itr={showonlyItr} document-master-name={documentMasterName}
+                    document-type={documentType} read-attribute={disableUpload} 
+                    heading-value='Upload Statement' onselecteddocumenttype={handleSelectedDocumentType}
+                    oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                    applicant-record-id={applicantId}
+                    onenablefetchdetails={handleEnableFetchDetails}></c-upload-multiple-files>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={showFetchButton}>
+                <lightning-layout-item size="6" small-device-size="6" large-device-size="2"  padding="around-small">
+                    <lightning-combobox  placeholder="Please Select Account Number"
+                     value={selectedBankAccountNumber} options={casaOptions}
+                        name="CasaAccountPicker"  label="Please Select Account Number"
+                        onchange={handleChange}></lightning-combobox>
+
+                       <div class="slds-m-top--small">
+                        <lightning-button label="Fetch Details" variant="brand"
+                            onclick={handleFetchDetails}></lightning-button>
+                       </div> 
+                </lightning-layout-item>
+                <!--<lightning-layout-item size="6" small-device-size="6" large-device-size="2"  padding="around-small">
+                    <div class="slds-align--absolute-center">
+                    <lightning-button label="Fetch Details" variant="brand"
+                    onclick={handleFetchDetails}></lightning-button>
+                    </div>
+                </lightning-layout-item>-->
+        </template>
+
+    <c-ausf-confirmation-modal title='Delete File'
+            message='Are you sure, Exisiting document will no longer be available?'
+            confirm-label='Yes'
+            cancel-label='No'
+            visible={isDialogVisible}
+            original-message={originalMessage}
+            name="confirmModal"
+            onclick={deleteFile}>
+    </c-ausf-confirmation-modal>
+</template>

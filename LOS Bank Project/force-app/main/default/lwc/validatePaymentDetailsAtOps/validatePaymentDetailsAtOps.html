@@ -1,0 +1,49 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+        class="slds-modal slds-fade-in-open slds-modal_medium">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Validate Payment Details</h1>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <div class="slds-box slds-box_x-small slds-theme_shade">
+                            <lightning-icon icon-name="utility:chevrondown" size="x-small"></lightning-icon>
+                            &nbsp;<b>Details Entered by Ops Maker</b>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <div class="slds-box slds-box_x-small slds-theme_shade">
+                            <lightning-icon icon-name="utility:chevrondown" size="x-small"></lightning-icon>
+                            &nbsp;<b>Details Entered by Ops Checker</b>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="Bank_Name_PMT__c" label="Bank Name" value={paymentFavouring.Bank_Name_PMT__c} disabled></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="bankName" label="Bank Name" value={paymentFavouringByAuthor.bankName} oncontextmenu={handleContext} onpaste={handlePaste} onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="Account_Number__c" label="Account Number" value={paymentFavouring.Account_Number__c} disabled></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="accountNumber" label="Account Number" value={paymentFavouringByAuthor.accountNumber} oncontextmenu={handleContext} onpaste={handlePaste} onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="IFSC_Code__c" label="IFSC Code" value={paymentFavouring.IFSC_Code__c} disabled></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" large-device-size="6" padding="around-small">
+                        <lightning-input name="ifscCode" label="IFSC Code" value={paymentFavouringByAuthor.ifscCode} oncontextmenu={handleContext} onpaste={handlePaste} onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button_brand" onclick={handleSave}>Validate</button>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+</template>

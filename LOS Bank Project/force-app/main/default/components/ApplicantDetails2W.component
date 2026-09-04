@@ -1,0 +1,511 @@
+<apex:component controller="CAMReportChildComponentsController">
+
+
+    <style>
+        .tableHeadStyle {width:25%; font-family:"Segoe UI", Roboto, Helvetica,  sans-serif; white-space:normal; word-break:break-word; word-wrap:break-word;text-align:center;background-color: rgb(109,48,120); color: white;font-size: 15px;font-weight: bold;padding: 0.5em;}
+        .tableStyle {font-family:"Segoe UI", Roboto, Helvetica,  sans-serif;height:100%; width:100%;  ;border-collapse: collapse;table-layout:fixed}
+        .tableRowStyle {width:100%; font-family:"Segoe UI", Roboto, Helvetica,  sans-serif; page-break-inside: avoid;  !important;}
+        .tableDataStyle { font-family:"Segoe UI", Roboto, Helvetica,  sans-serif; text-align:left; border: 1px solid rgb(240, 240, 240) !important; background-color: white;color:rgb(133, 133, 133); font-size: 13px;font-weight: normal;padding: 0.5em;}
+        .labelClass {width:5% !important; font-family:"Segoe UI", Roboto, Helvetica,  sans-serif; text-align:left; background-color: white; color: #181818; font-size: small;word-wrap:break-word; font-weight: bold;padding: 0.5em;color:rgb(95, 95, 95)}
+        .multipleTableStyle {font-family:"Segoe UI", Roboto, Helvetica,  sans-serif;height:100%;border-collapse: collapse;table-layout:fixed;}
+        div.tables table {
+            width:50%;
+            display: inline-block;
+            float: left
+        }
+        div.tables {
+            width:100%;
+            border-collapse: collapse;
+        }
+    </style>
+
+    <apex:attribute name="loanApp" description="This is the value for the component."
+    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="applicantDetails" description="This is the value for the component."
+    type="Applicant__c" required="true" assignTo="{!applicant}"/>
+    <apex:attribute name="collateralDetails" description="This is the value for the component." type="Collateral__c"
+        required="true" assignTo="{!collateral}" />
+    <apex:attribute name="productDetailsValue" description="This is the value for the component." type="String"
+         assignTo="{!productDetails}" />
+    <apex:attribute name="subPageValue" description="This is the value for the component." type="String"
+        assignTo="{!subPage}" />
+    <apex:attribute name="applicantIdList" description="This is the value for the component." type="Id[]"
+        assignTo="{!applicantIds}" />
+     <apex:attribute name="RODetails" description="This is the value for the component." type="User"
+        assignTo="{!RO}" />
+    <apex:attribute name="addressRecords" description="This is the value for the component."
+        type="Address__c[]" required="true" assignTo="{!addressList}"/>
+    <apex:attribute name="productRTMapping" description="This is the value for the component."
+        type="ProductRTMap__mdt" assignTo="{!productRT}"/>
+	<apex:attribute name="financialRecord" description="This is the value for the component."
+        type="Applicant_Financials_Details__c[]" required="true" assignTo="{!financial}"/>
+    <apex:attribute name="applicantList" description="This is the value for the component." type="Applicant__c[]"
+        required="true" assignTo="{!applicants}" />
+    <apex:attribute name="cartRecs" description="This is the value for the component."
+        type="Bank_Account_Records__c[]" required="true" assignTo="{!cartRecords}"/>
+    <div>
+
+        <table class="tableStyle">
+            <tr class="tableRowStyle">
+                <th class="tableHeadStyle">Application No. : {!loan.Application_Id__c}</th>
+                <th class="tableHeadStyle">Branch : {!loan.Branch_Master__r.Account_Name__c}</th>
+                <th class="tableHeadStyle">Hub : {!loan.Branch_Master__r.Business_HUB__r.Account_Name__c}</th>
+                <th class="tableHeadStyle">State :  {!loan.Branch_Master__r.State__r.Account_Name__c}</th>
+            </tr>
+        </table>
+        <br/>
+        <br/>
+            <table class="tableStyle">
+                <tr class="tableRowStyle">
+                    <th class="tableHeadStyle"></th>
+
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <th class="tableHeadStyle">{!applicant.RecordType.Name}</th>
+                    </apex:repeat>
+                   <th class="tableHeadStyle" style="display:{!IF(applicants.size==1,'table-head','none')}">Co Applicant</th>
+                    <th class="tableHeadStyle" style="display:{!IF(applicants.size==2 || applicants.size==1,'table-head','none')}">Guarantor</th>
+                </tr>
+                <tr class="tableRowStyle">
+                    <th class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important;">Aadhaar Photo</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td class="tableDataStyle" style="text-align:center">
+                            <apex:form >
+                                <apex:image value="{!applicantVSAadharPhoto[applicant]}" width="30%" height="30%" rendered="{!IF(applicantVSAadharPhoto[applicant]!='',true,false)}"></apex:image>
+                            </apex:form>
+                        </td>
+                    </apex:repeat>
+                    <td class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important; display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important; display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>
+                <tr class="tableRowStyle">
+                        <th class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important;">Camera Photo</th>
+                        <apex:repeat value="{!applicants}" var="applicant">
+                            <td class="tableDataStyle" style="text-align:center">
+                                <apex:image value="{!applicantVSLivePhoto[applicant]}" width="30%" height="30%" rendered="{!IF(applicantVSAadharPhoto[applicant]!='',true,false)}"></apex:image>
+                            </td>
+                        </apex:repeat>
+                        <td class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important; display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td class="labelClass" style="border: 1px solid rgb(240, 240, 240) !important; display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>
+            </table>
+        <br/><br/>
+        <table class="tableStyle">
+            <tr class="tableRowStyle">
+                <th class="tableHeadStyle">Customer Details</th>
+                <th class="tableHeadStyle">Profile</th>
+                <th class="tableHeadStyle">Vehicle Details</th>
+                <th class="tableHeadStyle">Other</th>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">Name :&nbsp;</span>
+                    {!applicant.First_Name__c} {!IF(applicant.Middle_Name__c!='',applicant.Middle_Name__c+' ','')}{!applicant.Last_Name__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Risk Profile :&nbsp;</span>
+                    {!applicant.High_risk_Profile__c}</td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Make / Model / Variant :&nbsp;</span> 
+                    {!collateral.Make__c} / {!collateral.Model__c} / {!collateral.Variant__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Loan Amount / LTV :&nbsp;</span> 
+                    
+                    <apex:outputText value="{0, number, 00}" id="Total_Loan_Amount__c1">
+                        <apex:param value="{!loan.Total_Loan_Amount__c}" />
+                    </apex:outputText> /
+                    <apex:outputText value="{0, number, 00.00}" id="LTV_offered_On_road__c">
+                        <apex:param value="{!collateral.LTV_offered_On_road__c}"/>
+                    </apex:outputText>%
+                    <!--{!loan.Total_Loan_Amount__c} / {!collateral.LTV_offered_On_road__c} %-->
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">Father Name :&nbsp;</span>
+                    {!applicant.Father_Name__c}                
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Income Proof :&nbsp;</span>
+                    <!--{!applicant.Customer_Grade__c}-->{!loan.Customer_Grade__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Dealer Name :&nbsp;</span> 
+                    {!loan.Sourcing_channel__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Tenure / EMI :&nbsp;</span> 
+                    {!ROUND(loan.Tenure__c,0)} months / {!ROUND(loan.EMI__c,0)}
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">PAN :&nbsp;</span> 
+                    {!applicant.PAN__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Monthly Income :&nbsp;</span> 
+                    {!ROUND(applicant.Total_Monthly_Income_Sum__c,0)}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Login Mode :&nbsp;</span> 
+                    {!applicant.Kyc_Type__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Total Proposed Exposure :&nbsp;</span> 
+                    <apex:outputText value="{0, number, 00}" id="Wheels_Exposure__c">
+                        <apex:param value="{!loan.Wheels_Exposure__c}" />
+                    </apex:outputText>
+                    <!--{!loan.Wheels_Exposure__c}-->
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">DOB / Age :&nbsp;</span> 
+                    <apex:outputText value="{0,date,MM-dd-yyyy}">
+                        <apex:param value="{!applicant.Dob__c}" />
+                    </apex:outputText>&nbsp;/&nbsp;
+                    <apex:outputText value="{0, number, 00}">
+                        <apex:param value="{!applicant.Age__c}" />
+                    </apex:outputText>
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Risk Category :&nbsp;</span> 
+                    <!--{!applicant.Risk_Category__c}-->
+                    {!applicant.X2W_Risk_Category__c}
+                    
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Vehicle Category :&nbsp;</span> 
+                    {!collateral.Vehicle_Category__c}
+                </td>
+                <td class="tableDataStyle">
+                    <!--<span class="labelClass">Credit Scheme :&nbsp;</span> 
+                    {!loan.Scheme__r.Scheme_Name__c}-->
+                    <span class="labelClass">AQB :&nbsp;</span>
+                    <!-- SFAU-5000 -->
+                    {!aqbByApplicant[applicant.Id]}
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">Mobile No. :&nbsp;</span> 
+                    {!applicant.Mobile_Number__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Existing :&nbsp;</span> 
+                    {!applicant.Existing_Customer__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">On Road Price :&nbsp;</span> 
+                    <apex:outputText value="{0, number, 00}" id="Final_Cost__c">
+                        <apex:param value="{!collateral.Final_Cost__c}" />
+                    </apex:outputText>
+                    <!--{!collateral.Final_Cost__c}-->
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">CPV Waive :&nbsp;</span> 
+                    {!IF(loan.Application_FI_Status__c == 'Waived Off','Yes','No')}
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">Resi type (Touch Point / Current) :&nbsp;</span> 
+                    <apex:repeat value="{!addressTypeValues}" var="addValue">
+                        <div style="display: {!IF(addValue.type=='Touch Point Address', 'inline', 'none')}">
+                            <apex:repeat value="{!addValue.value}" var="add">
+                                <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName=='Primary_Applicant','inline','none')}">
+                                    {!add.Status__c} /&nbsp;
+                                </div>
+                            </apex:repeat>
+                        </div> 
+                        <div style="display: {!IF(addValue.type=='Current Address', 'inline', 'none')}">
+                            <apex:repeat value="{!addValue.value}" var="add">
+                                <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName=='Primary_Applicant','inline','none')}">
+                                    {!add.Status__c}
+                                </div>
+                            </apex:repeat>
+                        </div>
+                  
+                    </apex:repeat>
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Employment Type :&nbsp;</span> 
+                    {!applicant.Type_Of_Employment__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">RTO Amount and % with Exshowroom :&nbsp;</span> 
+                    {!collateral.RTO_Taxes__c} 
+                    {!IF(collateral.RTO_Taxes__c!=null,' and ','')}
+                    {!ROUND(((collateral.RTO_Taxes__c/collateral.Ex_Showroom_Price__c)*100),2)}
+                    {!IF(ROUND(((collateral.RTO_Taxes__c/collateral.Ex_Showroom_Price__c)*100),2)!=null,' %','')}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">RO Name / EMP Code / Contact Number :&nbsp;</span> 
+                    <span style="width:15% !important">{!RO.Name} / {!RO.Employee_Code__c} / {!RO.MobilePhone}</span>
+                </td>
+            </tr>
+            <tr class="tableRowStyle">
+                <td class="tableDataStyle">
+                    <span class="labelClass">Resi City State (Touch Point / Current) :&nbsp;</span> 
+                    <apex:repeat value="{!addressTypeValues}" var="addValue">
+                        <div style="display: {!IF(addValue.type=='Touch Point Address', 'inline', 'none')}">
+                           <apex:repeat value="{!addValue.value}" var="add">
+                                <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName=='Primary_Applicant','inline','none')}">
+                                    {!add.City__c} - {!add.State__c} /&nbsp;
+                                </div>
+                            </apex:repeat>
+                        </div> 
+                        <div style="display: {!IF(addValue.type=='Current Address', 'inline', 'none')}">
+                            <apex:repeat value="{!addValue.value}" var="add">
+                                <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName=='Primary_Applicant','inline','none')}">
+                                    {!add.City__c} - {!add.State__c}
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </apex:repeat>
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Employer Name :&nbsp;</span> 
+                    <apex:repeat value="{!financial}" var="financialDetail">
+                        <div style="display: {!IF(financialDetail.applicant__r.RecordType.DeveloperName=='Primary_Applicant','inline','none')}">
+                            <apex:outputPanel rendered="{! If(AND(financialDetail.Company_Master__r.Company_Name__c!='',financialDetail.Company_Master__r.Company_Name__c!='Others') ,true,false) }">
+                                {!financialDetail.Company_Master__r.Company_Name__c}
+							</apex:outputPanel>
+                            <apex:outputPanel rendered="{! If(financialDetail.Company_Master__r.Company_Name__c=='Others' ,true,false) }">
+                                <apex:outputPanel rendered="{! If(financialDetail.Type_Of_Employment__c!='Self Employed Professional' ,true,false) }">
+                                	{!financialDetail.Company_Master__r.Company_Name__c} ->
+                                </apex:outputPanel>
+                                 {!financialDetail.Company_Name__c}
+							</apex:outputPanel>
+                            <apex:outputPanel rendered="{! If(financialDetail.Company_Master__r.Company_Name__c=='' ,true,false) }">
+                                {!financialDetail.Company_Name__c}
+							</apex:outputPanel>
+                            
+                        </div>
+                    </apex:repeat>
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Accessories Amount :&nbsp;</span> 
+                    {!collateral.Accessories__c}
+                </td>
+                <td class="tableDataStyle">
+                    <span class="labelClass">Risk Score :&nbsp;</span> 
+                    {!applicant.Internal_Risk_Score__c} / {!applicant.Risk_Category__c}
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <div class="tables">
+        <apex:repeat value="{!applicants}" var="app">
+            <table style="border-collapse: collapse !important;height:100%">
+                <tr class="tableRowStyle" style="border-right:1px solid rgb(109,48,120); display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <th class="tableHeadStyle">Customer Details ({!app.RecordType.Name})</th>
+                    <th class="tableHeadStyle">Profile</th>
+                    <!--<th class="tableHeadStyle">Customer Details ({!app.RecordType.Name})</th>
+                    <th class="tableHeadStyle">Profile</th>-->
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">Name :&nbsp;</span>
+                        {!app.First_Name__c} {!IF(app.Middle_Name__c!='',app.Middle_Name__c+' ','')}{!app.Last_Name__c}
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">Risk Profile :&nbsp;</span>
+                            {!app.High_risk_Profile__c}
+                        </div>
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                            <span class="labelClass"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">DOB / Age :&nbsp;</span> 
+                        <apex:outputText value="{0,date,MM-dd-yyyy}">
+                            <apex:param value="{!app.Dob__c}" />
+                        </apex:outputText>&nbsp;/&nbsp;
+                        <apex:outputText value="{0, number, 00}">
+                            <apex:param value="{!app.Age__c}" />
+                        </apex:outputText>
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">Income Proof :&nbsp;</span>
+                            <!--{!app.Customer_Grade__c}-->{!loan.Customer_Grade__c}
+                        </div>
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                            <span class="labelClass"></span>
+                        </div>      
+                    </td>
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">Mobile No. :&nbsp;</span> 
+                        {!app.Mobile_Number__c}
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">Monthly Income :&nbsp;</span> 
+                             {!ROUND(app.Total_Monthly_Income_Sum__c,0)}
+                        </div>
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                            <span class="labelClass"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">Resi type (Touch Point / Current) :&nbsp;</span> 
+                        <apex:repeat value="{!addressTypeValues}" var="addValue">
+                            <div style="display: {!IF(addValue.type=='Touch Point Address', 'inline', 'none')}">
+                                <apex:repeat value="{!addValue.value}" var="add">
+                                    <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName==app.RecordType.DeveloperName,'inline','none')}">
+                                        {!add.Status__c} /&nbsp;
+                                    </div>
+                                </apex:repeat>
+                            </div> 
+                            <div style="display: {!IF(addValue.type=='Current Address', 'inline', 'none')}">
+                                <apex:repeat value="{!addValue.value}" var="add">
+                                    <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName==app.RecordType.DeveloperName,'inline','none')}">
+                                        {!add.Status__c}
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                    
+                        </apex:repeat>
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">AQB :&nbsp;</span>          
+                            <!-- SFAU-5000 -->
+                            {!aqbByApplicant[app.Id]}
+                        </div>
+                    
+                    <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                            <span class="labelClass"></span>          
+                        
+                    </div>
+                    </td>
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">Relationship with Applicant :&nbsp;</span> 
+                        {!app.Relationship_with_applicant__c}
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">Existing :&nbsp;</span> 
+                            {!applicant.Existing_Customer__c}
+                        </div>
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                                <span class="labelClass"></span> 
+                        </div>         
+                    </td>
+                </tr>
+                
+                
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant' || app.RecordType.DeveloperName=='Guarantor','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">Resi City State (Touch Point / Current) :&nbsp;</span> 
+                        <apex:repeat value="{!addressTypeValues}" var="addValue">
+                            <div style="display: {!IF(addValue.type=='Touch Point Address', 'inline', 'none')}">
+                                <apex:repeat value="{!addValue.value}" var="add">
+                                    <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName==app.RecordType.DeveloperName,'inline','none')}">
+                                        {!add.City__c} - {!add.State__c} /&nbsp;
+                                    </div>
+                                </apex:repeat>
+                            </div> 
+                            <div style="display: {!IF(addValue.type=='Current Address', 'inline', 'none')}">
+                                <apex:repeat value="{!addValue.value}" var="add">
+                                    <div style="display: {!IF(add.Applicant__r.RecordType.DeveloperName==app.RecordType.DeveloperName,'inline','none')}">
+                                        {!add.City__c} - {!add.State__c}
+                                    </div>
+                                </apex:repeat>
+                            </div>
+                        </apex:repeat>
+                    </td>
+                    <td class="tableDataStyle">
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','inline','none')}">
+                            <span class="labelClass">Employment Type :&nbsp;</span> 
+                            {!app.Type_Of_Employment__c}<!--applicant.Type_Of_Employment__c-->
+                        </div>
+                        <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                            <span class="labelClass"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Co_Applicant','table-row','none')}">
+                    <td class="tableDataStyle">
+                        <span class="labelClass">PAN :&nbsp;</span> 
+                        {!app.PAN__c}
+                    </td>
+                    <td class="tableDataStyle">
+                    <span class="labelClass">Employer Name :&nbsp;</span> 
+                    <apex:repeat value="{!financial}" var="financialDetail">
+                        <div style="display: {!IF(financialDetail.Applicant__r.RecordType.DeveloperName==app.RecordType.DeveloperName,'inline','none')}">{!financialDetail.Company_Name__c}</div>
+                    </apex:repeat>
+                </td>
+
+                </tr>
+                <tr class="tableRowStyle" style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','table-row','none')}">
+                <td class="tableDataStyle">
+                    <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                        <span class="labelClass">Existing :&nbsp;</span> 
+                        {!applicant.Existing_Customer__c}
+                    </div>
+                </td>
+                <td class="tableDataStyle">
+                <div style="display:{!IF(app.RecordType.DeveloperName == 'Guarantor','inline','none')}">
+                        <span class="labelClass"></span> 
+                       
+                    </div>
+                </td>
+
+                </tr>
+            </table> 
+        </apex:repeat>
+        
+        </div>
+        <div style="display:{!IF(mod(applicants.size-1,2)!=0,'inline','none')}">
+           <table class="tableStyle" style="border-collapse: collapse !important; width:50%!important; height:100%!important">
+                <tr class="tableRowStyle" style="border-right:1px solid rgb(109,48,120);">
+                    <th class="tableHeadStyle">Customer Details</th>
+                    <th class="tableHeadStyle">Profile</th>
+                </tr>
+                <tr class="tableRowStyle">
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                <tr class="tableRowStyle">
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                <tr class="tableRowStyle">
+                   <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                 <tr class="tableRowStyle">
+                   <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                 <tr class="tableRowStyle">
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                 <tr class="tableRowStyle">
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+                 <tr class="tableRowStyle">
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                    <td class="tableDataStyle"><span class="labelClass"></span> </td>
+                </tr>
+            </table> 
+        </div> 
+    </div>
+    
+    
+
+</apex:component>

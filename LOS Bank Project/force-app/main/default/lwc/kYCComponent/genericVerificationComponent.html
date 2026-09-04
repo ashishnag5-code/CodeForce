@@ -1,0 +1,69 @@
+<template>
+       
+        <div class="slds-is-relative ">
+            {kyctype}
+             <template if:true={typeOfMobileotp}>
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">* </abbr>Mobile Number</label>
+             </template>
+              <template if:true={typeOfVerification}>
+                  <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">* </abbr>Aadhar Number</label>
+              </template>
+               <div class="buttonIn">
+                  <template if:true={typeOfMobileotp}>
+                <lightning-input type="text" placeholder="Enter Mobile Number here" data-id="mobileinput" name="Aadhaar_Number__c" class="validate input mobilebutton masked" value={mobileNumber}
+                    variant="label-hidden" onchange={handleChangePhoneNumber} max-length="10"
+                    pattern="[6-9]{1}[0-9]{9}"
+                    message-when-pattern-mismatch="Please enter a valid Aadhar number"></lightning-input>
+                  </template>
+                  <template if:true={typeOfVerification}>
+                     <lightning-input type="text" placeholder="Enter Aadhar/VID Number here" data-id="mobileinput" name="Aadhaar_Number__c" class="validate input mobilebutton masked" value={mobileNumber}
+                    variant="label-hidden" onchange={handleChangePhoneNumber} max-length="16"
+                    pattern="[6-9]{1}[0-9]{9}"
+                    message-when-pattern-mismatch="Please enter a valid Aadhar number"></lightning-input>
+                  </template>
+                <template if:true={boolSendOtp}>
+                    <lightning-button variant="base" label="SEND OTP" disabled={boolCheckMobileNumber} title="Looks like a link"
+                        onclick={handleSendOTP} class="button"></lightning-button>
+                </template>
+                <template if:true={boolResendOtp}>
+                    <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                        onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button"></lightning-button>
+                </template>
+                <template if:true={isVerified}>
+                    <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                        title="Mobile"></lightning-icon>
+                </template>
+            </div>
+        </div>
+    <br><br>
+    
+        <template if:true={isEnterOtp}>
+            <div class="slds-is-relative">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+                <div class="buttonIn">
+                   
+                    <lightning-input    type="Text" max-length="6"
+                                        pattern = "[0-9]{6}"
+                                        class="validate" placeholder="Enter OTP here" 
+                                        variant="label-hidden" 
+                                        onchange={handleChangeOtp}
+                                        message-when-pattern-mismatch="Please enter a valid OTP."
+                                        label="Enter OTP">
+                    </lightning-input>
+           
+                        <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                            onclick={handleVerify} disabled={boolVerify} class="button"></lightning-button>
+                </div>
+            </div>
+            <div class="slds-align_absolute-center slds-m-top_small">
+                <template if:true={boolRequestOtp}>
+                    Request OTP in&nbsp;<b>{increse1Second}</b>s
+                </template>
+            </div>
+        </template>
+  <!--  </lightning-layout-item>
+    </lightning-layout> -->
+</template>

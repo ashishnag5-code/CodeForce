@@ -1,0 +1,20 @@
+<template>
+    <fieldset class="slds-form-element">
+        <div class="slds-form-element__control">
+            <template for:each={optionList} for:item="each">
+                <div class="slds-visual-picker slds-visual-picker_small" key={each.value}>
+                    <label for={each.value}>
+                        <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                            <span>
+                                <span class="slds-text-heading_large"><img src={each.imageName} width="50%"></span>
+                            </span>
+                        </span>
+                        <span class="slds-visual-picker__body">
+                            <span class="slds-text-title">{each.label}</span>
+                        </span>
+                    </label>
+                </div>
+            </template>
+        </div>
+    </fieldset>
+</template>

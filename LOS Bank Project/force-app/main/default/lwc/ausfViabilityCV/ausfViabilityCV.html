@@ -1,0 +1,878 @@
+<template>
+    <template if:true={isMobile}>
+        <lightning-card>
+            <h1 slot="title">
+                <span style="color: rgb(100, 0, 134)">
+                    <lightning-icon class="slds-p-around_small slds-current-color" icon-name="action:adjust_value"
+                        size="medium"></lightning-icon>
+                </span>&nbsp;
+                VIABILITY
+            </h1>
+
+            <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                <lightning-accordion-section name="A" label="Details" class="accordClass">
+                    <span slot="actions">
+                        <template if:false={isEdit}>
+                            <lightning-icon icon-name="action:edit" onclick={handleOnEditClick}
+                                size="x-small"></lightning-icon>
+                        </template>
+                    </span>
+                      <!-- Added in R2-->
+                    <template if:true={isDelete}>
+                        <template if:false={isEdit}>
+                            <span slot="actions">
+                                <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                                    alternative-text="" access-key={index} class="slds-m-right_small slds-m-left--small"
+                                    onclick={handleDeleteRow}></lightning-icon>
+                            </span>
+                        </template>
+                    </template>
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange}
+                                value={viFinancialRecord.Customer_Name__c} class="validate" required
+                                label="Customer Name:" name="Customer_Name__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange} disabled
+                                value={viFinancialRecord.Vehicle_Model__c} class="validate" required
+                                label="Vehicle Model:" name="Vehicle_Model__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-accordion-section>
+            </lightning-accordion>
+            <lightning-accordion allow-multiple-sections-open active-section-name="B">
+                <lightning-accordion-section name="B" label="Income" class="accordClass">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange} value={viFinancialRecord.Route__c}
+                                class="validate" required label="ROUTE" name="Route__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange}
+                                value={viFinancialRecord.Nature_of_Goods__c} label="Nature of Goods" class="validate"
+                                required name="Nature_of_Goods__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Distance_in_Km__c} label="Distance in Km"
+                                name="Distance_in_Km__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.No_of_Trips_per_month__c} label="No. of Trips per month"
+                                name="No_of_Trips_per_month__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} step="0.01"
+                                value={viFinancialRecord.Monthly_running_in_Km__c} label="Monthly running in Km"
+                                disabled name="Monthly_running_in_Km__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Average_load_in_per_ton__c} label="Average load in per ton"
+                                name="Average_load_in_per_ton__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange}
+                                value={viFinancialRecord.Rate_uptrip__c} required step="0.01" class="validate"
+                                label="Rate (uptrip)" name="Rate_uptrip__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Rate_Downtrip__c} label="Rate (Downtrip)"
+                                name="Rate_Downtrip__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} step="0.01"
+                                value={viFinancialRecord.Total_Round_trip__c} label="Total.(Round trip)" disabled
+                                name="Total_Round_trip__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} step="0.01"
+                                value={viFinancialRecord.Monthly_revenue__c} label="Monthly revenue in Rs. Lacs.(A)"
+                                disabled name="Monthly_revenue__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required
+                                value={viFinancialRecord.Fuel_average_in_KM_per_litre__c} step="0.01"
+                                label="Fuel average in KM per litre" name="Fuel_average_in_KM_per_litre__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} name="Cost_per_liter_of_fuel__c"
+                                class="validate" required step="0.01"
+                                value={viFinancialRecord.Cost_per_liter_of_fuel__c} label="Cost per litre of fuel">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange}
+                                value={viFinancialRecord.No_of_tyres__c} required class="validate" label="No. of tyres"
+                                name="No_of_tyres__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Cost_of_1_tyre__c} label="Cost of 1 tyre"
+                                name="Cost_of_1_tyre__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Life_of_new_tyres_in_Km__c} label="Life of new tyres in Km"
+                                name="Life_of_new_tyres_in_Km__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12" step="0.01"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange}
+                                value={viFinancialRecord.Fuel_Cost__c} disabled label="Fuel Cost" name="Fuel_Cost__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12" step="0.01"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange}
+                                value={viFinancialRecord.Tyre_Cost__c} disabled label="Tyre Cost" name="Tyre_Cost__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Drivers_Salary_Allowances__c}
+                                label="Drivers Salary + Allowances" name="Drivers_Salary_Allowances__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Cleaners_Salary_Allowances__c}
+                                label="Cleaners Salary + Allowances" name="Cleaners_Salary_Allowances__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.RTO_Permit_fitness_charges__c}
+                                label="RTO/Permit/fitness charges" name="RTO_Permit_fitness_charges__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Toll_Tax_paid__c} label="Toll Tax paid"
+                                name="Toll_Tax_paid__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Other_Taxes_Misc_Expenses__c}
+                                label="Other Taxes/ Misc Expenses" name="Other_Taxes_Misc_Expenses__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Maintenance_expenses__c} label="Maintenance expenses"
+                                name="Maintenance_expenses__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="Number" onchange={handleChange} class="validate" required step="0.01"
+                                value={viFinancialRecord.Insurance_Expenses__c} label="Insurance Expenses"
+                                name="Insurance_Expenses__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange}
+                                value={viFinancialRecord.Total_Expenses__c} disabled step="0.01" label="Total Expenses"
+                                name="Total_Expenses__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange}
+                                value={viFinancialRecord.Free_Cash_Flow__c} step="0.01" disabled label="Free Cash Flow"
+                                name="Free_Cash_Flow__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange} value={viFinancialRecord.Emi__c} disabled
+                                class="validate"  step="0.01" label="Equated Monthly Instalments (EMI)"
+                                name="Emi__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+                            padding="around-small">
+                            <lightning-input type="text" onchange={handleChange} value={viFinancialRecord.FCF_EMI__c} data-name="FCF_EMI__c" class=""
+                                step="0.01" disabled label="Free Cash flow (FCF)/ EMI" name="FCF_EMI__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+                </lightning-accordion-section>
+
+            </lightning-accordion>
+            <template if:true={isEdit}>
+                <lightning-button class="slds-align_absolute-center buttonColor" variant="brand" label="Save Template"
+                    onclick={handleSave}></lightning-button>
+            </template>
+        </lightning-card>
+    </template>
+
+    <template if:false={isMobile}>
+        <article class="slds-box">
+            <lightning-accordion allow-multiple-sections-open active-section-name="">
+                <lightning-accordion-section name="A" label="VIABILITY SHEET COMMERCIAL VEHICLE" class="accordClass">
+                    <span slot="actions">
+                        <template if:false={isEdit}>
+                            <lightning-icon icon-name="action:edit" onclick={handleOnEditClick}
+                                size="x-small"></lightning-icon>
+                        </template>
+                    </span>
+                    <!-- Added in R2-->
+                    <template if:true={isDelete}>
+                        <template if:false={isEdit}>
+                            <span slot="actions">
+                                <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                                    alternative-text="" access-key={index} class="slds-m-left--small slds-m-right_small"
+                                    onclick={handleDeleteRow}></lightning-icon>
+                            </span>
+                        </template>
+                    </template>
+
+
+                    <lightning-layout multiple-rows="true" class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="10" padding="horizontal-medium">
+                            <lightning-accordion allow-multiple-sections-open active-section-name="B">
+                                <lightning-accordion-section name="B" label="DETAILS PART">
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                        style="table-layout:fixed;">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Customer Name:"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Customer_Name__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            variant="label-hidden"
+                                                            value={viFinancialRecord.Customer_Name__c} class="validate"
+                                                            required label="Customer Name:" name="Customer_Name__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Vehicle Model:"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Vehicle_Model__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            variant="label-hidden" disabled
+                                                            value={viFinancialRecord.Vehicle_Model__c} class="validate"
+                                                            required label="Vehicle Model:" name="Vehicle_Model__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+
+                    <lightning-layout multiple-rows="true" class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="10" padding="horizontal-medium">
+                            <lightning-accordion allow-multiple-sections-open active-section-name="C">
+                                <lightning-accordion-section name="C" label="INCOME PART">
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                        style="table-layout:fixed;">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="ROUTE"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Route__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            value={viFinancialRecord.Route__c} class="validate" required
+                                                            label="ROUTE" name="Route__c" variant="label-hidden">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Nature of Goods"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Diesel_cost_per_Ltr__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            value={viFinancialRecord.Nature_of_Goods__c}
+                                                            label="Nature of Goods" class="validate"
+                                                            variant="label-hidden" required name="Nature_of_Goods__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Distance in Km"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Distance_in_Km__c">
+                                                    <lightning-input type="Number" onchange={handleChange}
+                                                        class="validate" required step="0.01" variant="label-hidden"
+                                                        value={viFinancialRecord.Distance_in_Km__c}
+                                                        label="Distance in Km" name="Distance_in_Km__c">
+                                                    </lightning-input>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="No. of Trips per month"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="No_of_Trips_per_month__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.No_of_Trips_per_month__c}
+                                                            label="No. of Trips per month"
+                                                            name="No_of_Trips_per_month__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Monthly running in Km"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Monthly_running_in_Km__c}
+                                                            label="Monthly running in Km" disabled
+                                                            name="Monthly_running_in_Km__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Average load in per ton"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Average_load_in_per_ton__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Average_load_in_per_ton__c}
+                                                            label="Average load in per ton" variant="label-hidden"
+                                                            name="Average_load_in_per_ton__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Rate (uptrip)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            value={viFinancialRecord.Rate_uptrip__c} required
+                                                            step="0.01" class="validate" variant="label-hidden"
+                                                            label="Rate (uptrip)" name="Rate_uptrip__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Rate (Downtrip)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Rate_Downtrip__c}
+                                                            label="Rate (Downtrip)" name="Rate_Downtrip__c">
+
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Total.(Round trip)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Total_Round_trip__c}
+                                                            label="Total.(Round trip)" disabled
+                                                            name="Total_Round_trip__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Monthly revenue in Rs. Lacs."
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Monthly_revenue__c}
+                                                            label="Monthly revenue in Rs. Lacs.(A)" disabled
+                                                            name="Monthly_revenue__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Fuel average in KM per litre"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required
+                                                            value={viFinancialRecord.Fuel_average_in_KM_per_litre__c}
+                                                            step="0.01" variant="label-hidden"
+                                                            label="Fuel average in KM per litre"
+                                                            name="Fuel_average_in_KM_per_litre__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Cost per litre of fuel"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            name="Cost_per_liter_of_fuel__c" variant="label-hidden"
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Cost_per_liter_of_fuel__c}
+                                                            label="Cost per litre of fuel">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="No. of tyres"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            variant="label-hidden"
+                                                            value={viFinancialRecord.No_of_tyres__c} required
+                                                            class="validate" label="No. of tyres" name="No_of_tyres__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Cost of 1 tyre"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" variant="label-hidden"
+                                                            onchange={handleChange} class="validate" required
+                                                            step="0.01" value={viFinancialRecord.Cost_of_1_tyre__c}
+                                                            label="Cost of 1 tyre" name="Cost_of_1_tyre__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Life of new tyres in Km"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Life_of_new_tyres_in_Km__c}
+                                                            label="Life of new tyres in Km"
+                                                            name="Life_of_new_tyres_in_Km__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Fuel Cost"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            variant="label-hidden"
+                                                            value={viFinancialRecord.Fuel_Cost__c} disabled
+                                                            label="Fuel Cost" name="Fuel_Cost__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Tyre Cost"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            variant="label-hidden"
+                                                            value={viFinancialRecord.Tyre_Cost__c} disabled
+                                                            label="Tyre Cost" name="Tyre_Cost__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Drivers Salary + Allowances"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            variant="label-hidden" class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Drivers_Salary_Allowances__c}
+                                                            label="Drivers Salary + Allowances"
+                                                            name="Drivers_Salary_Allowances__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Cleaners Salary + Allowances"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01" variant="label-hidden"
+                                                            value={viFinancialRecord.Cleaners_Salary_Allowances__c}
+                                                            label="Cleaners Salary + Allowances"
+                                                            name="Cleaners_Salary_Allowances__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="RTO/Permit/fitness charges "
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.RTO_Permit_fitness_charges__c}
+                                                            variant="label-hidden" label="RTO/Permit/fitness charges"
+                                                            name="RTO_Permit_fitness_charges__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Toll Tax paid"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Toll_Tax_paid__c}
+                                                            label="Toll Tax paid" variant="label-hidden"
+                                                            name="Toll_Tax_paid__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Other Taxes/ Misc Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Other_Taxes_Misc_Expenses__c}
+                                                            variant="label-hidden" label="Other Taxes/ Misc Expenses"
+                                                            name="Other_Taxes_Misc_Expenses__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Maintenance expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Maintenance_expenses__c}
+                                                            label="Maintenance expenses" variant="label-hidden"
+                                                            name="Maintenance_expenses__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Insurance Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="Number" onchange={handleChange}
+                                                            class="validate" required step="0.01"
+                                                            value={viFinancialRecord.Insurance_Expenses__c}
+                                                            label="Insurance Expenses" variant="label-hidden"
+                                                            name="Insurance_Expenses__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Total Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            variant="label-hidden"
+                                                            value={viFinancialRecord.Total_Expenses__c} disabled
+                                                            step="0.01" label="Total Expenses" name="Total_Expenses__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Free Cash Flow (FCF)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Free_Cash_Flow__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            value={viFinancialRecord.Free_Cash_Flow__c} variant="label-hidden"
+                                                            step="0.01" disabled label="Free Cash flow (FCF)/ EMI"
+                                                            name="Free_Cash_Flow__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text
+                                                            value="Equated Monthly Instalments (EMI)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange}
+                                                            value={viFinancialRecord.Emi__c} variant="label-hidden" disabled
+                                                            class="validate"  step="0.01"
+                                                            label="Equated Monthly Instalments (EMI)" name="Emi__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Free Cash flow (FCF)/ EMI" data-name="FCF_EMI__c"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Monthly_running_in_Km__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="text" onchange={handleChange} 
+                                                            value={viFinancialRecord.FCF_EMI__c} variant="label-hidden"
+                                                            step="0.01" disabled label="Free Cash flow (FCF)/ EMI"
+                                                            name="FCF_EMI__c">
+                                                        </lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+
+                    <template if:true={isEdit}>
+                        <lightning-layout multiple-rows class="slds-p-bottom_small">
+                            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                <lightning-button label="Save" variant="brand" onclick={handleSave}
+                                    class="slds-var-m-around_small"></lightning-button>
+                            </div>
+                        </lightning-layout>
+                    </template>
+
+
+                </lightning-accordion-section>
+
+            </lightning-accordion>
+        </article>
+    </template>
+</template>

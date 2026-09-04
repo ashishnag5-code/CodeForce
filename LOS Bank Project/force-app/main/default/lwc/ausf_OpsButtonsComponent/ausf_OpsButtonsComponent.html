@@ -1,0 +1,64 @@
+<template>
+    <template if:true={boolShowButtons}>
+        <div style="text-align :right;">
+            <template if:true={boolShowAcceptButton}>
+                <span style="margin:0.5%;">
+                    <lightning-button label="Accept" name="Accept" onclick={handleAccept}></lightning-button>
+                </span>
+            </template>
+            <template if:true={showSubmitButtons}>
+                <template if:false={renderMarkPendingButton}>
+                    <span style="margin:0.5%;">
+                        <lightning-button label="Mark Pending" name="markPending" onclick={handlePendingSubStatus}></lightning-button>
+                    </span>
+
+                </template>
+                <template if:true={boolIsStageMaker}>
+                    <span style="margin:0.5%;">
+                        <lightning-button label="Submit to Ops Author" name="Submit to Ops Author"
+                            onclick={handleSubmittoAuthor}></lightning-button>
+                    </span>
+                    <span style="margin:0.5%;">
+                        <lightning-button label="Return to PSD" name="Return to PSD"
+                            onclick={openModal}></lightning-button>
+                    </span>
+                </template>
+                <template if:true={boolIsStageAuthor}>
+                    <template if:true={boolIsFinalDisbursement}>
+                        <span style="margin:0.5%;">
+                            <lightning-button label="Submit to PDD" name="Submit to PDD"
+                                onclick={handleSubmittoPDD}></lightning-button>
+                        </span>
+                    </template>
+                    <template if:false={boolIsFinalDisbursement}>
+                        <span style="margin:0.5%;">
+                            <lightning-button label="Submit" name="Submit"
+                                onclick={handleSubmitPartiallyDisbursed}></lightning-button>
+                        </span>
+                    </template>
+                    <span style="margin:0.5%;">
+                        <lightning-button label="Return to Maker" name="Return to Maker"
+                            onclick={handleReturntoMaker}></lightning-button>
+                    </span>
+                </template>
+            </template>
+        </div>
+    </template>
+
+    <template if:true={isOpenModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-textarea type="text" label="Remarks" onchange={handleInputChange}></lightning-textarea>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={cancel}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={submitRemarks}>Submit</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

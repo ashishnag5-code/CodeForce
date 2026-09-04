@@ -1,0 +1,14 @@
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+}
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .rowHeight {
+    height: 50px;
+  }

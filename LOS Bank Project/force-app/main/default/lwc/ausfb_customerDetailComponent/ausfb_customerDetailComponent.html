@@ -1,0 +1,504 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-03-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-card title="Customer Information" icon-name="standard:lead">
+        <!--<template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>-->
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+        <template if:true={applcntRecord}>
+            <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                active-section-name={activeSections}>
+                <lightning-accordion-section name="A" label="BASIC DETAILS">
+                    <div if:true={isFaceMatchScore} class="slds-grid slds-gutters">
+                        <div class="slds-col photodiv slds-hide" data-id="Customer_Photo__c">
+                                <template if:true={customerImageNeeded}>
+                                    <span class="slds-align_absolute-center uploaddiv">
+                                        <c-los-generic-document-upload isdocmanager={falseValue}
+                                            show-upload-component={trueValue} show-input-box={falseValue} loan-id=""
+                                            applicant-id={applicantIdInput} doc-name={label.DcumentMasterCustomerImage}
+                                            ondocumentsuccess={handleCustomerImage} uploadtypename="Live Photo"
+                                            hidefiledetails={trueValue} isapplicant-page={falseValue}
+                                            is-model-needed={falseValue} isliveonly={trueValue}>
+                                        </c-los-generic-document-upload>
+                                        <!-- c-los-generic-document-upload isloading ={isloading} isdocmanager={falseValue} show-upload-component ={trueValue}  show-input-box={falseValue} loan-id ="" applicant-id={applicantIdInput} doc-name ={label.DcumentMasterCustomerImage} ondocumentsuccess={handleCustomerImage} uploadtypename ="Customer Image" hidefiledetails={trueValue}></c-los-generic-document-upload -->
+                                    </span>
+                                </template>
+                                <template if:false={customerImageNeeded}>
+                                    <span class="slds-align_absolute-center">
+                                    <img src={customerImageURL} class="imagediv slds-align_absolute-center"
+                                        alt="Customer Image"/>
+                                    </span>
+                                </template>
+                                <div class=" slds-align_absolute-center">
+                                    <img src={cameraicon} class="camIcon" data-id="cameraicon">
+                                    <template if:true={customerImageURL}>
+                                        <template if:false={customerImageNeeded}>
+                                            <lightning-button class="retakeButon" variant="base" label="RETAKE PHOTO"
+                                                title="Retake Photo" onclick={handleChangeCustomerImage}>
+                                            </lightning-button>
+                                        </template>
+                                        <template if:true={customerImageNeeded}>
+                                            <lightning-button class="retakeButon" variant="base" label="RETAKE CANCEL"
+                                                title="Cancel Retake" onclick={handleChangeCustomerImage}>
+                                            </lightning-button>
+                                        </template>
+                                    </template>
+                                    <template if:false={customerImageURL}>
+                                        <lightning-button class="retakeButon" variant="base" label="UPLOAD PHOTO"
+                                            title="Upload Photo"></lightning-button>
+                                    </template>
+                                    <template if:true={customerImageChanged}>
+                                        <lightning-button-icon  icon-name="utility:refresh" size="small" onclick={getCustomerImage}></lightning-button-icon>
+                                    </template>
+                                </div>
+                        </div>
+                        <div class="slds-col photodiv">
+                            <template if:true={isFaceMatchScore}>  <!-- Kunal -SFAU-2347  Aadhar Image is not required in case of Non Individual-->
+                                <template if:true={aadharUrl}>
+                                    <img src={aadharUrl} class="imagediv slds-align_absolute-center"
+                                        alt="Customer Image" />
+                                </template>
+                                <template if:false={aadharUrl}>
+                                    <!--<div class="imagediv slds-align_absolute-center"></div>-->
+                                    <img src={aadhaarIconDummy} class="imagediv slds-align_absolute-center"
+                                        alt="Customer Image" />
+
+                                </template>
+                                <div class=" slds-align_absolute-center">
+                                    <img src={biometricIcon} class="camIcon" data-id="cameraicon">
+                                    <lightning-button class="retakeButon" variant="base" label="AADHAAR PHOTO"
+                                        title="AADHAAR PHOTO"></lightning-button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <template if:true={aadharUrl}>
+                        <template if:true={customerImageURL}>
+                            <lightning-button variant="brand" label="Face Match" title="Face Match"
+                                if:true={customerImageChanged} onclick={handleFaceMatch}
+                                class="slds-var-m-left_x-small slds-align_absolute-center slds-var-m-bottom_small slds-var-m-top_small">
+                            </lightning-button>
+                        </template>
+                    </template>
+                    <template if:true={isFaceMatchScore}>
+                        <div class="component slds-var-m-left_x-small slds-align_absolute-center slds-var-m-bottom_small slds-var-m-top_small" data-id="FaceMatch">
+                            <lightning-input type="number" label="Face Match Score" step=".01"
+                                value={faceMatchScore} disabled="true">
+                            </lightning-input>
+                        </div>
+                    </template>
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+
+                            <!--<lightning-combobox name="Existing_Customer__c" label="Existing Customer" required class="validate"
+                            value={applcntRecord.Existing_Customer__c} placeholder="Select Customer"
+                            options={existingCustomerPicklistValues} onchange={handleValuChange} read-only>
+                        </lightning-combobox>-->
+                            <div class="component slds-hide" data-id="Existing_Customer__c">
+                                <lightning-input type="text" label="Existing Customer"
+                                    value={applcntRecord.Existing_Customer__c} disabled={isExistingCustomerDisabled}
+                                    name="Existing_Customer__c">
+                                </lightning-input>
+                            </div>
+                            <!--<label>Existing Customer</label>
+                        <p><lightning-formatted-text value= {applcntRecord.Existing_Customer__c}></lightning-formatted-text></p>-->
+                            <div class="component slds-hide" data-id="Gender__c">
+                                <lightning-combobox name="Gender__c" label="Gender" value={applcntRecord.Gender__c} disabled={genderDisable}
+                                    required class="validate" placeholder="Select Gender" options={genderPicklistValues}
+                                     onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Title__c">
+                                <lightning-combobox name="Title__c" label="Title" value={applcntRecord.Title__c} required class="validate"
+                                    placeholder="Select Title" options={titlePicklistValues} disabled={disableTitle}
+                                    onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="First_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="First Name" required disabled={firstnameDisable}
+                                    class="validate" value={applcntRecord.First_Name__c} name="First_Name__c"
+                                    pattern="[a-zA-Z]*" message-when-pattern-mismatch="Please enter only Alphabets"
+                                    max-length="50">
+                                </lightning-input>
+                            </div>
+                            <div class="component slds-hide" data-id="Middle_Name__c">
+                                <lightning-input type="text" class="validate" onchange={handleValuChange} disabled={middleNameDisable}
+                                    label="Middle Name" pattern="^[a-zA-Z ]+$"
+                                    message-when-pattern-mismatch="Please enter only Alphabets" max-length="50"
+                                    value={applcntRecord.Middle_Name__c} name="Middle_Name__c">
+                                </lightning-input>
+                            </div>
+                            <div class="component slds-hide" data-id="Last_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Last Name" disabled={lastnameDisable}
+                                    pattern="[a-zA-Z]*" message-when-pattern-mismatch="Please enter only Alphabets"
+                                    max-length="50"  class="validate" value={applcntRecord.Last_Name__c}
+                                    name="Last_Name__c">
+                                    <!-- Last name is made Non-Mandatory [By Kunal - SFAU-4247 (Check comments)] -->
+                                </lightning-input>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Dob__c">
+                                <lightning-input type="date" onchange={handleValuChange} label="Date Of Birth" required
+                                disabled={dobDisable}  class="validate" value={applcntRecord.Dob__c} name="Dob__c" max={todayDate}
+                                    date-style="short">
+                                </lightning-input>
+                            </div>
+
+                            
+
+                            <template if:false={isQde}>
+                            <div class="component slds-hide" data-id="Marital_Status__c">
+                                <lightning-combobox name="Marital_Status__c" label="Marital Status" data-name="Marital_Status__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Marital_Status__c} required class="validate"
+                                    placeholder="Select Marital Status" options={maritalStatusPicklistValues}
+                                    onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </div>
+                        </template>
+                            <div class="component slds-hide" data-id="Mother_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Mother Name"
+                                    minlength="1" maxlength="35" pattern="[a-zA-Z ]*$"  data-name="Mother_Name__c" disabled={isDisabledMaterialFlds}
+                                    message-when-pattern-mismatch="Only alphabets are allowed"
+                                    value={applcntRecord.Mother_Name__c} required class="validate"
+                                    name="Mother_Name__c">
+                                </lightning-input>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Education_qualification__c">
+                                <lightning-combobox name="Education_qualification__c" label="Education qualification"
+                                    value={applcntRecord.Education_qualification__c} data-name="Education_qualification__c" disabled={isDisabledMaterialFlds}
+                                    placeholder="Select Education qualification"
+                                    options={educationQualificationPicklistValues} onchange={handleValuChange} required
+                                    class="validate">
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="No_of_Dependents__c">
+                                <lightning-combobox name="No_of_Dependents__c" label="No of Dependents" data-name="No_of_Dependents__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.No_of_Dependents__c} placeholder="Select No of Dependents"
+                                    options={noOfDependentsPicklistValues} onchange={handleValuChange} required
+                                    class="validate">
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Caste__c">
+                                <lightning-combobox name="Caste__c" label="Caste" value={applcntRecord.Caste__c} data-name="Caste__c" disabled={isDisabledMaterialFlds}
+                                    placeholder="Select Caste" options={castePicklistValues} onchange={handleValuChange}
+                                    required class="validate">
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Religion__c">
+                                <lightning-combobox name="Religion__c" label="Religion" data-name="Religion__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Religion__c} placeholder="Select Religion"
+                                    options={religionPicklistValues} onchange={handleValuChange} required
+                                    class="validate">
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Entity_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Entity Name" required
+                                    class="validate" value={applcntRecord.Entity_Name__c} name="Entity_Name__c">
+                                </lightning-input>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Key_Contact_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Key Contact Name" data-name="Key_Contact_Name__c"
+                                    required class="validate" value={applcntRecord.Key_Contact_Name__c}
+                                    pattern="[a-zA-Z\s]+" message-when-pattern-mismatch="Please enter only Alphabets"
+                                    name="Key_Contact_Name__c">
+                                </lightning-input>
+                            </div>
+
+                          
+
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-var-p-horizontal_small" flexibility="auto">
+
+                            <!--<lightning-input type="text" onchange={handleValuChange} label="Husband Name"
+                            value={applcntRecord.Husband_Name__c} name="Husband_Name__c">
+                        </lightning-input>-->
+                            <template if:false={isQde}>
+                                <div class="component " data-id="Place_of_Birth_Incorporation__c">
+                                    <lightning-input type="text" onchange={handleValuChange} label="Place of Birth/Incorporation"
+                                        required class="validate" value={applcntRecord.Place_of_Birth_Incorporation__c}
+                                        pattern="[a-zA-Z\s]+" message-when-pattern-mismatch="Please enter only Alphabets"
+                                        name="Place_of_Birth_Incorporation__c">
+                                    </lightning-input>
+                                </div>
+                                <div class="component slds-hide" data-id="High_risk_Profile__c">
+                                    <lightning-combobox name="High_risk_Profile__c" label="High risk Profile" required
+                                        class="validate" value={applcntRecord.High_risk_Profile__c} data-name="High_risk_Profile__c" disabled={isDisabledMaterialFlds}
+                                        placeholder="Select Profile" options={highRiskProfilePicklistValues}
+                                        onchange={handleValuChange}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="component slds-hide" data-id="Residential_Status__c">
+                                    <lightning-combobox name="Residential_Status__c" label="Residential Status" required
+                                        class="validate" value={applcntRecord.Residential_Status__c} data-name="Residential_Status__c" disabled={isDisabledMaterialFlds}
+                                        placeholder="Select Residential Status" options={residentialStatusPicklistValues}
+                                        onchange={handleValuChange}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="component slds-hide" data-id="AU_Employee__c">
+                                    <lightning-combobox name="AU_Employee__c" label="AU Employee" data-name="AU_Employee__c" disabled={isDisabledMaterialFlds}
+                                        value={applcntRecord.AU_Employee__c} placeholder="Select Employee Type"
+                                        options={auEmployeePicklistValues} onchange={handleValuChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </template>
+
+                            <template if:true={isAUEmployee}>
+                                <lightning-input type="text" onchange={handleValuChange} label="Name of Employee (AU)"
+                                    value={applcntRecord.Name_of_Employee_AU__c} required class="validate"
+                                    name="Name_of_Employee_AU__c">
+                                </lightning-input>
+
+                                <lightning-input type="text" onchange={handleValuChange} required class="validate"
+                                    label="AU Employee ID" value={applcntRecord.AU_Employee_ID__c} pattern="[0-9]+"
+                                    max-length="6"
+                                    message-when-pattern-mismatch="Please enter valid 6 digit AU Employee ID"
+                                    name="AU_Employee_ID__c">
+                                </lightning-input>
+
+                                <lightning-combobox name="AU_Employment_status__c" label="AU Employment status"
+                                    value={applcntRecord.AU_Employment_status__c} placeholder="Select Employment Status"
+                                    options={employmentStatusPicklistValues} onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </template>
+
+                            <div class="component slds-hide" data-id="Age__c">
+                                <lightning-input data-name="Age__c" type="text" disabled label="Age"
+                                    value={applcntRecord.Age__c} name="Age__c">
+                                </lightning-input>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Father_Name__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Father Name" required
+                                    pattern="[a-zA-Z\s]+" message-when-pattern-mismatch="Please enter only Alphabets" disabled={fathernameDisable}
+                                    max-length="35" class="validate" value={applcntRecord.Father_Name__c}
+                                    name="Father_Name__c">
+                                </lightning-input>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Spouse_Name__c">
+                                <lightning-input type="text" class="validate" onchange={handleValuChange} data-name="Spouse_Name__c" disabled={spouseDisable}
+                                    label="Spouse Name" required={spousNameRequired} pattern="[a-zA-Z\s]+"
+                                    message-when-pattern-mismatch="Please enter only Alphabets" max-length="30"
+                                    value={applcntRecord.Spouse_Name__c} name="Spouse_Name__c">
+                                </lightning-input>
+                            </div>
+
+                            <!--Face Match Score-->
+                            <!-- <template if:true={isFaceMatchScore}>
+                                <div class="component" data-id="FaceMatch">
+                                    <lightning-input type="number" label="Face Match Score" step=".01"
+                                        value={faceMatchScore} disabled="true">
+                                    </lightning-input>
+                                </div>
+                            </template> -->
+
+                            <div class="component slds-hide" data-id="Politically_Exposed_Person__c">
+                                <lightning-combobox name="Politically_Exposed_Person__c"
+                                    label="Politically Exposed Person" data-name="Politically_Exposed_Person__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Politically_Exposed_Person__c}
+                                    placeholder="Select Politically Exposed Person" required class="validate"
+                                    options={politicallyExposedPersonPicklistValues} onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="component slds-hide" data-id="Is_Customer_HIN_VIP__c">
+                                <lightning-combobox name="Is_Customer_HIN_VIP__c" label="Is Customer HNI/VIP"
+                                    value={applcntRecord.Is_Customer_HIN_VIP__c} data-name="Is_Customer_HIN_VIP__c" disabled={isDisabledMaterialFlds}
+                                    placeholder="Select Is Customer HIN/VIP" required class="validate"
+                                    options={isCustomerHinVipPicklistValues} onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </div>
+                            <template if:false={isQde}>
+                                <div class="component slds-hide" data-id="Phsically_challenged__c">
+                                    <lightning-combobox name="Phsically_challenged__c" label="Physically challenged"
+                                        value={applcntRecord.Phsically_challenged__c} data-name="Phsically_challenged__c" disabled={isDisabledMaterialFlds}
+                                        placeholder="Select Physically challenged" required class="validate"
+                                        options={phsicallyChallengedPicklistValues} onchange={handleValuChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </template>
+                            <template if:true={isPhsicallyChallenged}>
+                                <lightning-combobox name="Natutre_of_Phsically_challenge__c"
+                                    label="Nature of Physically challenged" data-name="Natutre_of_Phsically_challenge__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Natutre_of_Phsically_challenge__c}
+                                    placeholder="Select Natutre of Phsically challenge" required
+                                    options={natutreOfPhsicallychallengePicklistValues} onchange={handleValuChange}>
+                                </lightning-combobox>
+
+                                <lightning-combobox name="Proof_of_Disablity__c" label="Proof of Disablity" data-name="Proof_of_Disablity__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Proof_of_Disablity__c} placeholder="Select Proof of Disablity"
+                                    required options={proofOfDisablityPicklistValues} onchange={handleValuChange}>
+                                </lightning-combobox>
+                            </template>
+                            <div class="component slds-hide" data-id="Risk_Identification__c">
+								<template if:true={isRiskIdentification}>
+									<lightning-input type="checkbox" class="validate slds-p-vertical_x-small" 
+                                                 onchange={handleValuChange} data-name="Risk_Identification__c" 
+                                                 disabled={isDisabledMaterialFlds}
+                                                 label="RCO" 
+                                                 checked={applcntRecord.Risk_Identification__c} 
+                                                 name="Risk_Identification__c">
+                                	</lightning-input>
+								</template>
+                            </div>
+                            <div class="component slds-hide" data-id="Director_Identification_Number__c">
+                                <lightning-input type="text" onchange={handleValuChange} data-name="Director_Identification_Number__c" disabled={isDisabledMaterialFlds}
+                                    label="Director Identification Number"
+                                    value={applcntRecord.Director_Identification_Number__c}
+                                    name="Director_Identification_Number__c">
+                                </lightning-input>
+                            </div>
+
+                            <!--   <div class="component slds-hide" data-id="Risk_Category__c">
+                                <lightning-input type="text" onchange={handleValuChange} label="Risk Category"
+                                    value={applcntRecord.Risk_Category__c} name="Risk_Category__c">
+                                </lightning-input>
+                            </div>  -->
+
+                            <div class="component slds-hide" data-id="Key_Person__c">
+                                <lightning-combobox name="Key_Person__c" label="Key Person" data-name="Key_Person__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Key_Person__c} placeholder="Select Key Person"
+                                    options={keyPersonPicklistValues} onchange={handleValuChange} required
+                                    class="validate">
+                                </lightning-combobox>
+                            </div>
+                            <!--slds-hide-->
+                            <div class="component " data-id="Relationship_with_applicant__c">
+                                <lightning-combobox options={relationshipWithApplOptions} onchange={handleValuChange}
+                                    label="Relationship with applicant" required class="validate" data-name="Relationship_with_applicant__c" disabled={isDisabledMaterialFlds}
+                                    value={applcntRecord.Relationship_with_applicant__c}
+                                    name="Relationship_with_applicant__c">
+                                </lightning-combobox>
+                            
+                                <!-- R2-17 - An additional free text to open when Relationship with Applicant is selected as Others -->
+                                <div class="component slds-hide" data-id="Relation_with_Applicant_Other__c">
+                                    <lightning-input
+                                        required
+                                        label="Other Relationship with Applicant"
+                                        variant="label-hidden"
+                                        class="validate slds-p-vertical_small"
+                                        data-name="Relation_with_Applicant_Other__c"
+                                        name="Relation_with_Applicant_Other__c"
+                                        value={applcntRecord.Relation_with_Applicant_Other__c}
+                                        onchange={handleValuChange}
+                                        if:true={isRelationWithApplicantOther}
+                                    ></lightning-input>
+                                </div>
+                            </div>
+
+                            <template if:true={isDIN}>
+                                <template if:true={isDINReq}>
+                                    <div class="component" data-id="Director_Identification_Number__c">
+                                        <lightning-input type="text" onchange={handleValuChange} label="Director Identification Number"
+                                            required class="validate" value={applcntRecord.Director_Identification_Number__c}
+                                            name="Director_Identification_Number__c">
+                                        </lightning-input>
+                                    </div>
+                                </template>
+                                <template if:false={isDINReq}>
+                                    <div class="component" data-id="Director_Identification_Number__c">
+                                        <lightning-input type="text" onchange={handleValuChange} label="Director Identification Number"
+                                            value={applcntRecord.Director_Identification_Number__c}
+                                            name="Director_Identification_Number__c">
+                                        </lightning-input>
+                                    </div>
+                                </template>
+
+                            </template>
+
+                            <div class="component slds-hide" data-id="Date_of_Establishment__c">
+                                <lightning-input type="date" onchange={handleValuChange} label="Date Of Establishment" data-name="Date_of_Establishment__c"
+                                    required class="validate" value={applcntRecord.Date_of_Establishment__c}
+                                    max={maxEstablishmentDate} name="Date_of_Establishment__c">
+                                </lightning-input>
+                            </div>
+
+                            <template if:true={isBO}>
+								<lightning-input data-name="Shareholding__c" type="number" pattern="[0-9]*" max-length="2" 
+									label="Shareholding %" value={applcntRecord.Shareholding__c} name="Shareholding__c"
+									onchange={handleValuChange} required class="validate">
+								</lightning-input>
+							</template>
+
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-accordion-section>
+                <lightning-accordion-section name="B" label="CONTACT DETAILS">
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input type="tel" onchange={handleValuChange} label="Mobile Number" disabled
+                                value={applcntRecord.Mobile_Number__c} name="Mobile_Number__c">
+                            </lightning-input>
+                            <lightning-input data-id="alternateMobNum" type="tel" onchange={handleValuChange} data-name="Alternate_Mobile_Number__c" disabled={isDisabledMaterialFlds}
+                                class="validate" label="Alternate Mobile Number"
+                                value={applcntRecord.Alternate_Mobile_Number__c} max-length="10"
+                                pattern="[6-9]{1}[0-9]{9}"
+                                message-when-pattern-mismatch="Please enter valid alternate mobile number"
+                                name="Alternate_Mobile_Number__c">
+                            </lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+
+                            <div class="slds-is-relative ">
+                                <label>Email</label>
+                                <lightning-helptext
+                                    content="Please enter correct email id it will be verified from customer">
+                                </lightning-helptext>
+                                <div class="buttonIn">
+                                    <lightning-input type="email" variant="label-hidden" data-id="mobileinput" data-name="Email__c" disabled={isVerified}
+                                        required={isEmailRequired} class="validate input mobilebutton emailValidation" label="Emails"
+                                        name="Email__c" onchange={handleValuChange} value={applcntRecord.Email__c}
+										pattern="[A-Za-z0-9._-]+@[a-z0-9-]+.[a-z]{2,}$" message-when-pattern-mismatch="Please enter a valid email">
+
+                                    </lightning-input>
+                                    <template if:true={boolSendOtp}>
+                                        <lightning-button variant="base" label="VERIFY" disabled={isDesableVerifyButton}
+                                            title="Looks like a link" onclick={handleSendOTP} class="button">
+                                        </lightning-button>
+                                    </template>
+                                    <template if:true={isVerified}>
+                                        <lightning-icon size="small" variant="success" class="button"
+                                            icon-name="utility:success" title="Mobile"></lightning-icon>
+                                    </template> 
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        </template>
+        <template if:true={boolFromRelated}>
+            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                    <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                        class="slds-var-m-left_small" onclick={handleSubmitForm}></lightning-icon>
+
+                    <lightning-icon icon-name="action:back" size="x-small" alternative-text="Back"
+                        class="slds-var-m-left_small" onclick={handleBack}></lightning-icon>
+                </div>
+            </lightning-layout>
+        </template>
+        <!--<lightning-button variant="brand" label="Brand" title="Primary action" onclick={nextHandler} class="slds-m-left_x-small"></lightning-button>-->
+    </lightning-card>
+</template>

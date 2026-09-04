@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" 
+                controller='FIPrintReportPageAura' >
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+    <aura:attribute name='docId' type='Id'/>
+    <aura:attribute name='theme' type='String'/>
+    <aura:attribute name='pName' type='String'/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name='recordId' type='Id'/>
+    <lightning:spinner class="slds-hide" aura:id="spinner" size="large" variant="brand" alternativeText="spinner" />
+
+</aura:component>

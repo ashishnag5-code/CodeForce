@@ -1,0 +1,114 @@
+<template>
+	<c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+	<lightning-layout>
+		<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+			<lightning-card icon-name="standard:account" >
+				<h1 slot="title"><a>{applicantRecord.applicant.Loan__r.Name}</a></h1>
+				<div slot="actions">
+					<a><lightning-icon icon-name="utility:back" onclick={viewAllRecords} class="slds-float_right" size="small" alternative-text="Close" title="Close"></lightning-icon></a>
+				</div>
+				<div slot="footer" class="slds-align_absolute-center" if:true={allowCopyToApplication}>
+					<template if:true={isMobile}>
+						<figure>
+							<div class="slds-align_absolute-center">
+								<lightning-icon icon-name="action:clone" onclick={markSelected} size="x-small" alternative-text="Copy" title="Copy"></lightning-icon>
+							</div>
+							<figcaption class="slds-align_absolute-center slds-text-body_small slds-var-p-top_xx-small slds-text-color_weak">Copy To Application</figcaption>
+						</figure>
+					</template>
+					<template if:false={isMobile}>
+						<lightning-button onclick={markSelected} disabled={applicantRecord.boolBlockNext} data-id={applicantRecord.applicant.Id} label="Copy To Application" slot="actions"></lightning-button>
+					</template>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Product</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Loan__r.Product__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Application Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Loan__r.Loan_Number__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Customer_Name__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Type</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Customer_Type__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Mobile Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Mobile_Number__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">KYC (Match Parameter)</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strMatchParam}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Application status</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Loan__r.Stage__c}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Date</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Loan__r.CreatedDate}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">RO Name _ Code</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.CreatedBy.Name}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">RO Mobile Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.CreatedBy.MobilePhone}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Branch Name _Code</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.applicant.Loan__r.Branch_Name__c}
+					</div>
+				</div>
+			</lightning-card>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>

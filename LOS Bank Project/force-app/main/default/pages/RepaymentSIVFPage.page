@@ -1,0 +1,132 @@
+<apex:page controller="SIPageController" applyHtmlTag="false" renderAs="PDF" showHeader="false" standardstylesheets="true" applyBodyTag="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                .tabledata{
+                width:30% !important;
+                border: 1px solid white !important;
+                }
+                .tabledataColon{
+                width:5% !important;
+                border: 1px solid white !important;
+                }
+                .tabledataValue{ 
+                width:65% !important;
+                border: 1px solid white !important;
+                }
+                .whiteUncheckedBox {
+                    width: 15px;
+                    height: 15px;
+                    background-color: white;
+                }
+            </style>
+        </head>
+        <div class="logoAndHeader">
+            <div class="floatLeftStyles">
+                <div class="headerStyles"></div>
+                
+            </div>
+            
+        </div>
+        <body>
+            <div class="footer" name="footer"></div>
+            <div style="text-align:center;font-weight:bold;font-size:16px;font-family:Arial;">
+                <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">AU SMALL FINANCE BANK Standing Instruction Form</span>
+                <br />
+                <span style="">Customer Details (To be filled by the Customer. Fields marked with * are mandatory)</span>
+            </div>
+            <br />
+            <br />
+            <div class="footer" name="footer"></div>
+            <div class="mainContentDiv">
+                <p>To,</p>
+                <p><strong>The Branch Manager</strong></p>
+                <p>AU Small Finance Bank</p>
+                <p>{!loanObj.Branch_Name__c} (Branch)</p>
+                <p><strong>Subject: Request for Maintenance of a Standing Instruction</strong></p> <br/>
+                
+                
+                <ul>
+					<li style="list-style-type:none;"><p>*Customer’s Name (as in Bank A/C): {!UPPER(fullName)}</p></li>
+                    <li style="list-style-type:none;">
+                        <div style=" font-size: 15px">
+                            <table cellspacing="2" cellpadding="2">
+                                <tr>
+                                    <td style="text-align: center; font-size: 15px">*Credit Account/Loan No. :</td>
+                                    <apex:repeat value="{!debitAccount}" var="each">
+                                        <td style="background-color: black; text-align: center;font-color: white; font-size: 15px" >
+                                            <div class="whiteUncheckedBox">{!each}</div>
+                                        </td>
+                                    </apex:repeat>
+                                </tr>
+                            </table>
+                        </div>
+                    </li> 
+                    <li style="list-style-type:none;">
+                        <p>*Mobile No: <u>{!appObj.Mobile_Number__c} </u></p>
+                        <p><strong>*Description of Transaction:</strong> <u>LOAN EMI </u></p>
+                        <p>*Amount (<apex:image value="{!$Resource.INR_tick}"/>) figures: <apex:image value="{!$Resource.INR_tick}"/>{!loanObj.EMI__c} 
+                            <span style="float: center;">&nbsp;&nbsp;&nbsp;Words:  {!loanObj.Loan_Amount_In_Words__c}
+                            </span> </p>
+                        <p>*Frequency (Monthly / Quarterly/ Half- Yearly /Yearly) :  Monthly</p>
+                    </li>
+                    <li style="list-style-type:none;">
+                        <p>Start Date :  {!loanObj.EMI_Date__c} 
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="float: center; font-size: 15px">
+                    			End Date : {!endDate}
+                           </span> 
+                       	</p>
+                    </li>
+                    <li style="list-style-type:none;">
+                        <div style=" font-size: 15px">
+                            <table cellspacing="2" cellpadding="2">
+                                <tr>
+                                    <td style="text-align: center; font-size: 15px">*Debit Account/Loan No. :</td>
+                                    <apex:repeat value="{!debitAccount}" var="each">
+                                        <td style="background-color: black; text-align: center;font-color: white; font-size: 15px" >
+                                            <div class="whiteUncheckedBox">{!each}</div>
+                                        </td>
+                                    </apex:repeat>
+                                </tr>
+                            </table>
+                        </div>
+                    </li> 
+                    <li style="list-style-type:none;">
+                        <p><strong> Name :</strong> {!UPPER(fullName)}</p>
+                    </li>
+                </ul>
+                   
+                {!UPPER(fullName)}
+                <br/>
+                -------------------------------------------------------
+                <br/>
+                
+                Signature of the Customer (As per Bank records)
+                <!-- Content ENDS HERE -->
+                <!--Schedule Table starts here-->
+                <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                </span>
+                <!--p>
+                    <strong>
+                        <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                            For Bank Use 
+                        </span>
+                    </strong>
+                </p>
+                <p>
+                            Signature verified by: ____________________________ Approved by BM: ______________________   
+                </p>
+                <p>
+                    <strong>
+                        <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                            For COPS Use Only  
+                        </span>
+                    </strong>
+                </p>
+                <p>
+                  Maintained on:  _______________ Set-up charges recovered:   YES / NO _____________   
+                </p-->
+            </div>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,1114 @@
+<apex:component >
+    <apex:attribute name="applicant" description="Guarantor Record for displaying info" type="Applicant__c" required="true"/>
+    <apex:attribute name="addressMap" description="Address Details in a map" type="map" required="true"/>
+    <apex:attribute name="entityProofMap" description="Entity Details in a map" type="map" required="true"/>
+    <apex:attribute name="mapApplicantImage" description="Applicant Image Details in a map" type="map" required="true"/>
+
+    <table width="100%">
+        <tr width="100%">
+            <th width="12%">Existing Customer</th>
+            <td width="88%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td>
+                            <apex:panelGrid columns="4">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText value="Yes"/>
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText value="No"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="2%"/>
+                        <td><apex:outputText value="Account No./CIF No."/> </td>
+                        <td style="background-color: white;" width="30%">
+                        <apex:outputField value="{!applicant.CIF_No__c}"/>
+                        </td>
+                        <td width="2%"/>
+                        <td width="8%"><apex:outputText value="CKYCR No."/> </td>
+                        <td style="background-color: white;" width="30%">
+                        <apex:outputField value="{!applicant.CKYC__c}"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Constitution</th>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c == 'Sole Proprietary'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c <> 'Sole Proprietary'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputText value="Individual"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c == 'Sole Proprietary'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c <> 'Sole Proprietary'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputText value="Proprietorship"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c == 'Partnership Firms'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c <> 'Partnership Firms'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputText value="Partnership Firm"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c == 'Private Limited'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c <> 'Private Limited'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputText value="Pvt. Ltd."/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c == 'Public Limited'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Constitution_Type__c <> 'Public Limited'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputText value="Public Ltd."/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!OR(applicant.Constitution_Type__c == 'Trust', applicant.Constitution_Type__c == 'HUF', applicant.Constitution_Type__c == 'Society')}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!NOT(OR(applicant.Constitution_Type__c == 'Trust', applicant.Constitution_Type__c == 'HUF', applicant.Constitution_Type__c == 'Society'))}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!OR(applicant.Constitution_Type__c == 'Trust', applicant.Constitution_Type__c == 'HUF', applicant.Constitution_Type__c == 'Society')}">
+                                    <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!applicant.Constitution_Type__c}</span></apex:outputText>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!NOT(OR(applicant.Constitution_Type__c == 'Trust', applicant.Constitution_Type__c == 'HUF', applicant.Constitution_Type__c == 'Society'))}">
+                                    <apex:outputText >Others __________________________</apex:outputText>
+                                </apex:outputPanel>
+                            </apex:panelGrid>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th rowspan="2">
+                <apex:outputText value="Name"/>
+                <apex:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <apex:outputPanel rendered="{!applicant.Gender__c <> 'Female'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c <> 'Married')}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c == 'Married')}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputText value="Father's Name OR"/>
+                </apex:panelGrid>
+                <apex:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                    <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c <> 'Married')}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c == 'Married')}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Spouse Name"/>
+                </apex:panelGrid>
+            </th>
+            <td>
+                <table width="100%">
+                    <tr style="background-color:white" width="100%">
+                        <td style="background-color: white;padding:5px" width="100%">
+                            <apex:outputField value="{!applicant.Title__c}"/>&nbsp;<apex:outputField value="{!applicant.Applicant_Name__c}"/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%">
+                    <tr style="background-color:white" width="100%">
+                        <td style="background-color: white;padding:5px" width="100%">
+                            <apex:outputPanel rendered="{!applicant.Gender__c <> 'Female'}">
+                                <apex:outputField value="{!applicant.Father_Name__c}"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c <> 'Married')}">
+                                <apex:outputField value="{!applicant.Father_Name__c}"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!AND(applicant.Gender__c == 'Female', applicant.Marital_Status__c == 'Married')}">
+                                <apex:outputField value="{!applicant.Spouse_Name__c}"/>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Mother&apos;s Name</th>
+            <td>
+                <table width="100%">
+                    <tr style="background-color:white" width="100%">
+                        <td style="background-color: white;padding:5px" width="100%"><apex:outputField value="{!applicant.Mother_Name__c}"/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Mobile No. +91</th>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="25%" style="background-color: white;padding:5px;"><apex:outputField value="{!applicant.Mobile_Number__c}"/></td>
+                        <td><apex:outputText value="Telephone No. (R)"/></td>
+                        <td width="25%" style="background-color: white;padding:5px;"></td>
+                        <td><apex:outputText value="Telephone No. (O)"/></td>
+                        <td width="25%" style="background-color: white;padding:5px;"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Email ID</th>
+            <td>
+                <table width="100%">
+                    <tr style="background-color:white" width="100%">
+                        <td style="background-color: white;padding:5px" width="100%"><apex:outputField value="{!applicant.Email__c}"/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Religion</th>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'HINDU'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'HINDU'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Hindu"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'MUSLIM'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'MUSLIM'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Muslim"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'SIKH'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'SIKH'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Sikh"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'CHRISTIAN'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'CHRISTIAN'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Christian"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'JAIN'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'JAIN'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Jain"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'BUDDHIST'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'BUDDHIST'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Buddhist"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Religion__c <> 'ZOROASTRIAN'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Religion__c == 'ZOROASTRIAN'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Zorastrian"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="20%">
+                            <apex:panelGrid columns="2">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText value="Others _______________"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td><apex:outputText value="Gender"/></td>
+                        <td>
+                            <apex:outputPanel rendered="{!applicant.Gender__c == 'Male'}">
+                                <div class="whiteUncheckedBox" style="color:black;text-align:center">M</div>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicant.Gender__c <> 'Male'}">
+                                <div class="whiteUncheckedBox" style="color:#a89f9e;text-align:center">M</div>
+                            </apex:outputPanel>
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!applicant.Gender__c == 'Female'}">
+                                <div class="whiteUncheckedBox" style="color:black;text-align:center">F</div>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicant.Gender__c <> 'Female'}">
+                                <div class="whiteUncheckedBox" style="color:#a89f9e;text-align:center">F</div>
+                            </apex:outputPanel>
+                        </td>
+                        <td>
+                            <apex:outputPanel rendered="{!applicant.Gender__c == 'Transgender'}">
+                                <div class="whiteUncheckedBox" style="color:black;text-align:center">T</div>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!applicant.Gender__c <> 'Transgender'}">
+                                <div class="whiteUncheckedBox" style="color:#a89f9e;text-align:center">T</div>
+                            </apex:outputPanel>
+                        </td>
+                        <td><apex:outputText value="^  ^Third Gender"/></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Category</th>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'GENERAL'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'GENERAL'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="General"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'SC'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'SC'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="SC"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'ST'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'ST'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="ST"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'OBC'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'OBC'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="OBC"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'MINORITY'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'MINORITY'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c <> 'MINORITY'}">
+                                    <apex:outputText value="Others _________________"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Caste__c == 'MINORITY'}">
+                                    <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!applicant.Caste__c}</span></apex:outputText>
+                                </apex:outputPanel>
+                            </apex:panelGrid>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <th>Marital Status</th>
+            <td>
+                <table width="100%">
+                    <tr width="100%">
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c <> 'Married'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c == 'Married'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Married"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c <> 'Single'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c == 'Single'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Single"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c <> 'Widowed'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c == 'Widowed'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Widow(er)"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="8%">
+                            <apex:panelGrid columns="2">
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c <> 'Divorced'}">
+                                    <div class="whiteUncheckedBox"></div>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!applicant.Marital_Status__c == 'Divorced'}">
+                                    <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                </apex:outputPanel>
+                                <apex:outputText value="Divorced"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td width="4%"/>
+                        <th>Nationality</th>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText value="Indian"/>
+                            </apex:panelGrid>
+                        </td>
+                        <td>
+                            <apex:panelGrid columns="2">
+                                <div class="whiteUncheckedBox"></div>
+                                <apex:outputText value="Others _________________"/>
+                            </apex:panelGrid>
+                        </td>
+                        <th width="18%">Date of Birth/ Incorporation/ Commencement</th>
+                        <td style="background-color: white;padding:5px" width="8%">
+                            <apex:outputPanel rendered="{!NOT(ISNULL(applicant.Dob__c))}">
+                                <apex:outputField value="{!applicant.Dob__c}"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!NOT(ISNULL(applicant.Date_of_Establishment__c))}">
+                                <apex:outputField value="{!applicant.Date_of_Establishment__c}"/>
+                            </apex:outputPanel>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr width="100%">
+            <th width="8%">PAN No.</th>
+            <td style="background-color: white;padding:6px" width="12%">
+                <apex:outputField value="{!applicant.PAN__c}"/>
+            </td>
+            <td><apex:outputText value="Form 60"/></td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Pan_Form60__c <> 'Form 60'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Pan_Form60__c == 'Form 60'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="(Please provide Form 49A if PAN applied)" style="font-size:8px"/>
+                </apex:panelGrid>
+            </td>
+            <th>Residential Status</th>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c <> 'Resident'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c == 'Resident'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Resident"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c <> 'NRI'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c == 'NRI'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Non-Resident"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c <> 'PIO'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c == 'PIO'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="PIO"/>
+                </apex:panelGrid>
+                
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c <> 'OCI'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c == 'OCI'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="OCI"/>
+                </apex:panelGrid>
+                
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c <> 'Foreign National'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Residential_Status__c == 'Foreign National'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Foreign National"/>
+                </apex:panelGrid>
+                
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr width="100%">
+            <th width="8%">Education</th>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c <> 'UNEDUCATED'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c == 'UNEDUCATED'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Uneducated"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Undergraduate"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c <> 'GRADUATE'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c == 'GRADUATE'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Graduate"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c <> 'POST GRADUATE&ABOVE'}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Education_qualification__c == 'POST GRADUATE&ABOVE'}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputText value="Postgraduate"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <div class="whiteUncheckedBox"></div>
+                    <apex:outputText value="Professional degree"/>
+                </apex:panelGrid>
+            </td>
+            <td>
+                <apex:panelGrid columns="2">
+                    <apex:outputPanel rendered="{!OR(applicant.Education_qualification__c == 'BELOW 10TH', applicant.Education_qualification__c == 'SECONDARY',
+                        applicant.Education_qualification__c == 'SENIOR SECONDARY', applicant.Education_qualification__c == 'ITI - TECHNICAL DEGREE')}">
+                        <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(OR(applicant.Education_qualification__c == 'BELOW 10TH', applicant.Education_qualification__c == 'SECONDARY',
+                        applicant.Education_qualification__c == 'SENIOR SECONDARY', applicant.Education_qualification__c == 'ITI - TECHNICAL DEGREE'))}">
+                        <div class="whiteUncheckedBox"></div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!OR(applicant.Education_qualification__c == 'BELOW 10TH', applicant.Education_qualification__c == 'SECONDARY',
+                        applicant.Education_qualification__c == 'SENIOR SECONDARY', applicant.Education_qualification__c == 'ITI - TECHNICAL DEGREE')}">
+                        <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!applicant.Education_qualification__c}</span></apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(OR(applicant.Education_qualification__c == 'BELOW 10TH', applicant.Education_qualification__c == 'SECONDARY',
+                        applicant.Education_qualification__c == 'SENIOR SECONDARY', applicant.Education_qualification__c == 'ITI - TECHNICAL DEGREE'))}">
+                        <apex:outputText value="Others _______________"/>
+                    </apex:outputPanel>
+                </apex:panelGrid>
+            </td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr width="100%"> 
+            <th width="15%">Relationship with Applicant</th>
+            <td style="background-color: white;padding:5px" width="40%">
+            <apex:outputText value="{!applicant.Relationship_with_applicant__c}"/>
+            </td>
+            <!--No Mapping-->
+            <th width="15%">Place of Birth/Incorporation</th>
+            <td style="background-color: white;padding:5px" width="30%"></td>
+        </tr>
+    </table>
+    <table width="100%">
+        <tr width="100%">
+            <td width="76%">
+                <table width="100%">
+                    <tr width="100%">
+                        <td rowspan="6" width="2%"><apex:image styleClass="verticalImageStyleLong" url="{!URLFOR($Resource.ApplicationForm, 'Address2.png')}"/></td>
+                        <td width="10%"><apex:outputText value="Address Line 1"/></td>
+                        <td width="88%">
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="100%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].Address_Line_1__c}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr width="100%">
+                        <td width="10%"><apex:outputText value="Address Line 2"/></td>
+                        <td width="88%">
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="100%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].Address_Line_2__c}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="Landmark"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="60%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].Land_mark__c}"/>
+                                    </td>
+                                    <td style="text-align:center"><apex:outputText value="City"/></td>
+                                    <td width="35%" style="background-color:white"><apex:outputText value="{!addressMap[applicant.Id]['Current'].City__c}"/></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="District"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="30%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].District__c}"/>
+                                    </td>
+                                    <td width="5%" style="text-align:center"><apex:outputText value="State"/></td>
+                                    <td width="40%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].State__c}"/>
+                                    </td>
+                                    <td width="8%" style="text-align:center"><apex:outputText value="PIN Code"/></td>
+                                    <td style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Current'].Pincode__c}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="Country"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            <apex:outputText value="India"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <div class="whiteUncheckedBox"></div>
+                                            <apex:outputText value="Others ________________"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <th><apex:outputText value="Number of years of stay"/></th>
+                                    <td width="10%" style="background-color: white;padding:5px">
+                                        <apex:outputField value="{!addressMap[applicant.Id]['Current'].Stability__c}"/>
+                                    </td>
+                                    <td width="25%"/>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="Property Status"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c == 'Owned'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c <> 'Owned'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Self-Owned"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c == 'Rented'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c <> 'Rented'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Rented"/>
+                                        </apex:panelGrid>
+                                        
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <div class="whiteUncheckedBox"></div>
+                                            <apex:outputText value="Company Provided"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c == 'Parental'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Current'].Status__c <> 'Company Provided'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Parental"/>
+                                        </apex:panelGrid>
+                                        
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!OR(addressMap[applicant.Id]['Current'].Status__c == 'Parental', addressMap[applicant.Id]['Current'].Status__c == 'Rented', addressMap[applicant.Id]['Current'].Status__c == 'Owned')}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(addressMap[applicant.Id]['Current'].Status__c == 'Parental', addressMap[applicant.Id]['Current'].Status__c == 'Rented', addressMap[applicant.Id]['Current'].Status__c == 'Owned')}">
+                                                <apex:outputText value="Others ______________"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!AND(addressMap[applicant.Id]['Current'].Status__c <> 'Parental', addressMap[applicant.Id]['Current'].Status__c <> 'Rented', addressMap[applicant.Id]['Current'].Status__c <> 'Owned')}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!AND(addressMap[applicant.Id]['Current'].Status__c <> 'Parental', addressMap[applicant.Id]['Current'].Status__c <> 'Rented', addressMap[applicant.Id]['Current'].Status__c <> 'Owned')}">
+                                                <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!addressMap[applicant.Id]['Current'].Status__c}</span></apex:outputText>
+                                            </apex:outputPanel>
+                                        </apex:panelGrid>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr width="100%">
+                        <td rowspan="4" width="2%"><apex:image styleClass="verticalImageStyle" style="height:100px;" url="{!URLFOR($Resource.ApplicationForm, 'Address.png')}"/></td>
+                        <td width="10%"><apex:outputText value="Address Line 1"/></td>
+                        <td width="88%">
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="100%" style="background-color:white;padding:5px">
+                                        <apex:outputPanel rendered="{!NOT(ISNULL(addressMap[applicant.Id]['Permanent'].Address_Line_1__c))}">
+                                            <apex:outputField value="{!addressMap[applicant.Id]['Permanent'].Address_Line_1__c}"/>
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="Landmark"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="60%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Permanent'].Land_mark__c}"/>
+                                    </td>
+                                    <td style="text-align:center"><apex:outputText value="City"/></td>
+                                    <td width="35%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Permanent'].City__c}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><apex:outputText value="District"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td width="30%" style="background-color:white"/>
+                                    <td width="5%" style="text-align:center"><apex:outputText value="State"/></td>
+                                    <td width="40%" style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Permanent'].State__c}"/>
+                                    </td>
+                                    <td width="8%" style="text-align:center"><apex:outputText value="PIN Code"/></td>
+                                    <td style="background-color:white">
+                                        <apex:outputText value="{!addressMap[applicant.Id]['Permanent'].Pincode__c}"/>
+                                    </td> 
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td><apex:outputText value="Country"/></td>
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            <apex:outputText value="India"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <div class="whiteUncheckedBox"></div>
+                                            <apex:outputText value="Others ________________"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <th><apex:outputText value="Property Status"/></th>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c == 'Owned'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c <> 'Owned'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Self-Owned"/>
+                                        </apex:panelGrid>
+                                        
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c == 'Rented'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c <> 'Rented'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Rented"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <div class="whiteUncheckedBox"></div>
+                                            <apex:outputText value="Company Provided"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c == 'Parental'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!addressMap[applicant.Id]['Permanent'].Status__c <> 'Parental'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Company Provided"/>
+                                        </apex:panelGrid>
+                                        
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!OR(addressMap[applicant.Id]['Permanent'].Status__c == 'Parental', addressMap[applicant.Id]['Permanent'].Status__c == 'Rented', addressMap[applicant.Id]['Permanent'].Status__c == 'Owned')}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(addressMap[applicant.Id]['Permanent'].Status__c == 'Parental', addressMap[applicant.Id]['Permanent'].Status__c == 'Rented', addressMap[applicant.Id]['Permanent'].Status__c == 'Owned')}">
+                                                <apex:outputText value="Others ______________"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!AND(addressMap[applicant.Id]['Permanent'].Status__c <> 'Parental', addressMap[applicant.Id]['Permanent'].Status__c <> 'Rented', addressMap[applicant.Id]['Permanent'].Status__c <> 'Owned')}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!AND(addressMap[applicant.Id]['Permanent'].Status__c <> 'Parental', addressMap[applicant.Id]['Permanent'].Status__c <> 'Rented', addressMap[applicant.Id]['Permanent'].Status__c <> 'Owned')}">
+                                                <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!addressMap[applicant.Id]['Permanent'].Status__c}</span></apex:outputText>
+                                            </apex:outputPanel>
+                                        </apex:panelGrid>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr width="100%" class="purpleFont">
+                        <td width="10%" class="purpleFont">KYC DETAILS</td>
+                        <td width="90%"><hr/></td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr width="100%">
+                        <th width="8%" rowspan="2">Proof of Identity</th>
+                        <td width="92%">
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Passport'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Passport'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Passport"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Driving License'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Driving License'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Driving License"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Aadhaar'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Aadhaar'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Aadhaar"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Voter ID'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Voter ID'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Voter ID"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!NOT(OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport'))}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport'))}">
+                                                <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!entityProofMap[applicant.Id]}</span></apex:outputText>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport')}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport')}">
+                                                <apex:outputText value="Others ______________"/>
+                                            </apex:outputPanel>
+                                        </apex:panelGrid>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr width="100%">
+                        <td>
+                            <table width="100%">
+                                <tr width="100%">
+                                    <th>ID No.</th>
+                                    <td style="background-color: white;padding-left: 5px" width="30%">
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Passport'}">
+                                            <apex:outputField value="{!applicant.Passport_Number__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Driving License'}">
+                                            <apex:outputField value="{!applicant.Driving_License_Id__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Aadhaar'}">
+                                            <apex:outputField value="{!applicant.Aadhaar_Number__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Voter ID'}">
+                                            <apex:outputField value="{!applicant.Voter_Id__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'National Population Register (NPR)'}">
+                                            <apex:outputField value="{!applicant.NPR__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'NREGA Job Card'}">
+                                            <apex:outputField value="{!applicant.NREGA__c}"/>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td style="text-align:right">Expiry Date</td>
+                                    <td style="background-color: white;padding-left: 5px" width="20%">
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Passport'}">
+                                            <apex:outputField value="{!applicant.Passport_Expiry_Date__c}"/>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Driving License'}">
+                                            <apex:outputField value="{!applicant.Driving_License_Expiry_Date__c}"/>
+                                        </apex:outputPanel>
+                                    </td>
+                                    <td><apex:outputText >(If applicable)</apex:outputText></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr width="100%">
+                        <th width="8%" colspan="2">Proof of Address</th>
+                        <td width="92%">
+                            <table width="100%">
+                                <tr width="100%">
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Passport'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Passport'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Passport"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Driving License'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Driving License'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Driving License"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Aadhaar'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Aadhaar'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Aadhaar"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] == 'Voter ID'}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!entityProofMap[applicant.Id] <> 'Voter ID'}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputText value="Voter ID"/>
+                                        </apex:panelGrid>
+                                    </td>
+                                    <td>
+                                        <apex:panelGrid columns="2">
+                                            <apex:outputPanel rendered="{!NOT(OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport'))}">
+                                                <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport'))}">
+                                                <apex:outputText ><span>Others </span><span style="text-decoration: underline">{!entityProofMap[applicant.Id]}</span></apex:outputText>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport')}">
+                                                <div class="whiteUncheckedBox"></div>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!OR(entityProofMap[applicant.Id] == 'Aadhaar', entityProofMap[applicant.Id] == 'Voter ID', entityProofMap[applicant.Id] == 'Driving License', entityProofMap[applicant.Id] == 'Passport')}">
+                                                <apex:outputText value="Others ______________"/>
+                                            </apex:outputPanel>
+                                        </apex:panelGrid>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td> 
+                    </tr>
+                </table>
+            </td>
+            <td width="1%" rowspan="13">
+                <table cellspacing="8" width="100%">
+                    <tr width="100%">
+                        <td><apex:image style="float:right;" value="{!mapApplicantImage[applicant.Id]}" width="200px" height="200px"/></td>
+                    </tr>
+                    <tr width="100%" style="line-height:40px;background-color:white;">
+                        <td width="100%" style="text-align: center;color:#a89f9e;"><br/>Signature of Guarantor</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</apex:component>

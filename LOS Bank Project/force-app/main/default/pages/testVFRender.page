@@ -1,0 +1,10 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-09-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<apex:page renderAs="pdf">
+  This is just a test!!!!
+</apex:page>

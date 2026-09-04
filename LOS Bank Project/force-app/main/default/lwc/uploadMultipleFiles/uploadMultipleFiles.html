@@ -1,0 +1,112 @@
+<template>
+
+    <template if:true={loadSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </template>
+
+    <lightning-card>
+        <h3 slot="title">
+            {headingValue}
+        </h3>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6" padding="around-small">
+                <!--<lightning-combobox options={applicableDocumentMasters} value={selectedDocumentMaster} label="Please Select Document to be Uploaded"
+                onchange={handleDocumentSelection}></lightning-combobox>-->
+                <template if:false={hideRadioButtons}>
+                <lightning-radio-group name="Document Master"
+                          label="Please Select Document to be Uploaded"
+                          options={applicableDocumentMasters}
+                          value={selectedDocumentMaster}
+                          type="radio"
+                          onchange={handleDocumentSelection}></lightning-radio-group></template>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                <!--<div>
+                    <lightning-input type="file" 
+                    label="Attachment" 
+                    accept={acceptedTypes}
+                    onchange={handleFilesChange}
+                    onrowaction={handleDeleteFile}
+                    disabled={readAttribute}></lightning-input>
+                </div>
+                <div>
+                    <lightning-badge class="slds-m-top_small slds-m-bottom_small" label="Enter Password if the File is Password Protected"></lightning-badge>
+                    <lightning-input type="password" 
+                                            read-only={readAttribute}
+                                            label="Password" 
+                                            onchange={handlePasswordChange}
+                                            value={password}></lightning-input>
+
+                    
+                </div>-->
+                <template if:true={loadGenericDocument}>
+                    <c-los-generic-document-upload isloading ={isloading} isdocmanager={falseValue} show-upload-component ={trueValue} 
+                        loan-id ="" applicant-id={applicantId} doc-name ={documentMasterId} ondetailsreceived={handleSuccessResp}
+                        ondocumentsuccess={handleSuccess} uploadtypename ={documentType} hidefiledetails={hidefiledetails}>
+                    </c-los-generic-document-upload>
+                </template>
+            </lightning-layout-item> 
+        </lightning-layout>
+
+        <template if:true={uploadProgress}>
+            <div class="slds-m-around_small" slot="footer">
+                <lightning-formatted-text value={currentFile}></lightning-formatted-text> upload in progress 
+                <lightning-icon class="slds-m-around_small" size="x-small" icon-name="utility:spinner"></lightning-icon>
+            </div>
+        </template>
+
+        <template if:true={filesUploaded}>
+
+            <template for:each={uploadedFiles} for:item="item">
+
+                <lightning-card key={item.key}>
+                    
+                    <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                        <lightning-accordion-section name="A" label="File Details">
+                                <template if:true={showButtons}>
+                                    <template if:false={disableDelete}>
+                                        <div slot="actions" aria-setsize="6">
+                                            <lightning-icon icon-name="action:delete" onclick={handleDeleteFile} size="x-small"></lightning-icon>
+                                        </div>
+                                    </template>
+                                </template>
+                                <lightning-layout multiple-rows=true>
+                                    <lightning-layout-item size="12" large-device-size="6" small-device-size="12">
+                                        <lightning-input type="text" readonly label="File Name" value={item.name}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" large-device-size="6" small-device-size="12">
+                                        <lightning-input type="text" readonly label="File Size" value={item.size}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" large-device-size="6" small-device-size="12">
+                                        <lightning-input type="text" readonly label="File Status" value={item.status}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                        <lightning-input label="Amount" type="number" required formatter="decimal" onchange={handleChange}></lightning-input>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    
+                </lightning-card>
+            </template>
+        </template>
+
+        <div class="slds-align_absolute-center">
+            <lightning-icon class="slds-m-around_small" size="x-small" icon-name="action:reject" onclick={handleClose}></lightning-icon>
+            <template if:true={filesUploaded}>
+            <template if:true={showButtons}>
+
+            <!--<lightning-button  disabled={disableDelete} label="Delete File" class="slds-m-around_small"  ></lightning-button>-->
+            <lightning-icon class="slds-m-around_small" size="x-small" icon-name="action:upload" onclick={handleSubmit}></lightning-icon>
+            </template>
+            </template>
+        </div>
+        
+        
+        
+    </lightning-card>
+
+    
+</template>

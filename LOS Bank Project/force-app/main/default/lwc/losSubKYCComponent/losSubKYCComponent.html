@@ -1,0 +1,105 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-14-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <!-- KYC Subtype Option Screen starts -->
+        <template if:true={showKYCSubType}>
+            <lightning-card title="KYC" icon-name="standard:lead">
+
+                <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+
+                <!--template if:true={isloading}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template-->
+            <!-- <div class="slds-m-around_small slds-m-bottom_large back">
+                <a onclick={showKYCOptions} class="slds-float--right slds-m-right_small">Back
+                </a>
+            </div> -->
+
+            <label class="slds-form-element__label slds-m-left_small slds-m-bottom_small">Select KYC
+                verification
+                option:</label>
+            <template if:true={isIndividual}> <!--Added as a part of Bug-2439-->
+            <template if:true={isAadharPresent}> <!--Added as a part of Bug-2439-->
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={biometric} width="20%" height="20%" onclick={handleChangeKYCOptions} class="imageCss"
+                        data-id="Aadhaar - Biometric">
+                    <span class="slds-align_absolute-center"><b>Biometric KYC</b></span>
+                </lightning-layout-item>
+
+              <!---  <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={smartphone} width="35%" height="35%" onclick={handleChangeKYCOptions} class="imageCss"
+                        data-id="Aadhaar - Smartphone KYC">
+                    <span class="slds-align_absolute-center"><b>Smartphone KYC</b></span>
+                </lightning-layout-item>              -->
+            </lightning-layout> 
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={otp} width="20%" height="20%" onclick={handleChangeKYCOptions} class="imageCss"
+                        data-id="Aadhaar - OTP">
+                    <span class="slds-align_absolute-center"><b>OTP KYC</b></span>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={osv} width="20%" height="20%" onclick={handleChangeKYCOptions} class="imageCss"
+                        data-id="Aadhaar - Physical Document">
+                    <span class="slds-align_absolute-center"><b>Physical Document</b></span>
+                </lightning-layout-item>               
+            </lightning-layout>
+            </template>
+            </template>
+            <!--
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={ckyc} width="23%" height="23%" onclick={handleChangeKYCOptions} class="imageCss"
+                        data-id="CKYC">
+                    <span class="slds-align_absolute-center"><b>CKYC</b></span>
+                </lightning-layout-item>        
+            </lightning-layout>
+            -->
+            </lightning-card>
+        </template>
+        <!-- KYC Subtype Option Screen ends -->
+        <template if:true={isIndividual}>
+            <template if:true={isAadharPresent}> <!--Added as a part of Bug-2439-->
+        <template if:true={validateOTP}>
+            <c-los-otp-k-y-c-component onsubkycselection={showSubTypeKYC}  applicant={applicant} kyctype="Aadhaar - OTP" 
+                                       onupdateapplicant={updateApplicantRecord} spinner-image={spinnerImage}>
+            </c-los-otp-k-y-c-component>
+        </template>
+
+        <template if:true={osvKYC}>
+            <c-los-osv-k-y-c-component onsubkycselection={showSubTypeKYC}  parent-id={docChkLstId} applicant={applicant} onconsentchange={handleconsentchange} 
+                                       kyctype="Aadhaar - Physical Document" 
+                                       onupdateapplicant={updateApplicantRecord} spinner-image={spinnerImage}></c-los-osv-k-y-c-component>
+        </template>
+
+        <!--<template if:true={smartPhoneKYC}>
+            <c-los-smartphone-k-y-c onsubkycselection={showSubTypeKYC}  parent-id={docChkLstId} onconsentchange={handleconsentchange}
+                                    applicant={applicant} kyctype="Aadhaar - Smartphone KYC" 
+                                    onupdateapplicant={updateApplicantRecord} spinner-image={spinnerImage}></c-los-smartphone-k-y-c>
+        </template>-->
+        <template if:true={biometricKYC}>
+            <c-los-biometric-k-y-c onsubkycselection={showSubTypeKYC}  applicant={applicant} kyc="Aadhaar - Biometric" 
+                                   onupdateapplicant={updateApplicantRecord} spinner-image={spinnerImage}></c-los-biometric-k-y-c>
+        </template>
+        </template>
+        </template>
+        <template if:true={isCKYC}>
+            <c-ckyc-on-boarding onsubkycselection={showSubTypeKYC}  applicant={applicant} 
+                                oncheckvalidationfromkyccomp={validationCheck} spinner-image={spinnerImage}></c-ckyc-on-boarding>
+        </template>
+
+</template>

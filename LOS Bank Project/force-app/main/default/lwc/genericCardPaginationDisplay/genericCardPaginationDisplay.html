@@ -1,0 +1,309 @@
+<template>
+	<article class="slds-card">
+			<header class="slds-media slds-media_center slds-has-flexi-truncate">
+				<div class="slds-media__figure">
+					<span class="slds-icon_container" title="BRE Output">
+						<lightning-avatar src={genericUrlPath} size="large"></lightning-avatar>
+						<span class="slds-assistive-text">{cardTitle}</span>
+					</span>
+				</div>
+				<div class="slds-media__body">
+					<h2 class="slds-card__header-title">
+						<a href="#" class="slds-truncate" title="BRE Output">
+							<div class="slds-media__body" part="title">
+								<h2 class="slds-card__header-title">
+									<span
+										class="slds-text-heading_small slds-truncate"></span>{cardTitle}
+								</h2>
+							</div>
+						</a>
+					</h2>
+				</div>
+				<!--
+				<div class="slds-no-flex"><lightning-button-icon icon-name="utility:chevronleft" variant="border-filled"
+						alternative-text="Previuos" name="Prevous" slot="actions" onclick={handleAction}
+						disabled={disbalePrev}></lightning-button-icon><lightning-button-icon icon-name="utility:chevronright" variant="border-filled"
+						alternative-text="Next" name="Next" slot="actions" onclick={handleAction}
+						disabled={disbaleNext}></lightning-button-icon></div>
+				-->
+			</header>
+	
+		<!--
+		<template if:true={enableSelection}><div><lightning-input type="checkbox" disabled={isDisabled} checked={isChecked} onclick={selectSchemeHandle}
+				style="float: right;"></lightning-input></div></template>
+		-->
+		<div class="slds-box slds-theme_default" >
+			<template for:each={objDataList} for:item="obj">
+				<template if:false={showSchemaDetails}>
+				<div key={obj.key} class="slds-grid slds-wrap">
+					<div class="slds-size_1-of-2" style="
+					padding: 3px;
+				">
+				{obj.key}
+				</div>
+				<div key={obj.key} class="slds-size_1-of-2">
+					<b>
+						<label class="slds-form-element__label">{obj.value}</label>
+					</b>
+				</div>
+				</div>
+				</template>
+				</template>
+					<template lwc:if={showSchemaDetails}>
+                  
+						<template for:each={eligibleSchemesArray} for:item="obj">
+						<div key={obj.key} class="slds-grid slds-wrap">
+							<div class="slds-size_4-of-4" style="color: purple; padding-top: 8px;">
+								Scheme selected by RO
+						</div>
+						</div>
+						<div key={obj.key} class="slds-grid slds-wrap">
+						<div key={obj.key} class="slds-size_3-of-4">
+							<lightning-button variant="base" label={obj.EligibleSchemeName} title="Click to view the details"  onclick={displayDetails} data-scheme={obj.EligibleSchemeName}></lightning-button>
+						</div>
+						<template if:true={obj.isEligible}>
+							<div key={obj.key} class="slds-size_1-of-4" style="padding-top: 8px;">
+								<lightning-input type="checkbox" name={obj.EligibleSchemeName} value={obj.EligibleSchemeName} disabled={isDisabled} checked={obj.enableSelection} onclick={selectSchemeHandle}
+											></lightning-input>
+							</div>	
+						
+						</template>
+						
+						</div>	
+						
+					</template>
+				
+			</template>
+	<br></br>
+			<template for:each={otherSchemesArray} for:item="obj">
+				<div key={obj.SchemeName} class="slds-grid slds-wrap">
+					<div class="slds-size_4-of-4">
+						 Other Eligible schemes
+						</div>
+					</div>
+					<div key={obj.SchemeName} class="slds-grid slds-wrap">
+					<div class="slds-size_3-of-4">
+						<lightning-button variant="base" label={obj.SchemeName} title="Click to view the details"  onclick={displayDetails} data-scheme={obj.SchemeName}></lightning-button>
+					</div>
+				
+						<template if:true={obj.isEligible}>
+						<div key={obj.SchemeName} class="slds-size_1-of-4" style="padding-top: 8px;">
+							<lightning-input type="checkbox" value={obj.SchemeName} name={obj.SchemeName} disabled={isDisabled} checked={obj.enableSelection} onclick={selectSchemeHandle}
+										></lightning-input>
+						</div>
+					</template>
+					</div>
+			
+			</template>
+		</div>
+		<template if:true={showSchemeAdd}>
+			<div class="slds-box slds-theme_default slds-m-around_x-small slds-var-m-around_xxx-small">
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					Eligibility under Scheme -
+				</div>
+					<div class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">	{schemeName}</label>
+						</b>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					Loan amount
+				</div>
+					<div class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{loanAmt}</label>
+						</b>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					Tenure
+				</div>
+					<div class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{tenure}</label>
+						</b>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					IRR
+				</div>
+					<div class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{IRR}</label>
+						</b>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					LTV
+				</div>
+					<div class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{LTV}</label>
+						</b>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+					Processing Fee
+				</div>
+				<div class="slds-size_1-of-2">
+					<b>
+						<label class="slds-form-element__label">{processingFee}</label>
+					</b>
+				</div>
+			</div>
+			</div>
+			
+		
+		</template>
+		
+		<template if:true={showReasonIsSTP}>
+
+			<div class="slds-box slds-theme_default slds-m-around_x-small slds-var-m-around_xxx-small">
+			
+		
+				<b>Reasons for STP</b>
+				<br></br>
+			<div class="slds-grid slds-wrap">
+				<div class="slds-size_1-of-2">
+				
+						<label class="slds-form-element__label">Rule Level</label>
+				
+				</div>
+			</div>
+			<div class="slds-grid slds-wrap">
+					<template for:each={eligibilityRules} for:item="obj">
+						<div key={obj.key} class="slds-size_1-of-2"></div>
+						<div key={obj.key} class="slds-size_1-of-2">
+						<b key={obj.key}> <label class="slds-form-element__label">{obj.RuleLevel}</label></b>
+					</div>
+						</template>
+			
+				</div>
+				<div class="slds-grid slds-wrap">
+					<div class="slds-size_1-of-2">
+					
+							<label class="slds-form-element__label">Reason Text</label>
+					
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap">
+					<template for:each={eligibilityRules} for:item="obj">
+						<div key={obj.key} class="slds-size_1-of-2"></div>
+						<div key={obj.key} class="slds-size_1-of-2">
+						<b key={obj.key}> <label class="slds-form-element__label">{obj.ReasonText}</label></b>
+					</div>
+						</template>
+			
+				</div>
+			</div>
+			
+
+		
+	</template>
+	<template if:true={showReasonIsNSTP}>
+		<header class="slds-media slds-media_center slds-has-flexi-truncate">
+			<div class="slds-media__figure">
+				<span class="slds-icon_container" title="BRE Output">
+					<lightning-avatar src={genericUrlPath} size="large"></lightning-avatar>
+					<span class="slds-assistive-text">Deviations</span>
+				</span>
+			</div>
+			<div class="slds-media__body">
+				<h2 class="slds-card__header-title">
+					<a href="#" class="slds-card__header-link slds-truncate" title="BRE Output">
+						<div class="slds-media__body" part="title">
+							<h2 class="slds-card__header-title">
+								<span
+									class="slds-text-heading_small slds-truncate"></span>Deviations
+							</h2>
+						</div>
+					</a>
+				</h2>
+			</div>
+			<!--
+			<div class="slds-no-flex"><lightning-button-icon icon-name="utility:chevronleft" variant="border-filled"
+					alternative-text="Previuos" name="Prevous" slot="actions" onclick={handleAction}
+					disabled={disbalePrev}></lightning-button-icon><lightning-button-icon icon-name="utility:chevronright" variant="border-filled"
+					alternative-text="Next" name="Next" slot="actions" onclick={handleAction}
+					disabled={disbaleNext}></lightning-button-icon></div>
+			-->
+		</header>
+		<div  key={obj.key} class="slds-box slds-theme_default slds-var-m-around_xxx-small">	
+			
+			<template for:each={deviationDetailsArray} for:item="obj">
+				<div key={obj.key} class="slds-grid">
+					<div class="slds-size_1-of-2">
+							Deviations Type
+						</div>
+					<div key={obj.key} class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{obj.DeviationType}</label>
+						</b>
+					</div>
+				</div>
+				<div key={obj.key}  class="slds-grid slds-wrap ">
+					<div class="slds-size_1-of-2">
+								Variance
+							</div>
+			
+				<div key={obj.key} class="slds-size_1-of-2">
+					<b>
+						<label class="slds-form-element__label">{obj.variance}</label>
+					</b>
+				</div>
+				</div>
+				<div  key={obj.key} class="slds-grid slds-wrap">
+					<div class="slds-size_1-of-2">
+								Level
+							</div>
+					<div key={obj.key} class="slds-size_1-of-2">
+						<b>
+							<label class="slds-form-element__label">{obj.Level}</label>
+						</b>
+					</div>
+				</div>
+				<div key={obj.key}>
+				<br></br>
+			</div>
+		
+			</template>
+
+		</div>
+	
+	</template>
+
+	
+
+	<!--template if:true={isChecked}><center><lightning-button variant="brand" label="Update Scheme" title="Update Scheme"
+					onclick={handleSaveScheme} class="slds-m-left_x-small" style="margin-top: 20px;"></lightning-button></center></template-->
+	<!--
+		<template if:true={showFiInitiationDetails}><c-generic-card-pagination-display object-list={fiInitiationDetailsArray} loan-scheme-code={loanSchemeCode}
+				card-title="FI Initiated"></c-generic-card-pagination-display></template>
+		-->
+	<!--
+		<template if:true={displayuwcriteria}><template if:true={showUwCriterias}><c-generic-card-pagination-display object-list={uwCriteriasArray} loan-scheme-code={loanSchemeCode}
+					card-title="UW Criteria"></c-generic-card-pagination-display></template></template>
+	-->
+	<template if:true={showSubjectivityMsgs}>
+		<c-generic-card-pagination-display object-list={subjectivityMessagesArray} loan-scheme-code={loanSchemeCode}
+				card-title="Subjectivity Messages"></c-generic-card-pagination-display>
+	</template>
+	<!--
+		<template if:true={showDeviationDetails}><c-generic-card-pagination-display object-list={deviationDetailsArray}  loan-scheme-code={loanSchemeCode}
+			card-title="Deviation Details"></c-generic-card-pagination-display></template>
+		-->
+	<template if:true={isChecked}>
+		<center>
+			<lightning-button variant="brand" label="Update Scheme" title="Update Scheme"
+					onclick={handleConfirmClick} class="slds-m-left_x-small" style="margin-top: 40px;" disabled={isSchemeChecked}></lightning-button>
+		</center>
+	</template>
+</article>
+</template>

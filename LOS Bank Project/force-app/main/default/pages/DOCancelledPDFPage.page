@@ -1,0 +1,251 @@
+<apex:page controller="DOPDFController" renderAs="pdf" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+  <html>
+    <head>
+      <style type="text/CSS">
+        .applicationNumberCSS {
+          text-align: right;
+          padding-top: 5%;
+          font-family: 'Quicksand', sans-serif; font-size : 17px;
+          color: rgb(51, 48, 48);
+          font-weight: lighter;
+        }
+        .headingCSS {
+          text-align: left;
+          text-decoration: underline;
+          font-family: 'Quicksand', sans-serif; font-size : 17px;
+          color: rgb(51, 48, 48);
+          font-weight: lighter;
+          margin-left: 35%;
+          margin-bottom: 1.5%;
+        }
+
+        body{ font-family: 'Quicksand', sans-serif; font-size : 12px; font-weight: lighter; color: rgb(51, 48, 48);}
+
+       
+        .textCSS {
+          font-family: 'Quicksand', sans-serif; font-size : 12px;
+          font-weight: lighter;
+          color: rgb(51, 48, 48);
+        }
+        table {
+          width: 100%;
+          border: 1px solid black;
+          background-color:rgb(244, 240, 240);
+          
+        }
+
+        th{
+          border-right: 1px dashed #9b9b9b;
+        }
+
+        td{
+          font-family: 'Quicksand', sans-serif; font-size : 12px; padding-left : 30%;
+          border-bottom: 1px dashed #9b9b9b;
+          padding: 1px;
+          font-weight: 100;
+        }
+
+        .tableDataColorCSS{
+          border-right: 1px dashed black;
+        }
+
+        .marginBottom {
+          margin-bottom: .5%;
+        }
+
+        @page {
+            margin-bottom: 3cm;
+            background-image: url("{!URLFOR($Resource.CancelledImage)}");
+            background-repeat: no-repeat;
+            background-position: center;
+            
+
+            @bottom-left {
+             content: element(footer);
+            }
+        }
+
+        div.footer {
+            display: block;
+            position: running(footer);
+            align-content: left;
+        }
+
+      </style>
+    </head>
+    <div style="margin-bottom : 3.5%;">
+      <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "left"/>
+      <div class="applicationNumberCSS">Application No. {!PDFWrapperData.loanApplication.applicationNumber}</div>
+    </div>
+    <body class="slds-scope">
+      <!--footer-->
+      <div class="footer" name="footer">
+        <span style="float: left; margin-top : 200% !important;" class="textCSS"><b>This DO is valid for 7 days from the date of issue.</b></span>
+        <span style="float: right;" class="textCSS"><b>AU Small Finance Bank.<br/>19 A, Dhuleshwar Garden, Ajmer Road<br/>
+          JAIPUR-302001, India<br/>Tel: +91 141 391 0000<br/> Fax: +91-141-236-8815<br/></b>
+          <a href="www.aubank.in">www.aubank.in</a>
+        </span>
+      </div>
+
+      <div class="headingCSS">
+        DELIVERY ORDER(NEW)
+      </div>
+      <div class="marginBottom">
+        <div class="textCSS">DOBAN0441846</div>
+        <div class="textCSS">DATE : {!PDFWrapperData.dateValue}</div>
+      </div>
+      <div class="marginBottom">
+        <table width="50% !important;">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>DO No.</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Application No.</td>
+              <td>{!PDFWrapperData.loanApplication.applicationNumber}</td>
+            </tr>
+            <tr>
+              <td style="border:none">Branch Name</td>
+              <td style="border:none">{!PDFWrapperData.loanApplication.branchName}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS">To,<br/></div>
+        <div class="textCSS">{!PDFWrapperData.loanApplication.dealerName}<br/></div>
+        <div class="textCSS">({!PDFWrapperData.loanApplication.dealerLocation})<br/></div>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS">Dear Sir/Madam,<br/></div>
+        <div class="textCSS">Sub: Delivery of one MARUTI SWIFT VXI_PETROL 2022<br/></div>
+        <div class="textCSS">You are kindly requested to deliver the above mentioned vehicle to the under noted borrower subject to the 
+        following:
+        <br/></div>
+      </div>
+
+      <!--div class="marginBottom">
+        <div class="textCSS">The above vehicles must be comprehensively insured before the delivery.<br/></div>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS">Mentioned under Hypothecation of AU Small Finance Bank on the invoice, Insurance Cover Note and Registration
+          Certificate of the vehicle Collect from the borrower, any piece difference over and above the below mentioned net payable amount.
+        <br/></div>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS" style="word-wrap : break-word">Please note that you will be liable for providing copy of Invoice, original paper of registration/ Registration Certificate.
+          In case of refinance/used finance you will be liable for providing original papers of registration for transfer / transferred Registration Certificate 
+          , Insurance Copy and any other documents as may be required by the Bank as per its policy. The aforesaid amount is paid to you on the explicit 
+          understanding that any sum payable/refundable by you under the above transaction, for any reason whatsoever should be paid/refunded 
+          by you only to us and not to customer mentioned above or anyone else.
+        <br/></div>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS">Note: You are advised to release the vehicle only on receiving Bank DO, Bank will not be liable for any telephonic/ E-mail approval 
+          for relase of vehicle, it shall be Dealer's/ Seller's own Risk.
+        <br/></div>
+      </div-->
+      <div class="marginBottom">
+        <apex:repeat value="{!PDFWrapperData.staticContentMaster}" var="staticRecord" id="repeatedVal">
+            <apex:outputText escape="false" value="{!staticRecord.Letter_Content__c}" ></apex:outputText>
+          </apex:repeat>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS" style = "margin-bottom : 0.75%">Customer Details :
+        <br/></div>
+        <div class="textCSS">Name of Customer : {!PDFWrapperData.applicant.customerName}</div>
+        <div class="textCSS">Father's Name : {!PDFWrapperData.applicant.fatherName}</div>
+        <div class="textCSS">Address : {!PDFWrapperData.address.address}</div>
+      </div>
+      <div class="marginBottom" style="margin-bottom : 0.75% !important">
+        <div class="textCSS">Payable Details :
+        <br/></div>
+      </div>
+  
+      <div class="marginBottom" style="margin-bottom : 0.75% !important">
+        <table style="border:none !important" width = "70% !important;">
+          <thead>
+            <tr>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Assets Cost</td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td>Loan Amount</td>
+              <td>{!PDFWrapperData.loanApplication.loanAmount}</td>
+            </tr>
+            <tr>
+              <td>Less Charges</td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td>Add : Margin Money</td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td>Deferral Amount</td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td><b>Net Payable</b></td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td>Engine Category</td>
+              <td>{!PDFWrapperData.collateral.engineCategory}</td>
+            </tr>
+            <tr>
+              <td>Dealer Payout</td>
+              <td>Assets Cost</td>
+            </tr>
+            <tr>
+              <td>Mode of Payment</td>
+              <td>RLOS Number</td>
+            </tr>
+            <tr>
+              <td>RLOS Number</td>
+              <td>RLOS Number</td>
+            </tr>
+            <tr>
+              <td>Scheme</td>
+              <td>{!PDFWrapperData.loanApplication.scheme}</td>
+            </tr>
+          </tbody>
+  
+        </table>
+      </div>
+
+      <div class="marginBottom" style="margin-bottom : 0.75% !important">
+        <div class="textCSS"><b>Sales Executive    {!PDFWrapperData.loanApplication.salesExecutive}</b></div>
+        <div class="textCSS"><b>Approver Name    Lalit Nandan-125301</b></div>
+      </div>
+
+      <div class="marginBottom" style="margin-bottom : 0.75% !important">
+        <div class="textCSS">Thanking You.</div>
+      </div>
+
+      <div class="marginBottom">
+        <div class="textCSS">Yours faithfully</div>
+        <div class="textCSS">AU Small Finance Bank.</div>
+      </div>
+    </body>  
+  </html>
+</apex:page>

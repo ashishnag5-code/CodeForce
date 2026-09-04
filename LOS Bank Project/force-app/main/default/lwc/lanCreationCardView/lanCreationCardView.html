@@ -1,0 +1,126 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <article class="slds-box">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <lightning-icon icon-name="standard:user" size="small"></lightning-icon>
+                <div class="slds-media__body slds-p-right_small">
+                    <h2 class="slds-card__header-title">
+                        <a class="slds-card__header-link slds-truncate" onclick={navigateToLoanDetailView}
+                            title={loanAppRecord.Name} data-id={loanAppRecord.Name}>&nbsp;&nbsp;{loanAppRecord.Name}</a>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-form-element">
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Loan ID</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{loanAppRecord.LAN__c}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Loan Number</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{loanAppRecord.Loan_Number__c}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Product</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{loanAppRecord.productName}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">MMV</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{mmvMasterName}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Vehicle Number</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{collateral.Vehicle_Number__c}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Scheme</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{schemeName}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Loan Amount</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">Rs. {loanAppRecord.Total_Loan_Amount__c}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">Tenure In Months</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{loanAppRecord.Tenure__c}</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="4" class="slds-p-bottom_x-small">
+                        <span class="slds-form-element__label">ROI</span>
+                        <div class="slds-form-element__control">
+                            <div class="slds-form-element__static">{loanAppRecord.ROI__c} %</div>
+                        </div>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="11">
+                        <div class="slds-align_absolute-center">
+                            <lightning-button data-id="collateralDedup" label="Collateral Dedupe" variant="brand"
+                            onclick={getCollateralList} disabled={collateralDedupDisabled} class="slds-p-around_x-small buttonColor"></lightning-button>  
+                            <lightning-button data-id="modifyCollateral" label="Modify Collateral" variant="brand"
+                                onclick={handleModifyCollateral} disabled class="slds-p-around_x-small slds-hide buttonColor"></lightning-button>
+                            <lightning-button data-id="linkCollateral" label="Link Collateral" variant="brand"
+                                onclick={handleLinkCollateral} disabled class="slds-p-around_x-small slds-hide buttonColor"></lightning-button>
+                            <template if:false={retry}>
+                                <lightning-button label="Create LAN" variant="brand" onclick={handleCreateLANAction}
+                                    disabled={lanButtonDisabled} class="slds-p-around_x-small buttonColor" data-id="createLan"></lightning-button>
+                            </template>
+                            <!--<template if:true={hasLAN}>
+                                <lightning-button label="Submit PSL/BSR" variant="brand" onclick={submitPSLBSR}
+                                    class="slds-p-around_x-small buttonColor" disabled={disableCBSBSRPSL}></lightning-button>
+                            </template>-->
+                            <template if:true={retry}>
+                                <lightning-button label="Retry" variant="brand" onclick={handleRetryCreateLAN}
+                                    disabled={retryButtonDisabled} class="slds-p-around_x-small buttonColor"></lightning-button>
+                            </template>
+                             <!-- Joshna - START OF CBS API Change Tracker updates -->
+                             <template if:true={hasLAN}>
+                                <lightning-button label="Submit PSL/BSR" variant="brand" onclick={submitPSLBSR}
+                                    class="slds-p-around_x-small buttonColor" disabled={disableCBSBSRPSL}></lightning-button>
+                            </template>
+                            <!-- Joshna - END OF CBS API Change Tracker updates -->
+                            <template if:true={showSyncNotes}>
+                                <lightning-button label="Sync Notes" variant="brand" onclick={syncNotes}
+                                    disabled={notesButtonDisabled} class="slds-p-around_x-small buttonColor"></lightning-button>
+                            </template>
+                            <lightning-button data-id="SIButton" class="slds-hide slds-p-around_x-small buttonColor" label="Create SI" variant="brand"
+                                onclick={handleCreateSI} disabled={createSIButtonDisabled}></lightning-button>
+                        </div>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </div>
+
+
+
+        </div>
+    </article>
+</template>

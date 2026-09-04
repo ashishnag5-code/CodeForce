@@ -1,0 +1,33 @@
+<aura:component Controller="LosQuickLoanController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,lightning:actionOverride,lightning:isUrlAddressable" access="global" >
+	<!-- Attributes -->
+    <aura:attribute name="recordId" type="String" />
+    <!--Component Start-->
+    <div class="slds-m-around_xx-large">
+        <!--Modal Box Start-->
+            <div role="dialog" class="slds-modal slds-fade-in-open ">
+                <div class="slds-modal__container">
+                    <!--Modal Box Header Start-->
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">Confirmation</h1>
+                    </header>
+                    <!--Modal Box Header End-->
+                     
+                    <!--Modal Box Content Start-->
+                    <div class="slds-modal__content slds-p-around--medium">
+                        <center><b>Please confirm if you want to convert the Lead to the Loan?</b></center>
+                    </div>
+                    <!--Modal Box Content End-->
+                     
+                    <!--Modal Box Button Start-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button name='No' label='No' onclick='{!c.handleConfirmDialogNo}'/>
+                        <lightning:button variant="brand" name='Yes' label='Yes' onclick='{!c.handleConfirmDialogYes}'/>
+                    </footer>
+                    <!--Modal Box Button End-->
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop--open"></div>            
+       
+    </div>
+    <!--Component End-->
+</aura:component>

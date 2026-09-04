@@ -1,0 +1,128 @@
+<template>
+    <!--<div if:true={isLoaded} class="slds-is-relative">
+    <div if:true={isloading} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>-->
+    <!-- <div if:true={isloading}>
+        <lightning-spinner alternative-text="Loading...">
+        </lightning-spinner>
+    </div> -->
+
+    <c-custom-spinner
+        show-spinner={isloading}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+    <lightning-layout>
+        <template if:false={showVoterIdData}>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+            <div class="slds-card__body slds-card__body_inner">
+                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-var-p-horizontal_small slds-var-p-bottom_small"
+                            data-record-name="ViewMoreInformation">
+                            <article class="slds-box">
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <!--<div class="slds-media__figure">
+                                            <lightning-icon icon-name=custom:custom31 size="small">
+                                            </lightning-icon>
+                                        </div>-->
+                                        <div class="slds-media__body">
+                                            <h2 class="slds-card__header-title">Passport Verification
+                                            </h2>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <template if:false={isVerified}>
+                                                <lightning-button  style="display:flex;" type="neutral" disabled={isdisableVerifyButton}
+                                                name="Voter_Id__c" label="Verify" onclick={handleVerify}>
+                                                </lightning-button>
+                                            </template>
+                                            <template if:true={isVerified}>
+                                                <lightning-icon size="small" variant="success"
+                                                    icon-name="utility:success"></lightning-icon>
+                                            </template>
+                                        </div>
+                                    </header>
+
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-form-element">
+                                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                            <!--<div class="slds-size_1-of-2">
+                                                <span class="slds-form-element__label">Voter
+                                                    Id</span>
+                                            </div>-->
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr>Passport Number</label>
+                                                        <div class="buttonIn">
+                                                            <!-- Pattern Update : SFAU-5896 Kunal 15th Jan-->
+                                                            <lightning-input type="text" required="true" label="Passport Number"
+                                                                value={docCheckRecord.Document_Number__c} variant="label-hidden" pattern="[A-Z]{1}[1-9]{1}[0-9]{6}"
+                                                                name="Document_Number__c" length="8" disabled
+                                                                message-when-pattern-mismatch="Enter valid Passport number"><!--pattern="[A-PR-WYa-pr-wy][1-9][0-9]{6}"-->
+                                                            </lightning-input><!--onchange={handleValueChange}-->
+                                                            <lightning-button-icon class="button" icon-name="utility:upload"
+                                                                alternative-text="upload" title="Upload">
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>Expiry date</label>
+                                                            <lightning-input type="date" name="Document_Expiry_Date__c" variant="label-hidden" required 
+                                                            label="Expiry date" min={todaysDate} message-when-range-underflow="Past date is not allowed" class="validate" onchange={handleValueChange} value={docCheckRecord.Document_Expiry_Date__c}></lightning-input>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>File Number</label>
+                                                            <lightning-input type="text" name="Passport_File_Number__c" variant="label-hidden" label="File Number" length="15"
+                                                                message-when-pattern-mismatch="Enter valid Passport File number" required
+                                                                onchange={handleValueChange} class="validate"
+                                                                value={docCheckRecord.Passport_File_Number__c}></lightning-input><!--pattern="^[A-PR-WYa-pr-wy][1-9]\\d\\s?\\d{4}[1-9]$"-->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>Date of Birth</label>
+                                                            <lightning-input type="date" disabled={isDisabled} name="Dob__c" variant="label-hidden" label="Date of Birth"  max={maxDate}
+                                                                required
+                                                                onchange={handleDobChange} 
+                                                                value={applicant.Dob__c}></lightning-input><!--pattern="^[A-PR-WYa-pr-wy][1-9]\\d\\s?\\d{4}[1-9]$"-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                </ul>
+            </div>
+        </lightning-layout-item>
+    </template>
+        <template if:true={showVoterIdData}>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <c-generic-data-display onverified={handleIdentifierVerification} identifier-documents={identifierDocuments} onback={showDetails} display-type='Passport Details' pan-response={response}>
+                </c-generic-data-display>
+             </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

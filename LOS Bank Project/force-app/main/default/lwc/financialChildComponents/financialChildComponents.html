@@ -1,0 +1,32 @@
+<!--
+  @description       : 
+  @author            : Ashish
+  @group             : 
+  @last modified on  : 10-30-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+
+    <!-- Work Order inserting template -->
+    <c-ausfb-work-order-by-credit loan-id={recordId}></c-ausfb-work-order-by-credit>
+    <!-- Work Order inserting template -->
+
+    <!--Applicant Dropdown-->
+    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+            <lightning-combobox name="Member" label="Choose Applicant from Drop down" value={applicantId}
+                options={mdetailsOptions} required onchange={handleChange} padding="around-small">
+            </lightning-combobox>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <!--Tractor Financial Child templates-->
+    <template if:true={isTractor}>
+        <c-tractor-financial-child-templates is-mobile={isMobile} onnext={handleSuccessOnNext} ></c-tractor-financial-child-templates>
+    </template>
+
+     <!--Commericla Financial Child templates-->
+     <template if:true={isCV}>
+        <c-commmercial-financial-child-templates is-mobile={isMobile} onnext={handleSuccessOnNext}></c-commmercial-financial-child-templates>
+    </template>
+</template>

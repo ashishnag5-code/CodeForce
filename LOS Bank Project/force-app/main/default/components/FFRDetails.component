@@ -1,0 +1,30 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="fleetRecordsList" description="This is the value for the component."
+    type="FFRWrapper" required="true" assignTo="{!ffrDetail}"/>
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="FFR">							
+        </apex:pageBlockSection>
+        <table style="{!tableStyle}">
+            <tr style="{!tableRowStyle}">
+                <th style="{!tableHeadDataStyle} width:3% !important">Total No. Of Vehicle</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Free with no hypo on RC</th>
+                <th style="{!tableHeadDataStyle} width:5% !important">Deemed Free Vehicles</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Total Free Vehicles</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Financed Vehicle</th>
+                <th style="{!tableHeadDataStyle} width:10% !important">Pre Funding FFR</th>
+                <th style="{!tableHeadDataStyle} width:7% !important">Proposed</th>
+                <th style="{!tableHeadDataStyle} width:7% !important">Post Funding FFR</th>
+            </tr>
+            <tr style="{!tableRowStyle}">
+                <td style="{!tableDataStyle}">{!ffrDetail.totalNoofVehicle}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.freeWithNoHypoOnRC}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.deemedFreeVehicle}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.totalFreeVehicle}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.financedVehicle}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.preFundingFFR}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.proposed}</td>
+                <td style="{!tableDataStyle}">{!ffrDetail.postFundingFFR}</td>
+            </tr>
+        </table>
+    </div>   
+</apex:component>

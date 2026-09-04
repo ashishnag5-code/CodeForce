@@ -1,0 +1,160 @@
+<apex:component controller="CAMReportChildComponentsController">
+
+    <apex:attribute name="applicantList" description="This is the value for the component."
+    type="Applicant__c[]" required="true" assignTo="{!applicants}"/>
+    <apex:attribute name="financialRecord" description="This is the value for the component."
+    type="Applicant_Financials_Details__c[]" required="true" assignTo="{!applicantFinancialsR2}"/>
+    <apex:attribute name="loanApp" description="This is the value for the component."
+    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="applicantIdList" description="This is the value for the component."
+    type="Id[]" assignTo="{!applicantIds}"/>
+    <apex:attribute name="cbsCibilLoansRecords" description="This is the value for the component."
+    type="Bank_Account_Records__c[]" assignTo="{!cbsCibilLoans}"/>
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Income Profile">
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadDataStyle}">Particulars</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <th style="{!tableHeadDataStyle}">{!financialRecordR2[applicant.Id].recordTypeName}</th>
+                    </apex:repeat>
+                    <th style="{!tableHeadDataStyle} display:{!IF(applicants.size==1,'table-head','none')}">Co Applicant</th>
+                    <th style="{!tableHeadDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-head','none')}">Guarantor</th>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Employment Type</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].employmentType}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Working Org. Name</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].companyName}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">EMI Pattern</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].emiPattern}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Agriculture Income Details: Own Land</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].ownlandIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Agriculture Income Details: Rented Cultivated Land</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].rclIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Commercial/Agri Haulage Income</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].commercialIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Income from Dairy Business</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].dairyIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>   
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Other Income</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].otherIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>  
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Surplus income (If proposed asset is for hiring)</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].netSurplusIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Total Income</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0, number, 0.00}">
+                                <apex:param value="{!financialRecordR2[applicant.Id].totalIncome}"/>
+                            </apex:outputText>
+                        </td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Proposed EMI</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].proposedEMI}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>    
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Existing EMI Liability</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].existingEMILiability}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr> 
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadStyle}">Income Considered</th>
+                    <apex:repeat value="{!applicants}" var="applicant">
+                        <td style="{!tableDataStyle}">{!financialRecordR2[applicant.Id].considerIncome}</td>
+                    </apex:repeat>
+                    <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                    <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                </tr>    
+            </table>
+    </div>         
+</apex:component>

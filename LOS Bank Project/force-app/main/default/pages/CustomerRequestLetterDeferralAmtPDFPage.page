@@ -1,0 +1,68 @@
+<apex:page renderAs="PDF" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                body { font-family: 'Quicksand'; font-size : 15px !important; sans-serif; color :333;}
+                body ul{
+                    list-style-type: lower-alpha;
+                }
+                .ref-class{
+                    padding-left: 25px;
+                    text-align: justify;
+                }
+                .main-content{
+                    text-align: justify;
+                }
+            </style>
+        </head>
+        <body>
+        
+           <div class="latter-heading">
+                <p>
+                    <strong>
+                    Ref. No.: 
+                    <br/>
+                    Dated:
+                    </strong>
+                </p>
+                <p>To </p> 
+                <p>Branch Manager <br/>{!loan.Branch_Master__r.Account_Name__c} Branch <br/> AU Small Finance Bank Limited</p>
+            </div>
+    
+            <div class="ref-class">
+                <p><strong>Ref: </strong> Deferral payment hold Consent Letter with respect to the vehicle loan of Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>/- (Rupees
+                    {!totalLoanAmountInWords} only) <strong> (“Loan”) </strong> availed from the AU Small Finance Bank Limited (“the Bank”) vide loan
+                    agreement dated {!eSignDate} and other documents pertaining to availing of said Loan <strong> (“Documents”)</strong> .</p>
+            </div>
+            <div class="main-content">
+                <p>Dear Sir/Madam,</p>
+                <p>I refer to the Loan availed by me/us from AU Bank and secured by hypothecation over the {!collateral.Registration_Number__c}
+                <strong> (“Vehicle”) </strong>  in favor of AU Bank.</p>
+                <p>In this regard, I/we agree and confirm that 15% of the Loan amount shall be disbursed in my/our AU Bank account 
+                    no. {!loan.Repayment_Account_Number__c} and shall remain under debit freeze until compliance of the following conditions by me/us:</p>
+                    
+                <apex:outputText escape="false" value="{!objGenericMaster.Letter_Content__c}" ></apex:outputText><br/><br/>
+                <table>
+                    <tr><td>Thanking you</td></tr>
+                    <tr><td>(Customer Signature)</td></tr>
+                    <tr><td/></tr>
+                    <tr><td/></tr>
+                    <tr><td><apex:outputText >Name: {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</apex:outputText></td></tr>
+                    <tr><td>Address: {!customerCurrentAddress.Address_Line_1__c}, 
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_2__c))}">
+                        {!customerCurrentAddress.Address_Line_2__c},
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_3__c))}">
+                         {!customerCurrentAddress.Address_Line_3__c},
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!NOT(ISBLANK(customerCurrentAddress.District__c))}">
+                        {!customerCurrentAddress.District__c},
+                    </apex:outputPanel>
+                    {!customerCurrentAddress.City__c}, {!customerCurrentAddress.State__c}, {!customerCurrentAddress.Pincode__c}</td></tr>
+                </table>
+            </div>
+            
+        </body>
+    </html>
+    
+</apex:page>

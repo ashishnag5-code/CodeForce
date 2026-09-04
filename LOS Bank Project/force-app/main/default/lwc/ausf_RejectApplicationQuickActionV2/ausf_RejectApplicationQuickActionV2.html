@@ -1,0 +1,30 @@
+<template>
+    <lightning-quick-action-panel header="Reject Application">    
+        <div class="slds-m-top_medium">
+            
+            <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+                    <c-depended-pick-list-l-w-c  object-api-name = {applicationRecord.apiName}
+                                                 object-record-type-id = {applicationRecord.recordTypeId}
+                                                 controller-field-api-name = "Rejection_Reason__c"
+                                                 controller-field-label = "Rejection Reason"
+                                                 dependent-field-api-name = "Rejection_Sub_Reason__c"
+                                                 dependent-field-label = "Rejection Sub Reason"
+                                                 onchildmethod = {handlePicklistSelection}>
+                    </c-depended-pick-list-l-w-c>
+                    <div>
+                        <lightning-textarea name="OtherReasons" 
+                                            label="Other Reason" 
+                                            data-id="otherReason" 
+                                            onchange={handleTextAreaChange}>
+                        </lightning-textarea>
+                    </div>
+                            </div>
+
+            <div slot="footer">
+                <button class="slds-button slds-button_brand buttonColor" onclick={closeAction}>Cancel</button>
+                <button class="slds-button slds-button_brand buttonColor" onclick={handleReject}>Reject</button>
+                    </div>
+        
+      </lightning-quick-action-panel>
+    
+</template>

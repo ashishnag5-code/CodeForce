@@ -1,0 +1,127 @@
+<apex:page controller="CAMReportVFPageController" readOnly="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false">
+    <!-- Begin Default Content REMOVE THIS -->
+    
+    <html>
+        <head>
+            
+            <style>
+                body{
+                border:1px;
+                border-block-start: 2px;
+                border-block-start-color: rgb(222, 222, 222);
+                border-block-end-style: solid; 
+                }
+                .pbSubheader{
+                background-color: rgb(109,48,120);
+                font-size: medium;
+                color: white;
+                }
+                .pbSubheader h3{
+                padding-top: 20px;
+                padding-bottom: 20px;
+                font-size: 14px;
+                padding: 7px;
+                font-size: 16px;
+                }
+                @page {
+                margin: 0.23in;
+                size: 10in 16.69in;
+                }
+                
+                
+            </style>
+        </head>
+        <body>
+            <div style="display:{!IF(NOT(isSectionEnabledForCV_CE_SCV_Product), 'inline', 'none')};">
+                <apex:pageBlock title="CAM Report">
+                    <div style="display: {!IF(productDetails=='Four Wheeler', 'inline', 'none')};">
+                        <c:CaseSummary loanApp="{!loan}" applicantDetails="{!applicant}" pslDetailsRecord="{!pslDetails}"
+                                       productDetailsValue="{!productDetails}" RODetails="{!RO}" vahaanValue="{!vahaanPdf}" currentUserVar="{!currentUser}"></c:CaseSummary>
+                        <c:VerificationDetails productRTMapping="{!productRT}" addressRecords="{!addressList}" cpvDetailsForApp="{!cpvDetails}" loanApp="{!loan}" factorDetails="{!factor}" applicantList="{!applicants}" productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" vehiclededupe="{!vehiclededupe}" bureauScore="{!bureauScore}" addressListOfCblAddress="{!addressListOfCibilAddress}"></c:VerificationDetails>
+                        <c:CustomerDetails addressRecords="{!addressList}" productDetailsValue="{!productDetails}" fieldInvestigationRecordDetails="{!fiStatusRecords}" collateralDetails="{!collateral}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}"></c:CustomerDetails>
+                        
+                        <c:FIStatus fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" factorDetails="{!factor}" loanApp="{!loan}"></c:FIStatus>
+                        
+                        <c:VehicleDetails productDetailsValue="{!productDetails}" vahaanValue="{!vahaanPdf}" productRTMapping="{!productRT}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}"></c:VehicleDetails>
+                        <c:IncomeProfile loanApp="{!loan}" applicantList="{!applicants}" financialRecord="{!financial}"></c:IncomeProfile>
+                        <c:ExposureDetails loanApp="{!loan}" exposureCBSAccountRecords="{!cbsRecords}"></c:ExposureDetails>
+                        <c:ExposureDetailsForApplicant applicantDetail="{!applicant}" loanApp="{!loan}" exposureDetailsForAppBankRecords="{!applicantExposure}"></c:ExposureDetailsForApplicant>
+                        <c:AccountsFD cbsRecordsDetailsFD="{!cbsRecordsFD}"></c:AccountsFD>
+                        <c:BankingDetails cartRecordsDetails="{!cartRecords}" sentFromDetail="{!sentFromVF}"></c:BankingDetails>
+                        <c:FleetDetails fleetRecordsList="{!fleetRecords}"></c:FleetDetails>
+                        <c:CibilSummary cibilRecordsDetails="{!cibilRecords}"></c:CibilSummary>
+                        <c:Query queryRecords="{!queries}"></c:Query>
+                        <c:TeleVerificationRemarks tvrRecordDetails="{!tvrRecords}"></c:TeleVerificationRemarks>
+                        <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                        <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!subPage}" subProductValue="{!subProduct}"></c:SanctionCondition>
+                        <c:ApprovalFlow loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}"></c:ApprovalFlow>
+                    </div>
+                    <div style="display: {!IF(productDetails=='Two Wheeler', 'inline', 'none')};">
+                        <c:CaseSummary loanApp="{!loan}" applicantDetails="{!applicant}" pslDetailsRecord="{!pslDetails}"
+                                       productDetailsValue="{!productDetails}" RODetails="{!RO}" currentUserVar="{!currentUser}"></c:CaseSummary>
+                        <c:VerificationDetails productRTMapping="{!productRT}" addressRecords="{!addressList}" cpvDetailsForApp="{!cpvDetails}" loanApp="{!loan}" factorDetails="{!factor}" applicantList="{!applicants}" productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" bureauScore="{!bureauScore}"></c:VerificationDetails>
+                        <c:CustomerDetails addressRecords="{!addressList}" productDetailsValue="{!productDetails}" fieldInvestigationRecordDetails="{!fiStatusRecords}" collateralDetails="{!collateral}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}"></c:CustomerDetails>
+                        
+                        <div style="display: {!IF(productDetails=='Four Wheeler', 'inline', 'none')};">
+                            <c:FIStatus fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" factorDetails="{!factor}" loanApp="{!loan}"></c:FIStatus>
+                        </div>
+                        <c:VehicleDetails productDetailsValue="{!productDetails}" productRTMapping="{!productRT}" vahaanValue="{!vahaanPdf}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}"></c:VehicleDetails>
+                        <c:IncomeProfile loanApp="{!loan}" applicantList="{!applicants}" financialRecord="{!financial}"></c:IncomeProfile>
+                        <c:AccountsFD cbsRecordsDetailsFD="{!cbsRecordsFD}"></c:AccountsFD>
+                        <c:BankingDetails cartRecordsDetails="{!cartRecords}" sentFromDetail="{!sentFromVF}"></c:BankingDetails>
+                        <c:FleetDetails fleetRecordsList="{!fleetRecords}"></c:FleetDetails>
+                        <c:ExposureDetails loanApp="{!loan}" exposureCBSAccountRecords="{!cbsRecords}"></c:ExposureDetails>
+                        <c:ExposureDetailsForApplicant applicantDetail="{!applicant}" loanApp="{!loan}" exposureDetailsForAppBankRecords="{!applicantExposure}"></c:ExposureDetailsForApplicant>
+                        <c:CibilSummary cibilRecordsDetails="{!cibilRecords}"></c:CibilSummary>
+                        <c:Query queryRecords="{!queries}"></c:Query>
+                        <c:TeleVerificationRemarks tvrRecordDetails="{!tvrRecords}"></c:TeleVerificationRemarks>
+                        <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                        <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!subPage}" subProductValue="{!subProduct}"></c:SanctionCondition>
+                        <c:ApprovalFlow loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}"></c:ApprovalFlow>
+                    </div>
+                </apex:pageBlock>  
+            </div>
+            
+            <div style="display: {!IF(isSectionEnabledForCV_CE_SCV_Product, 'inline', 'none')};">
+                <apex:pageBlock title="CAM Report">
+                    <c:CaseSummaryCommercial loanApp="{!loan}" applicantDetails="{!applicant}" pslDetailsRecord="{!pslDetails}"
+                                             productDetailsValue="{!productDetails}" RODetails="{!RO}" vahaanValue="{!vahaanPdf}" currentUserVar="{!currentUser}"></c:CaseSummaryCommercial>
+                    <c:VerificationDetails productRTMapping="{!productRT}" addressRecords="{!addressList}" cpvDetailsForApp="{!cpvDetails}" loanApp="{!loan}" factorDetails="{!factor}"
+                                           applicantList="{!applicants}" productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" vehiclededupe="{!vehiclededupe}" bureauScore="{!bureauScore}"
+                                           addressListOfCblAddress="{!addressListOfCibilAddress}" isSectionEnabledForCECVSCVCAR="true"></c:VerificationDetails>
+                    <c:CustomerDetails addressRecords="{!addressList}" productDetailsValue="{!productDetails}" fieldInvestigationRecordDetails="{!fiStatusRecords}" collateralDetails="{!collateral}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:CustomerDetails>
+                    <c:FIStatus fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" factorDetails="{!factor}" loanApp="{!loan}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:FIStatus>
+                    <div style="display: {!IF((loan.Collateral_Type__c == 'SCV' && (loan.Product__c=='CV Loading (New)' || loan.Product__c=='CV Passenger (New)' || loan.Product__c=='CV Loading (Used)' || loan.Product__c=='CV Loading (Cash on Wheels)' || loan.Product__c=='CV Passenger (Used)' || loan.Product__c=='CV Passenger (Cash on Wheels)') || loan.Product__c=='Car Taxi (Used)' || loan.Product__c=='Car Taxi (Cash on Wheels)' || loan.Product__c=='Car Taxi (New)'), 'inline', 'none')};">
+                        <c:VehicleDetailsSCV productDetailsValue="{!productDetails}" vahaanValue="{!vahaanPdf}" productRTMapping="{!productRT}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:VehicleDetailsSCV>
+                    </div>
+                    <div style="display: {!IF(loan.Collateral_Type__c != 'SCV' && (loan.Product__c=='CV Loading (New)' || loan.Product__c=='CV Passenger (New)' || loan.Product__c=='CV Loading (Used)' || loan.Product__c=='CV Loading (Cash on Wheels)' || loan.Product__c=='CV Passenger (Used)' || loan.Product__c=='CV Passenger (Cash on Wheels)'), 'inline', 'none')};">
+                        <c:VehicleDetailsCommercial productDetailsValue="{!productDetails}" vahaanValue="{!vahaanPdf}" productRTMapping="{!productRT}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:VehicleDetailsCommercial>
+                    </div>
+                    <div style="display: {!IF(loan.Product__c=='Construction Equipment (New)' || loan.Product__c=='Construction Equipment (Used)' || loan.Product__c=='Construction Equipment (Cash on Wheels)', 'inline', 'none')};">
+                        <c:VehicleDetailsCE productDetailsValue="{!productDetails}" vahaanValue="{!vahaanPdf}" productRTMapping="{!productRT}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:VehicleDetailsCE>
+                    </div>
+                    
+                    <c:CustomerExperience applicantDetails="{!applicant}"></c:CustomerExperience>
+                    <c:AgriLandVerification applicantList="{!applicants}"></c:AgriLandVerification>
+                    <c:FleetDetails fleetRecordsList="{!fleetRecords}"></c:FleetDetails>
+                    <c:FFRDetails fleetRecordsList="{!ffrDetails}"></c:FFRDetails>
+                    <c:CibilSummary cibilRecordsDetails="{!cibilRecords}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:CibilSummary>
+                    <c:BankingDetails cartRecordsDetails="{!cartRecords}" sentFromDetail="{!sentFromVF}" ></c:BankingDetails>
+                    <c:AuditedFinancialAnalysis auditedFinancialResult="{!commercialfinancialDetails}"></c:AuditedFinancialAnalysis>
+                    <c:ITRValidationSummary itrValidationSummary="{!documentedWithOutAuditedFinancial}"></c:ITRValidationSummary>
+                    <c:WorkOrderDetails workOrderVar="{!workOrderDetails}" ></c:WorkOrderDetails>
+                    <c:ExposureDetails loanApp="{!loan}" exposureCBSAccountRecords="{!cbsRecords}"></c:ExposureDetails>
+                    <c:ExposureDetailsForApplicant applicantDetail="{!applicant}" loanApp="{!loan}" exposureDetailsForAppBankRecords="{!applicantExposure}"></c:ExposureDetailsForApplicant>
+                    <c:AccountsFD cbsRecordsDetailsFD="{!cbsRecordsFD}"></c:AccountsFD>
+                    <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                    <c:Query queryRecords="{!queries}" ></c:Query>
+                    <c:TeleVerificationRemarks tvrRecordDetails="{!tvrRecords}"></c:TeleVerificationRemarks>
+                    <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!subPage}" subProductValue="{!subProduct}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:SanctionCondition>
+                    <c:ApprovalFlow loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}" isSectionEnabledForCECVSCVCAR="{!isSectionEnabledForCV_CE_SCV_Product}"></c:ApprovalFlow>
+                </apex:pageBlock>
+            </div>
+                                    
+        </body>
+    </html>
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

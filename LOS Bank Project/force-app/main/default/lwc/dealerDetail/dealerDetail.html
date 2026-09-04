@@ -1,0 +1,422 @@
+<template>
+	<lightning-card title="Dealer Details" icon-name="standard:user">
+		<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+		<template if:true={showLookups}>
+		<div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+
+			<lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name="A">
+				<lightning-accordion-section if:true={dealerOptionsShow} name="A" label="Dealer Details">
+					<lightning-layout multiple-rows class="slds-p-bottom_small">
+						<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+							medium-device-size="12" large-device-size="6">
+
+							<!-- <lightning-input data-name="Sourcing_channel__c" type="text" onchange={handleChange} label="Sourcing channel"
+                        value={loanAppRec.Sourcing_channel__c} name="Sourcing_channel__c" disabled>
+                    </lightning-input> -->
+							<template if:true={dealerOptionsShow}>
+								<lightning-combobox data-name="Dealer_channel__c" name="Dealer_channel__c" label="Dealer Channel"
+									value={dealerChannelVal} required={dealerRequired} class="validate"
+									options={dealerOptions} onchange={handleChange}></lightning-combobox>
+							</template>
+
+							<lightning-combobox data-name="Purchase_State__c" data-sequence="1" name="Purchase_State__c" label="Purchase Region"
+								value={purchaseState} class="validate" required={dealerRequired}
+								options={purchaseOptions} onchange={handleChange}></lightning-combobox>
+
+							<!--  <lightning-combobox data-name="MFG__c" name="MFG" data-sequence="1" label="MFG" value={mfgValue}
+                        placeholder="Select MFG" options={mfgOptions} onchange={handleChange}>
+                    </lightning-combobox> collateral mfg will be sent-->
+
+							<!-- <c-generic-custom-lookup parent-component-name="dealerDetail" selected-record={recordSelected.Purchase_State__c} name="Purchase_State__c"
+                        data-sequence="2" label="Purchase State" record-type-name="Dealer"
+                        class="validateGenericLookupFld" dependent-field-api="MFG__r.Name"
+                        dependent-picklist-value={mfgValue} dependent-field-second-api="Product__c"
+                        dependent-picklist-second-value={productValueType} 
+                        dependent-field-third-api="Dealer_Class__c" dependent-picklist-third-value={dealerClassValue} search-fields="" stepid="0"
+                        fieldapi="Purchase_State__c" object-name="Account" s-object-api-name="Account"
+                        default-record-id="" required onlookupselect={handleChange}
+                        >
+                    </c-generic-custom-lookup> -->
+
+							<!--R2 Added the condition-->
+							<template if:true={showDealerDisabled}>
+							<template if:false={isUsedOrNow}>
+								<c-generic-custom-lookup data-sequence="2" parent-component-name="dealerDetail"
+									is-required={dealerRequired} selected-record={recordSelected.Purchase_City__c}
+									name="Purchase_City__c" label="Purchase City" record-type-name="Dealer"
+									class="validateGenericLookupFld" dependent-field-api="MFG__r.Name"
+									dependent-picklist-value={mfgValue} dependent-field-second-api="Product__c"
+									dependent-picklist-second-value={productValueType}
+									dependent-field-third-api="Purchase_State__c"
+									dependent-picklist-third-value={purchaseState}
+									dependent-field-fourth-api="Dealer_Class__c"
+									dependent-picklist-fourth-value={dealerClassVal} search-fields="" stepid="0"
+									fieldapi="Purchase_City__c" object-name="Account" s-object-api-name="Account"
+									default-record-id="" onlookupselect={handleChange}
+									is-disabled={isDisablePurchCityFld}>
+								</c-generic-custom-lookup>
+								<c-generic-custom-lookup data-sequence="3" parent-component-name="dealerDetail"
+									is-required={dealerRequired} selected-record={recordSelected.Name}
+									name="Account_Name__c" label="Dealer Name" record-type-name="Dealer"
+									class="validateGenericLookupFld" dependent-field-api="MFG__r.Name"
+									dependent-picklist-value={mfgValue} dependent-field-second-api="Product__c"
+									dependent-picklist-second-value={productValueType}
+									dependent-field-third-api="Purchase_City__c"
+									dependent-picklist-third-value={purchaseCity}
+									dependent-field-fourth-api="Dealer_Class__c"
+									dependent-picklist-fourth-value={dealerClassVal} search-fields="" stepid="0"
+									fieldapi="Account_Name__c" object-name="Account" s-object-api-name="Account"
+									default-record-id="" onlookupselect={handleChange}
+									is-disabled={isDisableDealNameFld}>
+								</c-generic-custom-lookup>
+							</template>
+							<template if:true={isUsedOrNow}>
+								<c-generic-custom-lookup data-sequence="2" is-used-or-now={isUsedOrNow}
+									parent-component-name="dealerDetail" is-required={dealerRequired}
+									selected-record={recordSelected.Purchase_City__c} name="Purchase_City__c"
+									label="Purchase City" record-type-name="Dealer" class="validateGenericLookupFld"
+									dependent-field-api="Product__c" dependent-picklist-value={productValueType}
+									dependent-field-second-api="Dealer_Class__c" dependent-picklist-second-value={dealerClassVal}
+									search-fields="" stepid="0" fieldapi="Purchase_City__c" object-name="Account" 
+									dependent-field-third-api="Purchase_State__c"
+									dependent-picklist-third-value={purchaseState}
+									s-object-api-name="Account" default-record-id="" onlookupselect={handleChange} is-disabled={isDisablePurchCityFld}>
+								</c-generic-custom-lookup>
+								<c-generic-custom-lookup data-sequence="3" is-used-or-now={isUsedOrNow}
+									parent-component-name="dealerDetail" is-required={dealerRequired}
+									selected-record={recordSelected.Name} name="Account_Name__c" label="Dealer Name"
+									record-type-name="Dealer" class="validateGenericLookupFld"
+									dependent-field-api="Product__c" dependent-picklist-value={productValueType}
+									dependent-field-second-api="Purchase_City__c"
+									dependent-picklist-second-value={purchaseCity}
+									dependent-field-third-api="Dealer_Class__c"
+									dependent-picklist-third-value={dealerClassVal} search-fields="" stepid="0"
+									fieldapi="Account_Name__c" object-name="Account" s-object-api-name="Account"
+									default-record-id="" onlookupselect={handleChange}
+									is-disabled={isDisableDealNameFld}>
+								</c-generic-custom-lookup>
+							</template>
+
+							<c-generic-custom-lookup data-sequence="4" parent-component-name="dealerDetail" default-record-id={outletId}
+								is-required={outletRequired} data-id="Outlet_Name__c"
+								selected-record={recordSelected.Outlet_Name__c} name="Outlet_Name__c"
+								label="Outlet Name" record-type-name="Outlet" dependent-field-api="Parent.Name"
+								dependent-picklist-value={dealerName} search-fields="" stepid="0"
+								fieldapi="Outlet_Name__c" object-name="Account" s-object-api-name="Account"
+								onlookupselect={handleChange} is-disabled={isDisableOutlNameFld}>
+							</c-generic-custom-lookup>
+							</template>
+							
+							<!--c-generic-custom-lookup selected-record={recordSelected.Outlet_Name__c} name="Outlet_Name__c"
+                        data-sequence="5" label="Outlet Name" record-type-name="Dealer" class="validateGenericLookupFld"
+                        dependent-field-api="MFG__r.Name" dependent-picklist-value={mfgValue}
+                        dependent-field-second-api="Product__c" dependent-picklist-second-value={productValue}
+                        dependent-field-third-api="Purchase_State__c" dependent-picklist-third-value={purchaseState}
+                        dependent-field-fourth-api="Purchase_City__c" dependent-picklist-fourth-value={purchaseCity}
+                        dependent-field-fifth-api="Account_Name__c" dependent-picklist-fifth-value={dealerName}
+                        search-fields="" stepid="0" fieldapi="Outlet_Name__c" object-name="Account"
+                        s-object-api-name="Account" default-record-id="" onlookupselect={handleChange}
+                        is-disabled={isDisableOutlNameFld}
+                    </c-generic-custom-lookup-->
+
+
+							
+							<!-- R2 changed disabled parameter to conditional and added on change || START-->
+							<template if:false={showDealerDisabled}>
+								<lightning-input data-name="Purchase_City__c" type="text" label="Purchase City"
+								value={dealerDetail.Purchase_City__c} name="Purchase_City__c" onchange={handleValChange}></lightning-input>
+								<lightning-input data-name="Account_Name__c" type="text" label="Dealer Name"
+								value={dealerDetail.Account_Name__c} name="Account_Name__c"  onchange={handleValChange}></lightning-input>
+								<lightning-input data-name="Outlet_Name__c" type="text" label="Outlet Name"
+								value={dealerDetail.Outlet_Name__c} name="Outlet_Name__c"  onchange={handleValChange}></lightning-input>
+							</template>
+							<!-- END -->
+							<lightning-input data-name="Account_Code__c" type="text" label="Dealer Code"
+								value={dealerDetail.dealerCode} name="Account_Code__c" disabled={showDealerDisabled} onchange={handleValChange}>
+							</lightning-input>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+							medium-device-size="12" large-device-size="6">
+							<template lwc:if={showDealerDisabled}>
+							    <lightning-input data-name="Category__c" type="text" label="Category" 
+								value={dealerDetail.category} name="Category__c" disabled={showDealerDisabled}>
+								</lightning-input>
+							</template>
+							<template lwc:else>
+								<lightning-combobox data-name="Category__c" name="Category__c" label="Category"
+									value={dealerDetail.category} 
+									options={categoryOptions} onchange={handleValChange}></lightning-combobox>
+							</template>
+							
+
+							<lightning-input data-name="Dealer_Class__c" type="text" label="Dealer Class"
+								value={dealerClassVal} name="Dealer_Class__c" disabled>
+							</lightning-input>
+
+							<template lwc:if={showDealerDisabled}>
+							<lightning-input data-name="Dealer_Type__c" type="text" label="Dealer Type" 
+								value={dealerDetail.dealerType} name="Dealer_Type__c" disabled={showDealerDisabled}>
+							</lightning-input>
+							</template>
+							<template lwc:else>
+								<lightning-combobox data-name="Dealer_Type__c" name="Dealer_Type__c" label="Dealer Type" 
+									value={dealerDetail.dealerType} 
+									options={dealerTypeOptions} onchange={handleValChange}></lightning-combobox>
+							</template>
+
+							<lightning-input data-name="Phone" type="tel" label="Phone Number" onchange={handleValChange}
+								value={dealerDetail.phoneNumber} name="Phone" disabled={showDealerDisabled}>
+							</lightning-input>
+
+							<lightning-input data-name="Email__c" type="email" label="Email" value={dealerDetail.email} onchange={handleValChange}
+								name="Email__c" disabled={showDealerDisabled}>
+							</lightning-input>
+
+							<lightning-input data-name="Bank_Name__c" type="text" label="Bank Name" onchange={handleValChange}
+								value={dealerDetail.bankName} name="Bank_Name__c" disabled={showDealerDisabled}>
+							</lightning-input>
+
+							<lightning-input data-name="Benificiary_Account_Number__c" type="text" onchange={handleValChange}
+								label="Beneficiary Account Number" value={dealerDetail.benificiaryAccountNumber}
+								name="Benificiary_Account_Number__c" disabled={showDealerDisabled}>
+							</lightning-input>
+
+							<lightning-input data-name="IFSC_Code__c" type="text" label="IFSC Code" onchange={handleValChange}
+								value={dealerDetail.ifscCode} name="IFSC_Code__c" disabled={showDealerDisabled}>
+							</lightning-input>
+
+						</lightning-layout-item>
+					</lightning-layout>
+					
+				</lightning-accordion-section>
+			</lightning-accordion>
+		</div>
+		<template if:false={isSourcingAndPayoutSection}>
+			<div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+				<lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name="B">
+					<lightning-accordion-section name="B" label="Sourcing & Payout Detail">
+						<!--div>
+                    <h1 class="slds-m-bottom_medium sectionHeadingCommon" slot="title">
+                        <b>Sourcing & Payout Detail</b>
+                    </h1>
+                </div-->
+						<lightning-layout multiple-rows class="slds-p-bottom_small">
+							<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+								medium-device-size="12" large-device-size="6">
+
+								<!--lightning-combobox data-name="Sourcing_Channel__c" name="Sourcing_Channel__c" label="Source Channel"
+                            value={loanAppRec.Sourcing_channel__c} placeholder="Select" options={sourceChannelOptions}
+                            onchange={handleValueChange} disabled>
+                        </lightning-combobox-->
+
+								<lightning-input data-name="Sourcing_Channel__c" type="text" label="Sourcing Channel"
+									value={loanAppRec.Sourcing_channel__c} name="Sourcing_Channel__c" disabled>
+								</lightning-input>
+
+								<lightning-input data-name="Source_Name__c" type="text" label="Source Name"
+									value={loanAppRec.Source_Name__c} name="Source_Name__c" onchange={handleValueChange}
+									disabled>
+								</lightning-input>
+
+								<template if:false={isTwoWheeler}>
+									<template if:true={isSourceChannelPayout}>
+										<lightning-combobox data-name="Source_Channel_Payout__c"
+											name="Source_Channel_Payout__c" label="Source Channel Payout"
+											value={paymentObj.sourceChannelPayout} placeholder="Select"
+											options={commonOptions} onchange={handleValueChange} class="validate"
+											required disabled={isDisableInputFld}>
+										</lightning-combobox>
+
+										<lightning-combobox data-name="Source_Channel_Payout_Type__c"
+											name="Source_Channel_Payout_Type__c" label="Source Channel Payout Type"
+											value={paymentObj.sourceChannelPayoutType} placeholder="Select"
+											options={payoutTypeOptions} onchange={handleValueChange} class="validate"
+											required disabled={isDisableInputFld}>
+										</lightning-combobox>
+
+										<lightning-input data-name="Source_Payout_amt__c" type="text"
+											label="Source Payout % & amt" value={paymentObj.sourcePayoutAmt}
+											name="Source_Payout_amt__c" onchange={handleValueChange} class="validate"
+											required disabled={disableSourceAmount} onblur={handleOnBlur}
+											>
+										</lightning-input>
+									</template>
+								</template>
+
+								<template if:true={isTwoWheeler}>
+									<lightning-combobox data-name="Source_Channel_Payout__c"
+										name="Source_Channel_Payout__c" label="Source Channel Payout"
+										value={paymentObj.sourceChannelPayout} placeholder="Select"
+										options={commonOptions} onchange={handleValueChange} class="validate" required
+										disabled={isDisableInputFld}>
+									</lightning-combobox>
+
+									<lightning-combobox data-name="Source_Channel_Payout_Type__c"
+										name="Source_Channel_Payout_Type__c" label="Source Channel Payout Type"
+										value={paymentObj.sourceChannelPayoutType} placeholder="Select"
+										options={payoutTypeOptions} onchange={handleValueChange} class="validate"
+										required disabled={isDisableInputFld}>
+									</lightning-combobox>
+
+
+									<lightning-input data-name="Source_Payout_amt__c" type="text"
+										label="Source Payout % & amt" value={paymentObj.sourcePayoutAmt}
+										name="Source_Payout_amt__c" onchange={handleValueChange} class="validate"
+										required disabled={disableSourceAmount} onblur={handleOnBlur}>
+									</lightning-input>
+
+								</template>
+
+								<template if:false={isTwoWheeler}>
+									<template if:true={isDealerPayout}>
+										<lightning-combobox data-name="Dealer_Payout__c" name="Dealer_Payout__c"
+											label="Dealer Payout" value={paymentObj.dealerPayout} placeholder="Select"
+											options={commonOptions} onchange={handleValueChange} class="validate"
+											required disabled={isDisableInputFld}>
+										</lightning-combobox>
+
+										<lightning-combobox data-name="Dealer_Payout_Type__c"
+											name="Dealer_Payout_Type__c" label="Dealer Payout Type"
+											value={paymentObj.dealerPayoutType} placeholder="Select"
+											options={payoutTypeOptions} onchange={handleValueChange} class="validate"
+											required disabled={isDisableInputFld}>
+										</lightning-combobox>
+
+											<lightning-input data-name="Dealer_Payout_amt__c" type="text"
+												label="Dealer Payout % & amt" value={paymentObj.dealerPayoutAmt}
+												name="Dealer_Payout_amt__c" onchange={handleValueChange} onblur={handleOnBlur}
+												class="validate" required disabled={disableDealerAmount}>
+											</lightning-input>
+									</template>
+								</template>
+
+								<!--   <template if:true={isTwoWheeler}>
+                            <lightning-combobox name="Dealer_Payout__c" label="Dealer Payout"
+                                value={paymentObj.dealerPayout} placeholder="Select" options={commonOptions}
+                                onchange={handleValueChange} class="validate" required disabled={isDisableInputFld}>
+                            </lightning-combobox> 
+                        </template>   -->
+
+							</lightning-layout-item>
+							<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+								medium-device-size="12" large-device-size="6">
+
+								<template if:true={isTwoWheeler}>
+									<lightning-combobox data-name="Dealer_Payout_Type__c" name="Dealer_Payout_Type__c"
+										label="Dealer Payout Type" value={paymentObj.dealerPayoutType}
+										placeholder="Select" options={payoutTypeOptions} onchange={handleValueChange}
+										class="validate" required disabled={isDisableInputFld}>
+									</lightning-combobox>
+										<lightning-input data-name="Dealer_Payout_amt__c" type="text"
+											label="Dealer Payout % & amt" value={paymentObj.dealerPayoutAmt}  onblur={handleOnBlur}
+											name="Dealer_Payout_amt__c" onchange={handleValueChange} class="validate"
+											required disabled={disableDealerAmount}>
+										</lightning-input>
+								</template>
+
+								<lightning-combobox data-name="DSE_Payout__c" name="DSE_Payout__c" label="DSE Payout"
+									value={paymentObj.dsePayout} placeholder="Select" options={commonOptions}
+									onchange={handleValueChange} class="validate" required disabled={isDisableInputFld}>
+								</lightning-combobox>
+
+								<template if:true={isDseNamePan}>
+									<lightning-combobox data-name="DSE__c" name="DSE__c" label="DSE Name_PAN"
+										value={paymentObj.dse} placeholder="Select" options={dseNamePanOptions}
+										onchange={handleValueChange} class="validate" required
+										disabled={isDisableInputFld}>
+									</lightning-combobox>
+								</template>
+
+								<lightning-combobox data-name="DSM_Payout__c" name="DSM_Payout__c" label="DSM Payout"
+									value={paymentObj.dsmPayout} placeholder="Select" options={commonOptions}
+									onchange={handleValueChange} class="validate" required disabled={isDisableInputFld}>
+								</lightning-combobox>
+
+								<template if:true={isDsmNamePan}>
+									<lightning-combobox data-name="DSM__c" name="DSM__c" label="DSM Name_PAN"
+										value={paymentObj.dsm} placeholder="Select" options={dsmNamePanOptions}
+										onchange={handleValueChange} class="validate" required
+										disabled={isDisableInputFld}>
+									</lightning-combobox>
+								</template>
+
+							</lightning-layout-item>
+						</lightning-layout>
+					</lightning-accordion-section>
+				</lightning-accordion>
+			</div>
+		</template>
+		<div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+			<lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name="C">
+				<lightning-accordion-section name="C" label="Trigger/Limits">
+					<!--div>
+            <h1 class="slds-m-bottom_medium slds-m-top_medium sectionHeadingCommon" slot="title">
+                <b>Trigger/Limits</b>
+            </h1>
+        </div-->
+					<div>
+						<lightning-layout multiple-rows class="slds-p-bottom_small">
+							<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+								medium-device-size="12" large-device-size="6">
+								<template if:true={isRCLimit}>
+									<template if:true={isFourWheeler}>
+										<template if:true={istriigerSection}>
+											<lightning-input data-name="RC_Limit_Count__c" type="text"
+												label="RC Limit (Count)" value={dealerDetail.rcLimitCount}
+												name="RC_Limit_Count__c" disabled>
+											</lightning-input>
+
+											<lightning-input data-name="RC_Limit_Used_Count__c" type="text"
+												label="RC Limit Used (Count)" value={dealerDetail.rcLimitUsedCount}
+												name="RC_Limit_Used_Count__c" disabled>
+											</lightning-input>
+
+											<lightning-input data-name="Balance_RC_Limit_Count__c" type="text"
+												label="Balance RC Limit (Count)" value={dealerDetail.balRcLimitCount}
+												name="Balance_RC_Limit_Count__c" disabled>
+											</lightning-input>
+										</template>
+									</template>
+								</template>
+								<lightning-input data-name="Collection__c" type="text" label="Collection %"
+									value={dealerDetail.collectionPercent} name="Collection__c" disabled>
+								</lightning-input>
+
+							</lightning-layout-item>
+
+							<lightning-layout-item size="12" small-device-size="12" padding="around-small"
+								medium-device-size="12" large-device-size="6">
+
+								<template if:true={isFourWheeler}>
+									<template if:true={istriigerSection}>
+										<template if:true={isRCLimit}>
+											<lightning-input data-name="RC_Limit_Amount__c" type="text"
+												label="RC Limit (Amount)" value={dealerDetail.rcLimitAmount}
+												name="RC_Limit_Amount__c" disabled>
+											</lightning-input>
+
+											<lightning-input data-name="RC_Limit_Used_Amount__c" type="text"
+												label="RC Limit Used (Amount)" value={dealerDetail.rcLimitUsedAmount}
+												name="RC_Limit_Used_Amount__c" disabled>
+											</lightning-input>
+
+											<lightning-input data-name="Balance_RC_Limit_Amount__c" type="text"
+												label="Balance RC Limit (Amount)" value={dealerDetail.balRcLimitAmt}
+												name="Balance_RC_Limit_Amount__c" disabled>
+											</lightning-input>
+										</template>
+									</template>
+								</template>
+								<lightning-input data-name="PDD_RC__c" type="text" label="PDD RC %"
+									value={dealerDetail.pddRcPercent} name="PDD_RC__c" disabled>
+								</lightning-input>
+							</lightning-layout-item>
+						</lightning-layout>
+					</div>
+				</lightning-accordion-section>
+			</lightning-accordion>
+		</div>
+	</template>
+
+	</lightning-card>
+</template>

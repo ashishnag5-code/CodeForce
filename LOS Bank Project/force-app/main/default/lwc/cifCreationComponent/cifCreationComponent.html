@@ -1,0 +1,38 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <!--<article class="slds-card slds-card_boundary">-->
+        <!--<div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a class="slds-card__header-link slds-truncate" title="CIF Creation">
+                            <span>CIF Creation</span>
+                        </a>
+                    </h2>
+                </div>
+
+            </header>
+        </div>-->
+
+        <lightning-accordion active-section-name='CIFCreation' allow-multiple-sections-open>
+            <lightning-accordion-section name="CIFCreation" label="CIF Creation" class="accordClass">
+                <div class="slds-card__body slds-card__body_inner">
+                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <template for:each={applicants} for:item="applicant">
+                            <li class="slds-size_1-of-1 slds-large-size_3-of-6 slds-p-horizontal_medium slds-p-bottom_small"
+                                key={applicant.Id}>
+                                <c-cif-card-view ins-check={insCheck} user-type={userType} disable-exposure-button={disableExposureButton} onexposurefetched={handleExposureEvent} oncifcreated={handleCIFCreationEvent} applicant-record={applicant}></c-cif-card-view>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </lightning-accordion-section>
+        </lightning-accordion>
+    <!--</article>-->
+
+
+</template>

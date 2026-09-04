@@ -1,0 +1,39 @@
+.THIS.main_content{
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.THIS .scores {
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.THIS .header_content {
+    font-size: 15px;
+    font-weight: bold;
+
+    padding-bottom: 13px;
+}
+
+.THIS .content {
+    padding: 10px;
+   
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.THIS .check_name{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.THIS .credit_score{
+	font-size:16px;
+	font-weight:bold;
+	color:green;    
+}
+
+.THIS .slds-icon-action-check {
+    background-color: #2e7711;
+}

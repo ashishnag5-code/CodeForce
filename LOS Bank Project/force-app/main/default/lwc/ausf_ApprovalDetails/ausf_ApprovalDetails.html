@@ -1,0 +1,59 @@
+<template>
+    <article class="slds-card slds-card_boundary">
+        <div class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=standard:user size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Approvals</span>
+                        <!--<a href="#" class="slds-card__header-link slds-truncate" title="Address">
+                                    <span>Addresses ({recordCount})</span>
+                                </a>-->
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                </div>
+            </header>
+        </div>
+
+
+        <div class="slds-card__body slds-card__body_inner">
+            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                <li class="slds-size_1-of-1 slds-medium-size_3-of-3 slds-p-horizontal_small slds-p-bottom_small"
+                     data-record-name="ViewMoreInformation">
+                     <article class="slds-box">
+                    
+                        <div class="slds-card__body slds-card__body_inner">
+                            <lightning-layout horizontal-align="space" multiple-rows>
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="Credit_Deviation">
+                                        <label class="slds-form-element__label"><strong>Credit Deviations Name of Authority</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {approvalWrapper.creditApproverLevel} &nbsp; {approvalWrapper.creditApproverName}
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="Pricing_Deviation">
+                                        <label class="slds-form-element__label"><strong>Pricing & Charges deviation name of Authority</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {approvalWrapper.pricingApproverLevel} &nbsp; {approvalWrapper.pricingApproverName}
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            
+    
+                            
+                        </div>
+                    </article>
+                </li>
+                    
+            </ul>
+            <!--End -->
+        </div>
+    </article>
+    
+</template>

@@ -1,0 +1,62 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+    <template if:true={boolNorecords}>
+        No results Found
+    </template>
+    <template if:false={viewMore}>
+        <template if:true={applicants}>
+        <template for:each={applicants} for:item="objapplicant">
+            <lightning-layout key={objapplicant.strApplicationNumber}>
+                <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                    <lightning-card onclick={viewMoreHandler} data-id={objapplicant.strApplicationNumber} data-card="full">
+                        <h1 slot="title">
+                            <lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+                            <a class="slds-var-p-left_x-small">{objapplicant.strApplicationNumber}</a>
+                        </h1>
+                        
+                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Product</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objapplicant.strProductName}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Customer Name</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objapplicant.strCustomerName}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Customer Type</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objapplicant.strCustomerType}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Customer Mobile Number</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objapplicant.strCustomerMobileNumber}
+                            </div>
+                        </div>
+                    </lightning-card>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-var-p-bottom_x-small" key={objapplicant.strApplicationNumber}></div>
+        </template>
+        </template>
+        <div class="slds-var-m-vertical_medium">
+            <c-lead-dedupe-pagination records={totalApplicants} record-size="6" onpaginate={updateApplicantsHandler}></c-lead-dedupe-pagination>
+        </div>
+    </template>
+    <template if:true={viewMore}>
+        <c-lead-Dedupe-C-R-M-Int_details onviewall={viewLessHandler} applicant-record={applicantRecord} applicant-input={applicantInput} spinner-image={spinnerImage}></c-lead-Dedupe-C-R-M-Int_details>
+    </template>
+</template>

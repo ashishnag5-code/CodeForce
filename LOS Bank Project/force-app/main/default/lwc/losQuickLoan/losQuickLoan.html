@@ -1,0 +1,191 @@
+<template>
+    <lightning-card title="Create Quick Loan Application" icon-name="standard:lead">
+
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small" flexibility="auto">
+
+
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Product</label>
+                <lightning-combobox label="Product" placeholder="Select Product" value={productOptionValue}
+                    options={productCategory} name="Product" class="validate" variant="label-hidden"
+                    onchange={handleProductChange} read-only={isReadOnly}>
+                </lightning-combobox>
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Loan Type</label>
+                <lightning-combobox label="Sub Product" placeholder="Select Sub Product" value={subProductOptionValue}
+                    options={productSubCategory} name="SubProduct" class="validate" variant="label-hidden"
+                    onchange={handleSubProductChange} read-only={isReadOnly}>
+                </lightning-combobox>
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Sourcing channel</label>
+                <lightning-combobox name="Sourcing_channel__c" label="Sourcing channel"
+                    value={sourcingChannelOptionsValue} class="validate" variant="label-hidden"
+                    placeholder="Select Sourcing channel" options={sourcingChannelPicklistValues}
+                    onchange={handleSourcingchannelChange} read-only={isSourcingChannelReadOnly} 
+                    disabled={isSourceChannelNameReadOnly}></lightning-combobox>
+
+                <!-- R2-22 -->
+                <template if:true={isCollateralTypeApplicable}>
+                    <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Collateral Type
+                    </label>
+                    <lightning-combobox name="Collateral_Type__c" label="Collateral Type"
+                        value={loanApplicationRecord.Collateral_Type__c}
+                        class="validate" variant="label-hidden" options={collateralTypes}
+                        onchange={handleValueChange} read-only={isReadOnly}
+                    ></lightning-combobox>
+                </template>
+
+                <!-- R2-12 - Vehicle Usage and Collateral Type not applicable for Other products -->
+                <template lwc:if={isVehicleUsageApplicable}>
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Vehicle Use</label>
+                    <lightning-combobox name="Vehicle_use__c" label="Vehicle Use" value={vehicleUseOptionsValue} data-name="Vehicle_use__c"
+                        class="validate" variant="label-hidden" placeholder="Select Vehicle Use" disabled={isDisableVehicleUse}
+                        options={vehicleUsePicklistValues} onchange={handleVehicleUseChange}></lightning-combobox>
+                </template>
+
+                <template if:true={isShowcustomLookups}>
+                    <div style="padding-top: 5px;">
+                        <c-generic-custom-lookup data-id="Purchase_City__c" parent-component-name="losQuickLoan" selected-record={recordSelected.Purchase_City__c} name="Purchase_City__c" 
+                            label="City of Source" record-type-name="Dealer"
+                            dependent-field-api="Dealer_Class__c"
+                            dependent-picklist-value={dealerClassValue}
+                            dependent-field-second-api="Product__c" dependent-picklist-second-value={productValueType}
+                            dependent-field-third-api="Vehicle_use__c"
+                            dependent-picklist-third-value={vehicleUseOptionsValue}
+                            search-fields="" stepid="0" fieldapi="Purchase_City__c" object-name="Dealer Master"
+                            s-object-api-name="Account"  required="" is-required={isSourcingRequired}
+                            onlookupselect={handleLookupSelect}>
+                        </c-generic-custom-lookup>
+                    </div>
+                    <!-- // R2-1738 - Populating sourcing channel name should auto populate City of Source -->
+                    <template if:true={_isShowSourceNameLookup}>
+
+                        <div style="padding-top: 5px;">
+                            <c-generic-custom-lookup data-id="Source_Name__c" parent-component-name="losQuickLoan" selected-record={recordSelected.Source_Name__c} name="Source_Name__c" label="Sourcing channel Name" record-type-name="Dealer"
+                                dependent-field-api="Dealer_Class__c"
+                                dependent-picklist-value={dealerClassValue}
+                                dependent-field-second-api="Product__c" dependent-picklist-second-value={productValueType}
+                                dependent-field-third-api="Vehicle_use__c"
+                                dependent-picklist-third-value={vehicleUseOptionsValue}
+                                dependent-field-fourth-api="Purchase_City__c"
+                                dependent-picklist-fourth-value={purchasingCityVal} search-fields="" stepid="0"
+                                fieldapi="Source_Name__c" object-name="Dealer Master"
+                                s-object-api-name="Account"  required="" is-required={isSourcingRequired}
+                                default-record-id ={sourceNameId}
+                                onlookupselect={handleLookupSelect}>
+                            </c-generic-custom-lookup>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- R2-30 - Dealer Source Code  -->
+                <div if:true={isShowcustomLookups}>
+                    <label class="slds-form-element__label">Source Code</label>
+                    <lightning-input
+                        lwc:ref="dealerSourceCode"
+                        variant="label-hidden"
+                        label="Source Code"
+                        name="Source_Code__c"
+                        onchange={handleSourceCodeChange}
+                        value={dealerSourceCode}
+                        disabled
+                    ></lightning-input>
+                </div>
+
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-p-horizontal_small" flexibility="auto">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Customer Type</label>
+                <lightning-combobox name="Customer_Type__c" label="CustomerType" value={customerTypeOptionsValue}
+                    class="validate" variant="label-hidden" placeholder="Select Customer Type"
+                    options={customerTypePicklistValues} onchange={handleCustomerTypeChange} read-only={isCustomerReadOnly}>
+                </lightning-combobox>
+
+                <template if:true={branchLocation}>
+                    <label class="slds-form-element__label">Branch</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Branch" name="Branch__c"
+                        value={loanApplicationRecord.Branch__c} disabled="true">
+                    </lightning-input>
+                </template>
+
+
+
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Loan Amount</label>
+                <lightning-input type="number" max-length="9" variant="label-hidden" onchange={handleAmountChange} class="validate"
+                    label="Loan Amount" value={loanAmount} name="Loan_Amount__c">
+                </lightning-input>
+
+
+
+              <!--  <label class="slds-form-element__label">Loan Amount(In Words)</label>
+                <lightning-input type="text" disabled="true" variant="label-hidden" class=""
+                    label="Loan Amount(In Words)" value={loanAmountInWords} name="Loan_Amount_In_Words__c">
+                </lightning-input>  -->
+
+                <div class="slds-is-relative ">
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Mobile</label>
+                    <div class="buttonIn">
+                        <lightning-input type="tel" data-id="mobileinput" name="Mobile__c"
+                            class="validate input mobilebutton" value={mobileNumber} variant="label-hidden"
+                            onchange={handleChangePhoneNumber} max-length="12"
+                            disabled={isVerifiedNumber}>
+                        </lightning-input>
+
+                        <template if:true={boolSendOtp}>
+                            <lightning-button variant="base" label="Send Confirmation Code" disabled={boolCheckMobileNumber}
+                                title="Looks like a link" onclick={handleSendOTP} class="button"></lightning-button>
+                        </template>
+                        <template if:true={boolResendOtp}>
+                            <lightning-button variant="base" label="Resend Confirmation Code" title="Looks like a link"
+                                onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button">
+                            </lightning-button>
+                        </template>
+                        <template if:true={isVerified}>
+                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                title="Mobile"></lightning-icon>
+                        </template>
+                    </div>
+
+                </div>
+                <div class="slds-m-top_medium">
+                    <template if:true={isEnterOtp}>
+                        <div class="slds-is-relative">
+
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Enter Confirmation Code</label>
+                            <div class="buttonIn">
+                                <lightning-input type="text" max-length="4" pattern="[0-9]{4}" class="validate checkValidity"
+                                    placeholder="Enter Confirmation Code here" value={enterOTPValue} variant="label-hidden"
+                                    onchange={handleChangeOtp} message-when-pattern-mismatch="Please enter a valid Confirmation Code."
+                                    label="Enter Confirmation Code">
+                                </lightning-input>
+                                <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                                    onclick={handleVerify} disabled={boolVerify} class="button"></lightning-button>
+
+                            </div>
+                        </div>
+                        <div class="slds-align_absolute-center slds-m-top_small">
+                            <template if:true={boolRequestOtp}>
+                                Request Confirmation Code in&nbsp;<b>{increse1Second}</b>s
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </lightning-layout-item>
+
+        </lightning-layout>
+    </lightning-card>
+</template>

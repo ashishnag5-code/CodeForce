@@ -1,0 +1,47 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="queryRecords" description="This is the value for the component."
+    type="Query__c[]" required="true" assignTo="{!queries}"/>
+
+    <apex:variable value="{!0}" var="rowNum"/>
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Query">
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadDataStyle} width:3% !important">Sr. No</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">Query Type</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Query Description</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Raised by</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Raised Date + Time</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Assigned To</th>
+                    <th style="{!tableHeadDataStyle} width:10% !important">Response Date + Time</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">Status</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Remarks</th>
+                </tr>
+                <apex:repeat value="{!queries}" var="query">
+                    <tr style="{!tableRowStyle}">
+                        <td style="{!tableDataStyle}">
+                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                            {!rowNum}
+                        </td>
+                        <td style="{!tableDataStyle}">{!query.Type__c}</td>
+                        <td style="{!tableDataStyle}">{!query.Resolution_Comments__c}</td>
+                        <td style="{!tableDataStyle}">{!query.CreatedBy.Name}</td>
+                        <td style="{!tableDataStyle}">
+                            <!--{!query.CreatedDate}-->
+                            <apex:outputField value="{!query.CreatedDate}"></apex:outputField>
+                        </td>
+                        <td style="{!tableDataStyle}">{!query.Assigned_To__r.Name}</td>
+                        <td style="{!tableDataStyle}">
+                            <span style="display:{!IF(query.Remarks__c!=null,'inline','none')}">
+                                <apex:outputField value="{!query.LastModifiedDate}"/>
+                            </span>
+                        </td>
+                        <td style="{!tableDataStyle}">{!query.Status__c}</td>
+                        <td style="{!tableDataStyle}">{!query.Remarks__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div>        
+</apex:component>

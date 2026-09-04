@@ -1,0 +1,9 @@
+<apex:component access="global" controller="AusfLoanApprovalEmailTemplate">
+    <apex:attribute name="AccId" type="Id" description="Id of the account" assignTo="{!accountId}"/>
+    <apex:attribute name="ApproverName" type="String" description="Id of the account"/>
+    <apex:attribute name="CustomerName" type="String" description="Id of the account"/>
+    <apex:attribute name="ApproverLevel" type="String" description="Id of the account"/>
+    <p>
+        Loan Application for customer {!CustomerName} {!Vehicle.manufacturer} submitted by credit authority {!ApproverLevel},{!ApproverName} and has been moved to {!ApproverLevel} {!ApproverName}.
+    </p>
+</apex:component>

@@ -1,0 +1,124 @@
+<apex:component controller="CAMReportChildComponentsController">
+    
+    <apex:attribute name="applicantList" description="This is the value for the component."
+                    type="Applicant__c[]" required="true" assignTo="{!applicants}"/>
+    <apex:attribute name="financialRecord" description="This is the value for the component."
+    type="Applicant_Financials_Details__c[]" required="true" assignTo="{!financial}"/>
+    <apex:attribute name="loanApp" description="This is the value for the component."
+                    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" columns="1" title="Income Profile">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <table style="{!tableStyle}">
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadDataStyle}">Particulars</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <th style="{!tableHeadDataStyle}">{!financialDetail.Applicant__r.RecordType.Name}</th>
+                            </apex:repeat>
+                            <th style="{!tableHeadDataStyle} display:{!IF(applicants.size==1,'table-head','none')}">Co Applicant</th>
+                            <th style="{!tableHeadDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-head','none')}">Guarantor</th>
+                        </tr>
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Employment Type</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">{!financialDetail.Type_Of_Employment__c}</td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr>
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Working Org. Name</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">{!financialDetail.Company_Name__c}</td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr> 
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Documented Income (Monthly)</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <!--<td style="{!tableDataStyle}">{!financialDetail.Average_Monthly_Salary__c}</td>-->
+                                <td style="{!tableDataStyle}">
+                                    {!IF(financialDetail.Monthly_Income__c!=null,ROUND(financialDetail.Monthly_Income__c,0),'')}
+                                </td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr>
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Assessed Income (Monthly)</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <!--<td style="{!tableDataStyle}">{!financialDetail.Monthly_Net_Profit__c}</td>-->
+                                <td style="{!tableDataStyle}">
+                                    {!IF(financialDetail.Other_Income__c!=null,ROUND(financialDetail.Other_Income__c,0),'')}
+                                </td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr> 
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Total Income (Monthly)</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">
+                                    <!--{!financialDetail.Monthly_Income__c}-->
+                                    {!ROUND(financialDetail.Monthly_Income__c+financialDetail.Other_Income__c,0)}
+                                    <!--{!IF(financialDetail.Monthly_Total_Income__c!=null,ROUND(financialDetail.Monthly_Total_Income__c,0),'')}-->
+                                </td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr> 
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Existing EMI Liability</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">
+                                    <!--{!financialDetail.Monthly_Obligation__c}-->
+                                    {!IF(financialDetail.Monthly_Obligation__c!=null,ROUND(financialDetail.Monthly_Obligation__c,0),'')}
+                                </td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr>   
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Proposed EMI</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">
+                                    {!IF(loan.EMI__c!=null,ROUND(loan.EMI__c,0),'')}
+                                    <!--{!loan.EMI__c}--></td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr>  
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Total EMI Liability</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">{!financialDetail.Applicant__r.Loan__r.Consolidation_Obligation__c}</td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr> 
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">FOIR</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">{!ROUND(financialDetail.Applicant__r.Loan__r.FOIR_Percentage__c,2)} %</td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr> 
+                        <tr style="{!tableRowStyle}">
+                            <th style="{!tableHeadStyle}">Income Considered</th>
+                            <apex:repeat value="{!financial}" var="financialDetail">
+                                <td style="{!tableDataStyle}">{!financialDetail.Consider_Income_for_Eligibility__c}</td>
+                            </apex:repeat>
+                            <td style="{!tableDataStyle}  display:{!IF(applicants.size==1,'table-cell','none')}"></td>
+                            <td style="{!tableDataStyle} display:{!IF(applicants.size==2 || applicants.size==1,'table-cell','none')}"></td>
+                        </tr>    
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+    </div>         
+</apex:component>

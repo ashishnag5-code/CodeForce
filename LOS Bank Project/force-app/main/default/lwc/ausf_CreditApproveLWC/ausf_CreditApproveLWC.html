@@ -1,0 +1,224 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isSending}></c-custom-spinner>
+    <template if:true={isLargeDevice}>
+        <div class="slds-p-around_small" style="text-align :center;">
+            <div class="slds-grid slds-gutters slds-grid_align-end">
+                
+                <template if:true={renderButtons.lsChargeApprovals}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span onclick={openApprovalModal} data-id="LSChargeApproval" title="LS Charge Approval">
+                            <lightning-icon icon-name="utility:currency" size="medium"></lightning-icon>
+                            <!-- <lightning-avatar src={chargeApprovalIcon} size="large" if:true={chargeApprovalIcon}></lightning-avatar> -->
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            LS Charge Approval
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.OEMApproval}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span onclick={openApprovalModal} data-id="OEMApproval" title="Payment Favouring Approval">
+                            <lightning-icon icon-name="utility:currency" size="medium"></lightning-icon>
+                            <!-- <lightning-avatar src={chargeApprovalIcon} size="large" if:true={chargeApprovalIcon}></lightning-avatar> -->
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Payment Favouring Approval
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateSanction}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="Sanction Letter"></lightning-avatar>
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Sanction Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateDO}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="Delivery Order"></lightning-avatar>
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            DO Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.cancelDOButton}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="DO Cancelled letter"></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            DO Cancel Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.cancelSanctionButton}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="Sanction Cancelled letter"></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Sanction Cancel Approvals
+                        </span>
+                    </div>
+                </template>
+                
+            </div>
+        </div>
+
+    </template>
+
+    <template if:false={isLargeDevice}>
+        <div class="slds-p-around_small" style="text-align :center;">
+            <div class="slds-grid slds-gutters">
+                
+                <template if:true={renderButtons.lsChargeApprovals}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span onclick={openApprovalModal} data-id="LSChargeApproval" title="LS Charge Approval">
+                            <lightning-icon icon-name="utility:currency" size="medium"></lightning-icon>
+                            <!-- <lightning-avatar src={chargeApprovalIcon} size="large" if:true={chargeApprovalIcon}></lightning-avatar> -->
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            LS Charge Approval
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.OEMApproval}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span onclick={openApprovalModal} data-id="OEMApproval" title="Payment Favouring Approval">
+                            <lightning-icon icon-name="utility:currency" size="medium"></lightning-icon>
+                            <!-- <lightning-avatar src={chargeApprovalIcon} size="large" if:true={chargeApprovalIcon}></lightning-avatar> -->
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Payment Favouring Approval
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateSanction}>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                            onclick={openApprovalModal} data-id="Sanction Letter"></lightning-avatar>
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Sanction Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateDO}>
+                    <div class="slds-col slds-size_1-of-12">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="Delivery Order"></lightning-avatar>
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            DO Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.cancelDOButton}>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="DO Cancelled letter"></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            DO Cancel Approvals
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.cancelSanctionButton}>
+                    <div class="slds-col slds-size_1-of-4">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={openApprovalModal} data-id="Sanction Cancelled letter"></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Sanction Cancel Approvals
+                        </span>
+                    </div>
+                </template>
+                
+            </div>
+        </div>
+
+    </template>
+
+    <template if:true={renderApprovalModal}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{modelHeader}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" style="text-align: center;">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <lightning-icon icon-name="action:new_note" alternative-text="Approve" title="Approve" onclick={handleApproveClick}></lightning-icon>
+                            </span><br />
+                            <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                                Approve
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3">
+                            <span>
+                                <lightning-icon icon-name="action:delete" alternative-text="Reject" title="Reject" onclick={handleRejectClick}></lightning-icon>
+                            </span><br />
+                            <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                                Reject
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3" if:true={allowDocumentPreview}>
+                            <span>
+                                <lightning-icon icon-name="action:preview" alternative-text="Preview Letter" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                            </span><br />
+                            <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                                Preview Letter
+                            </span>
+                        </div>
+                    </div>
+
+                    <div style="padding-top:4%;">
+                        <lightning-textarea data-id="remarks"
+                                            name="remarks" label="Remarks" disabled={disabledValue} variant="label-hidden"
+                                            value={selectedApprovalType.remarks} onchange={handleRemarkChange} >
+                        </lightning-textarea>
+                    </div>
+                    
+
+                </div>
+                
+                
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={closeModal} title="Cancel">Cancel</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+    
+</template>

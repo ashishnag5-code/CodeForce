@@ -1,0 +1,1807 @@
+<apex:page applyHtmlTag="false" renderAs="pdf"  showHeader="false" standardstylesheets="true" applyBodyTag="false"
+    controller="SystemGeneratedEsignDocumentsController">
+    <apex:variable value="{!1}" var="rowNumForSOC"/>
+    <apex:variable value="{!1}" var="rowNumForInterest"/>
+
+    <html>
+    <head>
+        <style type="text/CSS">
+            @page {
+                    margin: 0.1in;
+                	size: 12in 12in;
+                    margin-bottom: 70px;
+                    margin-top: 50px;
+                }
+        </style>
+            <!--
+            .tabledata{
+                    width:30% !important;
+                    border: 1px solid white !important;
+                }
+                .tabledataColon{
+                    width:5% !important;
+                    border: 1px solid white !important;
+                }
+                .tabledataValue{ 
+                    width:65% !important;
+                    border: 1px solid white !important;
+                }
+                table {
+                    page-break-inside: avoid;
+                }
+            </style>-->
+    </head>
+
+    <body>
+        <apex:variable value="{!0}" var="rowNum" />
+
+        <div style="text-align:center;font-weight:bold;font-size:16px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">AU SMALL FINANCE
+                BANK
+                LIMITED ("AUSFB") - Sanction Letter</span>
+        </div>
+        <br />
+        <br />
+        <table style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <tr>
+                <td class="tabledata">Ref No</td>
+                <td class="tabledataColon">:&nbsp;</td>
+                <td class="tabledataValue"><span
+                        style="display:inline-block; border-bottom:0.05em solid black; padding: 0.5px">{!loan.Application_Id__c}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabledata">Date</td>
+                <td class="tabledataColon">:&nbsp;</td>
+                <td class="tabledata"><span
+                        style="display:inline-block; border-bottom:0.05em solid black; padding: 0.5px">{!todaysDate}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabledata">Kind Attn: </td>
+                <td class="tabledataColon">:&nbsp;</td>
+                <td class="tabledata"><span
+                        style="display:inline-block; border-bottom:0.05em solid black; padding: 0.5px">{!applicant.Title__c} {!applicant.First_Name__c}
+                        {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</span></td>
+            </tr>
+        </table>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            Subject : Sanction of
+            <span
+                style="display:inline-block; border-bottom:0.05em solid black; padding: 0.5px">{!productRT.MasterLabel}</span>
+            loan from AU Small Finance Bank Limited for an amount of Rs.
+            <span
+                style="display:inline-block; border-bottom:0.05em solid black; padding: 0.5px">
+                    <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>
+                </span>
+            /- only.
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            Dear Sir/Madam,
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            We thank you for choosing AU SMALL FINANCE BANK LIMITED ("<b>AUSFB</b>" <i>which expression shall
+                include
+                our successors, transferers, novatees and assigns</i>) as your financial partner and look forward to
+            an
+            enduring relationship with you.
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            With reference to your loan application (“Application”), we are pleased to extend to you the captioned
+            loan
+            for an amount detailed below subject to terms and conditions set out in this letter (“<b>Sanction
+                Letter</b>”) and execution of the loan documents between you, i.e. the “<b>Borrower</b>” and AUSFB
+            and
+            submission of other required documents detailed below.
+        </div>
+        <br />
+        <br />
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">TERMS OF
+                SANCTION/KEY
+                FACT STATEMENT (KFS)</span>
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            This Sanction Letter/KFS shall be read, understood, and construed in conjunction with the terms
+            contained
+            here-in and those as contained in the Agreement for Loan cum Hypothecation and the Loan Application made
+            and
+            signed by the Borrower/Co-Borrower/Guarantor named herein:
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <table style="border: 0.1em solid black; border-collapse: collapse;">
+                <tr>
+                    <th style="padding: 0.5em; border: 0.1em solid black;">Sr. No.</th>
+                    <th style="padding: 0.5em; border: 0.1em solid black;">Particulars</th>
+                    <th style="padding: 0.5em; border: 0.1em solid black;">Details/Description</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">1.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Application</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Application Form No</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!loan.Application_Id__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Application Form Date</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!createdDate}</td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">2.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Borrower</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Name</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!applicant.First_Name__c} {!applicant.Middle_Name__c}
+                                    {!applicant.Last_Name__c}</td>
+                            </tr>
+                            <tr style="">
+                                <td class="tabledata">Father/Husband&apos;s Name</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    <apex:outputPanel rendered="{!applicant.Gender__c = 'Female'}">
+                                        <apex:outputPanel rendered="{!applicant.Marital_Status__c = 'Married'}">
+                                            {!applicant.Spouse_Name__c}
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!applicant.Marital_Status__c <> 'Married'}">
+                                            {!applicant.Father_Name__c}
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!applicant.Gender__c <> 'Female'}">
+                                        {!applicant.Father_Name__c}
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                            <tr style="">
+                                <td class="tabledata">Current Address</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!addressMap[applicant.Id]['Current'].Address_Line_1__c},&nbsp;
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].Address_Line_2__c))}">
+                                        {!addressMap[applicant.Id]['Current'].Address_Line_2__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].Address_Line_3__c))}">
+                                        {!addressMap[applicant.Id]['Current'].Address_Line_3__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].City__c))}">
+                                        {!addressMap[applicant.Id]['Current'].City__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].State__c))}">
+                                        {!addressMap[applicant.Id]['Current'].State__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].PinCode__c))}">
+                                        {!addressMap[applicant.Id]['Current'].PinCode__c}
+                                    </apex:outputPanel>
+                                    
+                                </td>
+                            </tr>
+                            <apex:outputText rendered="{!OR(AND(applicant.Customer_Type__c == 'Non Individual', NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].Address_Line_1__c))), applicant.Customer_Type__c <> 'Non Individual')}">
+                                <tr style="">
+                                    <td class="tabledata">Permanent Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[applicant.Id]['Permanent'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].Address_Line_2__c))}">
+                                            {!addressMap[applicant.Id]['Permanent'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].Address_Line_3__c))}">
+                                            {!addressMap[applicant.Id]['Permanent'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].City__c))}">
+                                            {!addressMap[applicant.Id]['Permanent'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].State__c))}">
+                                            {!addressMap[applicant.Id]['Permanent'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Permanent'].PinCode__c))}">
+                                            {!addressMap[applicant.Id]['Permanent'].PinCode__c}
+                                        </apex:outputPanel>
+                                        
+                                    </td>
+                                </tr>
+                            </apex:outputText>
+                            <tr style="">
+                                <td class="tabledata">PAN</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!applicant.PAN__c}
+                                </td>
+                            </tr>
+                            <tr style="">
+                                <td class="tabledata">Mobile Number</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!applicant.Mobile_Number__c}
+                                </td>
+                            </tr>
+                            <tr style="">
+                                <td class="tabledata">Email ID</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!applicant.Email__c}
+                                </td>
+                            </tr>
+                            <tr style="">
+                                <td class="tabledata">Office Address</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!addressMap[applicant.Id]['Office'].Address_Line_1__c},&nbsp;
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Office'].Address_Line_2__c))}">
+                                        {!addressMap[applicant.Id]['Office'].Address_Line_2__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Office'].Address_Line_3__c))}">
+                                        {!addressMap[applicant.Id]['Office'].Address_Line_3__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Office'].City__c))}">
+                                        {!addressMap[applicant.Id]['Office'].City__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Office'].State__c))}">
+                                        {!addressMap[applicant.Id]['Office'].State__c},&nbsp;
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Office'].PinCode__c))}">
+                                        {!addressMap[applicant.Id]['Office'].PinCode__c}
+                                    </apex:outputPanel>    
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">3.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Co-Borrower</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <apex:variable value="{!1}" var="rowNum"/>
+                        <apex:repeat value="{!coapplicants}" var="coapplicant">
+                            <table style="table-layout:fixed;padding-bottom: 0.5em; padding-right: 0.5em; padding-top: 0.5em;">
+                                <tr width="100%">
+                                    <td class="tabledata" width="30%">Name</td>
+                                    <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                    <td class="tabledataValue" width="65%">{!coapplicant.First_Name__c}
+                                        {!coapplicant.Middle_Name__c} {!coapplicant.Last_Name__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Father/Husband&apos;s Name</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        <apex:outputPanel rendered="{!coapplicant.Gender__c = 'Female'}">
+                                            <apex:outputPanel rendered="{!coapplicant.Marital_Status__c = 'Married'}">
+                                                {!coapplicant.Spouse_Name__c}
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!coapplicant.Marital_Status__c <> 'Married'}">
+                                                {!coapplicant.Father_Name__c}
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!coapplicant.Gender__c <> 'Female'}">
+                                            {!coapplicant.Father_Name__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Current Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[coapplicant.Id]['Current'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].Address_Line_2__c))}">
+                                            {!addressMap[coapplicant.Id]['Current'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].Address_Line_3__c))}">
+                                            {!addressMap[coapplicant.Id]['Current'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].City__c))}">
+                                            {!addressMap[coapplicant.Id]['Current'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        {!addressMap[coapplicant.Id]['Current'].State__c},&nbsp;
+                                        {!addressMap[coapplicant.Id]['Current'].PinCode__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Permanent Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[coapplicant.Id]['Permanent'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Permanent'].Address_Line_2__c))}">
+                                            {!addressMap[coapplicant.Id]['Permanent'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Permanent'].Address_Line_3__c))}">
+                                            {!addressMap[coapplicant.Id]['Permanent'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Permanent'].City__c))}">
+                                            {!addressMap[coapplicant.Id]['Permanent'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Permanent'].State__c))}">
+                                            {!addressMap[coapplicant.Id]['Permanent'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Permanent'].PinCode__c))}">
+                                            {!addressMap[coapplicant.Id]['Permanent'].PinCode__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">PAN</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!coapplicant.PAN__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Mobile Number</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!coapplicant.Mobile_Number__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Email ID</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!coapplicant.Email__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Office Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[coapplicant.Id]['Office'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Office'].Address_Line_2__c))}">
+                                            {!addressMap[coapplicant.Id]['Office'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Office'].Address_Line_3__c))}">
+                                            {!addressMap[coapplicant.Id]['Office'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Office'].City__c))}">
+                                            {!addressMap[coapplicant.Id]['Office'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Office'].State__c))}">
+                                            {!addressMap[coapplicant.Id]['Office'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Office'].PinCode__c))}">
+                                            {!addressMap[coapplicant.Id]['Office'].PinCode__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                            </table>
+                            <apex:outputPanel rendered="{!rowNum < coapplicants.size}"><hr/></apex:outputPanel>
+                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                        </apex:repeat>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">4.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Repayment Account</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Account Holder Name</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!loan.Repayment_By__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Account No</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!loan.Repayment_Account_Number__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Bank Name</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!loan.Repayment_Bank_Name__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">IFSC</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!loan.IFSC_Code__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">5.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Lender</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="table-layout:fixed; width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Name</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">AU SMALL FINANCE BANK LIMITED</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Branch</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!loan.Branch_Master__r.Account_Name__c}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">6.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Guarantor (if any)</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <apex:variable value="{!1}" var="rowNum"/>
+                        <apex:repeat value="{!guarantors}" var="guarantor">
+                            <table style="table-layout:fixed;padding-bottom: 0.5em; padding-right: 0.5em; padding-top: 0.5em;">
+                                <tr width="100%">
+                                    <td class="tabledata" width="30%">Name</td>
+                                    <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                    <td class="tabledataValue" width="65%">{!guarantor.First_Name__c}
+                                        {!guarantor.Middle_Name__c} {!guarantor.Last_Name__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Father/Husband&apos;s Name</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        <apex:outputPanel rendered="{!guarantor.Gender__c = 'Female'}">
+                                            <apex:outputPanel rendered="{!guarantor.Marital_Status__c = 'Married'}">
+                                                {!guarantor.Spouse_Name__c}
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!guarantor.Marital_Status__c <> 'Married'}">
+                                                {!guarantor.Father_Name__c}
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!guarantor.Gender__c <> 'Female'}">
+                                            {!guarantor.Father_Name__c}
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Current Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[guarantor.Id]['Current'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Current'].Address_Line_2__c))}">
+                                            {!addressMap[guarantor.Id]['Current'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Current'].Address_Line_3__c))}">
+                                            {!addressMap[guarantor.Id]['Current'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Current'].City__c))}">
+                                            {!addressMap[guarantor.Id]['Current'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Current'].State__c))}">
+                                            {!addressMap[guarantor.Id]['Current'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Current'].PinCode__c))}">
+                                            {!addressMap[guarantor.Id]['Current'].PinCode__c}
+                                        </apex:outputPanel>
+                                        
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Permanent Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[guarantor.Id]['Permanent'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Permanent'].Address_Line_2__c))}">
+                                            {!addressMap[guarantor.Id]['Permanent'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Permanent'].Address_Line_3__c))}">
+                                            {!addressMap[guarantor.Id]['Permanent'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Permanent'].City__c))}">
+                                            {!addressMap[guarantor.Id]['Permanent'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Permanent'].State__c))}">
+                                            {!addressMap[guarantor.Id]['Permanent'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Permanent'].PinCode__c))}">
+                                            {!addressMap[guarantor.Id]['Permanent'].PinCode__c}
+                                        </apex:outputPanel>
+                                        
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">PAN</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!guarantor.PAN__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Mobile Number</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!guarantor.Mobile_Number__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Email ID</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!guarantor.Email__c}
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">Office Address</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!addressMap[guarantor.Id]['Office'].Address_Line_1__c},&nbsp;
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Office'].Address_Line_2__c))}">
+                                            {!addressMap[guarantor.Id]['Office'].Address_Line_2__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Office'].Address_Line_3__c))}">
+                                            {!addressMap[guarantor.Id]['Office'].Address_Line_3__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Office'].City__c))}">
+                                            {!addressMap[guarantor.Id]['Office'].City__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Office'].State__c))}">
+                                            {!addressMap[guarantor.Id]['Office'].State__c},&nbsp;
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[guarantor.Id]['Office'].PinCode__c))}">
+                                            {!addressMap[guarantor.Id]['Office'].PinCode__c}
+                                        </apex:outputPanel>
+                                        
+                                    </td>
+                                </tr>
+                                <tr style="">
+                                    <td class="tabledata">GSTIN</td>
+                                    <td class="tabledataColon">:&nbsp;</td>
+                                    <td class="tabledataValue">
+                                        {!guarantor.GST_NO__c}
+                                    </td>
+                                </tr>
+                            </table>
+                            <apex:outputPanel rendered="{!rowNum < guarantors.size}"><hr/></apex:outputPanel>
+                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                        </apex:repeat>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">7.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Purpose of Loan</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">{!loan.Purpose_of_Loan__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">8.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Loan Details</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="table-layout:fixed; width:100%">
+                            <tr style="" width="100%">
+                                <td class="tabledata" width="30%">(a)Product Type</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!productRT.Product_Name__c}</td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(b)</td-->
+                                <td class="tabledata">(b)Type of Loan</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!IF(productRT.Sub_Product__c=='New','New
+                                    Asset',IF(productRT.Sub_Product__c=='Used','Old
+                                    <!-- R2-2634 -->
+                                    <!-- Asset',IF(productRT.Sub_Product__c=='Cash on Wheels','Cash On Wheels','')))} -->
+                                    Asset',IF(CONTAINS($Label.COW_Product_Names, productRT.Sub_Product__c),'Cash On Wheels','')))}
+                                    <!-- R2-2634 -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(c)</td-->
+                                <td class="tabledata">(c)Loan Amount</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    Rs.<apex:outputField value="{!loan.Total_Loan_Amount__c}"/>/- (Rupees {!totalLoanAmountInWords})
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <!--td class="tabledataColon">(f)</td-->
+                                <td class="tabledata">(d)Tenure (in Months)</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!loan.Tenure__c}
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(g)</td-->
+                                <td class="tabledata">(e)Net Disbursement</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    Rs. {!netDisbAmountStr}/- (Rupees {!netDisbAmountInWords}
+                                    ) (Amount disbursed after
+                                    deducting the charges/amount as mentioned in Item 9 below, from the Loan Amount) [8(c)-9(d]
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">9.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Deductions in Loan Amount (if Any)</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="table-layout:fixed; width:100%">
+                            <tr width="100%">
+                                <!--td class="tabledataColon">(a)</td-->
+                                <td class="tabledata" width="30%">(a)Processing Fee</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">Rs. {!processingFeesAmountStr}/- + GST Rs. {!processingFeesAmountGSTStr}/- (Rupees {!processingFeesAmountInWords}) (Non-refundable)
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(b)</td-->
+                                <td class="tabledata">(b)Insurance premium</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    Rs. {!insuranceChargeAmtStr}/- (Rupees {!insuranceChargeAmtInWords})
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(c)</td-->
+                                <td class="tabledata">(c)
+                                    Other Charges :
+                                </td>
+                                <td class="tabledataColon"></td>
+                                <td>
+                                    <table style="table-layout:fixed; width:100%">
+                                        <apex:variable value="{!1}" var="rowNum"/>
+                                        <apex:repeat value="{!chargeDetails}" var="each"><!--Rs. {!each.chargeAmountStr}/-<apex:outputPanel rendered="{!each.taxAmountStr <> '0'}"> + GST Rs. {!each.taxAmountStr}/- </apex:outputPanel> (Rupees {!each.chargesInWords} Only-->
+                                            <tr style="padding-bottom:50% !important;">
+                                                <td class="tabledataColon">({!rowNum}) &nbsp;</td>
+                                                <td></td>
+                                                <td width="40%" style="padding-right:100% !important;">{!each.chargesName}</td>
+                                                <td>&nbsp;</td>
+                                                <td></td>
+                                                <td class="tabledataColon" width="30%" align="justify"> Rs. {!each.chargeAmountStr}/-
+                                                    <apex:outputPanel rendered="{!each.taxAmountStr <> '0'}"> + GST Rs. {!each.taxAmountStr}/- 
+                                                    </apex:outputPanel> (Rupees {!each.chargesInWords}</td>
+                                            </tr>
+                                            <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                                        </apex:repeat>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(d)</td-->
+                                <td class="tabledata">(d)Total Deductions (a+b+c)</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    Rs. <apex:outputField value="{!loan.Total_Charges__c}"/>/- (Rupees {!totalChargesAmountInWords})
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">10.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Interest Rate (“ROI”)</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <!--td class="tabledataColon">(a)</td-->
+                                <td class="tabledata" width="30%">(a)Interest Type</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td class="tabledataColon"></td>
+                                            <td class="tabledata">
+                                                <span
+                                                    style="width:3%; display:{!IF(loan.Type_of_Rate__c == 'Fixed', 'inline', 'none')};">
+                                                    [ Y ]
+                                                </span>
+                                                <span
+                                                    style="width:3%; display:{!IF(loan.Type_of_Rate__c != 'Fixed', 'inline', 'none')};">
+                                                    [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                                                </span>&nbsp;&nbsp;
+                                                <span style="width:72%">Fixed</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tabledataColon"></td>
+                                            <td class="tabledata">
+                                                <span
+                                                    style="width:3%; display:{!IF(loan.Type_of_Rate__c == 'Variable', 'inline', 'none')};">
+                                                    [ Y ]
+                                                </span>
+                                                <span
+                                                    style="width:3%; display:{!IF(loan.Type_of_Rate__c != 'Variable', 'inline', 'none')};">
+                                                    [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                                                </span>&nbsp;&nbsp;
+                                                <span style="width:72%">Floating</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(b)</td-->
+                                <td class="tabledata">(b)Rate of Interest (ROI)</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue"><apex:outputField value="{!loan.ROI__c}"/> per annum</td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(c)</td-->
+                                <td class="tabledata">(c)Periodicity of Interest Compounding</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">Interest is not being compounded</td>
+                            </tr>
+                            <tr>
+                                <!--td class="tabledataColon">(d)</td-->
+                                <td class="tabledata">(d)Method of computation of Interest rate</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">Monthly Reducing</td>
+                            </tr>
+                        </table>
+                        <b><i>Default Interest Rate : {!$Label.DefaultInterestRate} per month on the amounts outstanding and due for
+                                payment
+                                from Borrower.</i></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">11.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Repayment Details</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledataColon" width="5%">(a)</td>
+                                <td class="tabledata" width="25%">EMI Amount</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">Rs. <apex:outputField value="{!loan.EMI__c}"/> *</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">(b)</td>
+                                <td class="tabledata">Total Number of EMI&apos;s</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!loan.Tenure__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">(c)</td>
+                                <td class="tabledata">EMI Start Date</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!emiDateStr}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">(d)</td>
+                                <td class="tabledata">EMI Due Date</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!loan.EMI_Date__c} day of every Calendar Month
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">(e)</td>
+                                <td class="tabledata">EMI Frequency</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    {!loan.EMI_Frequency__c}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">(f)</td>
+                                <td class="tabledata">Moratorium</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    of <u>{!monotariumCount}</u> days starting from <u>{!todaysDate}</u> and continuing till date of First EMIas mentioned above. (if applicable).
+                                </td>
+                            </tr>
+                        </table>
+                        <br /><br />
+                         <b><i>*EMI amount mentioned above is considering full loan amount
+                         utilization</i></b><br />
+                         <b><i>**Detailed Loan Repayment Schedule covering EMI dates with bifurcation of
+                                            principal
+                                            and
+                                            interest component will be shared in Welcome Letter which will be shared
+                                            post
+                                            creation
+                                            of loan account.</i></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">12.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Schedule of Charges</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">As contained in Table A (Schedule of
+                        Charges)
+                        below</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">13.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Loan Disbursement Details</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">As per the Disbursement Request Form
+                        (“DRF”)
+                        or any other instruction given by the Borrower.</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">14.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Mode of Disbursement</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">The Lender shall make disbursements via
+                        any
+                        electronic mode of transfer viz. NEFT, IMPS, RTGS into the designated account provided by
+                        the
+                        Borrower or as per DRF.</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">15.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Penal Interest</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Delay in payment of EMI shall attract
+                        penal
+                        interest at the rate of {!$Label.DefaultInterestRate} per month on the Outstanding Amounts, from the
+                        respective due
+                        date
+                        until the date of receipt.</td>
+                </tr>
+                <!--tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">16.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Cooling off Period/Free look out period
+                    </td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        Within {!$Label.Cooling_Off_Period} days from the date of disbursement.<br />
+                        (During this period the Applicant/Borrower shall not be charged any penalty on the
+                        prepayment of
+                        the loan amount. However, the Applicant/Borrower shall be liable to pay proportionate
+                        interest
+                        for the number of days for which the amount is utilized by the Applicant/Borrower within
+                        Cooling
+                        Off Period).
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">17.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Lending Service Partner (“LSP”) (if
+                        Applicable)</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr>
+                                <td class="tabledata">Name of LSP</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue"><apex:outputPanel rendered="{!loan.Sourcing_channel__c == 'Digital Partner'}">{!loan.Source_Name__c}</apex:outputPanel></td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Retained partner for</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">
+                                    <table>
+                                        <tr>
+                                            <td class="tabledataColon">
+                                                <apex:outputPanel rendered="{!loan.Sourcing_channel__c == 'Digital Partner'}">
+                                                    [Y]
+                                                </apex:outputPanel>
+                                                <apex:outputPanel rendered="{!loan.Sourcing_channel__c <> 'Digital Partner'}">
+                                                    [&nbsp;&nbsp;]
+                                                </apex:outputPanel>
+                                            </td>
+                                            <td class="tabledataValue">Sourcing of the Loan of the Applicant/Borrower.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tabledataColon">[ ]</td>
+                                            <td class="tabledataValue">For servicing and/or recovery of the Loan.</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+
+                        </table>
+
+
+                    </td>
+                </tr-->
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">16.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Nodal Grievance Redressal Officer</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Name</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!nodalOfficerDetails.Name__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Designation</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!nodalOfficerDetails.Designation__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Address</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!nodalOfficerDetails.Address__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Phone Number</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!nodalOfficerDetails.Phone__c}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">17.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Details of Assets</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        <table style="width:100%">
+                            <tr width="100%">
+                                <td class="tabledata" width="30%">Make</td>
+                                <td class="tabledataColon" width="5%">:&nbsp;</td>
+                                <td class="tabledataValue" width="65%">{!collateral.Make__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Model</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!collateral.Model__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Engine No</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!collateral.Engine_Number__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Chassis No</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!collateral.Chasis_Number__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledata">Reg No</td>
+                                <td class="tabledataColon">:&nbsp;</td>
+                                <td class="tabledataValue">{!collateral.Registration_Number__c}</td>
+                            </tr>
+                        </table>
+                        <br /><br />
+                        <b><i>*In case of Loan on New Asset details will be as per Annexure- "AD"</i></b>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">18.</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">Mode of Security or charge creation and
+                        Priority of Charge</td>
+                    <td style="padding: 0.5em; border: 0.1em solid black;">
+                        Security/charge creation: Hypothecation of Asset<br />
+                        First and Exclusive charge by way of Hypothecation of Asset in favour of the Bank
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br /><br />
+        <!-- Adding SOC Code-->
+        <div style="page-break-after:always;"/>
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">SCHEDULE OF CHARGES(SOC)</span>
+        </div>
+        <br/>
+        <div>
+            <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                <thead>
+                    <th colspan="8" style="background-color: rgb(109,48,120);
+                  					color: white; font-size:15px; text-align:center; ">Charges Applicable as Per Product</th>
+                    <tr style="background-color:#ed7d31; font-size:15px">
+                        <th>SNo.</th>
+                        <th>Parameter</th>
+                        <th>{!socVehicleHeader}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!socChargesData}" var="soc">
+                        <tr>
+                            <td colspan="1">
+                                <div>
+                                    {!rowNumForSOC}
+                                    <apex:variable var="rowNumForSOC" value="{!rowNumForSOC + 1}"/>
+                                    
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div>
+                                    
+                                    {!soc.Parameters__c}
+                                </div>
+                            </td>
+                            
+                            <td colspan="1">
+                                <div>
+                                    
+                                    {!soc.Charge_Value__c}
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </apex:repeat>
+                
+                </tbody>
+            </table>
+            <b>*If stamp duty is purchased by Bank on behalf of customer.</b>
+            <br/><br/>
+            
+            <div>
+            <table border="1" cellpadding="0" cellspacing="0" width="100%">
+                <thead>
+                    <th colspan="8" style="background-color: rgb(109,48,120);
+                  					color: white; font-size:15px; text-align:center; ">Interest Rates</th>
+                    <tr style="background-color:#ed7d31; font-size:15px">
+                        <th>SNo.</th>
+                        <th>Interest Rate</th>
+                        <th>{!socVehicleHeader}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <apex:repeat value="{!socInterestRateData}" var="interest">
+                        <tr>
+                            <td colspan="1">
+                                <div>
+                                    {!rowNumForInterest}
+                                    <apex:variable var="rowNumForInterest" value="{!rowNumForInterest + 1}"/>
+                                    
+                                </div>
+                            </td>
+                            <td colspan="1">
+                                <div>
+                                    
+                                    {!interest.Interest_Type__c}
+                                </div>
+                            </td>
+                            
+                            <td colspan="1">
+                                <div>
+                                    
+                                    {!interest.Interest_Rate__c}
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </apex:repeat>
+                
+                </tbody>
+            </table>
+            </div>
+            <br/><br/><br/>
+            <div style="font-weight:normal;font-size:14px;font-family:Arial;">
+                <b>Notes:</b>
+            </div>
+            <div style="font-weight:normal;font-size:14px;font-family:Arial;">
+                <apex:outputText escape="false" value="{!socNotes}"></apex:outputText>
+            </div>
+        </div>
+        
+        <!---->
+
+        
+        
+        <div style="page-break-after:always;"/>
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">MOST IMPORTANT TERMS
+                AND
+                CONDITIONS (“MITC”)</span>
+        </div>
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial; padding: 0.1em">
+            <apex:outputText escape="false" value="{!mitcContent}"></apex:outputText>
+        </div>
+        <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+            <apex:image value="{!URLFOR($Resource.BorrowersSignature)}" width="220" height="90"/>
+        </div>
+        <apex:repeat value="{!coapplicants}" var="coapplicant">
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:image value="{!URLFOR($Resource.CoBorrowersSignature)}" width="220" height="90"/>
+            </div>
+        </apex:repeat>
+        <apex:repeat value="{!guarantors}" var="coapplicant">
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:image value="{!URLFOR($Resource.GuarantorsSignature)}" width="220" height="90"/>
+            </div>
+        </apex:repeat>
+        <div style="page-break-after:always;"/>
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                AU SMALL FINANCE BANK LIMITED- LOAN CUM HYPOTHECATION AGREEMENT
+            </span>
+        </div><br />
+        <div style="text-align:center;font-weight:normal;font-size:14px;font-family:Arial; padding: 0.1em">
+            <apex:outputText escape="false" value="{!loanCumHypoContent}"></apex:outputText>
+        </div>
+        <br />
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                FIRST PART
+            </span>
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <table style="width:100%">
+                <tr>
+                    <td style="padding: 0.5em; width:20% !important">Date of Execution</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75% !important">{!todaysDate}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Place of Execution</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!loan.Branch_Master__r.Account_Name__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Loan Application Number</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!loan.Application_Id__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Borrower Name</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!applicant.First_Name__c} {!applicant.Middle_Name__c}
+                        {!applicant.Last_Name__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Borrower Mobile Number</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!applicant.Mobile_Number__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Borrower Address</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        {!addressMap[applicant.Id]['Current'].Address_Line_1__c},&nbsp;
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].Address_Line_2__c))}">
+                            {!addressMap[applicant.Id]['Current'].Address_Line_2__c},&nbsp;
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].Address_Line_3__c))}">
+                            {!addressMap[applicant.Id]['Current'].Address_Line_3__c},&nbsp;
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[applicant.Id]['Current'].City__c))}">
+                            {!addressMap[applicant.Id]['Current'].City__c},&nbsp;
+                        </apex:outputPanel>
+                        {!addressMap[applicant.Id]['Current'].State__c},&nbsp;
+                        {!addressMap[applicant.Id]['Current'].PinCode__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Borrower Type</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!applicant.Customer_Type__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Co-Borrower</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        <table style="table-layout:fixed;">
+                            <apex:repeat value="{!coapplicants}" var="coapplicant">
+                                <table style="table-layout:fixed;padding-bottom: 0.5em; padding-right: 0.5em; padding-top: 0.5em; border-bottom: 0.07em solid rgb(176, 176, 176);">
+                                    <tr>
+                                        <td class="tabledata">Name</td>
+                                        <td class="tabledataColon">:&nbsp;</td>
+                                        <td class="tabledataValue">{!coapplicant.First_Name__c}
+                                            {!coapplicant.Middle_Name__c} {!coapplicant.Last_Name__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tabledata">Mobile Number</td>
+                                        <td class="tabledataColon">:&nbsp;</td>
+                                        <td class="tabledataValue">{!coapplicant.Mobile_Number__c}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tabledata">Address</td>
+                                        <td class="tabledataColon">:&nbsp;</td>
+                                        <td class="tabledataValue">
+                                            {!addressMap[coapplicant.Id]['Current'].Address_Line_1__c},&nbsp;
+                                            <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].Address_Line_2__c))}">
+                                                {!addressMap[coapplicant.Id]['Current'].Address_Line_2__c},&nbsp;
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].Address_Line_3__c))}">
+                                                {!addressMap[coapplicant.Id]['Current'].Address_Line_3__c},&nbsp;
+                                            </apex:outputPanel>
+                                            <apex:outputPanel rendered="{!NOT(ISBLANK(addressMap[coapplicant.Id]['Current'].City__c))}">
+                                                {!addressMap[coapplicant.Id]['Current'].City__c},&nbsp;
+                                            </apex:outputPanel>
+                                            {!addressMap[coapplicant.Id]['Current'].State__c},&nbsp;
+                                            {!addressMap[coapplicant.Id]['Current'].PinCode__c}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tabledata">Type</td>
+                                        <td class="tabledataColon">:&nbsp;</td>
+                                        <td class="tabledataValue">{!coapplicant.Customer_Type__c}</td>
+                                    </tr>
+                                </table>
+                            </apex:repeat>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div style="page-break-before:always;"/>
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                SECOND PART
+            </span>
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:bold;font-size:14px;font-family:Arial;padding: 0.5em">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                Loan Details
+            </span>
+        </div>
+        <br />
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;">
+            <table style="width:100%">
+                <tr>
+                    <td style="padding: 0.5em; width:20% !important">Loan sanction by AUSFB</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75% !important">Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>/- (In words Rupees
+                        {!totalLoanAmountInWords})</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">ROI</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%"><apex:outputField value="{!loan.ROI__c}"/> per annum</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20% !important">Type of Interest Rate</td>
+                    <td style="padding: 0.5em; width:5% !important">:</td>
+                    <td style="padding: 0.5em; width:75% !important">
+                        <span style="width:3%; display:{!IF(loan.Type_of_Rate__c == 'Fixed', 'inline', 'none')};">
+                            [ Y ]
+                        </span>
+                        <span style="width:3%; display:{!IF(loan.Type_of_Rate__c != 'Fixed', 'inline', 'none')};">
+                            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                        </span>&nbsp;&nbsp;
+                        <span style="width:72%">Fixed</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20% !important"></td>
+                    <td style="padding: 0.5em; width:5% !important"></td>
+                    <td style="padding: 0.5em; width:75% !important">
+                        <span style="width:3%; display:{!IF(loan.Type_of_Rate__c == 'Variable', 'inline', 'none')};">
+                            [ Y ]
+                        </span>
+                        <span style="width:3%; display:{!IF(loan.Type_of_Rate__c != 'Variable', 'inline', 'none')};">
+                            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                        </span>&nbsp;&nbsp;
+                        <span style="width:72%">Floating</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Processing fee</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        Rs. {!processingFeesAmountStr}/- + GST Rs. {!processingFeesAmountGSTStr}/-
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Loan tenure (in Months)</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!loan.Tenure__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">EMI Amount</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">Rs. <apex:outputField value="{!loan.EMI__c}"/>/-</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">First EMI Date</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!emiDateStr}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Mode of Repayment</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">{!loan.Repayment_Mode__c}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Total Deductions in Loan</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">Rs. <apex:outputField value="{!loan.Total_Charges__c}"/>/-</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Net Disbursement</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">Rs. {!netDisbAmountStr}/-</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Other Charges</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">As may be prescribed by AUSFB from time to time</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Broken Period Interest (P-EMI)</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">The interest charged for the number of day(s) which is /
+                        are
+                        over and abovethe period of thirty (30) days from the date of Disbursement of the Loan to
+                        till the date of EMI commencement. Depending on the type of loan (product variant) availed,
+                        it
+                        will either get deducted from your loan amount or would
+                        be included in your first EMI.</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Details of Repayment Bank</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        <table>
+                            <tr>
+                                <td class="tabledataColon">a)</td>
+                                <td class="tabledata">Name of Bank</td>
+                                <td class="tabledataColon">:</td>
+                                <td class="tabledataValue">{!loan.Repayment_Bank_Name__c}</td>
+                            </tr>
+                            <tr>
+                                <td class="tabledataColon">b)</td>
+                                <td class="tabledata">Bank A/c Number</td>
+                                <td class="tabledataColon">:</td>
+                                <td class="tabledataValue">{!loan.Repayment_Account_Number__c}</td>
+                            </tr>
+                        </table>  
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Details of Disbursement</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">As per the Disbursement request Form/Other Instruction
+                        given
+                        by Borrower.</td>
+                </tr>
+            </table>
+        </div>
+        <div style="page-break-after:always;"/>
+        <div style="text-align:left;font-weight:bold;font-size:14px;font-family:Arial;">
+            <span style="display:inline; border-bottom:0.1em solid black; padding: 0.5px">
+                Fees and Charges levied by AUSFB
+            </span>
+        </div>
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <table>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Stamp Duty</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">Calculated as per the state laws and deducted/payable
+                        upfront.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Pre-payment/Part pre-payment Charges</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        5% of Balance amount, if paid before 12 months,<br/>
+                        3% of Balance amount, if paid after 12 months<br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Penal Interest</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        3% per month on the Outstanding Amounts, from the respective due date until the date of receipt.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5em; width:20%">Cheque/SI/ACH/ECS Return Charges</td>
+                    <td style="padding: 0.5em; width:5%">:</td>
+                    <td style="padding: 0.5em; width:75%">
+                        Rs. 500/- per instrument per instance plus applicable taxes as on date.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="text-align:left;font-weight:bold;font-size:14px;font-family:Arial;padding: 0.1em">
+            <i># This amount may vary basis date of disbursement and applicability of Broken Period Interest/
+                Pre-EMI
+                Interest.</i>
+        </div>
+        <div style="page-break-after:always;"/>
+        <div style="text-align:center;font-weight:bold;font-size:14px;font-family:Arial;padding: 0.1em">
+            <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                THIRD PART
+            </span>
+        </div>
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <apex:outputText escape="false" value="{!thirdPartContent}"></apex:outputText>
+        </div>
+        <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;padding: 0.1em">
+            <apex:repeat value="{!loanAgreementContentsName}" var="key">
+                <br />
+                <apex:outputText escape="false" value="{!loanAgreementContents[key].Letter_Content__c}">
+                </apex:outputText>
+            </apex:repeat>
+        </div>
+        <br />
+        <div style="page-break-before:always;">
+            <div style="text-align:center;font-weight:normal;font: size 14px;font-family:Arial;padding: 0.1em">
+                <b>DECLARATION</b>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:outputText escape="false" value="{!declarationContent}"></apex:outputText>
+            </div>
+            <br/><br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:image value="{!URLFOR($Resource.BorrowersSignature)}" width="220" height="90"/>
+            </div>
+            <apex:repeat value="{!coapplicants}" var="coapplicant">
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.CoBorrowersSignature)}" width="220" height="90"/>
+                </div>
+            </apex:repeat>
+            <apex:repeat value="{!guarantors}" var="coapplicant">
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.GuarantorsSignature)}" width="220" height="90"/>
+                </div>
+            </apex:repeat>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:image value="{!URLFOR($Resource.AUSFBankSignature)}" width="220" height="90"/>
+            </div>
+        </div>
+        
+        <div style="page-break-before:always;">
+            <div style="text-align:center;font-weight:normal;font: size 14px;font-family:Arial;padding: 0.1em">
+                <b>Annexure</b>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                (Example of SMA, NPA Classification and NPA Upgradation of Term Loan Cases)<br />
+                <b>1. IRAC Circular Refer Para No. 2.1.2 (i)</b> - interest and/ or instalment of principal remains overdue
+                for a period of more than 90 days in respect of a Term Loan
+                <br /><b>Example Description</b> - SMA and NPA Classification of Term Loan Cases based on overdue date.
+                <br /><b>Example Detail</b>: If due date of a Loan account is March 31, 2021, and complete dues are not
+                received before the lending institution runs the day-end process on this date, the date of overdue shall be
+                March 31, 2021. If it continues to remain overdue, then this account shall get tagged as SMA-1 upon running
+                day-end process on April 30, 2021 i.e. upon completion of30 days of being continuously overdue. Accordingly,
+                the date of SMA-1 classification for that account shall be April 30, 2021."Similarly, if the account
+                continues to remain overdue, it shall get tagged as SMA-2 upon running day-end process on May 30, 2021 and
+                if continues to remain overdue further, it shall get classified as NPA upon running day-end process on June
+                29, 2021. This is further elaborated as below mention table:
+                <br /><br />
+                <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                    <tr>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Date</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">DPD</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Classification</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">"31-Mar-21 "(Due Date)"</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">30-Apr-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">31</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-1</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">30-May-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">61</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-2</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA</td>
+                    </tr>
+                </table>
+                <br />
+                <b>lRAC Circular Refer Para No. 4.2.5</b> - If arrears of interest and principal are paid by the Borrower in
+                the case of Loan accounts classified as NPAs, the account should no longer be treated as nonperforming and
+                may be classified as 'standard' accounts.
+                <br /><b>Example Description</b> - Upgradation of NPA Account: Loan accounts classified as NPAs may be
+                upgraded as 'standard' asset only if entire arrears of interest and principal are paid by the Borrower
+                <br /><br />
+                <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                    <tr>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Date</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Due Amount</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">DPD</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Classification</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">"31-Mar-21 "(Due Date)"</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">10000</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-0</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">30-Apr-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">10000</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">31</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-1</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">30-May-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">61</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">SMA-2</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">31-May-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">10000</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">91</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">30-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">10000</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">1-Jul-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Upgradation*</td>
+                    </tr>
+                </table>
+                <br />
+                *Upgradation of Account to standard category can be done after total pending due of Rs. 40000 is received
+                from borrower by the Bank
+    
+                <br /><br /><b>IRAC Circular Reference Para No. 4.2.7 (c)</b> - Asset Classification to be Borrower-wise and
+                not Loan facility-wise "Para No. 4.2.7.1 -It is difficult to envisage a situation when only one Loan
+                facility to a Borrower/one investment in any of the securities issued by the Borrower becomes a problem
+                credit/investment and not others. Therefore, all the Loan facilities granted by a bank to a Borrower and
+                investment in all the securities issued by the borrower will have to be treated as NPA/NPI and not the
+                particular Loan facility/investment or part thereof which has become irregular.
+                <br /><b>Example Description</b> - NPA Classification on based on Borrower wise and not Loan facility wise.
+                <br /><b>Example</b>: If any Loan Facility of Borrower is classified as NPA upon running day-end process as
+                on date, all the Loan facility of the Borrower needs to be classified NPA upon same day. It is further
+                explained as below mentioned table:
+                <br /><br />
+                <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                    <tr>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Customer ID</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Type of Facility</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Date</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">NPA Reason</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Term Loan I</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified as per above Example</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">TermLoan2</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-2 I</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified Due to Borrower A Term Loan J
+                            is classified NPA</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Cash Credit/ Overdraft</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-2 l</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified Due to Borrower A Term Loan I
+                            is classified NPA</td>
+                    </tr>
+                </table>
+                <br />
+                <b>IRAC Circular Refer Para No. 4.2.5</b> - If arrears of interest and principal are paid by the Borrower in
+                the case of Loan accounts classified as NPAs, the account should no longer be treated as nonperforming and
+                may be classified as 'standard' accounts.
+                <br /><b>Example Description</b> - Upgradation of NPA Account: Loan accounts classified as NPAs may be
+                upgraded if arrears of interest and principal are repaid in all the facilities of the Borrower
+                <br /><br />
+                <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                    <tr>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Customer ID</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Type of Facility</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Date</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">NPA Reason</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Term Loan I</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified as per above Example</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">TermLoan2</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified Due to Borrower A Term Loan I
+                            is classified NPA</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Cash Credit/ Overdraft</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">29-Jun-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">NPA Classified Due to Borrower A Term Loan I
+                            is classified NP</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Term Loan I</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">15-Jul-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Upgrade*</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">TermLoan2</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">15-Jul-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Upgrade*</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">A</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Cash Credit/ Overdraft</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">15-Jul-21</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Upgrade*</td>
+                    </tr>
+                </table>
+                <br />
+                *Upgradation of Borrower's accounts to standard can be done if arrears of interest and principal are repaid
+                in all the facilities of the Borrower
+            </div>
+
+            <br/><br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:image value="{!URLFOR($Resource.BorrowersSignature)}" width="220" height="90"/>
+            </div>
+            <apex:repeat value="{!coapplicants}" var="coapplicant">
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.CoBorrowersSignature)}" width="220" height="90"/>
+                </div>
+            </apex:repeat>
+            <apex:repeat value="{!guarantors}" var="coapplicant">
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.GuarantorsSignature)}" width="220" height="90"/>
+                </div>
+            </apex:repeat>
+        </div>
+        
+        <div style="page-break-before:always;">
+            <div style="text-align:center;font-weight:bold;font-size:16px;font-family:Arial;">
+                <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                    DEMAND PROMISSORY NOTE
+                </span>
+            </div> <br /><br />
+            <div style="text-align:right;font-weight:normal;font-size:14px;font-family:Arial;">
+                Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>
+            </div>
+            <div style="text-align:right;font-weight:normal;font-size:14px;font-family:Arial;">
+                Date: {!todaysDate}
+            </div><br />
+            <div style="text-align:right;font-weight:normal;font-size:14px;font-family:Arial;">
+                Place: {!loan.Branch_Master__r.Account_Name__c}
+            </div><br/><br />
+            <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;">
+                <strong>ON DEMAND</strong>, the Borrower(s), Co-Borrowers and /or the Guarantors as named in the Agreement executed in continuation to Loan Application Form No.
+                {!loan.Application_Id__c} Dated {!createdDate}, do hereby promise to pay to AU SMALL FINANCE BANK LIMITED which expression shall, unless
+                repugnant to the context or meaning thereof, be deemed to mean and include its successor(s) and permitted assign(s)) (hereinafter referred to as
+                the “AUSFB/BANK/Lender” ) a sum of Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>/- (Rupees {!totalLoanAmountInWords}) for value received together with interest as per sanctioned terms
+                as mentioned in Sanction Letter/KFS and as amended from time to time.
+                Presentment for payment and noting, and protest of this note are hereby unconditionally and irrevocably waived.
+
+                <br/><br/>
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.BorrowersSignature)}" width="220" height="90"/>
+                </div>
+                <apex:repeat value="{!coapplicants}" var="coapplicant">
+                    <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                        <apex:image value="{!URLFOR($Resource.CoBorrowersSignature)}" width="220" height="90"/>
+                    </div>
+                </apex:repeat>
+                <apex:repeat value="{!guarantors}" var="coapplicant">
+                    <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                        <apex:image value="{!URLFOR($Resource.GuarantorsSignature)}" width="220" height="90"/>
+                    </div>
+                </apex:repeat>
+            </div>
+        </div>
+
+        <div style="page-break-before:always;">
+            <div style="text-align:center;font-weight:bold;font-size:16px;font-family:Arial;">
+                <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                    LETTER OF CONTINUITY OF DEMAND PROMISSORY NOTE
+                </span>
+            </div> <br /><br />
+            <div style="text-align:right;font-weight:normal;font-size:14px;font-family:Arial;">
+                Date: {!todaysDate}
+            </div> <br /><br />
+            <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;">
+                To,
+                <br />The Manager
+                <br />AU Small Finance BANK
+                <br />
+                <br /><br />
+                Dear Sir/s,
+                <br /><br /><br />
+                Borrower executed a demand promissory note for, <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>(Rupees {!totalLoanAmountInWords}) dated {!todaysDate} (<b>Demand Promissory Note</b>),
+                duly signed, sealed and delivered as security for the repayments by the Borrower to the Lender of any
+                sum now due or which may hereafter be or become due by the Borrower to the Lender under the Loan
+                facility
+                granted by the Lender in terms of the Loan Agreement dated {!todaysDate} executed between the Borrower and the Lender
+                and any other Loans and advances granted by the Lender to the Borrower from time to time notwithstanding
+                the fact that the Loan facility may from time to time be reduced or extinguished, or the balance
+                in the said account brought to credit, the intention being that the Demand Promissory Note
+                and the security shall be a continuing security for borrowing by the Borrower at any time to the Lender.
+                <br />
+                <br />
+                Yours faithfully,
+                <br/><br/>
+                <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                    <apex:image value="{!URLFOR($Resource.BorrowersSignature)}" width="220" height="90"/>
+                </div>
+                <apex:repeat value="{!coapplicants}" var="coapplicant">
+                    <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                        <apex:image value="{!URLFOR($Resource.CoBorrowersSignature)}" width="220" height="90"/>
+                    </div>
+                </apex:repeat>
+                <apex:repeat value="{!guarantors}" var="coapplicant">
+                    <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                        <apex:image value="{!URLFOR($Resource.GuarantorsSignature)}" width="220" height="90"/>
+                    </div>
+                </apex:repeat>
+            </div>
+        </div>
+
+        <apex:outputPanel rendered="{!isRepaymentModeSI}">
+            <div style="page-break-before:always;">
+                <div style="text-align:center;font-weight:bold;font-size:16px;font-family:Arial;">
+                    <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                        AU SMALL FINANCE BANK Standing Instruction Form
+                    </span>
+                </div><br /><br />
+                <div style="text-align:center;font-weight:normal;font-size:14px;font-family:Arial;">
+                    <span style="display:inline-block; border-bottom:0.1em solid black; padding: 0.5px">
+                        Standing Instruction Form
+                    </span>
+
+                </div><br /><br />
+                <div style="text-align:left;font-weight:normal;font-size:14px;font-family:Arial;">
+                    To,
+                    <br />The Branch Manager,
+                    <br />AU SMALL FINANCE BANK Limited
+                    <br />{!loan.Branch_Master__r.Account_Name__c} Branch
+                    <br /><br /><br />
+                    Dear Sir / Madam,
+                    <br /><br /><br />
+                    The undersigned has availed a “Loan” for an amount of Rs. {!loan.Total_Loan_Amount__c} (Rupees {!totalLoanAmountInWords} only)
+                    vide Agreement executed in continuation to the Loan Application Form No. {!loan.Application_Id__c} dated {!createdDate}
+                    from AU Small Finance Bank Limited and would like to avail of the Standing Instruction facility offered
+                    by your bank to make repayments towards my Loan facility. I, therefore, request you to accept this
+                    mandate
+                    to debit my AU Bank Account Number {!loan.Repayment_Account_Number__c} maintained at {!loan.Branch_Master__r.Account_Name__c} branch of
+                    your
+                    Bank towards recovery of EMI, outstanding interest/balance and repayment dues of my Loan facility
+                    account
+                    as per due dates and terms and conditions mentioned in the KFS or as per revised instructions basis
+                    requirements
+                    as communicated from my end in line with the Bank's policy. I undertake to maintain sufficient balances
+                    to
+                    cover the EMI, outstanding balance and Loan repayment dues (and charges, if any) on the stipulated due
+                    dates.
+                    I also understand that the failure to repay the outstanding balance and all dues through this standing
+                    instruction shall be treated as a default in repayment of dues and all charges / fees/ levies as covered
+                    by the Agreement will hold good towards the nonpayment of obligations. Please treat this as an
+                    irrevocable
+                    communication as an authorization to debit my account every month with the required amounts towards the
+                    repayment of my Loan. In the event of the above account getting closed/transferred for any reason,
+                    I / We will intimate to the Bank of the new account opened with the bank to debit the EMI,
+                    outstanding balance and Loan repayment dues as per the Agreement. I also understand and accept that the
+                    Bank will have the right to set-off, without prior intimation to me, the available balances in
+                    the designated account for recovery of overdue instalments (EMIs) and/or charges/ fees/ commissions/
+                    levies
+                    (if any) in the Loan account.
+
+                    <br />
+                    <br />
+                    Thanking You,<br/>
+                    <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                        <apex:image value="{!URLFOR($Resource.AccountHolderSignature)}" width="220" height="90"/>
+                    </div>
+                </div>
+            </div>
+        </apex:outputPanel>
+
+
+
+       
+    </body>
+    </html>
+</apex:page>

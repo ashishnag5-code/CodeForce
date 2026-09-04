@@ -1,0 +1,79 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={displayJourneySelection}>
+        <div class="slds-box slds-box_x-small slds-text-align_left">
+            <lightning-card>
+                <h2 slot="title">
+                    <lightning-icon icon-name="standard:record_signature_task" size="medium"
+                        class="slds-m-right_small"></lightning-icon>
+                    Esign
+                </h2>
+            </lightning-card>
+            <div class="slds-box slds-box_x-small slds-text-align_left">
+                <lightning-card>
+                    <div class="slds-p-around_small">
+                        <lightning-radio-group variant="label-stacked" label="Select Your Journey" name="radioGroup"
+                            options={journeyOptions} value={selectedJourney} type="radio"
+                            onchange={handleChange}></lightning-radio-group>
+                    </div>
+                    <div data-id="warningMessageToRO" class="slds-p-top_xx-small slds-p-bottom_xx-small slds-p-left_small">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="warning"
+                            title="warning variant x-small" size="x-small"></lightning-icon>&nbsp;
+                        Make sure Aadhaar is linked with mobile of customer
+                    </div>
+                    <div data-id="warningMessageToRO" class="slds-p-top_xx-small slds-p-bottom_xx-small slds-p-left_small">
+                        <lightning-icon icon-name="utility:warning" alternative-text="Warning!" variant="warning"
+                            title="warning variant x-small" size="x-small"></lightning-icon>&nbsp;
+                        Ensure to submit the application to Operations today only
+                    </div>
+                    <div class="slds-p-around_small">
+                        <lightning-button onclick={handleBeginJourney} class="buttonColor"
+                        label="Begin Journey" title="Begin Journey" variant="brand"
+                        icon-name="utility:check"></lightning-button>
+                    </div>
+                    
+                    <div data-id="successMessageForCJ" class="slds-hide slds-p-around_small">
+                        <div class="slds-text-color_success"><i><b>Email sent successfully to the customer. Please ask
+                                    them to
+                                    procced.</b></i></div>
+                    </div>
+                </lightning-card>
+            </div>
+            <div data-id="documentLinks" class="slds-hide slds-p-top_small">
+                <div class="slds-box slds-box_x-small slds-text-align_left">
+                    <lightning-card>
+                        <h2 slot="title">
+                            <lightning-icon icon-name="action:web_link" size="small"
+                                class="slds-m-right_small"></lightning-icon>
+                            Document Links
+                        </h2>
+                    </lightning-card>
+                    <div class="slds-box slds-box_x-small slds-text-align_left">
+                        <lightning-card>
+
+                            <template for:each={signerVsLink} for:item="signer">
+                                <lightning-layout multiple-rows key={signer.SignerName}>
+                                    <lightning-layout-item size="12" large-device-size="3" padding="around-small">
+                                        <lightning-formatted-text value={signer.SignerName}></lightning-formatted-text>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" large-device-size="9" padding="around-small">
+                                        <lightning-formatted-url value={signer.EsignLink} label="Proceed to Esign"
+                                            target="_blank"></lightning-formatted-url>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12">
+                                        <div class="slds-border_bottom"></div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </template>
+                        </lightning-card>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-p-around_small">
+                <lightning-button label="Return" icon-name="utility:back" variant="brand" class="buttonColor" onclick={returnToPreviousPage}></lightning-button>
+            </div>
+        </div>
+    </template>
+</template>

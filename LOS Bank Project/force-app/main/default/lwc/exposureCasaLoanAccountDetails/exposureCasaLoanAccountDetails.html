@@ -1,0 +1,95 @@
+<template>
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <lightning-layout>
+        <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+            <lightning-card class="no-wrap" icon-name="standard:account">
+                <h1 slot="title" class="no-wrap"><a> {objAccountRecord.Account_Number__c}</a></h1>
+                <div class="component slds-hide" data-id="Account_Name__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Account Name</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Name__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Product__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Account Type</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Product__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Account_Number__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Account Number</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Number__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Branch_Name__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Branch Name</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Branch_Name__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Account_Opening_Date__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Account Opening Date</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Opening_Date__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Current_Status__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Current Status</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Current_Status__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="Current_Balance__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Current Balance</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Current_Balance__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="SOA">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">SOA</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <lightning-button variant="base" label="View" title="Looks like a link" onclick={handleCasa}
+                                class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="slds-p-bottom--small"></div>
+</template>

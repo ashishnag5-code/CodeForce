@@ -1,0 +1,46 @@
+<template>
+    <template lwc:if={renderSalaryTemplate}>
+        <c-salary-finance-component cart-monthly-income-data={cartMonthlyIncomeData} loan-app-id={loanId} is-mobile={isMobile}
+            spinner-image={spinnerImage} document-type='Bank ITR Statement' oncalculatemonthlyincome={handleSubmit} ondeletedrecord={handleDeleteRecord}
+            onhome={navigateToHome} onshoweditview={handleShowEditView} existing-details={salariedData}
+            financial-id={applicantFinancialId} applicant-id={currentApplicantId} onsalarysubmit={handleSubmit}
+            onotherincome={dispatchSubmitEvent} fetch-details={populateData} cart-data-fetched={docVerified}
+            original-doc-verified-value={cartDataFetchInitialValue} is-r2=true>
+        </c-salary-finance-component>
+    </template>
+    <template lwc:if={renderAssessed}>
+        <c-assessed-parent-component financial-id={applicantFinancialId} onhome={navigateToHome} loan-app-id={loanId} ondeletedrecord={handleDeleteRecord}
+            onotherincome={dispatchSubmitEvent} spinner-image={spinnerImage} existing-details={assessedData} is-mobile={isMobile}
+            applicant-id={currentApplicantId} onassesesnodocsubmit={handleSubmit} onassessedupdate={handleUpdate}
+            is-r2=true></c-assessed-parent-component>
+    </template>
+    <template lwc:if={renderDocAuditedTemplate}>
+        <c-document-audited-component set-read-only={setReadOnly} onhome={navigateToHome} loan-app-id={loanId} ondeletedrecord={handleDeleteRecord}
+            onotherincome={dispatchSubmitEvent} spinner-image={spinnerImage} existing-details={auditedData} is-mobile={isMobile}
+            oncalculatemonthlyincome={handleSubmit} financial-id={applicantFinancialId}
+            applicant-id={currentApplicantId} ondocauditedsubmit={handleSubmit} onauditedupdate={handleUpdate}
+            is-r2=true>
+        </c-document-audited-component>
+    </template>
+    <template lwc:if={renderWithoutDocAuditedTemplate}>
+        <c-document-without-audited-component financial-id={applicantFinancialId} applicant-id={currentApplicantId} is-mobile={isMobile}
+            onotherincome={dispatchSubmitEvent} onwithoutdocauditedsubmit={handleSubmit} loan-app-id={loanId} ondeletedrecord={handleDeleteRecord}
+            existing-details={withoutauditedData} is-r2=true>
+        </c-document-without-audited-component>
+    </template>
+    <template lwc:if={renderFarmerTemplate}>
+        <c-farmer-financial-component is-r2=true initial-record={intialRecord} dairy-records={dairy} rcl-records={rcl} is-mobile={isMobile}
+            onotherincome={handleSubmit} spinner-image={spinnerImage} own-land-records={ownland} loan-app-id={loanId} ondeletedrecord={handleDeleteRecord}
+            commercial-records={commercial} oncalculatemonthlyincome={handleFarmerSubmit}
+            financial-id={applicantFinancialId} applicant-id={currentApplicantId} onfarmerevent={handleFarmerSubmit}
+            onhome={navigateToHome} >
+        </c-farmer-financial-component>
+    </template>
+    <template lwc:if={showOtherIncomeSection}>
+        <c-other-income-component onhome={handleReject} oncalculatemonthlyincome={handleFarmerSubmit} loan-id={loanId} is-mobile={isMobile}
+            spinner-image={spinnerImage} financial-id={applicantFinancialId} applicant-id={currentApplicantId}
+            other-income-records={otherIncome} is-r2=true>
+        </c-other-income-component>
+    </template>
+
+</template>

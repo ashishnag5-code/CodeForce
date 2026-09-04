@@ -1,0 +1,54 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="loanApp" description="This is the value for the component."
+    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+
+<div style='{!pageBlockSectionCSS}'>
+    <apex:form >
+        <apex:pageBlock >
+
+        <apex:pageBlockSection showHeader="true" title="Remarks">            </apex:pageBlockSection>
+
+        
+            <table id="theGrid" style="width:100%; !important">
+                <tbody>
+                    <tr>
+                        <td style="width:50%; !important">
+                            <span id="theFirst" style="width:100%; !important">
+                                <apex:inputField value="{!loan.Credit_Remarks__c}" id="Remarks" label="" style="width:100%; !important"/>
+                            </span>
+                        </td>
+                        <td style="width:50%; !important">
+                            <span id="theSecond">
+                                &nbsp;&nbsp;<apex:commandButton style="margin-top:20px" onclick="updateCreditRemarksJS('{!loan.Id}'); return false;" value="Save Remarks"></apex:commandButton>
+                                &nbsp;&nbsp;<apex:outputText style="display:inline; margin-top:20px;font-style:italic" value="" id="saveMessage"></apex:outputText>
+                                <script>
+                                    function updateCreditRemarksJS(loanId){
+                                     
+                                     var creditRemarks = document.querySelectorAll('[id*="Remarks"]')[0].value
+                                         Visualforce.remoting.Manager.invokeAction(
+                                             '{!$RemoteAction.CAMReportChildComponentsController.updateCreditRemarks}',loanId.toString(),creditRemarks,
+                                                     function(result, event){
+                                                     if(event.status){
+                                                         document.querySelectorAll('[id*="saveMessage"]')[0].innerHTML = "Remarks Saved"
+                                                         var delay = setTimeout(() => {
+                                                             document.querySelectorAll('[id*="saveMessage"]')[0].innerHTML = ""
+                                                         }, 1500);
+                                                     }
+                                                 }, 
+                                                 {escape: true}
+                                             );
+                                     }                                  
+                                 </script>
+                            </span>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+            
+
+        </apex:pageBlock>
+    </apex:form>
+</div>
+</apex:component>

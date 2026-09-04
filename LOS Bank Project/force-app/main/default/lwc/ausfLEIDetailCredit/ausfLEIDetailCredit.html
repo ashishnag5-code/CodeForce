@@ -1,0 +1,150 @@
+<template>
+    <!-- <template if:true={isloaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template> -->
+    <c-custom-spinner
+        show-spinner={isloaded}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+    <lightning-card title="LEI Details">
+        <div slot="footer">
+            <!--<lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+            onclick={handleCancelForm}></lightning-icon>-->
+            <template if:true={showSaveButton}>
+            <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                            class="slds-var-m-left_small" onclick={handleSubmitForm}></lightning-icon>
+            </template>
+            <template if:false={showSaveButton}>
+            <lightning-icon icon-name=action:edit size="x-small" alternative-text="Edit"
+                            onclick={handleEditAction}></lightning-icon>
+            </template>
+            </div>
+        <lightning-layout multiple-rows vertical-align="end">
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Security_Status__c"
+                    label="Security Status"
+                    value={loanApplicationRecord.Security_Status__c}
+                    placeholder="Select Status"
+                    options={securityStatusOptions}
+                    disabled={disableRecord}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Type_Of_Banking__c"
+                    label="Type of Banking"
+                    value={loanApplicationRecord.Type_Of_Banking__c}
+                    placeholder="Select Status"
+                    options={typeOfBankingOptions}
+                    disabled={disableRecord}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="LEI_Status__c"
+                    label="LEI Status"
+                    value={loanApplicationRecord.LEI_Status__c}
+                    placeholder="Select Status"
+                    options={leiStatusOptions}
+                    disabled={disableRecord}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-input type="number"  class="validate" label="LEI No." disabled={disableRecord}
+                                            required={isLEINoRequired} name="LEI_No__c" value={loanApplicationRecord.LEI_No__c}
+                                            onchange={handleChange}>
+                </lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Realestate_Exposure__c"
+                    label="Realestate Exposure"
+                    value={loanApplicationRecord.Realestate_Exposure__c}
+                    options={leiStatusOptions}
+                    disabled
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Capital_Market_Exposure__c"
+                    label="Capital Market Exposure"
+                    value={loanApplicationRecord.Capital_Market_Exposure__c}
+                    options={leiStatusOptions}
+                    disabled
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Three_years_average_turnover__c"
+                    label="Three year’s average turnover"
+                    value={loanApplicationRecord.Three_years_average_turnover__c}
+                    placeholder="Select Status"
+                    options={averageTurnoverOptions}
+                    disabled={disableRecord}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                <lightning-combobox
+                    name="Foreign_Curreny_Exposure__c"
+                    label="Foreign Curreny Exposure"
+                    value={loanApplicationRecord.Foreign_Curreny_Exposure__c}
+                    placeholder="Select Status"
+                    options={leiStatusOptions}
+                    disabled={disableRecord}
+                    onchange={handleChange} >
+                </lightning-combobox>
+            </lightning-layout-item>
+            <!--UFCE Changes start- sadhana-->
+            <template if:true={isUFCE}>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox
+                        name="Unhedged_Foreign_Currency_Exposure__c"
+                        label="Unhedged Foreign Currency Exposure"
+                        value={loanApplicationRecord.Unhedged_Foreign_Currency_Exposure__c}
+                        options={ufceOptions}
+                        required
+                        class="validate"
+                        disabled={disableRecord}
+                        onchange={handleChange} >
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+            </template>
+            <!--UFCE Changes End- sadhana-->
+        </lightning-layout>
+
+    </lightning-card>
+    <!--UFCE Changes start-->
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{modalHeader}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p><b>{modalMsg}
+                    </b></p>
+                    
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">OK</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--UFCE Changes end-->
+</template>

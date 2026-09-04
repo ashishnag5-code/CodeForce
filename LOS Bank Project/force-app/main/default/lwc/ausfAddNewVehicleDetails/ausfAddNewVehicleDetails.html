@@ -1,0 +1,41 @@
+<template>
+
+    <lightning-spinner variant="brand" size="large" if:true={isLoaded}></lightning-spinner>
+    <lightning-card title="Add Vehicle" icon-name=custom:custom31>
+        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+            <!--<lightning-layout-item size="12" small-device-size="12" large-device-size="6" 
+                class="slds-p-horizontal_small" flexibility="auto">-->
+            <template for:each={columnsData} for:item="rec">
+                <lightning-layout-item size="12" small-device-size="12" key={rec.fieldName} large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+                    <template if:true={rec.isText}>
+                        <lightning-input type={rec.type} label={rec.label} name={rec.fieldName}
+                            value={rec.value} onchange={handleChange}></lightning-input>
+                    </template>
+                    <template if:true={rec.isPickList}>
+                        <lightning-combobox name={rec.fieldName} value={rec.value} label={rec.label}
+                            placeholder="Select Values" options={rec.options} onchange={handleChange}>
+                        </lightning-combobox>
+                    </template>
+                    <template if:true={rec.isGeneric}>
+                        <lightning-combobox name={rec.fieldName} value={rec.value} label={rec.label}
+                            placeholder="Select Values" options={manufacturerOptions} onchange={handleChange}>
+                        </lightning-combobox>
+                        <!--<div style="padding-top: 5px;">
+                            <c-ausf-vehicle-lookup label="Manufacturer" record-type-name="" 
+                                record-id={recordId}
+                                dependent-field-api=""
+                                dependent-picklist-value="" search-fields="" stepid="0"
+                                fieldapi="Manufacturer__c" object-name="LTV Master"
+                                s-object-api-name="LTV_Master__c" default-record-id={sourceNameId} required=""
+                                onlookupselect={handleLookupSelect}>
+                            </c-ausf-vehicle-lookup>
+                        </div>-->
+                    </template>
+                </lightning-layout-item>
+            </template>
+            <!--</lightning-layout-item>-->
+        </lightning-layout>
+
+    </lightning-card>
+</template>

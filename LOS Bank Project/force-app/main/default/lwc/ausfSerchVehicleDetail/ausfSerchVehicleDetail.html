@@ -1,0 +1,46 @@
+<template>
+    <lightning-card>
+        <lightning-layout multiple-rows class="slds-var-p-bottom_small" horizontal-align="center">
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="3"
+                class="slds-var-p-horizontal_small" flexibility="auto">
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                class="slds-var-p-horizontal_small" flexibility="auto">
+
+                <label class="slds-form-element__label">Vehicle Number</label>
+                <lightning-input type="text" variant="label-hidden" label="Vehicle Number"
+                    value={inputSearchParamater.Vehicle_Number__c} name="Vehicle_Number__c"
+                    onchange={handleInputChange}>
+                </lightning-input>
+
+                <label class="slds-form-element__label">Engine no</label>
+                <lightning-input type="text" variant="label-hidden" label="Engine no"
+                    value={inputSearchParamater.Engine_Number__c} name="Engine_Number__c"
+                    onchange={handleInputChange}>
+                </lightning-input>
+
+                <label class="slds-form-element__label">Chasis no</label>
+                <lightning-input type="text" variant="label-hidden" label="Chasis no"
+                    value={inputSearchParamater.Chasis_Number__c} name="Chasis_Number__c"
+                    onchange={handleInputChange}>
+                </lightning-input></br></br>
+                <lightning-button class="slds-align_absolute-center slds-var-m-left_x-small" variant="brand" label="Brand" title="Primary action" 
+                onclick={handleClick}> </lightning-button>
+
+            </lightning-layout-item>
+
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="3"
+                class="slds-var-p-horizontal_small" flexibility="auto">
+                <!-- Brand variant: Identifies the primary action in a group of buttons -->
+               
+            </lightning-layout-item>
+        </lightning-layout>
+        <template if:true={showSearchResult}>
+            <c-ausf-vehicle-record-card search-data={searchData} onedit={handleEdit}></c-ausf-vehicle-record-card>
+        </template>
+
+    </lightning-card>
+</template>

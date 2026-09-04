@@ -1,0 +1,265 @@
+<apex:component controller="CAMReportChildComponentsController">
+    
+    <apex:attribute name="applicantList" description="This is the value for the component."
+                    type="Applicant__c[]" required="true" assignTo="{!applicants}"/>
+    <apex:attribute name="fieldInvestigationRecordDetails" description="This is the value for the component."
+                    type="FISummaryViewWrapper[]" required="true" assignTo="{!fieldInvestigationRecords}"/>
+    <apex:attribute name="loanApp" description="This is the value for the component."
+                    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="factorDetails" description="This is the value for the component."
+                    type="String" required="true" assignTo="{!factor}"/>
+    <apex:attribute name="isSectionEnabledForCECVSCVCAR" description="This is the value for the component."
+                    type="boolean" required="false" assignTo="{!isSectionEnabledForCV_CE_SCV_Product}"/>
+                    
+    <apex:includeLightning />
+    <script>
+    function openWindowForFI(reportLink,factor){
+        if(factor=="1"){
+            var newWindow=window.open(reportLink);
+            if(window.focus)
+                newWindow.focus();
+        }
+        if(factor=="3"){
+            var newWindow=window.open(reportLink,'_blank');
+            if(window.focus)
+                newWindow.focus();
+        }
+        let fiRecordId = (reportLink.split('='))[1]
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.CAMReportChildComponentsController.updateFIReportCheck}',
+            fiRecordId.toString(),
+            function(result, event){
+            }, 
+            {escape: true}
+        );
+    }
+    
+    </script>   
+    
+    <input type="hidden" name="myMap" value="{!applicantVsCPVReason}"/>
+    
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" columns="1" title="FI Status">
+            <apex:pageBlockSectionItem >
+                <apex:outputPanel >
+                    <table style="{!tableStyle}">
+                        <tr style="{!tableRowStyle}">				
+                            <th style="{!tableHeadDataStyle} width:5%">Entity Relationship</th>
+                            <th style="{!tableHeadDataStyle} width:10%">Current Address</th>
+                            <th style="{!tableHeadDataStyle} width:10%">Permanent Address</th>
+                            <th style="{!tableHeadDataStyle} width:10%">Office Address</th>
+                            <th style="{!tableHeadDataStyle} width:10%">Touch Point Address</th>
+                            <!--<th style="{!tableHeadDataStyle} width:10%">CPV Waive Off Reason</th>  -->                
+                        </tr>
+                        <apex:repeat value="{!fieldInvestigationRecords}" var="fiRecord">
+                            <tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Applicant' || fiRecord.entity=='Co-Applicant' || fiRecord.entity=='Guarantor', 'table-row', 'none')};">
+                                <td style="{!tableDataStyle}" rowspan="2">
+                                    <div style="display: {!IF(fiRecord.entity=='Applicant','inline','none')}">Applicant_ {!fiRecord.applicantName}</div>
+                                    <div style="display: {!IF(fiRecord.entity=='Co-Applicant','inline','none')}">Co-Applicant_ {!fiRecord.applicantName}</div>
+                                    <div style="display: {!IF(fiRecord.entity=='Guarantor','inline','none')}">Guarantor_ {!fiRecord.applicantName}</div>
+                                </td>  
+                                <td style="{!tableDataStyle}">
+                                    <div style="display: {!IF(fiRecord.currentAddress=='Not Available','inline','none')}">Not Applicable</div>
+                                    <div style="display: {!IF(fiRecord.currentAddress=='Waived off','inline','none')}">Waived off ({!applicantVsCPVReason[fiRecord.applicantName]})</div>
+                                    <div style="display: {!IF(fiRecord.currentAddress!='Not Available','inline','none')}">{!fiRecord.currentAddress}</div>
+                                    
+                                    <br/><br/>
+                                    <div style="display: {!IF(fiRecord.currentAddress!='In Progress' && fiRecord.currentAddress!='Not Available','inline','none')}">
+                                        <div style="display: {!IF(fiRecord.reportLinkForCurrentAddress!='' && fiRecord.reportLinkForCurrentAddress!=null,'inline','none')}">
+                                            <apex:form >
+                                                <apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForCurrentAddress}','{!factor}');return false;"></apex:commandLink>
+                                            </apex:form>
+                                        </div>
+                                    </div>
+                                    
+                                </td>       
+                                <td style="{!tableDataStyle}">
+                                    <div style="display: {!IF(fiRecord.permanentAddress=='Not Available','inline','none')}">Not Applicable</div>
+                                    <div style="display: {!IF(fiRecord.permanentAddress=='Waived off','inline','none')}">Waived off ({!applicantVsCPVReason[fiRecord.applicantName]})</div>
+                                    <div style="display: {!IF(fiRecord.permanentAddress!='Not Available','inline','none')}">{!fiRecord.permanentAddress}</div>
+                                    <br/><br/>
+                                    <div style="display: {!IF(fiRecord.permanentAddress!='In Progress' && fiRecord.permanentAddress!='Not Available','inline','none')}">
+                                        <div style="display: {!IF(fiRecord.reportLinkForPermanentAddress!='' && fiRecord.reportLinkForPermanentAddress!=null,'inline','none')}">
+                                            <apex:form >
+                                                <apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForPermanentAddress}','{!factor}');return false;"></apex:commandLink>
+                                            </apex:form>
+                                        </div>
+                                    </div>
+                                </td> 
+                                <td style="{!tableDataStyle}">
+                                    <div style="display: {!IF(fiRecord.officeAddress=='Not Available','inline','none')}">Not Applicable</div>
+                                    <div style="display: {!IF(fiRecord.officeAddress=='Waived off','inline','none')}">Waived off ({!applicantVsCPVReason[fiRecord.applicantName]})</div>
+                                    <div style="display: {!IF(fiRecord.officeAddress!='Not Available','inline','none')}">{!fiRecord.officeAddress}</div>
+                                    <br/><br/>
+                                    <div style="display: {!IF(fiRecord.officeAddress!='In Progress' && fiRecord.officeAddress!='Not Available','inline','none')}">
+                                        <div style="display: {!IF(fiRecord.reportLinkForOfficeAddress!='' && fiRecord.reportLinkForOfficeAddress!=null,'inline','none')}">
+                                            <apex:form >
+                                                <apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForOfficeAddress}','{!factor}');return false;"></apex:commandLink>
+                                            </apex:form>
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                                <td style="{!tableDataStyle}">
+                                    <div style="display: {!IF(fiRecord.tpAddress=='Not Available','inline','none')}">Not Applicable</div>
+                                    <div style="display: {!IF(fiRecord.tpAddress=='Waived off','inline','none')}">Waived off ({!applicantVsCPVReason[fiRecord.applicantName]})</div>
+                                    <div style="display: {!IF(fiRecord.tpAddress!='Not Available','inline','none')}">{!fiRecord.tpAddress}</div>
+                                    <br/><br/>
+                                    <div style="display: {!IF(fiRecord.tpAddress!='In Progress' && fiRecord.tpAddress!='Not Available','inline','none')}">
+                                        <div style="display: {!IF(fiRecord.reportLinkForTPAddress!='' && fiRecord.reportLinkForTPAddress!=null,'inline','none')}">
+                                            <apex:form >
+                                                <apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForTPAddress}','{!factor}');return false;"></apex:commandLink>
+                                            </apex:form>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!--<td style="{!tableDataStyle}" rowspan="2">
+{!applicantVsCPVReason[fiRecord.applicantName]}                        
+</td>-->
+                            </tr>
+                            <tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Applicant' || fiRecord.entity=='Co-Applicant' || fiRecord.entity=='Guarantor', 'table-row', 'none')};">
+                                <td style="{!tableDataStyle}">
+                                    <br/>
+                                    {!fiRecord.currentAddressAgency}<br/><br/>
+                                </td>       
+                                <td style="{!tableDataStyle}">
+                                    <br/>
+                                    {!fiRecord.permanentAddressAgency}<br/><br/>
+                                </td> 
+                                <td style="{!tableDataStyle}">
+                                    <br/>
+                                    {!fiRecord.officeAddressAgency}<br/><br/>
+                                </td>
+                                <td style="{!tableDataStyle}">
+                                    <br/>
+                                    {!fiRecord.tpAddressAgency}<br/><br/>
+                                </td>
+                            </tr>
+                            <!--<tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Co-Applicant', 'table-row', 'none')};">
+<td style="{!tableDataStyle}" rowspan="2">Co-Applicant_ {!fiRecord.applicantName}</td>  
+
+<td style="{!tableDataStyle}">
+{!fiRecord.currentAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.currentAddress!='In Progress' && fiRecord.currentAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForCurrentAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.permanentAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.permanentAddress!='In Progress' && fiRecord.permanentAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForPermanentAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.officeAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.officeAddress!='In Progress' && fiRecord.officeAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForOfficeAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td>
+<td style="{!tableDataStyle}">
+{!fiRecord.tpAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.tpAddress!='In Progress' && fiRecord.tpAddress!='Not Available','inline','none')}">                           
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForTPAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td>
+<td style="{!tableDataStyle}" rowspan="2">{!applicantVsCPVReason[fiRecord.applicantName]}</td>
+</tr>
+<tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Co-Applicant', 'table-row', 'none')};">
+<td style="{!tableDataStyle}">
+{!fiRecord.currentAddressAgency}<br/>
+</td>       
+<td style="{!tableDataStyle}">
+{!fiRecord.permanentAddressAgency}<br/>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.officeAddressAgency}<br/>
+</td>
+<td style="{!tableDataStyle}">
+{!fiRecord.tpAddressAgency}<br/>
+</td>
+</tr>
+<tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Co-Applicant', 'table-row', 'none')};">
+<td style="{!tableDataStyle}">
+{!fiRecord.currentAddressAgency}<br/>
+</td>       
+<td style="{!tableDataStyle}">
+{!fiRecord.permanentAddressAgency}<br/>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.officeAddressAgency}<br/>
+</td>
+<td style="{!tableDataStyle}">
+{!fiRecord.tpAddressAgency}<br/>
+</td>
+</tr>-->
+                            <!--tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Guarantor', 'table-row', 'none')};">
+<td style="{!tableDataStyle}" rowspan="2">Guarantor_ {!fiRecord.applicantName}</td>  
+
+<td style="{!tableDataStyle}">
+{!fiRecord.currentAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.currentAddress!='In Progress' && fiRecord.currentAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForCurrentAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.permanentAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.permanentAddress!='In Progress' && fiRecord.permanentAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForPermanentAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.officeAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.officeAddress!='In Progress' && fiRecord.officeAddress!='Not Available','inline','none')}">
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForOfficeAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td>
+<td style="{!tableDataStyle}">
+{!fiRecord.tpAddress}<br/><br/>
+<div style="display: {!IF(fiRecord.tpAddress!='In Progress' && fiRecord.tpAddress!='Not Available','inline','none')}">                           
+<apex:form >
+<apex:commandLink reRender="None" value="View Report" onclick="return openWindowForFI('{!fiRecord.reportLinkForTPAddress}','{!factor}');return false;"></apex:commandLink>
+</apex:form>
+</div>
+</td>
+<td style="{!tableDataStyle}" rowspan="2">{!applicantVsCPVReason[fiRecord.applicantName]}</td>  
+
+</tr>
+<tr style="{!tableRowStyle} display: {!IF(fiRecord.entity=='Guarantor', 'table-row', 'none')};">
+<td style="{!tableDataStyle}">
+{!fiRecord.currentAddressAgency}<br/>
+</td>       
+<td style="{!tableDataStyle}">
+{!fiRecord.permanentAddressAgency}<br/>
+</td> 
+<td style="{!tableDataStyle}">
+{!fiRecord.officeAddressAgency}<br/>
+</td>
+<td style="{!tableDataStyle}">
+{!fiRecord.tpAddressAgency}<br/>
+</td>
+</tr-->
+                        </apex:repeat>
+                        
+                        
+                        
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+    </div>         
+</apex:component>

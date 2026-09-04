@@ -1,0 +1,205 @@
+<template>
+    <lightning-card title="PAN" icon-name="standard:lead">
+        <lightning-button label="Edit/New" onclick={handleClick} slot="actions"></lightning-button>
+        <!--<lightning-button variant="base" label="Add or Edit Additional Documents" title="Looks like a link" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>-->
+        <!--template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template-->
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+       <template if:false={showOCRDetails}>
+       <template if:true={showVerificationOptions}>
+            <label class="slds-form-element__label slds-m-left_small">Click on one of the below Verification
+                options:</label>
+            <lightning-layout multiple-rows class="slds-m-around_small">
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={pan} width="50%" height="100%" onclick={selectVerificationType} class="imageCss"
+                        data-id="Pan Card">
+                    <span class="slds-align_absolute-center"><b>PAN CARD</b></span>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={form60} width="50%" height="100%" onclick={selectVerificationType} class="imageCss"
+                        data-id="Form 60">
+                    <span class="slds-align_absolute-center"><b>FORM 60</b></span>
+                </lightning-layout-item>
+
+            </lightning-layout>
+        </template>
+
+        <template if:true={verificationTypePAN}>
+            <template if:true={showBanner}>
+                <div class="slds-box slds-box_x-small slds-m-around_small slds-theme_success">
+                    <p>Selected Verification Type: PAN
+                        <a style="color:white; text-decoration:none;" class="slds-float_right"
+                            onclick={resetVerificationType}>Change</a>
+                    </p>
+                </div>
+            </template>
+
+            <div class="slds-grid slds-gutters_x-small slds-m-around_small">
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size--2-of-3 slds-medium-size--1-of-2 ">
+                    <span>
+                        <!--<label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>PAN</label>-->
+                        <div class="buttonIn">
+                            <lightning-input type="text" required="true" variant="label-hidden" placeholder="Enter pan"
+                                onchange={handleValueChange} class="validate input pan" value={applicant.PAN__c}
+                                pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" length="10" name="PAN__c"
+                                message-when-pattern-mismatch="Enter valid Pan number" disabled>
+                            </lightning-input>
+                            <div class="button">
+                                <lightning-button-icon icon-name="utility:upload" alternative-text="upload"
+                                   title="Upload">
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:save" onclick={showResponse} alternative-text="View" if:true={showViewResponse}
+                                    title="View">
+                                 </lightning-button-icon>
+                            </div >
+                        </div>
+                    </span>
+                </div>
+                <div class="slds-col slds-large-size_1-of-2 slds-small-size--1-of-3 slds-medium-size--1-of-2">
+                    <span>
+                        <div class="slds-is-relative">
+                            <template if:false={docVerified}>
+                                <lightning-button class="slds-align_absolute-center slds-is-absolute"
+                                    style="display:flex;" type="neutral" label="Verify" onclick={verifyPAN} disabled={disableVerifyPanButton}>
+                                </lightning-button>
+                            </template>
+                            <template if:true={docVerified}>
+                                <lightning-icon size="small" variant="success"
+                                    class="slds-align_absolute-center slds-is-absolute" style="display:flex;"
+                                    icon-name="utility:success"></lightning-icon>
+                            </template>
+                        </div>
+                    </span>
+                </div>
+
+            </div>
+
+        </template>
+
+        <template if:true={verificationTypeForm60}>
+            <div class="slds-box slds-box_x-small slds-m-around_small slds-theme_success">
+                <p>Selected Verification Type: Form 60
+                    <a style="color:white; text-decoration:none;" class="slds-float_right"
+                        onclick={resetVerificationType}>Change</a>
+                </p>
+            </div>
+            <div if:false={isform60uploaded} class="slds-p-around_small">
+                <label class="slds-form-element__label">
+                    <abbr class="slds-required" title="required">* </abbr>Form 60</label>
+                <!-- <lightning-file-upload multiple onuploadfinished={handleUploadFinished}></lightning-file-upload> -->
+                <c-los-generic-document-upload is-form60={verificationTypeForm60} isdocmanager={trueValue} show-upload-component={trueValue}  show-input-box={falseValue} loan-id ="" applicant-id={applicant.Id} doc-name ={documentPan} ondocumentsuccess={handleSuccessUpload} is-model-needed={falseValue} uploadtypename ={documentPan} isapplicant-page={falseValue} hidefiledetails={trueValue}></c-los-generic-document-upload>
+            </div>
+            <div if:true={isform60uploaded} class="slds-p-around_small">
+                <div if:false={isMobile} class="slds-grid slds-gutters slds-col slds-size_1-of-3">
+                    <lightning-button variant="base" label="Click here to preview form 60" name="form60File" data-id={contentVersionId} title="Document Name" 
+                    onclick={handlePreviewClick} class="linkClass slds-size_2-of-4 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                    <a target="_blank" class="slds-size_1-of-4 slds-align_absolute-center" href={downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                    <lightning-icon class="slds-col slds-size_1-of-4 slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={contentVersionId} onclick={handleClickDelete}></lightning-icon>
+                    <br/>
+                </div>
+                <div if:true={isMobile} class="slds-grid slds-gutters slds-col">
+                    <lightning-button variant="base" label="Click here to preview form 60" name="form60File" data-id={contentVersionId} title="Document Name" 
+                    onclick={handlePreviewClick} class="linkClass slds-size_2-of-4 slds-col slds-cell-wrap slds-truncate"></lightning-button>
+                    <a target="_blank" class="slds-size_1-of-4 slds-align_absolute-center" href={downloadurl} download> <lightning-icon icon-name="utility:download" size="x-small" alternative-text="Download" title="Download"></lightning-icon></a>
+                    <lightning-icon class="slds-col slds-size_1-of-4 slds-align_absolute-center" icon-name="utility:delete" size="x-small" alternative-text="Delete" title="Delete" name={contentVersionId} onclick={handleClickDelete}></lightning-icon>
+                    <br/>
+                </div>
+            </div>
+        </template>
+
+        <!--<template if:true={docVerified}>-->
+            <template if:true={showAdditional}>
+            <div class="slds-p-horizontal_small slds-m-around_small">
+                <label class="slds-form-element__label">Additional KYC &nbsp; <!--SFAU-2968-->
+                    <!--<lightning-button-icon
+                        icon-name="utility:add" alternative-text="Add" title="Add" class="slds-form-element__label"
+                        onclick={handleAdditionalInformationClick}>-->
+                    <!--<lightning-icon icon-name=action:new size="xx-small" onclick={handleAdditionalInformationClick}>
+                    </lightning-icon>-->
+                    <!--</lightning-button-icon>-->
+                </label>
+            </div>
+
+            <!--<template if:true={isShowAdditionalInformationsPicklist}>
+                <div class="slds-grid slds-gutters slds-p-horizontal_small">
+                    <div class="slds-col slds-large-size_1-of-2 slds-small-size--2-of-3 slds-medium-size--1-of-2 ">
+                        <lightning-combobox class="slds-form-element__label slds-p-left_x-small" data-index={index}
+                            variant="label-hidden" name="AdditionalInformation" value={AdditionalInformationvalue}
+                            placeholder="Select Document type" options={AdditionalInformationoptions}
+                            onchange={handleAdditionalInformationChange}>
+                        </lightning-combobox>
+                        <template for:each={allAdditionalInformationvalues} for:item="val">
+                            <lightning-pill key={val} label={val} name={val} class="slds-p-left_x-small"
+                                onremove={handleRemove}></lightning-pill>
+                        </template>
+                    </div>
+                </div>
+            </template>-->
+            <div class="slds-p-horizontal_small slds-m-around_small">
+            <template if:true={isEnabledVoterId}>
+                <c-ausf-voter-card-verification document-check-list-record={voterDocumentChecklist} applicant={applicant} onvoterverify={handleVoterVerify}></c-ausf-voter-card-verification><!--isvoter-card-verified={voterIdVerified}  onvoterverify={handleVoterVerify}-->
+            </template>
+            <template if:true={isEnabledDrivingLicence}>
+                <c-ausf-driver-licence-verification spinner-image={spinnerImage} applicant={applicant} document-check-list-record={drivingLicenseDocumentChecklist} ondlverify={handleDlVerify} ></c-ausf-driver-licence-verification><!--dl-verified={dlVerified} ondlverify={handleDlVerify}-->
+            </template>
+            <template if:true={isEnabledPassport}>
+                <c-ausf-passport-verification spinner-image={spinnerImage} applicant={applicant} document-check-list-record={passportDocumentChecklist} onpassportverify={handlePassVerify}></c-ausf-passport-verification><!--passport-verified={passportVerified} onpassportverify={handlePassVerify}-->
+            </template>
+            <template if:true={isEnabledGst}>
+                <c-ausf-g-s-t-verification spinner-image={spinnerImage} applicant={applicant} document-check-list-record={gstDocumentChecklist}></c-ausf-g-s-t-verification>
+            </template>
+            <template if:true={isEnabledCin}>
+                <c-ausf-cin-verification spinner-image={spinnerImage} applicant={applicant} document-check-list-record={cinDocumentChecklist}></c-ausf-cin-verification>
+            </template>
+                        <template if:true={isEnabledUdyam}>
+                <c-ausf-udyam-verification applicant={applicant} document-check-list-record={udyamDocumentChecklist}></c-ausf-udyam-verification>
+            </template>
+            </div>
+            <!--<template if:true={isShowAdditionalInformationsPicklist}>
+                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                    <lightning-button variant="base" label="Add or Edit Additional Documents" title="Looks like a link" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                </div>   AusfCinVerification
+            </template>-->
+        </template>
+        <!--</template>-->
+
+        <template if:true={showPANDetails}>
+            <c-generic-data-display onback={cancel} display-type={dispType} identifier-documents={identifierDocuments} 
+                    onverified={verifyPANDetails} pan-response={response}>
+            </c-generic-data-display>
+        </template>
+        </template>
+        <template if:true={showOCRDetails}>
+            <lightning-card icon-name="standard:account"
+                class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+                <template if:true={isloading}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template>
+                <template for:each={dataValues} for:item="data">
+                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                        <div class="slds-size_1-of-2">
+                            <b>{data.key}</b>
+                        </div>
+                        <div class="slds-size_1-of-2 textContent">
+                            {data.value}
+                        </div>
+                    </div>
+                </template>
+                <div class="slds-align_absolute-center slds-var-m-top_large">
+                    <lightning-button label="Ok" disabled={disableOkButton} variant="brand" title="Ok" onclick={okClick}
+                        class="slds-var-m-left_x-small">
+                    </lightning-button>
+                    <!--<lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+                    </lightning-button>-->
+                </div>
+            </lightning-card>
+        </template>
+
+    </lightning-card>
+</template>

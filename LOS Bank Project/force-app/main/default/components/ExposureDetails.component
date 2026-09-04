@@ -1,0 +1,73 @@
+<apex:component controller="CAMReportChildComponentsController">
+
+    <apex:attribute name="loanApp" description="This is the value for the component."
+    type="Loan_Application__c" required="true" assignTo="{!loan}"/>
+    <apex:attribute name="exposureCBSAccountRecords" description="This is the value for the component."
+    type="Bank_Account_Records__c[]" required="true" assignTo="{!exposureDetailsForAppBanks}"/>
+
+
+    	 						
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Exposure Details (Applicant / Co-applicant / Guarantor Self Loan) - Co-applicant and Guarantor exposure clubbed only under individual capacity">
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                        <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                            <th style="{!tableHeadDataStyle} width:10% !important">Deal Member</th>
+                        <!--</apex:outputPanel> commented this condition as part of JIRA 4309-->
+                        <th style="{!tableHeadDataStyle} width:7% !important">Prod Code + Name</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">A/c No</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">Loan/limit Amount</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">POS</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">EMI Billed / Tenor</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">No of EMI Overdue</th>
+                        <th style="{!tableHeadDataStyle} width:7% !important">Overdue Amt</th>
+                        <!--<th style="{!tableHeadDataStyle} width:7% !important">Average / Peak Delay (last 12 months)</th>-->
+                        <!--<apex:outputPanel rendered="{!loan.Product__c!='Auto Loan (New)'}" >-->
+                        <th style="{!tableHeadDataStyle} width:7% !important">Average Delay (last 12 months)</th>
+                        <!--</apex:outputPanel>-->
+                        <!--<apex:outputPanel rendered="{!loan.Product__c!='Auto Loan (New)'}" >-->
+                            <th style="{!tableHeadDataStyle} width:7% !important"> Peak Delay (last 12 months)</th>
+                        <!--</apex:outputPanel>-->
+                        <th style="{!tableHeadDataStyle} width:7% !important">No. of Bouncing</th>                   
+                </tr>
+                <apex:repeat value="{!keys}" var="key">
+                    <tr style="{!tableRowStyle}" >
+                        <td style="{!tableDataStyle}" rowspan="{!applicantsizeMap[key]}">{!applicantnameMap[key]}</td>       
+                                            
+                                                
+                                                    
+                        <apex:repeat value="{!exposureBankRecords[key]}" var="bankRec">
+                            <tr style="{!tableRowStyle}">
+                                <!--<apex:outputPanel rendered="{!loan.Product__c=='Auto Loan (New)'}" >-->
+                                    <td style="{!tableDataStyle}">{!bankRec.Product__c} {!bankRec.Product_Code__c}</td>
+                                <!--</apex:outputPanel> commented this condition as a part of JIRA 4309-->
+                               <!--<td style="{!tableDataStyle}">{!bankRec.Loan_Number__c}</td>-->
+                               <td style="{!tableDataStyle}">{!bankRec.Account_Number__c}</td> <!--updated JIRA SFAU-4580 -->
+                               
+                                <td style="{!tableDataStyle}">
+                                    <div style="display: {!IF(bankRec.Account_Type__c=='Loan', 'inline', 'none')};">
+                                        {!bankRec.Loan_Amount__c}
+                                    </div>
+                                    <div style="display: {!IF((bankRec.Account_Type__c=='CASA' || bankRec.Account_Type__c=='ODCC'), 'inline', 'none')};">
+                                        {!bankRec.OD_Limit_Sanctioned__c}
+                                    </div> 
+                                </td>
+                                <td style="{!tableDataStyle}">{!bankRec.POS__c}</td>
+                                <td style="{!tableDataStyle}">{!bankRec.EMI_Amount__c} {!bankRec.Tenure__c}</td>
+                                <td style="{!tableDataStyle}">{!bankRec.Loan_Overdue_EMI__c}</td>
+                                <td style="{!tableDataStyle}">{!bankRec.InstallmentsOverDue__c}</td>
+                                <!--<td style="{!tableDataStyle}"></td>-->
+                                 <td style="{!tableDataStyle}"></td>
+                                 <td style="{!tableDataStyle}"></td>
+                                <td style="{!tableDataStyle}">{!bankRec.No_of_Bouncing__c}</td>
+                            </tr>
+                        </apex:repeat>
+                        
+                    </tr>   
+                </apex:repeat>
+                      
+            </table>
+    </div>         
+</apex:component>

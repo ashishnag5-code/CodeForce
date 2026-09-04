@@ -1,0 +1,196 @@
+<template>
+
+	<div class="slds-m-top--small">
+		<div if:true={isLoaded} class="slds-is-relative">
+			<lightning-spinner alternative-text="Loading..." variant="brand">
+			</lightning-spinner>
+		</div>
+		<lightning-card>
+			<h1 slot="title">
+				<span style="color: rgb(100, 0, 134)">
+                    <lightning-icon class="slds-p-around_small slds-current-color" icon-name="action:adjust_value"
+                        size="medium"></lightning-icon>
+                </span>&nbsp;
+				RTR Dashboard
+			</h1>
+			<!--Generic Applicant Selection-->
+			<c-applicant-selection record-val={recordId} onselection={handleApplicantChange} label-text={labelVal}>
+			</c-applicant-selection>
+			<!--lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+				<lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+					<lightning-combobox name="Repayment History" label="Repayment History" value={repaymentHistory}
+						options={repaymentHistoryOptions} required onchange={handleChange} padding="around-small">
+					</lightning-combobox>
+				</lightning-layout-item>
+			</lightning-layout-->
+		</lightning-card>
+		<br/>
+		<template if:true={showBureauTable}>
+			<!-- create folder card -->
+			<lightning-card variant="Narrow" title="RTR Bureau Details" icon-name="standard:folder" class="cardSpinner">
+				<!-- loader -->
+				<div if:true={showSpinner}>
+					<lightning-spinner alternative-text="Loading..." variant="brand">
+					</lightning-spinner>
+				</div>
+				<!-----/loader-------->
+				<div class="slds-var-p-around_small">
+					<template if:true={data}>
+						<c-l-w-c-custom-datatable-type class="wrapped-header-datatable" key-field="Id" data={data}
+							columns={columns} onvalueselect={handleSelection} draft-values={draftValues}
+							oncellchange={handleCellChange} onsave={handleSave} oncancel={handleCancel}
+							hide-checkbox-column min-column-width="100">>
+						</c-l-w-c-custom-datatable-type>
+					</template>
+				</div>
+			</lightning-card>
+		</template>
+		<br/>
+		<template if:true={showButton}>
+			<lightning-button variant="brand" label="Add - RTR Manual" title="Add - RTR Manual"
+				onclick={handleAddRtrManualClick}></lightning-button>
+
+		</template>
+		<template if:true={showCreateForm}>
+			<div class="slds-m-top_x-small">
+				<lightning-record-edit-form object-api-name='Bank_Account_Records__c' onsuccess={handleSuccess}
+					columns="2" record-type-id={manualRecordTypeId} onsubmit={handleSubmit}>
+					<lightning-layout multiple-rows class="slds-p-bottom_small">
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Name_of_the_Financier__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Loan_Amount__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="POS__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="ROI__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="No_of_Emi_Paid__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Tenure__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6" >
+							<!--lightning-input-field field-name="Type_of_Loan__c"></lightning-input-field-->
+							<span class="sslds-form-element slds-form-element_horizontal">
+							<label class="slds-form-element__label">Type of Loan</label>
+                                        <lightning-combobox name="Type_of_Loan__c" label="Type of Loan" variant="label-hidden"
+											options={loanTypeOptions}
+                                            onchange={handleOnChange}>
+                                        </lightning-combobox>
+							</span>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="RTR_Status__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="EMI_Considered_for_Obligation__c">
+							</lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Payment_History_End_Date__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="EMI_Amount__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field data-name="Loan_Track_Verified_From__c"
+								field-name="Loan_Track_Verified_From__c" value="Manual" disabled="true">
+							</lightning-input-field>
+						</lightning-layout-item>
+						<!---->
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Average_12_Month_DPD__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Highest_12_Month_DPD__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Average_Delay__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Highest_Overall_DPD__c"></lightning-input-field>
+						</lightning-layout-item>
+
+						<!---->
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Reported_Date__c"></lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+							medium-device-size="12" large-device-size="6">
+							<lightning-input-field field-name="Remarks__c"></lightning-input-field>
+						</lightning-layout-item>
+						<div hidden>
+							<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+								medium-device-size="12" large-device-size="6">
+								<lightning-input-field field-name="Applicant__c" value={applicantId} disabled="true">
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+								medium-device-size="12" large-device-size="6">
+								<lightning-input-field field-name="Bureau_Results__c" value={burResId} disabled="true">
+								</lightning-input-field>
+							</lightning-layout-item>
+						</div>
+					</lightning-layout>
+					<lightning-layout multiple-rows class="slds-p-bottom_small">
+						<div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+							<lightning-button class="slds-m-top_small" variant="brand" name="Cancel" label="Back"
+								onclick={handleFormCancel}>
+							</lightning-button>&nbsp;
+							<lightning-button class="slds-m-top_small" variant="brand" type="submit" name="Save"
+								label="Save">
+							</lightning-button>
+						</div>
+					</lightning-layout>
+
+				</lightning-record-edit-form>
+			</div>
+		</template>
+
+		<br/>
+		<br/>
+		<template if:true={showManualTable}>
+			<!-- create folder card -->
+			<lightning-card variant="Narrow" title="RTR Manual Details" icon-name="standard:folder" class="cardSpinner">
+				<!-- loader -->
+				<div if:true={showSpinner1}>
+					<lightning-spinner alternative-text="Loading..." variant="brand">
+					</lightning-spinner>
+				</div>
+				<!-----/loader-------->
+				<div class="slds-var-p-around_small">
+					<template if:true={data1}>
+						<c-l-w-c-custom-datatable-type class="wrapped-header-datatable" key-field="Id" data={data1}
+							columns={columns1} onvalueselect={handleSelection1} draft-values={draftValues1}
+							oncellchange={handleCellChange1} onsave={handleSave1} oncancel={handleCancel1}
+							hide-checkbox-column min-column-width="100" onrowaction={handleRowAction}>
+						</c-l-w-c-custom-datatable-type>
+					</template>
+				</div>
+			</lightning-card>
+		</template>
+	</div>
+
+</template>

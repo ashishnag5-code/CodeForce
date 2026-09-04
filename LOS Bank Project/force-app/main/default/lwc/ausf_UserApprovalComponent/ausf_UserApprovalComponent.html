@@ -1,0 +1,60 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isSending}></c-custom-spinner>
+
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="custom:custom50" size="medium"></lightning-icon>
+            <span class="slds-p-left_small">{title}</span>
+        </h3>
+        <div slot="footer">
+                
+        </div>
+        <p class="slds-p-horizontal_small">
+            <lightning-datatable
+                                key-field="id"
+                                data={data}
+                                columns={columns}
+                                hide-checkbox-column="true"
+                                show-row-number-column="true"
+                                onrowaction={handleRowAction}>
+            </lightning-datatable>
+
+        </p>
+    </lightning-card>
+
+
+    
+    
+
+    <template if:true={renderRemarksModal}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Send Back Approval Request</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-textarea data-id="remarks"
+                                        name="remarks" label="Remarks" disabled={disabledValue} variant="label-hidden"
+                                        value={remark} onchange={handleRemarkChange} >
+                    </lightning-textarea>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={rejectDetails} title="Reject">Send Back</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+</template>

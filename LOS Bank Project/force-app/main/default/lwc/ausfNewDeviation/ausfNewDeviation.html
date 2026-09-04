@@ -1,0 +1,115 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="Create Deviation">
+                            <lightning-avatar src={deviationDetails} size="large"></lightning-avatar>
+                            <span class="slds-assistive-text">Create Deviation</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a href="#" class="slds-card__header-link slds-truncate" title="Create Deviation">
+                                <span>Create Deviation</span>
+                            </a>
+                        </h2>
+                    </div>
+                </header>
+            </div>
+        
+        <template if:false={isSourceBRE}>
+        <lightning-layout multiple-rows="true">
+            <lightning-layout-item class="slds-p-around_xx-small" size="12">
+                <lightning-layout>
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        <div class="slds-p-around_xx-small">
+                            <template if:true={manualDeviationDepartmentPicklist.data}>
+                                <lightning-combobox name="Department" label="Department" value={departmentVal} required
+                                    options={manualDeviationDepartmentPicklist.data.values} onchange={handleDepartmentChange} disabled={isDisabled}>
+                                </lightning-combobox>
+                            </template>     
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <template if:true={ruleTypePicklist}>
+                            <lightning-combobox name="Rule Type" label="Rule Type" value={ruleTypeVal} required={isRuleTypeRequired}
+                                    options={ruleTypePicklist} onchange={handleRoleTypeChange} disabled={isDisabled}>
+                            </lightning-combobox>
+                            </template>
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <template if:true={descriptionPicklist}>
+                                <lightning-combobox name="Deviation Description" label="Deviation Description" value={deviationDescriptionVal} required={isDeviationDescRequired}
+                                        options={descriptionPicklist} onchange={handleDescriptionChange} disabled={isDisabled}>
+                                </lightning-combobox>
+                                </template>
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <template if:true={deviationLevel}>
+                                <lightning-combobox name="Deviation Level" label="Deviation Level" value={deviationLevelVal} required={isDeviationLevelRequired}
+                                        options={deviationLevel} onchange={handleLevelChange} disabled={isDisabled}>
+                                </lightning-combobox>
+                                </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                        
+                        <div class="slds-p-around_xx-small">
+                            <lightning-input type="number" name="Policy Value" required label="Policy Value" value={policyValue} onchange={handlePolicyChange} disabled={isDisabled}></lightning-input>
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <lightning-input type="number" name="Actual Value" required label="Actual Value" value={actualValue} onchange={handleActualValueChange} disabled={isDisabled}></lightning-input>
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <lightning-input type="number" name="Variance" label="Variance" value={variance} onchange={handleVarianceChange} disabled={isDisabled}></lightning-input>
+                        </div>
+                        <div class="slds-p-around_xx-small">
+                            <lightning-textarea name="Mitigates" required label="Mitigates" value={mitigates} onchange={handleMitigatesChange}></lightning-textarea>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-button variant="brand" label={buttonLabel} title="Primary action" onclick={createDeviation} class="slds-m-around_x-small slds-align_absolute-center"></lightning-button>
+        </template>
+
+        <template if:true={isSourceBRE}>
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item class="slds-p-around_xx-small" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="text" name="Department" label="Department" value={departmentVal} disabled></lightning-input>   
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="text" name="Rule Type" label="Rule Type" value={ruleTypeVal} disabled></lightning-input>   
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="text" name="Deviation Description" label="Deviation Description" value={deviationDescriptionVal} disabled></lightning-input>  
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="text" name="Deviation Level" label="Deviation Level" value={deviationLevelVal} disabled></lightning-input>  
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-around_xx-small" size=6>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="number" name="Policy Value" label="Policy Value" value={policyValue} disabled></lightning-input>
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="number" name="Actual Value" label="Actual Value" value={actualValue} disabled></lightning-input>
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-input type="number" name="Variance" label="Variance" value={variance} onchange={handleVarianceChange} disabled></lightning-input>
+                            </div>
+                            <div class="slds-p-around_xx-small">
+                                <lightning-textarea name="Mitigates" label="Mitigates" value={mitigates} onchange={handleMitigatesChange} ></lightning-textarea>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-button variant="brand" label='Update Deviation' title="Primary action" onclick={updateBREDeviation} class="slds-m-around_x-small slds-align_absolute-center"></lightning-button>
+            </template>
+    </article>
+</template>

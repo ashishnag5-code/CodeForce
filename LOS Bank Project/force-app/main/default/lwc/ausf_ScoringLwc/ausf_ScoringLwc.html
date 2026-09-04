@@ -1,0 +1,170 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <div class="mainContent">
+        <lightning-card icon-name="custom:custom66" title="Highlights">
+            <div class="content">
+                <lightning-layout if:true={showVehicleFinanlize} multiple-rows vertical-align="end">
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+                    <div class="component" data-id="Vehicle_finalised__c">
+                        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                            <lightning-layout-item size="12" small-device-size="12"
+                                large-device-size="6" class="slds-var-p-horizontal_small"
+                                flexibility="auto">
+                                <label class="slds-form-element__label"></abbr>Vehicle Finalised</label>
+                                <lightning-input type="toggle" variant="label-hidden" name="Vehicle_finalised__c"
+                                    message-toggle-active="Yes" message-toggle-inactive="No"
+                                    checked={loanApp.Vehicle_finalised__c} onchange={handleValuChange}>
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </div>
+                </lightning-layout-item>
+                </lightning-layout>
+                
+
+                <template if:true={errorMessage}>
+                    <div class="slds-col slds-small-size_1-of-2 slds-medium-size_3-of-12 slds-large-size_1-of-2 infoMessgaeCss slds-notify slds-notify_toast slds-theme_info">
+                        {errorMessage} 
+                        <lightning-formatted-url value={matchRecordUrl} label={matchRecordLabel} target="_self"></lightning-formatted-url> 
+                    </div>
+                </template>
+                <template if:true={noDataFoundMessage}>
+                    <div class="slds-col slds-small-size_1-of-2 slds-medium-size_3-of-12 slds-large-size_1-of-2 infoMessgaeCss slds-notify slds-notify_toast slds-theme_info" style="display:inline;">
+                        {noDataFoundMessage}
+                    </div>
+                </template>
+                <template if:false={noDataFoundMessage}>
+                <div class="slds-grid slds-wrap scores">
+                    <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                        CFR Status
+                    </div>
+                    <template if:true={cfrStatusVal}>
+                        <div data-name="CfrStatus"
+                            class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            {cfrStatusVal}
+                        </div>
+                    </template>
+                    <template if:false={cfrStatusVal}>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <lightning-icon data-name="CfrStatus" data-id="1" variant="" icon-name=""
+                                size="x-small"></lightning-icon>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="slds-grid slds-wrap scores">
+                    <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                        Negative Check Status
+                    </div>
+                    <template if:true={negatCheckVal}>
+                        <div data-name="NegCheckStatus"
+                            class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            {negatCheckVal}
+                        </div>
+                    </template>
+                    <template if:false={negatCheckVal}>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <lightning-icon data-name="NegCheckStatus" data-id="2" variant="" icon-name="" size="x-small">
+                            </lightning-icon>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="slds-grid slds-wrap scores">
+                    <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                        Related Party Status
+                    </div>
+                    <template if:true={relPartyVal}>
+                        <div data-name="RelPartyStatus"
+                            class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            {relPartyVal}
+                        </div>
+                    </template>
+                    <template if:false={relPartyVal}>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <lightning-icon data-name="RelPartyStatus" data-id="3" variant="" icon-name="" size="x-small">
+                            </lightning-icon>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="slds-grid slds-wrap scores">
+                    <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                        AML Status
+                    </div>
+                    <template if:true={amlStatusVal}>
+                        <div data-name="AmlStatus"
+                            class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">                           
+                                {amlStatusVal}
+                        </div>
+                    </template>
+                    <template if:false={amlStatusVal}>
+                        <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                            <template if:true={onClick}>
+                                <lightning-icon data-name="AmlStatus" data-id="4" variant="" icon-name="utility:refresh" size="medium" onclick={refreshCreditScoreHandler} class="onClickRefresh"></lightning-icon>
+                            </template>
+                            <template if:false={onClick}>
+                                <lightning-icon data-name="AmlStatus" data-id="4" variant="" icon-name="" size=""></lightning-icon>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+                <template if:false={isCibil}>
+                    <div class="slds-grid slds-wrap scores cibil">
+                        <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                            Cibil Score
+                        </div>
+                        <template if:true={creditScore}>
+                            <template if:true={rerunCibil}>
+                                        <lightning-button label="Rerun" title="Rerun" onclick={handleCreateCibilRequest} ></lightning-button>
+                                        Last Score - {creditScore}
+                            </template>
+                            <template if:false={rerunCibil}>
+                            <div data-id="cibilColor" class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                {creditScore}
+                            </div>
+                            </template>
+                        </template>
+                        <template if:false={creditScore}>
+                            <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                <template if:false={cibilOnClick}>
+                                    <lightning-icon data-name="CreditScore" icon-name="utility:spinner" title="Get Cibil Score" variant="warning" size="medium"
+                                        style="cursor: pointer;"  disabled={isGetCibilScoreDisabled}>
+                                    </lightning-icon>
+                                </template>
+                                <template if:true={cibilOnClick}>
+                                    <lightning-icon data-name="CreditScore" data-id="4" variant="" icon-name="utility:refresh" size="medium" onclick={handleCreateCibilRequest} class="onClickRefresh"></lightning-icon>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="slds-grid slds-wrap scores cibil">                  
+                        <div class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+                            Cibil Report
+                        </div> 
+                        <template if:true={reportVal}>
+                            <div class="slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                <template if:true={isLink}>
+                                    <lightning-icon icon-name="action:preview" size="small" onclick={previewFile}></lightning-icon>
+                                </template>                          
+                                <template if:false={isLink}>  
+                                    {view}
+                                </template> 
+                            </div>
+                        </template>
+                        <template if:false={reportVal}>
+                            <div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+                                <lightning-icon data-name="ReportVal" variant="warning" icon-name="utility:spinner" size="medium"></lightning-icon>
+                            </div>
+                        </template>
+                    </div> 
+                </template>
+            </template>
+            </div>
+        </lightning-card>
+    </div>
+    <template if:true={additionalMatchRecId}>
+        <c-los-additional-match-cibil record-id={additionalMatchRecId} onclickedgetcibilbutton={clickedGetCibilButton}></c-los-additional-match-cibil>
+    </template>
+</template>

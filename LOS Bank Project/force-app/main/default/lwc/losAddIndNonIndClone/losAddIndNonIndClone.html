@@ -1,0 +1,318 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-12-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:false={showOCRDetails}>
+        <lightning-card title="Applicant Details" icon-name="standard:document">
+            <template if:true={isloading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <template if:true={addNewApplicant}>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-combobox name="RecordTypeId" label="Customer Type" data-name="RecordTypeId" required
+                            class="validate" value={appRecTypeVal} options={appRecTypes} onchange={handleApplicantType}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <div class="slds-is-relative ">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Mobile</label>
+                            <div class="buttonIn">
+                                <lightning-input type="tel" data-id="mobileinput" name="Mobile_Number__c"
+                                    class="validate input mobilebutton" value={mobileNumber} variant="label-hidden"
+                                    onchange={handleChangePhoneNumber} max-length="10" pattern="[6-9]{1}[0-9]{9}"
+                                    disabled={isVerifiedNumber} read-only={isReadOnly}
+                                    message-when-pattern-mismatch="Please enter a valid phone number">
+                                </lightning-input>
+                                <template if:true={boolSendOtp}>
+                                    <lightning-button variant="base" label="SEND OTP" disabled={boolCheckMobileNumber}
+                                        title="Looks like a link" onclick={handleSendOTP} class="button"></lightning-button>
+                                </template>
+                                <template if:true={boolResendOtp}>
+                                    <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                                        onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button">
+                                    </lightning-button>
+                                </template>
+                                <template if:true={isVerified}>
+                                    <lightning-icon size="small" variant="success" class="button"
+                                        icon-name="utility:success" title="Mobile"></lightning-icon>
+                                </template>
+                            </div>
+
+                        </div>
+                        <div class="slds-m-top_medium">
+                            <template if:true={isEnterOtp}>
+                                <div class="slds-is-relative">
+
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+                                    <div class="buttonIn">
+                                        <lightning-input type="text" max-length="6" pattern="[0-9]{6}" class="validate"
+                                            placeholder="Enter OTP here" value={enterOTPValue} variant="label-hidden"
+                                            onchange={handleChangeOtp}
+                                            message-when-pattern-mismatch="Please enter a valid OTP." label="Enter OTP">
+                                        </lightning-input>
+                                        <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                                            onclick={handleVerify} disabled={boolVerify} class="button"></lightning-button>
+                                    </div>
+                                </div>
+                                <div class="slds-align_absolute-center slds-m-top_small">
+                                    <template if:true={boolRequestOtp}>
+                                        Request OTP in&nbsp;<b>{increse1Second}</b>s
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </template>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+
+                    <div class="slds-is-relative">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Aadhaar Number</label>
+                        <div class="buttonIn">
+                            <lightning-input type="text" variant="label-hidden" onchange={handleValuChange}
+                                class="validate checkValidity masked input aadhaar" label="Aadhaar Card" name="Aadhaar_Number__c"
+                                max-length="16" min-length="12"  pattern="^[0-9]{12}$|^[0-9]{16}$" message-when-pattern-mismatch="Enter Valid Aadhaar or VID"
+                                value={ApplicantRecord.Aadhaar_Number__c}>
+                            </lightning-input>
+                            <div class="button slds-align_absolute-center">
+                                <template if:true={showPreview}>
+                                    <template if:true={mask}>
+                                        <lightning-button-icon style="float: right;" icon-name="utility:unlock"
+                                            alternative-text="unlock" title="Unlock" onclick={handleMasking}>
+                                        </lightning-button-icon>
+                                    </template>
+                                    <template if:false={mask}>
+                                        <lightning-button-icon style="float: right;" icon-name="utility:lock"
+                                            alternative-text="lock" title="Lock" onclick={handleMasking}>
+                                        </lightning-button-icon>
+                                    </template>
+                                </template>
+                                <template if:true={isMobile}>
+                                    <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                    alternative-text="ocr" title="ocr" data-id="AUWheels0003" data-name="AUWheels0003" onclick={hanldeOcrClick}>
+                                    </lightning-button-icon>
+                                </template>
+                                <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0003green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0003preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                alternative-text="upload" title="Upload" data-name="AUWheels0003" onclick={hanldeUploadClick}>
+                            </lightning-button-icon>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slds-m-top_medium">
+                        <label class="slds-form-element__label">CIF No</label>
+                        <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} min-length="8"
+                            max-length="10" label="CIF No" name="CIF_No__c" value={ApplicantRecord.CIF_No__c}>
+                        </lightning-input>
+                    </div>
+
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <div class="slds-is-relative">
+                        <label class="slds-form-element__label">
+                            PAN</label>
+                        <div class="buttonIn">
+                            <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} class="input checkValidity"
+                                label="PAN" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" max-length="10" name="PAN__c"
+                                message-when-pattern-mismatch="Enter valid Pan number" value={ApplicantRecord.PAN__c}>
+                            </lightning-input>
+                            <div class="button slds-align_absolute-center">
+                                <template if:true={isMobile}>
+                                    <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                        alternative-text="ocr" title="ocr" data-id="AUWheels0001" data-name="AUWheels0001" onclick={hanldeOcrClick}>
+                                    </lightning-button-icon>
+                                </template>
+                                <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0001green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0001preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                <lightning-button-icon style="float: right;"  icon-name="utility:upload"
+                                alternative-text="upload" title="Upload" data-name="AUWheels0001" onclick={hanldeUploadClick}>
+                            </lightning-button-icon>
+                            </div>
+                            <!--<lightning-icon size="x-small" icon-name="action:approval" class="green_tick" alternative-text="Check" title="Checked"></lightning-icon>-->
+                        </div>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small" flexibility="auto">
+                    <div class="slds-is-relative">
+                        <label class="slds-form-element__label">
+                            Mobile Bill</label>
+                        <div class="buttonIn">
+                            <lightning-input type="text" variant="label-hidden" onchange={handleValuChange} class="input checkValidity"
+                                label="Mobile Number" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" max-length="10" name="PAN__c"
+                                message-when-pattern-mismatch="Enter valid Mobile Number" value="">
+                            </lightning-input>
+                            <div class="button slds-align_absolute-center">
+                                <template if:true={isMobile}>
+                                    <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                        alternative-text="ocr" title="ocr" data-id="AUWheels0013" data-name="AUWheels0013" onclick={hanldeOcrClick}>
+                                    </lightning-button-icon>
+                                </template>
+                                <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0013green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0013preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                <lightning-button-icon style="float: right;"  icon-name="utility:upload"
+                                alternative-text="upload" title="Upload" data-name="AUWheels0013" onclick={hanldeUploadClick}>
+                                </lightning-button-icon>
+                            </div>
+
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-p-horizontal_small slds-m-top_medium slds-p-bottom_small">
+                <label class="slds-form-element__label">Additional Information &nbsp;&nbsp;
+
+                </label>
+                <lightning-icon icon-name=action:new size="xx-small" onclick={handleAdditionalInformationClick}>
+                </lightning-icon>
+            </div>
+
+            <lightning-layout multiple-rows class="slds-p-bottom_small" if:true={isShowAdditionalInformationsPicklist}>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6" flexibility="auto"
+                    class="slds-p-horizontal_small">
+                    <div class="slds-m-top_medium">
+                        <lightning-combobox class="slds-form-element__label" data-index={index} variant="label-hidden"
+                            name="AdditionalInformation" label="Additional Information" value={AdditionalInformationvalue}
+                            placeholder="Select Document type" options={AdditionalInformationoptions}
+                            onchange={handleAdditionalInformationChange}>
+                        </lightning-combobox>
+                        <template for:each={allAdditionalInformationvalues} for:item="val">
+                            <lightning-pill key={val} label={val} name={val} onremove={handleRemove}></lightning-pill>
+                        </template>
+                    </div>
+                    <div class="slds-m-top_medium">
+                        <template if:true={isEnabledVoterId}>
+                            <div class="slds-is-relative ">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">* </abbr>VoterId</label>
+                                <div class="buttonIn">
+                                    <lightning-input type="text" required="true" variant="label-hidden"
+                                        onchange={handleValuChange} class="validate checkValidity input" label="VoterId"
+                                        name="Voter_Id__c" min-length="10" max-length="15" pattern="[a-zA-Z0-9]*"
+                                        message-when-pattern-mismatch="Enter valid VoterId number"
+                                        value={ApplicantRecord.Voter_Id__c}>
+                                    </lightning-input>
+                                    <div class="button slds-align_absolute-center">
+                                        <template if:true={isMobile}>
+                                            <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                            alternative-text="ocr" title="ocr" data-id="AUWheels0002" data-name="AUWheels0002" onclick={hanldeOcrClick}>
+                                            </lightning-button-icon>
+                                        </template>
+                                        <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0002green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                        <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0002preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                        <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                        alternative-text="upload" title="Upload" data-name="AUWheels0002" onclick={hanldeUploadClick}>
+                                    </lightning-button-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="slds-m-top_medium">
+                        <template if:true={isEnabledDrivingLicence}>
+                            <div class="slds-is-relative ">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">* </abbr>Driving Licence</label>
+                                <div class="buttonIn">
+                                    <lightning-input type="text" required="true" variant="label-hidden"
+                                        onchange={handleValuChange} class="validate checkValidity input" label="Driving Licence"
+                                        name="Driving_License_Id__c" min-length="6" max-length="25" pattern="[a-zA-Z0-9]*"
+                                        message-when-pattern-mismatch="Enter valid DL number"
+                                        value={ApplicantRecord.Driving_License_Id__c}>
+                                    </lightning-input>
+                                    <div class="button slds-align_absolute-center">
+
+                                        <template if:true={isMobile}>
+                                            <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                            alternative-text="ocr" title="ocr" data-id="AUWheels0004" data-name="AUWheels0004" onclick={hanldeOcrClick}>
+                                            </lightning-button-icon>
+                                        </template>
+                                        <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0004green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                        <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0004preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                        <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                        alternative-text="upload" title="Upload" data-name="AUWheels0004" onclick={hanldeUploadClick}>
+                                    </lightning-button-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="slds-m-top_medium">
+                        <template if:true={isEnabledPassport}>
+                            <div class="slds-is-relative ">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">* </abbr>Passport</label>
+                                <div class="buttonIn">
+                                    <lightning-input type="text" required="true" variant="label-hidden"
+                                        onchange={handleValuChange} class="validate checkValidity input" label="Passport"
+                                        name="Passport_Number__c" pattern="[A-PR-WYa-pr-wy][1-9][0-9]{6}"
+                                        length="8" message-when-pattern-mismatch="Enter valid Passport number"
+                                        value={ApplicantRecord.Passport_Number__c}>
+                                    </lightning-input>
+                                    <div class="button slds-align_absolute-center">
+                                        <template if:true={isMobile}>
+                                            <lightning-button-icon style="float: right;" class="slds-hide" icon-name="utility:cases"
+                                            alternative-text="ocr" title="ocr" data-id="AUWheels0005" data-name="AUWheels0005" onclick={hanldeOcrClick}>
+                                            </lightning-button-icon>
+                                        </template>
+                                        <lightning-icon size="small" icon-name="utility:check" data-id="AUWheels0005green" class="green_tick slds-hide" alternative-text="Check" title="Checked"></lightning-icon>
+                                        <lightning-icon size="small" icon-name="utility:preview" data-id="AUWheels0005preview" class="slds-hide" alternative-text="preview" title="Preview" onclick={handlePreviewClick}></lightning-icon>
+                                        <lightning-button-icon style="float: right;" icon-name="utility:upload"
+                                        alternative-text="upload" title="Upload" data-name="AUWheels0005" onclick={hanldeUploadClick}>
+                                    </lightning-button-icon>
+                                    </div>
+                                <!--<lightning-button-icon style="float: right;" class="slds-hide" icon-name="action:approval"
+                                alternative-text="ocr" title="ocr" data-id="AUWheels0005" data-name="AUWheels0005">
+                            </lightning-button-icon>-->
+                            <!--<lightning-icon size="x-small" icon-name="action:approval" class="green_tick" alternative-text="Check" title="Checked"></lightning-icon>-->
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </template>
+    <template if:true={showUploadComponent}>
+        <c-los-generic-document-upload show-upload-component ={trueValue} isapplicant-page={trueValue}  show-input-box={falseValue} applicant-id={applicantId} doc-name ={docName} ondocumentsuccess={handleSuccess} oncancel ={hanleCancel} uploadtypename ="" is-model-needed={modelNeeded} onocrbutton={handleOCRButton}></c-los-generic-document-upload>
+    </template>
+    <template if:true={showOCRDetails}>
+        <lightning-card icon-name="standard:account" class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+            <template if:true={isloading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+            <template for:each={dataValues} for:item="data">
+                <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                    <div class="slds-size_1-of-2">
+                        <b>{data.key}</b>
+                    </div>
+                    <div class="slds-size_1-of-2 textContent">
+                        {data.value}
+                    </div>
+                </div>
+            </template>
+            <div class="slds-align_absolute-center slds-var-m-top_large">
+                <lightning-button  disabled={disableOkButton}  label="Ok" variant="brand" title="Ok" onclick={okClick} class="slds-var-m-left_x-small">
+                </lightning-button>
+                <lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+                </lightning-button>
+            </div>
+        </lightning-card>
+    </template>
+</template>

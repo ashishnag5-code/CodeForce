@@ -1,0 +1,129 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-18-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    
+    <!--<lightning-card title={title} icon-name="standard:document">-->
+        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+            <template if:true={showInputBox}>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+                    <div class="slds-is-relative">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>{uploadtypename}</label>
+                        <div class="buttonIn">
+                            <lightning-input type="text" variant="label-hidden"
+                                class="validate checkValidity masked input aadhaar" label={uploadTypeName} name={uploadtypename}
+                                value={documentNumber}>
+                            </lightning-input>
+                            <lightning-button-icon class="button" icon-name="utility:upload"
+                            alternative-text="upload" title="Upload" data-name={docName} onclick={handleUploadClick}>
+                        </lightning-button-icon>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </template>
+            <template if:true={isModelNeeded}>
+             <template if:true={showUploadComponent}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                       <header class="slds-modal__header">
+                          <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                             <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" ></lightning-icon>
+                             <span class="slds-assistive-text">Close</span>
+                          </button>
+                          <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{title}</h2>
+                       </header>
+                       <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
+                        <template if:true={showUpload}>
+                            <c-los-document-upload is-form60={isForm60} field-invetigation-id={fieldInvetigationId} isliveonly={isliveonly} collateral-id={collateralId} loan-id ={loanId} isdocmanager={isdocmanager} isapplicant-page={isapplicantPage} isloading ={isloading} show-upload-component ={showUploadComponent} applicant-id={applicantId} doc-name ={docName} ondocumentsuccess={handleSuccess} onocrbutton ={handleOCRBUtton} uploadtypename ={uploadtypename} hidefiledetails={hidefiledetails}></c-los-document-upload>
+                        </template>
+                        <template if:true={showOCRDetails}>
+                            <lightning-card icon-name="standard:account" class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+                                <template if:true={isloading}>
+                                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                                </template>
+                                <div if:true={docImage} class="slds-grid slds-wrap slds-var-p-around_xx-small divComp">
+                                    <div class="slds-size_1-of-2">
+                                        <b>Image</b>
+                                    </div>
+                                    <div class="slds-size_1-of-2 textContent">
+                                        <img src={docImage} alternative-text="Image"></img>
+                                    </div>
+                                </div>
+                                <template for:each={dataValues} for:item="data">
+                                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                                        <div class="slds-size_1-of-2">
+                                            <b>{data.key}</b>
+                                        </div>
+                                        <div class="slds-size_1-of-2 textContent">
+                                            {data.value}
+                                        </div>
+                                    </div>
+                                </template>
+                                <div class="slds-align_absolute-center slds-var-m-top_large">
+                                    <lightning-button   disabled={disableOkButton}  label="Ok" variant="brand" title="Ok" onclick={okClick} class="buttonClass slds-var-m-left_x-small">
+                                    </lightning-button>
+                                    <lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="buttonClass slds-var-m-left_x-small">
+                                    </lightning-button>
+                                </div>
+                            </lightning-card>
+                        </template>
+                       </div>
+                       <footer class="slds-modal__footer">
+                          <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                       </footer>
+                    
+                    </div>
+                 </section>
+                 <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </template>
+            <template if:false={isModelNeeded}>
+                <template if:true={showUploadComponent}>
+                    <template if:true={showUpload}>
+                        <c-los-document-upload is-form60={isForm60} field-invetigation-id={fieldInvetigationId} isliveonly={isliveonly} collateral-id={collateralId} loan-id ={loanId} isdocmanager={isdocmanager} isapplicant-page={isapplicantPage} show-input-box={showInputBox} isloading ={isloading} show-upload-component ={showUploadComponent} applicant-id={applicantId} doc-name ={docName} ondocumentsuccess={handleSuccess} onocrbutton ={handleOCRBUtton} uploadtypename ={uploadtypename} hidefiledetails={hidefiledetails}></c-los-document-upload>
+                    </template>
+                    <template if:true={showOCRDetails}>
+                        <lightning-card icon-name="standard:account" class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+                            <template if:true={isloading}>
+                                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                            </template>
+                            <div if:true={docImage} class="slds-grid slds-wrap slds-var-p-around_xx-small divComp">
+                                <div class="slds-size_1-of-2">
+                                    <b>Image</b>
+                                </div>
+                                <div class="slds-size_1-of-2 textContent">
+                                    <img src={docImage} alternative-text="Image"></img>
+                                </div>
+                            </div>
+                            <template for:each={dataValues} for:item="data">
+                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                                    <div class="slds-size_1-of-2">
+                                        <b>{data.key}</b>
+                                    </div>
+                                    <div class="slds-size_1-of-2 textContent">
+                                        {data.value}
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="slds-align_absolute-center slds-var-m-top_large">
+                                <lightning-button  disabled={disableOkButton}  label="Ok" variant="brand" title="Ok" onclick={okClick} class="buttonClass slds-var-m-left_x-small">
+                                </lightning-button>
+                                <!--<lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Not Ok" onclick={notOkClick} class="slds-var-m-left_x-small">
+                                </lightning-button>-->
+                            </div>
+                        </lightning-card>
+                    </template>
+                </template>
+        </template>
+        </lightning-layout>
+    <!--</lightning-card>-->
+</template>

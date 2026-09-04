@@ -1,0 +1,37 @@
+<template>
+    <li>
+        <div class={className}>
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <button onclick={expandCollapse} class="slds-button" title="Toggle details" aria-controls="task-item-expanded" aria-expanded="true">
+                        <template if:true={isExpanded}>
+                            <lightning-icon icon-name="utility:chevrondown" size="xx-small"></lightning-icon>
+                        </template>
+                        <template if:false={isExpanded}>
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small"></lightning-icon>
+                        </template>
+                        <span class="slds-assistive-text">{stepLabel}</span>
+                    </button>
+                    <div class="slds-icon_container slds-timeline__icon" title={stepLabel}>
+                        <lightning-icon icon-name={iconName} size="x-small"></lightning-icon>
+                    </div>
+                </div> 
+                <div class="slds-media__body">
+                    {stepLabel}
+                    <span style="float:right;margin-left:10px;">{stepStatus}</span>
+                    <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium" id="task-item-expanded" aria-hidden="false">
+                        <ul>
+                            <template for:each={ownerDetails} for:item="each">
+                                <li key={each.ownerName}>
+                                    <span class="slds-text-title slds-p-bottom_x-small">Owner</span>&nbsp;&nbsp;{each.ownerName}
+                                    <span class="slds-text-title slds-p-bottom_x-small">Start</span>&nbsp;&nbsp;{each.startDateTime}
+                                    <span class="slds-text-title slds-p-bottom_x-small">End</span>&nbsp;&nbsp;{each.endDateTime}
+                                </li>
+                            </template>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </li>
+</template>

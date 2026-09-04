@@ -1,0 +1,169 @@
+<template>
+    <article class="slds-card slds-card_boundary">
+        <div class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=standard:user size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Pricing Details</span>
+                        <!--<a href="#" class="slds-card__header-link slds-truncate" title="Address">
+                                    <span>Addresses ({recordCount})</span>
+                                </a>-->
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                </div>
+            </header>
+        </div>
+
+
+        <div class="slds-card__body slds-card__body_inner">
+            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                <li class="slds-size_1-of-1 slds-medium-size_3-of-3 slds-p-horizontal_small slds-p-bottom_small"
+                     onclick={viewMoreHandler}
+                     data-record-name="ViewMoreInformation">    
+                     <article class="slds-box">
+                    
+                        <div class="slds-card__body slds-card__body_inner c-container">
+                            <lightning-layout horizontal-align="space" multiple-rows vertical-align="end">
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <div class="slds-form-element slds-form-element_horizontal" data-id="Application_Id">
+                                        <label class="slds-form-element__label">Application ID</label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            <template lwc:if={renderFromAssignmentRec}>
+                                                <a>{opsCategoryWrapper.applicationId}</a>
+                                            </template>
+                                            <template lwc:elseif={renderFromAssignmentRec}>
+                                                {opsCategoryWrapper.applicationId}
+                                            </template>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                    <template if:true={renderDataObj.hub}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="HUB">
+                                            <label class="slds-form-element__label">HUB</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.hub}
+                                                
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.applicantName}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Applicant_Name">
+                                            <label class="slds-form-element__label">Applicant Name</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.applicantName}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.applicationId}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Deal_Approved_By">
+                                            <label class="slds-form-element__label">Deal Approved By</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.applicationId}
+                                            </div>
+                                        </div>
+
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.deliveryOrderDate}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Delivery_Order_Date">
+                                            <label class="slds-form-element__label">Delivery Order Date</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.deliveryOrderDate}
+                                            </div>
+                                        </div>
+
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.irr}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Applied_IRR">
+                                            <label class="slds-form-element__label">Applied IRR</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.irr}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    
+                                    
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <template if:true={renderDataObj.state}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="State">
+                                            <label class="slds-form-element__label">State</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.state}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.branch}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Branch">
+                                            <label class="slds-form-element__label">Branch</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.branch}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.fatherName}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Father_Name">
+                                            <label class="slds-form-element__label">Father/Spouse Name</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.fatherName}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.creditApprovalDate}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Credit_Date">
+                                            <label class="slds-form-element__label">Credit Approval Date</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.creditApprovalDate}
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.loanAmount}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Loan_Amount">
+                                            <label class="slds-form-element__label">Loan Amount</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.loanAmount}
+                                                
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                    <template if:true={renderDataObj.totalCharges}>
+                                        <div class="slds-form-element slds-form-element_horizontal" data-id="Total_Charges">
+                                            <label class="slds-form-element__label">Total Charges</label>
+                                            <div class="slds-form-element__control" style="margin: 0.6%;">
+                                                {opsCategoryWrapper.totalCharges}
+                                                
+                                            </div>
+                                        </div>
+
+                                    </template>
+                                    
+                                    
+                                </lightning-layout-item>
+                            </lightning-layout> 
+                            
+    
+                            
+                        </div>
+                    </article>
+                </li>
+                    
+            </ul>
+            <!--End -->
+        </div>
+    </article>
+    
+</template>

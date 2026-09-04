@@ -1,0 +1,148 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <lightning-card>
+        <h1 slot="title">
+            <div class="demo-only" style="width:30rem">
+                <article class="slds-tile slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="description of icon when needed">
+                            <lightning-icon icon-name="custom:custom41" size="medium"></lightning-icon>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h3 class="slds-tile__title slds-truncate" title="Loan Details">
+                            <p>Loan Details</p>
+                        </h3>
+                        <div class="slds-tile__detail">
+                            <dl class="slds-list_horizontal slds-wrap">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-text-body_small"
+                                    title="EMI Calculation"></dt>
+                            </dl>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </h1>
+
+        <lightning-layout multiple-rows vertical-align="end">
+            <lightning-layout-item data-id="Product__c" class="component slds-hide" size="12" padding="around-small"
+                small-device-size="12" large-device-size="4">
+                <lightning-input name="Product__c" label="Product" disabled value={loanApp.Product__c} required>
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Scheme__c" class="component slds-hide" size="12" padding="around-small"
+                small-device-size="12" large-device-size="4">
+                <lightning-input type="text" disabled label="Scheme" name="Scheme__c" value={Scheme__c}>
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Risk_Base_Pricing__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input label="Risk Base Pricing" type="number" disabled required={requiredAtDDE}
+                    name="Risk_Base_Pricing__c" value={loanApp.Risk_Base_Pricing__c} formatter="currency">
+                </lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="component slds-hide" data-id="Loan_Amount__c" size="12" padding="around-small"
+                small-device-size="12" large-device-size="4">
+                <!--<lightning-slider name="Loan_Amount__c" label="Loan Amount" class="sliderColor"
+                    value={loanApp.Loan_Amount__c} onchange={handleChange} disabled min={minLoanAmount} 
+                    max={maxLoanAmount}></lightning-slider>-->
+
+                <lightning-input max={maxLoanAmount} min={minLoanAmount} type="number" disabled name="Loan_Amount__c" label="Loan Amount"
+                    value={loanApp.Loan_Amount__c} formatter="currency"></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="component slds-hide" data-id="Tenure__c" size="12" padding="around-small"
+                small-device-size="12" large-device-size="4">
+                <!--<lightning-slider class="sliderColor" name="Tenure__c" label="Tenure In Months"
+                    value={loanApp.Tenure__c} min={minTenure} max={maxTenure} disabled></lightning-slider>-->
+
+                <lightning-input min={minTenure} max={maxTenure} disabled type="number" name="Tenure__c" label="Tenure In Months"
+                    value={loanApp.Tenure__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item class="component slds-hide" data-id="ROI__c" size="12" padding="around-small" small-device-size="12"
+                large-device-size="4">
+                    <!--<lightning-slider class="sliderColor" name="ROI__c" label="Applied ROI" value={loanApp.ROI__c}
+                        min={minROI} max={maxROI} step=0.1 disabled></lightning-slider>-->
+
+                    <lightning-input min={minROI} max={maxROI} disabled label="Applied ROI" type="number" step=0.01 name="ROI__c"
+                        value={loanApp.ROI__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Type_of_Rate__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input label="Type of Rate" type="text" disabled name="Type_of_Rate__c"
+                    value={loanApp.Type_of_Rate__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Emi_Frequency__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input name="Emi_Frequency__c" label="EMI Frequency" disabled type="text"
+                    value={loanApp.Emi_Frequency__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Schedule_Type__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input name="Schedule_Type__c" label="Schedule Type" disabled value={loanApp.Schedule_Type__c}
+                    onchange={handleChange}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Disbursement_Category__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input name="Disbursement_Category__c" label="Disbursement Category" disabled
+                    value={loanApp.Disbursement_Category__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="EMI_Date__c" class="component slds-hide" size="12" padding="around-small"
+                small-device-size="12" large-device-size="4">
+                <lightning-combobox name="EMI_Date__c" label="EMI Cycle Date" value={loanApp.EMI_Date__c} options={emiDateOptions}
+                onchange={handleChange}>
+                </lightning-combobox>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="First_EMI_Date__c" class="component slds-hide" size="12" padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input label="First EMI Date" 
+                type="date" 
+                name="First_EMI_Date__c"
+                value={loanApp.First_EMI_Date__c}
+                onchange={handleChange}
+                disabled={readOnly}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Start_Date__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input label="Repayment Start Date" type="date" disabled name="Repayment_Start_Date__c"
+                    value={loanApp.Repayment_Start_Date__c}></lightning-input>
+            </lightning-layout-item>
+
+            <lightning-layout-item data-id="Repayment_Mode__c" class="component slds-hide" size="12"
+                padding="around-small" small-device-size="12" large-device-size="4">
+                <lightning-input name="Repayment_Mode__c" label="Repayment Mode" disabled
+                    value={loanApp.Repayment_Mode__c}></lightning-input>
+            </lightning-layout-item>
+
+        </lightning-layout>
+
+        <lightning-card class="slds-align_absolute-center">
+            <h1 slot="title">
+                EMI: <span class="slds-badge badgeProperty">
+                    <lightning-formatted-number value={loanApp.EMI__c} format-style="currency" currency-code="INR"
+                        class="component slds-hide" data-id="EMI__c"></lightning-formatted-number>
+                </span>
+            </h1>
+        </lightning-card>
+        <div class="slds-align_absolute-center buttonColor">
+            <lightning-button  variant="brand" disabled label="Calculate EMI"
+            onclick={calculateEMI}></lightning-button>
+            <lightning-button class="slds-m-left_small" variant="brand" label="EMI Schedule"
+            onclick={callEMISchedule} data-id="emiScheduleButton" disabled="true"></lightning-button>
+        </div>
+        
+        
+    </lightning-card>
+</template>

@@ -1,0 +1,144 @@
+<!--
+  @description       : Component for input of work order
+  @author            : Ajitesh
+  @group             : 
+  @last modified on  : 12-09-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <!-- <lightning-spinner alternative-text="Loading" variant="inverse" lwc:if={isLoading}></lightning-spinner> -->
+
+    <c-custom-spinner
+        show-spinner={isLoading}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+    
+    <lightning-accordion allow-multiple-sections-open active-section-name="A" lwc:if={isComponentVisible}>
+        <lightning-accordion-section name="A" label="Work Order OR Contract in hand" class="accordClass">
+            <lightning-card >
+                <lightning-button label="Add" slot="actions" disabled={isComponentNotEditable}
+                    onclick={handleAddWorkOrder}></lightning-button>
+                <div class="slds-p-horizontal_small">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item style="overflow-x: auto;overflow-y:hidden" padding="around-small"
+                            size="12">
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right"
+                                aria-label="Example default base table of Opportunities">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Sr no.</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Name of the Principal</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Nature of Work</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Contract start date</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Completion date</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">%age work completed</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Value of contract (Rs in lacs)</div>
+                                        </th>
+                                        <th class="" scope="col">
+                                            <div class="slds-truncate">Unexecuted CIH (Rs in Lacs)</div>
+                                        </th>
+                                        <th class="" scope="col">
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={workOrderList} for:index="indexVar" for:item="item"
+                                        lwc:if={isWorkOrderExist}>
+                                        <tr class="slds-hint-parent" key={item.S_No__c}>
+                                            <th data-label="Opportunity Name" scope="row">
+                                                {item.S_No__c}
+                                            </th>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable} type="text"
+                                                    value={item.Name_of_the_Principal__c} variant="label-hidden"
+                                                    label="Enter some text" data-index={indexVar} data-type="text"
+                                                    data-field="Name_of_the_Principal__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable} type="text"
+                                                    value={item.Nature_of_Work__c} variant="label-hidden"
+                                                    label="Enter some text" data-index={indexVar}
+                                                    data-field="Nature_of_Work__c" data-type="text"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable} type="date"
+                                                    value={item.Contract_start_date__c} variant="label-hidden"
+                                                    data-type="date" label="Enter some text" data-index={indexVar}
+                                                    data-field="Contract_start_date__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable} type="date"
+                                                    value={item.Completion_date__c} variant="label-hidden"
+                                                    data-type="date" label="Enter some text" data-index={indexVar}
+                                                    data-field="Completion_date__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable}
+                                                    type="number" value={item.age_work_completed__c}
+                                                    variant="label-hidden" data-type="number" label="Enter some text"
+                                                    data-index={indexVar} data-field="age_work_completed__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable}
+                                                    type="number" value={item.Value_of_contract_Rs_in_lacs__c}
+                                                    variant="label-hidden" data-type="number" label="Enter some text"
+                                                    data-index={indexVar} data-field="Value_of_contract_Rs_in_lacs__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-input required disabled={isComponentNotEditable}
+                                                    type="number" value={item.Unexecuted_CIH_Rs_in_Lacs__c}
+                                                    variant="label-hidden" data-type="number" label="Enter some text"
+                                                    data-index={indexVar} data-field="Unexecuted_CIH_Rs_in_Lacs__c"
+                                                    onchange={handleInputWorkOrderChange}></lightning-input>
+                                            </td>
+                                            <td>
+                                                <lightning-button variant="destructive" label="Delete"
+                                                    onclick={handleDeleteRow} data-index={indexVar}
+                                                    class="slds-m-left_x-small"></lightning-button>
+
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <tr class="slds-hint-parent" lwc:else>
+                                        <td colspan="8">
+                                            <div class="slds-align_absolute-center" style="height:5rem">No Work Order
+                                                added
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <div slot="footer">
+                    <lightning-button  variant="brand"
+                        label="Save Work Order" onclick={handleSavingWorkOrderData}
+                        disabled={isComponentNotEditable}></lightning-button>
+                </div>
+
+            </lightning-card>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

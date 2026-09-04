@@ -1,0 +1,987 @@
+<template>
+
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+
+
+    <!--New Form Details-->
+    <template if:true={showValuation}>
+    <lightning-card title="Valuation Details" icon-name="standard:budget_category_value">
+        <div slot="actions">
+            <lightning-icon icon-name="action:back" onclick={handleBackAction} size="x-small" alternative-text="Close"
+                title="Close"></lightning-icon>
+        </div>
+        <div class="slds-box">
+            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                    <label class="slds-form-element__label">REFERENCE ID</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="REFERENCE ID"
+                        name="Reference_ID__c" value={referenceId} disabled="true">
+                    </lightning-input>
+                    <label class="slds-form-element__label">Product</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Branch" name="Branch__c"
+                        value={valuationRecord.Product__c} disabled="true">
+                    </lightning-input>
+                    <label class="slds-form-element__label">Collateral Type</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Collateral Type"
+                        name="Collateral_Type__c" value={collateralName} disabled="true">
+                    </lightning-input>
+                    <label class="slds-form-element__label">MMV</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="MMV" name="MMV_Master__c"
+                        value={mmvMasterName} disabled="true">
+                    </lightning-input>
+                    <label class="slds-form-element__label">Vehicle Number</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                        name="Vehicle_Number__c" value={valuationRecord.Vehicle_Number__c} disabled="true">
+                    </lightning-input>
+                    <label class="slds-form-element__label">ACTION</label><!--options={actions}-->
+                    <lightning-combobox label="ACTION" placeholder="Select Action" value={actionVal} options={actionOptions}
+                         name="Action__c" class="validate" variant="label-hidden"
+                        disabled={actionDisableCheck} onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                    <label class="slds-form-element__label">Valuer Name Code</label>
+                    <lightning-combobox label="" placeholder="Select Reference"
+                        value={valuerName} options={valuerNameCodeOptions}
+                        name="Valuer_Name_Code__c" class="validate" variant="label-hidden" disabled={valuerDisable}
+                        onchange={handleChange}>
+                    </lightning-combobox>
+
+                    <template if:true={showOtherPicklist}>
+                        <label class="slds-form-element__label">Other state and list from master</label>
+                        <lightning-combobox label="" placeholder="Select Other State"
+                        value={stateVal} options={stateList}
+                        name="Other_state_and_list_from_master__c" class="validate" variant="label-hidden"
+                        onchange={handleChange}></lightning-combobox>
+
+                        <label class="slds-form-element__label">Contact Person Name to coordinate for valuation</label>
+                        <lightning-combobox name="Coordinate_for_valuation_POC__c" options={contactOptions}
+                            variant="label-hidden" class="" label="Branch" onchange={handleChange}
+                            value={contactName}></lightning-combobox>
+
+                        <label class="slds-form-element__label">Contact Person Mobile Number</label>
+                        <lightning-input type="text" variant="label-hidden" class="" label="Branch"
+                            onchange={handleChange} name="Contact_Person_Mobile_Number__c" value={phoneVal}>
+                        </lightning-input>
+                    </template>
+
+                    <template if:false={showOtherPicklist}>
+                        <template if:true={showContactPicklist}>
+                            <label class="slds-form-element__label">Contact Person Name to coordinate for
+                                valuation</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Branch"
+                                onchange={handleChange} name="Coordinate_for_valuation_POC__c"
+                                value={contactName}
+                                disabled={onValuationDisableCheck}>
+                            </lightning-input>
+
+                            <label class="slds-form-element__label">Contact Person Mobile Number</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Branch"
+                                onchange={handleChange} name="Contact_Person_Mobile_Number__c"
+                                value={phoneVal}
+                                disabled={onValuationDisableCheck}>
+                            </lightning-input>
+                        </template>
+                    </template>
+
+                    <label class="slds-form-element__label">Allocation Date and Time</label>
+                    <lightning-input type="text" variant="label-hidden" class="" label="Allocation Date Time"
+                        name="Allocation_Date_Time__c" value={allocationDateAndTime} disabled="true">
+                    </lightning-input>
+
+                    <label class="slds-form-element__label">Completion Date and Time</label>
+                    <lightning-input type="date" variant="label-hidden" class="" label="Branch"
+                        name="Completion_Date_Time__c" value={valuationRecord.Completion_Date_Time__c} disabled="true">
+                    </lightning-input>
+
+                </lightning-layout-item>
+
+            </lightning-layout>
+           <!-- <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+                    <label class="slds-form-element__label">Reports</label>
+                    <lightning-button variant="base" label="View" title="Looks like a link" onclick={handleReport}
+                        class="slds-m-left_x-small"></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>-->
+            <div slot="footer" class="slds-align--absolute-center">
+                <template if:false={onValuationDisableCheck}>
+                <lightning-button label="Send for Valuation" title="Submit" onclick={handleSubmit}
+                    disabled={showCancelButton}></lightning-button>
+                </template>
+                <template if:true={showCancelButton}>
+                    <lightning-button label="Cancel for Valuation" title="Submit"  class="slds-m-left_x-small" onclick={handleSubmit}>
+                    </lightning-button>
+                </template>
+            </div>
+        </div>
+        <!--  <template if:true={showDocumentPopup}>
+                    <lightning-modal-header label="Document Upload"></lightning-modal-header>
+                    <lightning-modal-body> 
+                        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-var-p-horizontal_small" flexibility="auto">
+                            <label class="slds-form-element__label">Upload Document</label>
+                            <lightning-file-upload
+                            label="Attach receipt"
+                            variant="label-hidden"
+                            name="fileUploader"
+                            accept={acceptedFormats}
+                            
+                            onuploadfinished={handleUploadFinished}
+                            multiple
+                        >
+                        </lightning-file-upload>
+    
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-var-p-horizontal_small" flexibility="auto">
+                            <label class="slds-form-element__label">Valuation Amount</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label=""
+                                name="Valuation_Amount__c" value={valuationAmount}>
+                            </lightning-input>
+    
+                         </lightning-layout-item>
+    
+                        </lightning-layout>
+                    </lightning-modal-body>
+                    <lightning-modal-footer>
+                        <lightning-button label="Submit" title="Download action" icon-name="action:submit_for_approval" onclick={handleOkay} icon-position="right"></lightning-button>
+                        
+                    </lightning-modal-footer>
+                </template>  <lightning-file-upload variant="label-hidden" name="fileUploader"
+                                    accept={acceptedFormats} record-id={valuationRecordId}
+                                    onuploadfinished={handleUploadFinished} multiple>
+                                </lightning-file-upload> -->
+       <!-- <template if:true={showDocumentPopup}>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" id="myModal"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+
+                    <header class="slds-modal__header">
+
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Document Upload
+                        </h2>
+                    </header>
+
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-var-p-horizontal_small" flexibility="auto">
+                                <label class="slds-form-element__label">Upload Document</label>
+                               
+                                <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue} collateral-id={collateralId}  show-input-box={falseValue} doc-name = "AUWheels0014" ondocumentsuccess={handleSuccess} uploadtypename = "Valuation Report With Vehicle Photo">
+                                </c-los-generic-document-upload>
+
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-var-p-horizontal_small" flexibility="auto">
+                                <label class="slds-form-element__label">Valuation Amount</label>
+                                <lightning-input type="text" variant="label-hidden" class="" label=""
+                                    onchange={handleChange} name="Valuation_Amount__c" value={valuationAmount}>
+                                </lightning-input>
+
+                            </lightning-layout-item>
+
+                        </lightning-layout>
+                    </div>
+
+                    <footer class="slds-modal__footer">
+                        <lightning-button-group>
+                            <lightning-button label="Submit" title="Download action"
+                                icon-name="action:submit_for_approval" onclick={handleOkay} icon-position="right">
+                            </lightning-button>
+                            &nbsp; <lightning-button label="Back" title="Download action" icon-name="action:back"
+                                onclick={closeModal} icon-position="right"></lightning-button>
+                        </lightning-button-group>
+
+
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>-->
+        <!--SFAU-3733 Start-->
+        <template if:true={showDocumentPopup}>
+            <lightning-card title="Document Upload" icon-name="standard:budget_category_value">
+                <div class="slds-box">
+                    <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                            <c-los-generic-document-upload hidefiledetails={trueValue} isloading ={isloading} isdocmanager={trueValue} show-upload-component ={trueValue} collateral-id={collateralId}  show-input-box={falseValue} doc-name = "AUWheels0014" ondocumentsuccess={handleSuccess} uploadtypename = "Valuation Report With Vehicle Photo">
+                             </c-los-generic-document-upload>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-var-p-horizontal_small" flexibility="auto">
+                                <label class="slds-form-element__label">Valuation Amount</label>
+                                <lightning-input type="text" variant="label-hidden" class="" label=""
+                                    onchange={handleChange} name="Valuation_Amount__c" value={valuationAmount}>
+                                </lightning-input>
+
+                            </lightning-layout-item>
+
+                    </lightning-layout>
+
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                            <lightning-button label="Submit" title="Download action" class="buttonClass"
+                                icon-name="action:submit_for_approval" onclick={handleOkay} icon-position="right">
+                            </lightning-button>
+                            &nbsp; <lightning-button label="Back" title="Download action" icon-name="action:back" class=" buttonClass slds-m-left_x-small" 
+                                onclick={closeModal} icon-position="right"></lightning-button>
+                        
+                        </div>
+                        </lightning-layout>
+                </div>
+                </lightning-card>
+        </template>
+        <!--END-->
+
+        <!--Existing Details View Form-->
+        <template if:true={showExistingDetails}>
+
+
+            <!--<lightning-card title="Valuation and Collateral Table">
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-col slds-p-around_medium slds-size_1-of-2">
+                                <h2>Valuation</h2>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col">Chassis Number</th>
+                                            <th scope="col">Engine Number</th>
+                                            <th scope="col">Fuel</th>
+                                            <th scope="col">Hypothication</th>
+                                            <th scope="col">Make Model</th>
+                                            <th scope="col">Manufacturing Year</th>
+                                            <th scope="col">Owner Serial Number</th>
+                                            <th scope="col">Registration Date</th>
+                                            <th scope="col">Valuation Amount</th>
+                                            <th scope="col">Vehicle Condition</th>
+                                            <th scope="col">Vehicle Number</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={combinedData.Valuation} for:item="valuation">
+                                            <tr key={valuation.Chassisnumber}>
+                                                <td>{valuation.Chassisnumber}</td>
+                                                <td>{valuation.Enginenumber}</td>
+                                                <td>{valuation.Fuel}</td>
+                                                <td>{valuation.Hypothication}</td>
+                                                <td>{valuation.MakeModel}</td>
+                                                <td>{valuation.Manufacturingyear}</td>
+                                                <td>{valuation.OwnerSerialno}</td>
+                                                <td>{valuation.Registrationdate}</td>
+                                                <td>{valuation.ValuationAmount}</td>
+                                                <td>{valuation.VehicleCondition}</td>
+                                                <td>{valuation.Vehiclenumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="slds-col slds-p-around_medium slds-size_1-of-2">
+                                <h2>Collateral</h2>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                            <th scope="col">Chassis Number</th>
+                                            <th scope="col">Color</th>
+                                            <th scope="col">Engine Number</th>
+                                            <th scope="col">Hypothication</th>
+                                            <th scope="col">Make Model</th>
+                                            <th scope="col">Owner Serial Number</th>
+                                            <th scope="col">Vehicle Number</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={combinedData.Collateral} for:item="collateral">
+                                            <tr key={collateral.Chassisnumber}>
+                                                <td>{collateral.Chassisnumber}</td>
+                                                <td>{collateral.Color}</td>
+                                                <td>{collateral.Enginenumber}</td>
+                                                <td>{collateral.Hypothication}</td>
+                                                <td>{collateral.MakeModel}</td>
+                                                <td>{collateral.OwnerSerialno}</td>
+                                                <td>{collateral.Vehiclenumber}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </lightning-card>-->
+
+
+            <div class="slds-box slds-m-top--x-small table-container">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered table-container"
+                    aria-label="Example default base table of Opportunities">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name"> <b>Valuation</b></div>
+                            </th>
+                            <template if:true={showSecondValuation}>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name"><b>Valuation2</b> </div>
+                            </th>
+                            </template>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name"> <b>Collateral</b></div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={combinedData} for:item="item">
+                            <tr key={item.Valuation1.Vehiclenumber} class=" rowHeight slds-line-height_reset">
+                                <td class="tdClss" data-label="Name" scope="row">
+                                    <b> Vehicle Number</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Vehicle Number</b></td>
+                                    </template>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Vehicle Number</b></td>
+                            </tr>
+                       <tr key={item.Valuation1.Vehiclenumber} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.VehicleColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Vehiclenumber}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.VehicleColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Vehiclenumber}</td>
+                                </template>
+                                <td data-label="Name" scope="row">
+
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Vehicle_Number__c" value={item.Collateral.Vehiclenumber} onchange={handleCollateralChange}>
+                                    </lightning-input>
+
+                                </td>
+                            </tr>
+                            <tr key={item.Valuation1.MakeModel} class=" rowHeight slds-line-height_reset">
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Make Model</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Make Model</b></td>
+                                    </template>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Make Model</b></td>
+                            </tr>
+
+                            <tr key={item.Valuation1.MakeModel} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.MakeColor} data-label="Name" scope="row">
+                                    {item.Valuation1.MakeModel}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.MakeColor} data-label="Name" scope="row">
+                                    {item.Valuation2.MakeModel}</td>
+                                </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Make__c" value={item.Collateral.MakeModel} onchange={handleCollateralChange}>
+                                    </lightning-input>
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Enginenumber} class=" rowHeight slds-line-height_reset">
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Engine Number</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Engine Number</b></td>
+                                    </template>
+                                <td  class="tdClss" data-label="Name" scope="row">
+                                    <b> Engine Number</b></td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Enginenumber} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.EngineColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Enginenumber}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.EngineColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Enginenumber}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Engine_Number__c" value={item.Collateral.Enginenumber} onchange={handleCollateralChange}>
+                                    </lightning-input>
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Chassisnumber} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b> Chasis Number</b></td>
+                                      <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b> Chasis Number</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b> Chasis Number</b></td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Chassisnumber} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.ChasisColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Chassisnumber}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.ChasisColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Chassisnumber}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Chasis_Number__c" value={item.Collateral.Chassisnumber} onchange={handleCollateralChange}>
+                                    </lightning-input>
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Manufacturingyear} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Manufacturing Year</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Manufacturing Year</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Manufacturing Year</b></td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Manufacturingyear} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.ManufacturingColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Manufacturingyear}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.ManufacturingColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Manufacturingyear}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Manufacture_year_month__c" value={item.Collateral.Manufacturingyear} onchange={handleCollateralChange}>
+                                    </lightning-input>
+
+                                </td>
+                            </tr>
+
+
+                            <tr key={item.Valuation1.Manufacturingyear} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Registration date</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Registration date</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Registration date</b></td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Registrationdate} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.RegColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Registrationdate}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.RegColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Registrationdate}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="date" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Registration_Date__c" value={item.Collateral.Registrationdate} onchange={handleCollateralChange}>
+                                    </lightning-input>
+                                </td>
+                            </tr>
+
+
+                            <tr key={item.Valuation1.OwnerSerialno} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Owner Serial no</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Owner Serial no</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Owner Serial no</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.OwnerSerialno} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.OwnerColor} data-label="Name" scope="row">
+                                    {item.Valuation1.OwnerSerialno}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.OwnerColor} data-label="Name" scope="row">
+                                    {item.Valuation2.OwnerSerialno}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Owner_Serial_number__c" value={item.Collateral.OwnerSerialno} onchange={handleCollateralChange}>
+                                    </lightning-input>
+
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Hypothication} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Hypothication</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Hypothication</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Hypothication</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.Hypothication} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.HypothicationColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Hypothication}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.HypothicationColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Hypothication}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="HPN_With_Financiers_Name__c" value={item.Collateral.Hypothication} onchange={handleCollateralChange}>
+                                    </lightning-input>
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Color} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Color</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Color</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Color</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.Color} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.VhColorIdentifier} data-label="Name" scope="row">
+                                    {item.Valuation1.Color}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.VhColorIdentifier} data-label="Name" scope="row">
+                                    {item.Valuation2.Color}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                        name="Vehicle_Color__c" value={item.Collateral.Color} onchange={handleCollateralChange}>
+                                    </lightning-input>
+
+                                </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Odometer} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Odometer</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Odometer</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Odometer</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.Odometer} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.OdometerColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Odometer}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.OdometerColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Odometer}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">{item.Collateral.Odometer}</td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Fuel} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Fuel</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Fuel</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Fuel</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.Fuel} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.FuelColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Fuel}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.FuelColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Fuel}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">{item.Collateral.Fuel}</td>
+                            </tr>
+
+                            <tr key={item.Valuation1.VehicleCondition} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Vehicle Condition</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Vehicle Condition</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Vehicle Condition</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.VehicleCondition} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.ConditionColor} data-label="Name" scope="row">
+                                    {item.Valuation1.VehicleCondition}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.ConditionColor} data-label="Name" scope="row">
+                                    {item.Valuation2.VehicleCondition}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">{item.Collateral.VehicleCondition}</td>
+                            </tr>
+
+                            <tr key={item.Valuation1.ValuationAmount} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Valuation Amount</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Valuation Amount</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Valuation Amount</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.ValuationAmount} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.ValuationAmountColor} data-label="Name" scope="row">
+                                    {item.Valuation1.ValuationAmount}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.ValuationAmountColor} data-label="Name" scope="row">
+                                    {item.Valuation2.ValuationAmount}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">{item.Collateral.ValuationAmount}</td>
+                            </tr>
+
+                            <tr key={item.Valuation1.Finalremarks} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Final remarks</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Final remarks</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b>Final remarks</b></td>
+                            </tr>
+                            <tr key={item.Valuation1.Finalremarks} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.remarksColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Finalremarks}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.remarksColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Finalremarks}</td>
+                                    </template>
+                                <td data-label="Name" scope="row">{item.Collateral.Finalremarks}</td>
+                            </tr>
+
+
+                            <tr key={item.Valuation1.Finalremarks} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Major remarks</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Major remarks</b></td>
+                                    </template>
+                                    <td data-label="Name" scope="row">
+                                        </td>
+                            </tr>
+                            <tr key={item.Valuation1.Majorremarks} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.remarksColor} data-label="Name" scope="row">
+                                    {item.Valuation1.Majorremarks}</td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.remarksColor} data-label="Name" scope="row">
+                                    {item.Valuation2.Majorremarks}</td>
+                                    </template>
+                                    <td data-label="Name" scope="row">
+                                    </td>
+                            </tr>
+
+                            <tr key={item.Valuation1.FileId} class=" rowHeight slds-line-height_reset">
+                                <td data-label="Name" scope="row">
+                                    <b>Report</b></td>
+                                    <template if:true={showSecondValuation}>
+                                <td data-label="Name" scope="row">
+                                    <b>Report</b></td>
+                                    </template>
+                                <td data-label="Name" scope="row">
+                                    <b></b></td>
+                            </tr>
+                            <tr key={item.Valuation1.FileId} class=" rowHeight slds-line-height_reset">
+
+                                <td class={item.Valuation1.remarksColor} data-label="Name" scope="row">
+                                    <lightning-button variant="base" label="View"  name={item.Valuation1.FileId} onclick={handleReport}
+                                    class="slds-m-left_x-small"></lightning-button>
+                                      </td>
+                                    <template if:true={showSecondValuation}>
+                                <td class={item.Valuation2.remarksColor} data-label="Name" scope="row">
+                                    <lightning-button variant="base" label="View"  name={item.Valuation2.FileId} onclick={handleReport}
+                                    class="slds-m-left_x-small"></lightning-button></td>
+                                    </template>
+                                <td data-label="Name" scope="row"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <div class="slds-align--absolute-center slds-m-around--small">
+                    <lightning-button label="Submit" title="Submit" onclick={handleCollateralEdit}
+                      ></lightning-button>
+                </div>
+            </div>
+            
+            <!--API Details-
+                <div class="slds-float--right">
+                    <lightning-button label="Show Data Miss Match" title="Submit" onclick={handleMissMatch}>
+                    </lightning-button>
+                    
+                </div>
+                <lightning-accordion allow-multiple-sections-open>
+                    <lightning-accordion-section label="Valuation Details"> &nbsp;
+                        <template for:each={valuationDetails} for:item="valRecord">
+                            <lightning-layout key={valRecord.Id} multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item flexibility="auto"  size="12" small-device-size="12" large-device-size="6"
+                                class="slds-var-p-horizontal_small">
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Vehicle number</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Vehicle_Number__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Make
+                                                        / Model</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Make_Model__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Engine number</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Engine_number__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Chassis number</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Chassis_number__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Manufacturing year</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Manufacturing_year__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Registration date</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Registration_date__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Owner
+                                                        Serial no</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Owner_Serial_no__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Hypothication</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Hypothication__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Color</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Color__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Odometer</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Odometer__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Fuel</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Fuel__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Vehicle Condition</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Vehicle_Condition__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Valuation Amount</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Valuation_Amount__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="component">
+                                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                            <div class="slds-size_1-of-2">
+                                                <label class="slds-form-element__label vehicleNo"
+                                                    data-id="vehicle"><b>Final
+                                                        remarks</b></label>
+                                            </div>
+                                            <div class="slds-size_1-of-2">
+                                                {valRecord.Final_remarks__c}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </template>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+                   END API Details
+
+                 RC Details-
+                <lightning-accordion allow-multiple-sections-open>
+                    <lightning-accordion-section label="RC details" multiple-rows class="slds-var-p-bottom_small">
+                        <lightning-layout>
+                            <lightning-layout-item flexibility="auto"  size="12" small-device-size="12" large-device-size="6"
+                            class="slds-var-p-horizontal_small">
+                            <label class="slds-form-element__label">Vehicle Number</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                name="Vehicle_Number__c" value={collateralRecord.Vehicle_Number__c} >
+                            </lightning-input>
+                            <label class="slds-form-element__label">Make</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                name="Make__c" value={collateralRecord.Make__c} >
+                            </lightning-input>
+                            <label class="slds-form-element__label">Engine number</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                name="Engine_number__c" value={collateralRecord.Engine_Number__c} >
+                            </lightning-input>
+                            <label class="slds-form-element__label">Chassis number</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                name="Chasis_Number__c" value={collateralRecord.Chasis_Number__c} >
+                            </lightning-input>
+                            <label class="slds-form-element__label">Manufacturing year</label>
+                            <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                                name="Manufacture_Year__c" value={collateralRecord.Manufacture_Year__c}>
+                            </lightning-input>
+                         </lightning-layout-item>
+
+                         <lightning-layout-item flexibility="auto"  size="12" small-device-size="12" large-device-size="6"
+                         class="slds-var-p-horizontal_small">
+                         <label class="slds-form-element__label">Registration date</label>
+                         <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                             name="Vehicle_Number__c" value={collateralRecord.Vehicle_Number__c}>
+                         </lightning-input>
+                         <label class="slds-form-element__label">Owner Serial no</label>
+                         <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                             name="Owner_Serial_number__c" value={collateralRecord.Owner_Serial_number__c} >
+                         </lightning-input>
+                         <label class="slds-form-element__label">Hypothication</label>
+                        <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                             name="Engine_number__c" value={collateralRecord.Engine_number__c} >
+                         </lightning-input>
+                         <label class="slds-form-element__label">Color</label>
+                         <lightning-input type="text" variant="label-hidden" class="" label="Vehicle Number"
+                             name="Vehicle_Color__c" value={collateralRecord.Vehicle_Color__c}>
+                         </lightning-input>
+                         
+                      </lightning-layout-item>
+
+
+
+                                </lightning-layout>
+
+                    </lightning-accordion-section>
+                </lightning-accordion>
+
+                  END RC Details-->
+
+        </template>
+        <!--End-->
+
+    </lightning-card>
+</template>
+    <!--End-->
+</template>

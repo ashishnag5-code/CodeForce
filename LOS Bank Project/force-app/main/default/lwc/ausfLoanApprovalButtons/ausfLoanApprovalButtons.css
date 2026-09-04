@@ -1,0 +1,12 @@
+:host{
+    --sds-c-button-brand-color-background: rgb(230, 90, 40);
+    --sds-c-button-brand-color-background-active: rgb(230, 90, 40);
+    --slds-c-button-brand-color-background-hover: rgb(230, 90, 40);
+}
+
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+}

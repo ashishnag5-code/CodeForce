@@ -1,0 +1,21 @@
+.badgeProperty { 
+    --slds-c-badge-font-size: 25px;
+}
+
+.cardbgColor {
+    --slds-c-icon-color-foreground: rgb(75, 75, 75);
+}
+.sliderColor {
+    --sds-c-slider-track-color-background: rgb(112, 110, 110);
+    --sds-c-slider-thumb-color-foreground: rgb(243,116,53);
+}
+.inputSlider {
+    color: rgb(255, 165, 0);
+}
+
+.buttonColor{
+    --sds-c-button-brand-color-background: rgb(243,116,53);
+    --slds-c-button-brand-color-background-hover: rgb(243,116,53);
+    --slds-c-button-brand-color-border: rgb(243,116,53);
+    --slds-c-button-brand-color-border-hover: rgb(243,116,53);
+}

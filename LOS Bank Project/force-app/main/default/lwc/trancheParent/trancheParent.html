@@ -1,0 +1,245 @@
+<template>
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+    <div class="slds-box slds-box_x-small slds-theme_shade">
+        <template if:true={hideSection}>
+          <lightning-icon icon-name="utility:chevronright" onclick={handleOpenSection} size="x-small"></lightning-icon>
+        </template>
+        <template if:false={hideSection}>
+          <lightning-icon icon-name="utility:chevrondown" onclick={handleHideSection} size="x-small"></lightning-icon>
+        </template>
+        &nbsp;<b>Tranche ({recordCount})</b>
+    
+    </div>
+
+    <template if:false={hideSection}>
+    <lightning-card>
+        <!--<template if:true={readOnly}>
+            <span slot="actions">
+                    <lightning-icon class="slds-m-around_x-small" icon-name="action:edit" size="xx-small" onclick={handleEdit}></lightning-icon>
+            </span>
+        </template>
+        
+        <template if:false={readOnly}>
+            <span slot="actions">
+                <lightning-icon class="slds-m-around_x-small" icon-name="action:reject" size="xx-small" onclick={handleReject}></lightning-icon>
+
+            </span>               
+           
+        </template>-->
+        
+        <lightning-layout>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                <div class="slds-scrollable--x">
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">                                    
+                                        <lightning-formatted-text value="" class="slds-text-body_small"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Tranche" data-id="Tranche_Number__c" class="slds-text-body_small slds-hide"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Partial Payment Condition" data-id="Partial_Payment_Condition__c" class="slds-text-body_small slds-hide"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Disbursement Amount" data-id="Disbursement_Amount__c" class="slds-text-body_small slds-hide"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                        <lightning-formatted-text value="Tranche Status" data-id="Tranche_Status__c" class="slds-text-body_small slds-hide"></lightning-formatted-text>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={trancheList} for:item="relatedRecord" for:index="index">
+                                    <tr class="slds-hint-parent" key={relatedRecord.key}>  
+                                        <td data-label="Check">
+                                            <div class="slds-truncate">
+                                                <div class="slds-align_absolute-center">
+                                                    <lightning-input onchange={handleChange} disabled={readOnly} name="isChecked" access-key={relatedRecord.key} variant="label-hidden" type="checkbox" value={relatedRecord.isChecked} checked={relatedRecord.isChecked}></lightning-input>
+                                                </div>  
+                                            </div>
+                                        </td>
+                                        <td data-label="Tranche_Number__c" title={relatedRecord.Tranche_Number__c}>
+                                            <div class="slds-truncate">
+                                                <lightning-input data-name="Tranche_Number__c" data-id="Tranche_Number__c" class="slds-text-body_small slds-hide" read-only=true name="Tranche_Number__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Tranche_Number__c} required onchange={handleChange}></lightning-input>                    
+                                            </div>
+                                        </td>
+                                            <td data-label="Partial_Payment_Condition__c" title={relatedRecord.Partial_Payment_Condition__c}>
+                                              <div class="slds-truncate">
+                                                <lightning-input data-name="Partial_Payment_Condition__c" data-id="Partial_Payment_Condition__c" class="slds-text-body_small slds-hide" read-only={readOnly} name="Partial_Payment_Condition__c" variant="label-hidden" access-key={relatedRecord.key} type="text" value={relatedRecord.Partial_Payment_Condition__c} required onchange={handleChange}></lightning-input>
+                                              </div>
+                                            </td>
+                                            <td data-label="Disbursement_Amount__c">
+                                              <div class="slds-truncate" title={relatedRecord.Disbursement_Amount__c}>
+                                                <lightning-input data-name="Disbursement_Amount__c" data-id="Disbursement_Amount__c" class="slds-text-body_small slds-hide" read-only={readOnly} name="Disbursement_Amount__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Disbursement_Amount__c} required onchange={handleChange}></lightning-input>
+                                              </div>
+                                            </td>
+                                            <td data-label="Tranche_Status__c">
+                                                <div class="slds-truncate" title={relatedRecord.Tranche_Status__c}>
+                                                  <lightning-input data-name="Tranche_Status__c" data-id="Tranche_Status__c" class="slds-text-body_small slds-hide" read-only={readOnly} name="Disbursement_Amount__c" variant="label-hidden" access-key={relatedRecord.key} type="number" value={relatedRecord.Tranche_Status__c}></lightning-input>
+                                                </div>
+                                              </td>
+                                        </tr>
+                                    </template>
+                                    <tr class="slds-hint-parent">  
+                                        <td data-label="Check">
+                                            <div class="slds-truncate">
+                                                <div class="slds-align_absolute-center">
+                                                </div>  
+                                            </div>
+                                        </td>
+                                        <td data-label="Tranche_Number__c" >
+                                            <div class="slds-truncate">
+                                            </div>
+                                        </td>
+                                            <td data-label="Partial_Payment_Condition__c">
+                                              <div class="slds-truncate" >
+                                                <strong><lightning-formatted-text value="Total"></lightning-formatted-text></strong>  
+                                              </div>
+                                            </td>
+                                            <td data-label="Disbursement_Amount__c">
+                                              <div class="slds-truncate">
+                                                <strong><lightning-formatted-number value={totalDisbursement} format-style="currency" 
+                                                    currency-code="INR"></lightning-formatted-number></strong>                                              </div>
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div> 
+                    </lightning-layout-item>
+                </lightning-layout>
+                 
+                <template if:false={boolFromCINLANCmp}>
+                    <template if:true={readOnly}>
+                        <div class="slds-align_absolute-center">
+                                <lightning-icon class="slds-m-around_x-small" icon-name="action:edit" size="xx-small" onclick={handleEdit}></lightning-icon>
+                        </div>
+                    </template>
+                    <template if:false={readOnly}>
+                        <div class="slds-align_absolute-center">
+                                <lightning-icon class="slds-m-around_x-small" icon-name="action:approval"  size="xx-small" onclick={handleSave}></lightning-icon>
+                                <template if:false={isDelete}>
+                                    <lightning-icon class="slds-m-around_x-small" icon-name="action:new" size="xx-small" onclick={handleAddNewTranche}></lightning-icon>
+                                </template>
+                                <template if:true={isDelete}>
+                                    <lightning-icon class="slds-m-around_x-small" icon-name="action:delete" size="xx-small" onclick={handleDeleteAction}></lightning-icon>
+                                </template>
+                            </div>
+                        
+                       
+                    </template>
+                </template>
+                
+                
+    </lightning-card>
+    </template>
+        <!--<template if:false={addTranche}>
+            <article class="slds-card slds-card_boundary">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                <a class="slds-card__header-link slds-truncate" title="Tranche"
+                                    onclick={handleGotoRelatedList}>
+                                    <span>Tranche ({recordCount})</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">
+                            <lightning-icon icon-name=action:new size="xx-small" onclick={handleAddNewTranche}></lightning-icon>
+                        </div>
+                    </header>
+                </div>
+    
+                <div class="slds-p-top_small">
+                    <div class="slds-card__body slds-card__body_inner">
+                        <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <template for:each={trancheList} for:item="relatedRecord" for:index="index">
+                                <li class="slds-size_1-of-2 slds-small-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small" key={relatedRecord.Tranche_Number__c}>
+                                    <c-tranche-child is-record-saved={relatedRecord.isSaved} inserted-tranche-record={relatedRecord} ondeletetranche={handleDeleteAction} onrowaction={handleRowAction} add-tranche={addTranche}  key-id={relatedRecord.Tranche_Number__c} loan-app={loanApp}></c-tranche-child>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+                <lightning-card class="slds-align_absolute-center slds-p-around_small">
+                        <h1 slot="title" class="slds-align_absolute-center">
+                            Total : <span class="slds-badge badgeProperty">
+                                        <lightning-formatted-number value={totalDisbursement} format-style="currency" 
+                                                                    currency-code="INR"></lightning-formatted-number>
+                                </span>
+                        </h1>
+                </lightning-card>
+            </article>
+        </template>
+    
+        <template if:true={addTranche}>
+                <c-tranche-child inserted-tranche-record={trancheRecord} ondeletetranche={handleDeleteAction} onrowaction={handleRowAction} add-tranche={addTranche} onsavetranche={handleSave} key-id={trancheNumber} tranche-number={trancheNumber} loan-app={loanApp}></c-tranche-child>
+        </template><!-->
+            
+    <!--<template if:false={addTranche}>
+        <article class="slds-card slds-card_boundary">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate" title="Tranche"
+                                onclick={handleGotoRelatedList}>
+                                <span>Tranche ({recordCount})</span>
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning-icon icon-name=action:new size="xx-small" onclick={handleAddNewTranche}></lightning-icon>
+                    </div>
+                </header>
+            </div>
+
+            <div class="slds-p-top_small">
+                <div class="slds-card__body slds-card__body_inner">
+                    <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <template for:each={trancheList} for:item="relatedRecord" for:index="index">
+                            <li class="slds-size_1-of-2 slds-small-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small" key={relatedRecord.Tranche_Number__c}>
+                                <c-tranche-child is-record-saved={relatedRecord.isSaved} inserted-tranche-record={relatedRecord} ondeletetranche={handleDeleteAction} onrowaction={handleRowAction} add-tranche={addTranche}  key-id={relatedRecord.Tranche_Number__c} loan-app={loanApp}></c-tranche-child>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+            <lightning-card class="slds-align_absolute-center slds-p-around_small">
+                    <h1 slot="title" class="slds-align_absolute-center">
+                        Total : <span class="slds-badge badgeProperty">
+                                    <lightning-formatted-number value={totalDisbursement} format-style="currency" 
+                                                                currency-code="INR"></lightning-formatted-number>
+                            </span>
+                    </h1>
+            </lightning-card>
+        </article>
+    </template>
+
+    <template if:true={addTranche}>
+            <c-tranche-child inserted-tranche-record={trancheRecord} ondeletetranche={handleDeleteAction} onrowaction={handleRowAction} add-tranche={addTranche} onsavetranche={handleSave} key-id={trancheNumber} tranche-number={trancheNumber} loan-app={loanApp}></c-tranche-child>
+    </template>-->
+        
+</template>

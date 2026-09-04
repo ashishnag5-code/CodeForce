@@ -1,0 +1,21 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-12-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <c-common-toast></c-common-toast>
+
+    <lightning-card variant="Narrow" title="Document Preview" icon-name="doctype:image">
+        <template if:true={showSpinner}>
+            <lightning-spinner variant="brand"
+                alternative-text="Loading"></lightning-spinner>
+      </template>
+
+            <c-fi-preview  images-list={imagesList} onmyeventdelete={handleClickDelete}></c-fi-preview>
+            <c-fi-preview  images-list={imagesList2} onmyeventdelete={handleClickDelete}></c-fi-preview>
+
+    </lightning-card>
+</template>

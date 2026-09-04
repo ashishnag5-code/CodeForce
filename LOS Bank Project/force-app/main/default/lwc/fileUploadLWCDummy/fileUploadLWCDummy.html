@@ -1,0 +1,20 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-13-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-card title="LWC File Upload Example" icon-name="custom:custom19">
+        <lightning-file-upload
+            label="Attach receipt(Max File size 8Mb)"
+            name="fileUploader"
+            accept={acceptedFormats}
+            record-id="a0B6s000001EAvvEAG"
+            onuploadfinished={handleUploadFinished}
+            ondrop={handleDrag}
+            multiple>
+    </lightning-file-upload>
+    </lightning-card>
+</template>

@@ -1,0 +1,73 @@
+<apex:component >
+    <apex:attribute name="loanRecord" description="Referemce to Loan Record" type="Loan_Application__c" required="true"/>
+
+    <p class="subHeadingStyles">K. DETAILS OF FEES &amp; CHARGES</p>
+    <table width="100%" cellpadding="2" cellspacing="2">
+        <tr>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">1) </span>Stamp Duty: At actual as per applicable law.
+            </td>
+            <td width="4%"/>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">6) </span>Collection/EMI Pick-up Charges: INR 600 /- per instance
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">2) </span>Interest rate of {!loanRecord.ROI__c} % p.a.
+            </td>
+            <td width="4%"/>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">7) </span>Duplicate Amortization/ Repayment Schedule: INR 500 /- per instance
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">3) </span>Processing Charges (Non-Refundable) if INR.&nbsp;<apex:outputField value="{!loanRecord.Total_Charges__c}"/>
+            </td>
+            <td width="4%"/>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">8) </span>Cheque/SI/ECS swapping Charges: INR 1000 /- per instance
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">4) </span>Cheque/SI/NACH return Charges: INR 500 /- per instance
+            </td>
+            <td width="4%"/>
+            <td style="background-color: white; padding-left:10px;" width="48%" rowspan="2">
+                <apex:panelGrid columns="4">
+                    <span>
+                        <span class="pslTextInBold">9) </span>Loan Pre-payment Charges:  &lt;= 12 Months of EMI Repayment: 5%<br/>
+                        <span class="pslTextInBold">   </span>(on principle outstanding) &gt; 12 Months of EMI Repayment: 3%
+                    </span>
+                    <apex:outputText >&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputText>
+                    <span style="font-size: 25px">{</span>
+                    <apex:outputText >Not applicable for Home Loan</apex:outputText>
+                </apex:panelGrid>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">5) </span>Overdue Interest/Late payment charges: 3% per month from unpaid EMI
+            </td>
+            <td width="4%"/>
+        </tr>
+        <tr>
+            <td/><td/>
+            <td style="background-color: white; padding-left:10px;" width="48%">
+                <span class="pslTextInBold">10) </span>Statement of Account/ Foreclosure statement: INR 500 /- per statement
+            </td>
+        </tr>
+    </table>
+    <span style="line-height: 1px">
+        <span class="pslTextInNormalFont" style="font-size: 10px;">
+            <span class="pslTextInBold">NOTE: (1) </span>Visit <span class="pslTextInBold">http://www.aubank.in</span> for detailed fees and charges under the respective loan product
+        </span><br/>
+        <span class="pslTextInNormalFont" style="font-size: 10px;">Changes in charges from time to time are updated on bank&apos;s website.</span>
+        <span class="pslTextInBold" style="font-size: 10px;"> (2) </span>
+        <span class="pslTextInNormalFont" style="font-size: 10px;">All of the above charges are subject to change as per the Bank&apos;s discretion from time to time.</span>
+        <span class="pslTextInBold" style="font-size: 10px;"> (3) </span>
+        <span class="pslTextInNormalFont" style="font-size: 10px;">All of the above charges are exclusive of all statutory and Government taxes.</span>
+    </span>
+</apex:component>

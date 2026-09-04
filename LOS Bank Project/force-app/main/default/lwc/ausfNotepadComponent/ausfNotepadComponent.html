@@ -1,0 +1,154 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <div>
+        <div if:true={addIcon} class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+
+                        <a class="slds-card__header-link slds-truncate" title="Applicants"
+                            onclick={handleGotoRelatedList}>
+                            <span>Notepad</span>
+                        </a>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <template if:true={addIcon}>
+                        <lightning-button variant="brand" label="Fetch" onclick={showFetchScreen} disabled={disableFetch}></lightning-button> &nbsp;
+                        <lightning-icon icon-name=action:new size="small" onclick={addCreateScreenIcon}></lightning-icon>
+                    </template>
+                </div>
+            </header>
+        </div>
+    </div>
+    <template if:true={addFetchScreen}>
+        <div class="slds-m-top_x-small">
+            <lightning-messages></lightning-messages>
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon class="slds-m-left_xx-small" icon-name=custom:custom9 size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-truncate">Fetch Notes</span></h2>
+                </div>
+            </header>
+            <div class="slds-m-top_x-small">
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">Applicant</label>
+                        <lightning-combobox label="Applicant" placeholder="Select Applicant" value={applicant}
+                                name="Applicant" class="validate" variant="label-hidden" options={fetchApplicantOptions}
+                                onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                            onclick={handleCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" type="submit"
+                            class="slds-m-left_small" onclick={fetchCBSData} >
+                        </lightning-icon>
+                    </div>
+                </lightning-layout>
+            </div>
+        </div>
+    </template>
+    <template if:true={addReferencesScreen}>
+        <div class="slds-m-top_x-small">
+            <lightning-messages></lightning-messages>
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon class="slds-m-left_xx-small" icon-name=custom:custom9 size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title"><span class="slds-truncate">Add
+                            Notes</span></h2>
+                </div>
+            </header>
+            <div class="slds-m-top_x-small">
+                <lightning-record-edit-form object-api-name="Notepad__c" >
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <!--<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Name" name="Name" required></lightning-input-field>
+                    </lightning-layout-item>-->
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Note_Type__c" name="Note_Type__c" onchange={handleChange} required></lightning-input-field>
+                    </lightning-layout-item>
+                    <template if:true={noteTypeCust}>
+                        <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                            medium-device-size="12" large-device-size="6">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_4-of-12 slds-p-around--xxx-small ">
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>Applicant</label>
+                                </div>
+                                <div class="slds-col slds-size_8-of-12 slds-p-around--xxx-small">
+                                    <lightning-combobox label="Applicant" placeholder="Select Applicant" value={applicantValue}
+                                        name="Applicant__c" class="validate" variant="label-hidden" options={applicantOptions}
+                                        onchange={handleChange} required>      
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                            medium-device-size="12" large-device-size="6">
+                            <lightning-input-field field-name="Customer_ID__c" name="Customer_ID__c" value={cif} disabled="true"></lightning-input-field>
+                        </lightning-layout-item>
+                        
+                    </template>
+                    <template if:true={noteTypeLoan}>
+                        <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                            medium-device-size="12" large-device-size="6">
+                            <lightning-input-field field-name="Loan_Application__c" disabled="true" name="Loan_Application__c" value={loanId} required></lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Reason_for_Notes__c" name="Reason_for_Notes__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Notes_Start_Date__c" data-id="StartDate" name="Notes_Start_Date__c" value={notesStartDate} onchange={handleStartDateChange}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Notes_End_Date__c" name="Notes_End_Date__c" onchange={handleEndDateChange}></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Notes__c" name="Notes__c"></lightning-input-field>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                            onclick={handleCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" 
+                            class="slds-m-left_small" onclick={handleSave} >
+                        </lightning-icon>
+                    </div>
+                </lightning-layout>
+            </lightning-record-edit-form>
+            </div>
+        </div>
+    </template>
+    <div style="height: 300px;">
+        <lightning-datatable
+                key-field="Id"
+                data={notesList}
+                columns={columns}
+                onrowaction={handleRowAction}
+                column-widths-mode="auto">
+        </lightning-datatable>
+    </div>
+</template>

@@ -1,0 +1,24 @@
+<template>
+    <lightning-accordion-section name="A" label="Farmer Income Details">
+        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="agricultureType" label="Please select the type of Agriculture Income" data-name=""
+                                class="validate" value={memberDetailsValue} options={agricultureTypeOptions} required
+                                onchange={handleChange}>
+                            </lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-accordion-section>
+
+    <lightning-accordion-section name="B" label="">
+       
+            <template if:true={renderOwnlandTemplate}>
+                <c-agriculture-ownland-component  financial-id={financialId} applicant-id={applicantId}></c-agriculture-ownland-component>
+            </template>
+
+     
+
+
+    </lightning-accordion-section>
+    
+</template>

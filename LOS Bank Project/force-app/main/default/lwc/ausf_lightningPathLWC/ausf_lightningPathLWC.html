@@ -1,0 +1,18 @@
+<template>
+    <template if:true={showLightningPath}>
+        <lightning-card>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-path">
+                    <div class="slds-grid slds-path__track slds-scrollable_x">
+                        <lightning-progress-indicator current-step={currentStep} class="addClass rejected-css" type="path" variant="base">
+                            <template for:each={steps} for:item="step">
+                                <lightning-progress-step data-id={step.label} class={step.class} label={step.label}
+                                    value={step.value} key={step.label}></lightning-progress-step>
+                            </template>
+                        </lightning-progress-indicator>
+                    </div>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+</template>

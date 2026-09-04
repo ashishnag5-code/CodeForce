@@ -1,0 +1,77 @@
+<template>
+    <c-common-toast></c-common-toast>
+    <article class="slds-card">
+        <template if:true={booleanRender}>
+          <!-- <div style="align:right;">
+                <lightning-button data-id="printButton" variant="base" class="slds-m-top_small" label="Printable View" onclick={handlePrint}>
+                </lightning-button>
+            </div>   -->
+            <!-- template if:true={isPrintable}>
+                <lightning-button data-id="backButton" variant="base" class="slds-m-top_small" label="Back To Edit Mode" onclick={handlePrint}>
+                </lightning-button>
+            </template -->
+            <lightning-tabset active-tab-value={activeTab}>
+
+                <lightning-tab label={getTabLabel} value="1" onactive={handleActive}>
+                    
+                    <c-field-investigation-questionaire-repeative-code check-current={checkCurrent}
+                        onmyevent={handleFieldChange} onmyeventback={handleBack} check-office={checkOffice}
+                        borrower-list={borrowerList} onmyeventnext={changeTab} check-auto-loan={checkAutoLoan}
+                        check-two-wheeler-type={checkTwoWheelerType} record-id={recordId}
+                        check-permanent={checkPermanent} is-disable={isDisable} id="applicant" checkvechicle=true
+                        save-button-name="Next"
+                        currentdatetime={currentdatetime}
+                        userwithempcode={userwithempcode}
+                        currentdate={currentdate}
+                        currenttime={currenttime}
+                        applicant-type={applicantType} render-applicant-component={renderApplicantDetails_ApplicantPage} opening-remarks={openingRemarks}></c-field-investigation-questionaire-repeative-code>
+
+                    <!-- template if:true={isPrintable}>
+                    <c-field-investigation-questionaire-repeative-code onmyevent={handleFieldChange} id="vechicle"
+                    check-current={checkCurrent} check-office={checkOffice} vechicle={VehicleList}
+                    onsuccess={handleSuccess} check-auto-loan={checkAutoLoan} onmyeventtotab1={changeTab}
+                    check-two-wheeler-type={checkTwoWheelerType} record-id={recordId}
+                    check-permanent={checkPermanent} save-button-name="Save" is-disable={isDisable} checkvechicle=false
+                    check-for-vechicle=true></c-field-investigation-questionaire-repeative-code>
+                    </template -->
+                    
+                </lightning-tab>
+
+                <lightning-tab label="Vehicle Details" value="2" onactive={handleActive}>
+                    <c-field-investigation-questionaire-repeative-code onmyevent={handleFieldChange}
+                        check-current={checkCurrent} check-office={checkOffice} borrower-list={VehicleList}
+                        onsuccess={handleSuccess} check-auto-loan={checkAutoLoan} onmyeventtotab1={changeTab}
+                        check-two-wheeler-type={checkTwoWheelerType} record-id={recordId} is-disable={isDisable}
+                        check-permanent={checkPermanent} save-button-name="Save"
+                        check-for-vechicle=true
+                        currentdatetime={currentdatetime}
+                        userwithempcode={userwithempcode}
+                        currentdate={currentdate}
+                        currenttime={currenttime}
+                        applicant-type={applicantType} render-applicant-component={renderApplicantDetails_VehiclePage} opening-remarks={openingRemarks}></c-field-investigation-questionaire-repeative-code>
+
+                </lightning-tab>
+            </lightning-tabset>
+        </template>
+            <template if:true={checkForNullValues}>
+                <div class="slds-notify_container slds-is-relative">
+                    <div class="slds-notify slds-notify_toast slds-theme_warning" role="status">
+                        <span class="slds-assistive-text">warning</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-warning slds-m-right_small slds-no-flex slds-align-top"
+                            title="Description of icon when needed">
+                            <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#warning"></use>
+                            </svg>
+                        </span>
+                        <div class="slds-notify__content">
+                            <h2 class="slds-text-heading_small ">
+                                {showMessage}</h2>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        
+    </article>
+
+</template>

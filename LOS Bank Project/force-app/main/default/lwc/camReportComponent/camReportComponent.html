@@ -1,0 +1,26 @@
+<template>
+    
+    <c-custom-spinner show-spinner={loadSpinner} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <div class="slds-align--absolute-center">
+        <template if:true={showBack}>
+            <lightning-button class="slds-m-around_small" label="Return" variant="brand" onclick={goBack}></lightning-button>
+        </template>
+
+        <template if:false={showBack}>
+            <lightning-button class="slds-m-around_small buttonColor" label="Generate Latest CAM Report" variant="brand" onclick={runReport}></lightning-button>
+            <lightning-button class="slds-m-around_small buttonColor" label="View Last CAM Report" variant="brand" onclick={viewReport}></lightning-button>
+        </template>
+    
+    </div>
+    <template if:true={fileExists}>
+        <div style="overflow:visible">
+            <lightning-layout>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                    <iframe src={fileUrl} height={heightInRem} frame-border="0" onload={loadData}></iframe>
+                </lightning-layout-item>
+            </lightning-layout>
+            
+        </div>
+    </template>
+</template>

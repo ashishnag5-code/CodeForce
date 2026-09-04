@@ -1,0 +1,85 @@
+<template>
+	<div class="mainContent">
+		<lightning-card icon-name="custom:custom66" title="Additional Match">
+			<div class="content">
+				<template if:true={error}>
+					<div
+						class="slds-col slds-small-size_1-of-2 slds-medium-size_3-of-12 slds-large-size_1-of-2 errorMessgaeCss slds-notify slds-notify_toast slds-theme_error">
+						{error}
+						<lightning-formatted-url value={matchRecordUrl} label={matchRecordLabel} target="_self">
+						</lightning-formatted-url>
+					</div>
+				</template>
+				<template if:true={isApplicantVisible}>
+					<div class="slds-grid slds-wrap scores">
+						<div
+							class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+							{applicantRecord.First_Name__c} {applicantRecord.Middle_Name__c}
+							{applicantRecord.Last_Name__c}
+						</div>
+						<template if:true={creditScore}>
+							<template if:true={rerunCibil}>
+								<lightning-button label="Rerun" title="Rerun" onclick={handleCreateCibilRequest}>
+								</lightning-button>
+								Last Score - {creditScore}
+							</template>
+							<template if:false={rerunCibil}>
+								<div
+									class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+									{creditScore}
+								</div>
+							</template>
+						</template>
+						<template if:false={creditScore}>
+							<div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+								<template if:true={fetchCibil}>
+									<lightning-button label="Fetch" title="Fetch" onclick={handleCreateCibilRequest}>
+									</lightning-button>
+								</template>
+								<template if:false={rerunCibil}>
+									<template if:false={fetchCibil}>
+										<template if:false={onClick}>
+											<lightning-icon data-name="changeIconForCreditScore"
+												icon-name="utility:spinner" title="Get Cibil Score" variant="warning"
+												size="medium" style="cursor: pointer;"
+												disabled={isGetCibilScoreDisabled}>
+											</lightning-icon>
+										</template>
+										<template if:true={onClick}>
+											<lightning-icon data-name="changeIconForCreditScore" data-id="4" variant=""
+												icon-name="utility:refresh" size="medium"
+												onclick={handleCreateCibilRequest} class="onClickRefresh">
+											</lightning-icon>
+										</template>
+									</template>
+								</template>
+							</div>
+						</template>
+					</div>
+
+					<div class="slds-grid slds-wrap scores cibil">
+						<div
+							class="slds-col slds-size_8-of-12 slds-medium-size_8-of-12 slds-large-size_8-of-12 checkname">
+							Cibil Report
+						</div>
+						<template if:true={reportVal}>
+							<div class="slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12 checkname">
+								<a onclick={previewFile}>{reportVal}</a>
+							</div>
+						</template>
+						<template if:false={reportVal}>
+							<div class="slds-col slds-size_4-of-12 slds-medium-size_4-of-12 slds-large-size_4-of-12">
+								<lightning-icon data-name="ReportVal" variant="warning" icon-name="" size="medium">
+								</lightning-icon>
+							</div>
+						</template>
+					</div>
+
+				</template>
+				<template if:false={isApplicantVisible}>
+					There are no Additional Matches.
+				</template>
+			</div>
+		</lightning-card>
+	</div>
+</template>

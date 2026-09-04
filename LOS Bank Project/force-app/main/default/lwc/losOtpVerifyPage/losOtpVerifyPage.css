@@ -1,0 +1,113 @@
+body
+{
+    height:max-content !important;
+}
+/* Amit 28/9 */
+.marginTopNeg23{
+    margin-top: -23px;
+}
+.marginBottom35{
+    margin-bottom : 35px !important;
+}
+.applyButton{
+    height: 48px;
+}
+.iti {
+    position: relative;
+    display: block;
+}
+
+.single-blog .post-meta li {
+    list-style-type: none;
+    color: #00000099;
+    font-weight: 500;
+    display: inline-block;
+    font-size: 14px;
+}
+
+/* A 10/08/2022 - Start */
+@media (min-width: 576px){
+    .col-sm-10 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+.otpClickable{
+    cursor: pointer;
+}
+
+.verifyClickable{
+    cursor: pointer;
+}
+/* A 10/08/2022 - End */
+
+.did-floating-input{
+    display: inline-flex !important;
+}
+
+.content-desktop {display: block;}
+.content-mobile {display: none;}
+
+@media screen and (max-width: 768px) {
+    .content-desktop {display: none;}
+    .content-mobile {display: block;}
+    .main-container-mobdob{
+        padding-right:0px;
+        padding-left:0px;
+    }
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 991px)
+{
+    .main-banner-area.bg-three{
+        background-size: 640px 240px;
+        padding-top :0px;
+    }
+}
+
+.did-floating-select:not([value=""]) ~ .did-floating-label {
+    top: -8px;
+    font-size: 13px;
+}
+
+/* @media only screen and (min-width: 768px) and (max-width: 991px)
+{
+.single-blog .post-meta li {
+    margin-right: 8px;
+    font-size: 13px;
+    }
+} */
+
+.nice-select:after {
+    border-bottom: 2px solid #0A68CC;
+    border-right: 2px solid #0A68CC;
+    content: '';
+    display: block;
+    height: 8px;
+    margin-top: -4px;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    -webkit-transform-origin: 66% 66%;
+    -ms-transform-origin: 66% 66%;
+    transform-origin: 66% 66%;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-transition: all .15s ease-in-out;
+    transition: all .15s ease-in-out;
+    width: 8px;
+}
+
+.nice-select.open:after {
+    -webkit-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+
+.fieldDisabledParent {
+    background-color: #e9ecef;
+}

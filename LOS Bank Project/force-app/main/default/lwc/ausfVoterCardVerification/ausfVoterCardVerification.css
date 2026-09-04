@@ -1,0 +1,25 @@
+.input {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    outline: none;
+    border-radius: 5px;
+}
+
+.button {
+    position: absolute;
+    top: 0px;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    cursor: pointer;
+    transform: translateX(2px);
+    right: 2px;
+}
+
+.buttonIn {
+    width: 100%;
+    position: relative;
+    border: none;
+}

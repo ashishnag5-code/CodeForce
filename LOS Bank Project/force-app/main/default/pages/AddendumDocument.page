@@ -1,0 +1,42 @@
+<apex:page renderAs="pdf" controller="AddendumDocumentController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+
+    <html>
+        <head>
+            <style type="text/CSS">
+                body{ 
+                    font-family: 'Arial'; font-size : 14px !important; color :333;
+                   
+                }                
+                div.footer {
+                    display: block;
+                    position: running(footer);
+                    margin-bottom: 10px;
+                    align-content: left;
+                    margin-top: 5%;
+                }
+                @page { 
+                        margin: 0.5in; 
+                        margin-bottom: 1.0in; 
+                    }
+            </style>
+        </head>
+        <body>
+            <div style="margin-bottom : 16%">
+            <!--apex:image url="{!URLFOR($Resource.AUMotoImage)}" height="100" width="150"></apex:image-->
+            <img src="{!URLFOR($Resource.AUMotoImage)}" height="100" width="150" align = "left"/>
+            <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "right"/>
+            <!--apex:image url="{!URLFOR($Resource.AUBankLogoSanction)}" style="margin-left : 17%; text-align:right;" height="100" width="150"></apex:image-->
+            </div>
+            <div class="footer" name="footer">
+                <apex:image url="{!URLFOR($Resource.SantionFooter)}" width="300%" height="90"></apex:image>
+            </div>
+            Dear {!applicant.Title__c}. {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c},<br/><br/><br/><br/><br/>
+            EMI due date for your loan on {!collateral.Make__c} {!collateral.Model__c} vide Loan application number {!loan.Application_Id__c} has been changed to {!firstDayOfInst}th day of every calendar month. Your first EMI date will be {!formattedDate}.
+            <br/><br/> <br/><br/> <br/>
+            For any gap, please connect with your Relationship Manager {!RO.Name}, @ {!RO.MobilePhone} or call customer care number (1800 1200 1200).
+            <br/><br/><br/><br/><br/><br/>
+            AU Bank
+        </body>
+    </html>
+
+</apex:page>

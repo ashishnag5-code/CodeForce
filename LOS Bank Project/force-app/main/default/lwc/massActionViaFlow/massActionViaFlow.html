@@ -1,0 +1,16 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-10-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-card title="HelloForEach" icon-name="custom:custom14">
+        <ul class="slds-var-m-around_medium">
+            <template for:each={ids} for:item="id">
+                <li key={id}>{id}</li>
+            </template>
+        </ul>
+    </lightning-card>
+</template>

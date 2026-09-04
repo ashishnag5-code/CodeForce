@@ -1,0 +1,18 @@
+<aura:component Controller="Loan_Application__c" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,lightning:actionOverride,lightning:isUrlAddressable" access="global" >
+	 <!--aura:html tag="style">
+        .slds-modal {
+         visibility: hidden;
+         display: none;
+         }
+        .slds-backdrop{
+        display: none;
+        }      
+  </aura:html-->
+    <aura:attribute name="recordId" type="String" />
+    
+    <c:convertToLoan recordId="{!v.recordId}">
+        </c:convertToLoan>
+    
+    <br/>
+    <!--lightning:button label="Ok" onclick="{!c.clickOk}"/-->
+</aura:component>

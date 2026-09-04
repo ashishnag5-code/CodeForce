@@ -1,0 +1,339 @@
+<template>
+    <div class="slds-box slds-m-top--small">
+        <!--<div if:true={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>-->
+        <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+        <template if:true={isShowDetailsSection}>
+            <lightning-card>
+                <h1 slot="title">
+                    <span style="color: rgb(100, 0, 134)">
+                        <lightning-icon class="slds-p-around_small slds-current-color" icon-name="utility:money"
+                            size="medium"></lightning-icon>
+                    </span>&nbsp;
+                    Exposure Details
+                </h1>
+           
+
+            <!--Wheels Exposure Count Details Section-->
+            <lightning-layout multiple-rows class="slds-p-left--x-large slds-p-bottom_small">
+                <lightning-layout-item class="slds-text-heading--small" size="12" small-device-size="12"
+                    large-device-size="6">
+                    <p class="slds-text-body_regular"><b>{vehicleType} Exposure:&nbsp;</b>{decWheelsExposure}</p>
+                    <!--<label class="slds-form-element__label">
+                        Wheels Exposure:&nbsp;</label>
+                        <lightning-formatted-number value={decWheelsExposure} class="component" format-style="currency"
+                            currency-code="INR">
+                        </lightning-formatted-number>-->
+                    
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-text-heading--small" size="12" small-device-size="12"
+                    large-device-size="6">
+                    <!--<label class="slds-form-element__label">
+                        Total Exposure: &nbsp; </label>
+                        <lightning-formatted-number value={decTotalExposure} class="component" format-style="currency"
+                            currency-code="INR"></lightning-formatted-number>-->
+                            <p class="slds-text-body_regular"><b>Total Exposure:&nbsp;</b>{decTotalExposure}</p>
+
+                </lightning-layout-item>
+            </lightning-layout>
+            <!--End-->
+
+            <!-- Details Table-->
+            <template if:true={showMainSection}>
+            <lightning-accordion allow-multiple-sections-open>
+                <template for:each={lstAccountDetails} for:item="accountInstance">
+                    <template if:true={accountInstance.bankCheck}>
+                    <lightning-accordion-section key={accountInstance.applicantName}
+                        label={accountInstance.applicantName}> &nbsp;  
+                        <div slot="actions">
+                        <lightning-button variant="base" label="Refresh" title={accountInstance.applicantCIF} name={accountInstance.applicantCIF} data-id={accountInstance.applicantId} onclick={refreshHandler} icon-name="action:refresh" icon-position="right"
+                        class="slds-m-left_x-small"></lightning-button></div>
+                        <!--ODCC Accounts-->
+                        <template if:true={accountInstance.isODCC}>
+                            <lightning-accordion allow-multiple-sections-open>
+                                <lightning-accordion-section name='OD/CC Account Details' label='OD/CC Account Details'>
+                                    <template for:each={accountInstance.odccBankAccountRecords}
+                                        for:item="objAccountWrapper">
+                                        <c-exposure-c-c-account-details key={objAccountWrapper.Id}
+                                            obj-account-record={objAccountWrapper}></c-exposure-c-c-account-details>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </template>
+                        <!--End-->
+
+                        <!--Loan Accounts-->
+                        <template if:true={accountInstance.isLOAN}>
+                            <lightning-accordion allow-multiple-sections-open>
+                                <lightning-accordion-section name='Loan Account Details' label='Loan Account Details'>
+                                    <template for:each={accountInstance.loanBankAccountRecords}
+                                        for:item="objAccountWrapper">
+                                        <c-exposure-loan-account-details key={objAccountWrapper.Id} onloancredit={handleExposure} onrender={handleRender}
+                                        onexposurecalculation={handleCalculation}  onloandetails={handleLoan} oninquirydetails={handleInquiryLoan}
+                                            obj-account-record={objAccountWrapper}></c-exposure-loan-account-details>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </template>
+                        <!--End-->
+
+                        <!--Casa Accounts-->
+                        <template if:true={accountInstance.isCASA}>
+                            <lightning-accordion allow-multiple-sections-open>
+                                <lightning-accordion-section name='CASA Account Details' label='CASA Account Details'>
+                                    <template for:each={accountInstance.casBankAccountRecords}
+                                        for:item="objAccountWrapper">
+                                        <c-exposure-casa-loan-account-details key={objAccountWrapper.Id}
+                                            oncasadetails={handleCasa} obj-account-record={objAccountWrapper}>
+                                        </c-exposure-casa-loan-account-details>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </template>
+                        <!--End-->
+
+                        <!--Credit Accounts-->
+                        <template if:true={accountInstance.isCREDIT}>
+                            <lightning-accordion allow-multiple-sections-open>
+                                <lightning-accordion-section name='Credit Card Details' label='Credit Card Details'>
+
+                                    <template for:each={accountInstance.creditBankAccountRecords}
+                                        for:item="objAccountWrapper">
+                                        <c-exposure-credit-loan-account-details key={objAccountWrapper.Id} onexposurecredit={handleExposure}
+                                        onexposurecalculation={handleCalculation}     obj-account-record={objAccountWrapper}>
+                                        </c-exposure-credit-loan-account-details>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </template>
+                        <!--End-->
+
+                          <!--Disbursed Accounts-->
+                        <template if:true={accountInstance.isApplicantLoan}>
+                           
+                            <lightning-accordion allow-multiple-sections-open>
+                                <lightning-accordion-section name='Existing Loan Details' label='Existing Loan Details'>
+                                    <template for:each={accountInstance.applicantRecords} for:item="objAppWrapper">
+                                        <c-exposure-disbursed-loan-details key={objAppWrapper.Id} obj-applicant-record={accountInstance} loan-stage={loanStage}
+                                        ondisbursedcalculated={handleAfterDisbursedCalculation}   obj-account-record={objAppWrapper}></c-exposure-disbursed-loan-details>
+                                    </template>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </template>
+
+                    </lightning-accordion-section>
+                </template>
+                </template>
+            </lightning-accordion>
+          </template>
+            <!--End-->
+         <!--  <lightning-button variant="base" label="Check" title="Looks like a link" onclick={dummyHandler}
+                                class="slds-m-left_x-small"></lightning-button>-->
+            </lightning-card>
+        </template>
+
+
+        <!--CASA API RESPONSE DETAILS-->
+        <template if:true={isShowCasaSection}>
+            <lightning-card class="no-wrap" icon-name="standard:currency">
+                <h1 slot="title" class="no-wrap"><a>CASA Details</a></h1>
+                <div slot="actions">
+                    <a>
+                        <lightning-icon icon-name="action:back" onclick={handleRowAction} size="x-small"
+                            alternative-text="Close" title="Close"></lightning-icon>
+                    </a>
+                </div>
+            </lightning-card>
+            <template for:each={casaApiDetails} for:item="relatedRecord">
+                <lightning-layout key={relatedRecord.TxnId} class="slds-m-top--medium">
+                    <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                        <lightning-card class="no-wrap">
+
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Account number</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.AccountNumber}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Description</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.Description}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Running Total </label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.RunningTotal}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Transaction Amount</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TransactionAmount}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Transaction Branch</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TransactionBranch}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Transaction Date</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TransactionDate}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Transaction Type</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TransactionType}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">TxnId</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TxnId}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Value Date</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.ValueDate}
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </template>
+        </template>
+        <!--End-->
+
+        <!--Loan API RESPONSE DETAILS-->
+        <template if:true={isShowLoanApiSection}>
+            <lightning-card class="no-wrap" icon-name="standard:currency">
+                <h1 slot="title" class="no-wrap"><a>Account Number : {accountNumber}</a></h1>
+                <div slot="actions">
+                    <a>
+                        <lightning-icon icon-name="action:back" onclick={handleRowAction} size="x-small"
+                            alternative-text="Close" title="Close"></lightning-icon>
+                    </a>
+                </div>
+            </lightning-card>
+            <lightning-layout multiple-rows class="slds-p-left--x-large slds-p-bottom_small">
+                <lightning-layout-item class="slds-text-heading--small" size="12" small-device-size="12"
+                    large-device-size="6">
+                    <p class="slds-text-body_regular"><b> No of EMI Paid:&nbsp;</b>{emiPaid}</p>
+                   <!--No of EMI Paid:&nbsp; <span class="slds-badge badgeProperty">
+                        <lightning-formatted-number value={emiPaid} class="component">
+                        </lightning-formatted-number>
+                    </span>--> 
+
+
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-text-heading--small" size="12" small-device-size="12"
+                    large-device-size="6">
+                    <p class="slds-text-body_regular"><b>Loan Overdue EMI:&nbsp;</b>{overDue}</p>
+                  <!--  Loan Overdue EMI:&nbsp; <span class="slds-badge badgeProperty">
+                        <lightning-formatted-number value={overDue} class="component"></lightning-formatted-number>
+                    </span>-->
+
+                </lightning-layout-item>
+            </lightning-layout>
+
+            <template for:each={loanApiDetails} for:item="relatedRecord">
+                <lightning-layout key={relatedRecord.AccountID} class="slds-m-top--medium">
+                    <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                        <lightning-card class="no-wrap">
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Account number</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.AccountNumber}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Account ID</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.AccountID}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Debited Amount </label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.DebitedAmount}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Credited Amount</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.CreditedAmount}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Running Balance</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.RunningBalance}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Txn Date</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.TxnDate}
+                                </div>
+                            </div>
+                            <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                                <div class="slds-size_1-of-2">
+                                    <b><label class="slds-form-element__label">Value Date</label></b>
+                                </div>
+                                <div class="slds-size_1-of-2">
+                                    {relatedRecord.ValueDate}
+                                </div>
+                            </div>
+                        </lightning-card>
+
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+            </template>
+
+        </template>
+        <!--End-->
+
+    </div>
+</template>

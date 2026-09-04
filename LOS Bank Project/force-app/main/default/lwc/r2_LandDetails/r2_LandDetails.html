@@ -1,0 +1,166 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <template if:true={loadAdditionalDetails}>
+        <lightning-accordion allow-multiple-sections-open active-section-name="A">
+            <lightning-accordion-section name="A" label="Additional Details" allow-multiple-sections-open  class="accordClass">                                           
+                <c-additional-financial-component screen={screenType} applicant-id={currentApplicantId} onauemployee={addEventHandler} 
+                is-mobile={isMobile} spouse-name={spouseName} onchangeddetails={addEventHandler}></c-additional-financial-component>                               
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </template>
+    <lightning-accordion allow-multiple-sections-open active-section-name="B">
+       
+        <lightning-accordion-section name="B" label="IV Profile" class="accordClass">
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Type_Of_Employment__c">
+                    <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                        data-name="Type_Of_Employment__c" 
+                        value={parentFinancialRecord.Type_Of_Employment__c} options={employmentTypeOptions} required
+                        onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Sector__c">
+                    <lightning-combobox name="Sector__c" data-name="Sector__c" label ="Sector"
+                        class="" value={parentFinancialRecord.Sector__c}
+                        options={sectorOptions} required onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Industry__c">
+                    <lightning-combobox name="Industry__c" data-name="Industry__c" label ="Industry"
+                        class="" value={parentFinancialRecord.Industry__c}
+                        options={industryOptions} required onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Sub_Industry__c">
+                    <lightning-combobox name="Sub_Industry__c" data-name="Sub_Industry__c" label ="Sub Industry"
+                        class="" value={parentFinancialRecord.Sub_Industry__c}
+                        options={subIndustryOptions} required onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Occupation__c">
+                    <lightning-combobox name="Occupation__c" data-name="Occupation__c" label ="Occupation"
+                        class="" value={parentFinancialRecord.Occupation__c}
+                        options={occupationOptions} onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Method_Of_Assesment__c">
+                    <lightning-combobox name="Method_Of_Assesment__c" data-name="Method_Of_Assesment__c" label ="Method Of Assessment"
+                        value={parentFinancialRecord.Method_Of_Assesment__c} lwc:ref="Method_Of_Assesment__c"
+                        options={methodOfAssessmentOptions} required onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={showCompanyDropdown}>
+                    <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" data-id="Company_Name__c">
+                        <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                            record-type-name="Company" read-only={isCompanyReadOnly}
+                            dependent-picklist-value={parentFinancialRecord.Company_Name__c} fieldapi="Company_Name__c"
+                            object-name="Generic Master" default-record-id={parentFinancialRecord.Company_Master__c}
+                            s-object-api-name="Generic_Master__c"
+                            onlookupselect={handleLookupSelect}> </c-generic-custom-lookup>
+                    </lightning-layout-item>
+                </template>
+                <template if:true={showCompanyTextBox}>
+                    <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" data-id="Company_Name__c">
+                        <lightning-input name="Company_Name__c" disabled={disableField} label={companyTextBoxLabel}
+                            data-name="Company_Name__c" class="disableForAUEmployee" value={parentFinancialRecord.Company_Name__c} 
+                            type="text" onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+                </template>
+                <!--R2-2327
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Consider_Income_for_Eligibility__c">
+                    <lightning-combobox name="Consider_Income_for_Eligibility__c"
+                                                            label="Consider Income for Eligibility"
+                                                            data-name="Consider_Income_for_Eligibility__c" class="" value={parentFinancialRecord.Consider_Income_for_Eligibility__c}
+                                                            options={incomeEligibilityOptions} required onchange={handleChange}>
+                                                        </lightning-combobox>
+                </lightning-layout-item>
+                -->
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Consider_Land_for_Eligibility__c">
+                    <lightning-combobox name="Consider_Land_for_Eligibility__c" label="Consider Land for Eligibility"
+                        data-name="Consider_Land_for_Eligibility__c" class="" value={parentFinancialRecord.Consider_Land_for_Eligibility__c} 
+                        options={landEligibilityOptions} required onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Agri_Owned_By__c">
+                    <lightning-combobox name="Agri_Owned_By__c" disabled={disableField} label="Agri Owned By"
+                        data-name="Agri_Owned_By__c" class="" value={parentFinancialRecord.Agri_Owned_By__c} 
+                        options={agriOwnedByOptions} required onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" data-id="Agri_Owned_By_Other__c" class="slds-hide" large-device-size="4" small-device-size="12" padding="around-small">
+                    <template if:true={displayAgriPicklist}>
+                        <lightning-combobox name="Agri_Owned_By_Other__c" disabled={disableField} label="Agri Owner Name"
+                        data-name="Agri_Owned_By_Other__c" class="" value={parentFinancialRecord.Agri_Owned_By_Other__c} 
+                        options={agriOwnedByOtherOptions} onchange={handleChange} required>
+                        </lightning-combobox>
+                    </template>
+                    <template if:false={displayAgriPicklist}>
+                        <lightning-input name="Agri_Owned_By_Other__c" disabled={disableField} label="Agri Owner Name"
+                        data-name="Agri_Owned_By_Other__c" class="" required value={parentFinancialRecord.Agri_Owned_By_Other__c} 
+                        type="text" onchange={handleChange}>
+                        </lightning-input><!--removed slds-hide-->
+                    </template>
+                    
+                    
+                </lightning-layout-item>
+         
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Land_Owner_Name__c">
+                    <lightning-input name="Land_Owner_Name__c" disabled={disableField} label="Land Owner Name"
+                        data-name="Land_Owner_Name__c" class="" value={parentFinancialRecord.Land_Owner_Name__c} pattern="^[a-zA-Z ]+$" message-when-pattern-mismatch="Name can not contain special characters or numbers"
+                        onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+                	
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="" data-id="Size_of_Agri_Land__c">
+                    <lightning-input name="Size_of_Agri_Land__c" type="number"  step=0.01 disabled={disableField} label="Size of Agri Land"
+                        data-name="Size_of_Agri_Land__c" class="" value={parentFinancialRecord.Size_of_Agri_Land__c} onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+            
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="" data-id="Unit_Land_Area__c">
+                    <lightning-combobox name="Unit_Land_Area__c" disabled={disableField} label="Unit"
+                        data-name="Unit_Land_Area__c" class="" value={parentFinancialRecord.Unit_Land_Area__c} dropdown-alignment='auto'
+                        options={unitOptions} onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="" data-id="Agri_Land_in_Acres__c">
+                    <lightning-input name="Agri_Land_in_Acres__c" type="number" disabled label="Land in Acres"
+                        data-name="Agri_Land_in_Acres__c" class="" value={parentFinancialRecord.Agri_Land_in_Acres__c} 
+                    required onchange={handleChange}>
+                    </lightning-input>
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small" class="slds-hide" data-id="Customer_Grade__c">
+                    <lightning-combobox name="Customer_Grade__c" disabled={disableField} label="Customer Grade"
+                        data-name="Customer_Grade__c" class="" value={loanApplication.Customer_Grade__c} options={customerGradeOptions}
+                    required onchange={handleChange} dropdown-alignment='auto'>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <template if:true={showWorkExperienceField}>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<!--<span class="slds-form-element__static">-->
+							<template if:true={isSalaried}>
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr> Total Work Experience</label>
+							</template>
+							<template if:false={isSalaried}>
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr>No. of years in Business
+								</label>
+							</template>
+							<lightning-combobox name="Total_Work_Experience__c" variant="label-hidden" class="validate"
+								data-name="Total_Work_Experience__c"
+								value={parentFinancialRecord.Total_Work_Experience__c} options={WorkOptions} required
+								onchange={handleChange}>
+							</lightning-combobox>
+						<!--</span>-->
+					</lightning-layout-item>
+				</template>
+            </lightning-layout>
+        </lightning-accordion-section>
+    </lightning-accordion>
+    <!--<lightning-button class="slds-var-p-around_small slds-align_absolute-center" label="Save Land Details" onclick={handleParentSaveTemplate} variant="brand"></lightning-button>-->
+    <div class="slds-align_absolute-center">
+        <lightning-icon class="slds-var-m-around_small" icon-name="action:approval" size="x-small" onclick={handleParentSaveTemplate}></lightning-icon>
+    </div>
+
+    <!--<template if:true={loadViabilitySheet}>
+        <c-viability-of-harvester applicant-data={currentApplicant}></c-viability-of-harvester>
+    </template>-->
+</template>

@@ -1,0 +1,19 @@
+<aura:component controller="GenericWizardController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride,lightning:isUrlAddressable" access="global" >
+    <ltng:require styles="{!$Resource.modalWidthStyle}"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sObjectName" type="String" />
+    <aura:attribute name="flowName" type="String" />
+    <aura:attribute name="childToFlow" type="String" />
+    <aura:attribute name="stageName" type="String" />
+    <aura:attribute name="boolReFetchData" type="Boolean" default="false" />
+    <aura:attribute name="showWizard" type="Boolean" />
+    <aura:handler  name="init" value="{!this}" action="{!c.doinit}"/>
+    <aura:if isTrue="{!v.showWizard}">
+        <c:genericWizard recordId="{!v.recordId}" sObjectName="{!v.sObjectName}" 
+                         flowName="{!v.flowName}" childToFlow="{!v.childToFlow}"
+                         stageName="{!v.stageName}"
+                         boolReFetchData="{!v.boolReFetchData}">
+        </c:genericWizard>
+    </aura:if>
+    
+</aura:component>

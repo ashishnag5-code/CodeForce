@@ -1,0 +1,21 @@
+<apex:component controller="CAMReportChildComponentsController">
+
+    <apex:attribute name="applicantList" description="This is the value for the component." type="Applicant__c[]"
+        required="true" assignTo="{!applicants}" />
+    <apex:attribute name="loanApp" description="This is the value for the component." type="Loan_Application__c"
+        required="true" assignTo="{!loan}" />
+    <apex:attribute name="productDetailsValue" description="This is the value for the component." type="String"
+        required="true" assignTo="{!productDetails}" />
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title=" Credit Tab Verification Details" columns="2">
+            <apex:repeat value="{!tabNames}" var="tab">
+                <apex:pageBlockSectionItem dataStyle="{!cellData} width:30% !important" labelStyle="{!labelData} width: 20% !important">
+                    <apex:outputLabel value="{!tab}" for="Tab_Name"/>
+                    <apex:outputText value="{!reviewTabs[tab]}" escape="false"></apex:outputText>
+                </apex:pageBlockSectionItem>
+            </apex:repeat>
+        </apex:pageBlockSection>
+    </div>
+    
+</apex:component>

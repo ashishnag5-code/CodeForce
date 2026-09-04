@@ -1,0 +1,11 @@
+@isTest
+public with sharing class FetchUdyamCertControllerMockAPI  implements HttpCalloutMock{
+    public HTTPResponse respond(HTTPRequest req) {
+        // Create a fake response
+        HttpResponse res = new HttpResponse();
+        res.setHeader('Content-Type', 'application/json');
+        res.setBody('{"requestId":"237264","result":{"udyamRegistrationNo":"23482658","dateOfRegistration":"2021-06-25","interestedInTreds":null,"interestedInGem":null,"profile":{"name":"sjdhkfwhr","enterpriseType":"Micro","majorActivity":"Services","organizationType":"Proprietary","ownerName":null,"pan":null,"previousITRStatus":null,"itrType":null,"gstnStatus":null,"mobile":null,"emailId":null,"socialCategory":"OBC","gender":"Male","speciallyAbled":null,"dateOfIncorporation":"2015-03-01","dateOfCommencement":null},"bankDetails":{"bank":null,"ifsc":null,"acNo":null},"employmentDetails":{"male":null,"female":null,"others":null,"total":null},"financials":{"financialYear":null,"details":{"wdvPme":null,"exclusion":null,"netInvestmentInPme":null,"totalTurnover":null,"exportTurnover":null,"netTurnover":null}},"branchDetails":[{"name":"BHANWAR LAL GURJAR","flat":"0","premises":"JAMWA RAMGARH","village":"BASANA GHATA JALDHARI GHATA","block":"0","road":"JAIPUR","city":"JAIPUR","state":"RAJASTHAN","pincode":"302028","district":"JAIPUR"}],"officialAddress":{"flat":"0","premises":"JAMWA RAMGARH","village":"BASANA GHATA JALDHARI GHATA","block":"0","road":"JAIPUR","city":"JAIPUR","state":"RAJASTHAN","pincode":"302028","district":"jaipur","email":"BHANWARLALCHANDIJA@GMAIL.COM","mobile":"97*****115"},"industry":[{"industry":"Education","subSector":"Higher education","activityDescription":"Higher education in science, commerce, humanity and fine arts leading to a university degree or equivalent","industryCode":"85","subSectorCode":"8530","nicCode":"85301","activity":"Services"},{"industry":"Education","subSector":"Other education n.e.c.","activityDescription":"Other educational services n.e.c.","industryCode":"85","subSectorCode":"8549","nicCode":"85499","activity":"Services"}],"pdfData":"abcd"},"statusCode":101}');
+        res.setStatusCode(200);
+        return res;
+    }
+}

@@ -1,0 +1,7 @@
+.slds-timeline__item_task:before {
+    background: rgb(221, 219, 218)	 !important;
+    left: 1.5rem !important;
+}
+.detailStyle{
+    word-wrap: break-word;
+}

@@ -1,0 +1,59 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="applicantDetails" description="This is the value for the component."
+    type="Applicant__c" required="true" assignTo="{!applicant}"/>
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Customer Experience Validation" columns="1">
+        </apex:pageBlockSection>
+        <table width="100%">
+            <tr style="{!tableRowStyle}" width="100%">
+                <th style="{!tableHeadDataStyle} !important" width="25%">Experience in years</th>
+                <th style="{!tableHeadDataStyle} !important" width="25%">Experience validated from</th>
+                <th style="{!tableHeadDataStyle} !important" width="25%">Document Issue DATE</th>
+                <th style="{!tableHeadDataStyle} !important" width="25%">Document Valid Till (if applicable)</th>
+            </tr>
+            <tr style="{!tableRowStyle}" width="100%">
+                <!-- cell 1 -->
+                <td style="{!tableDataStyle}" width="25%">
+                    <apex:outputPanel rendered="{!applicant.Customer_Type__c == 'Individual'}">
+                        <apex:outputPanel rendered="{!applicant.Driving_License_Issue_Date__c <> NULL}">
+                            {!(TODAY() - applicant.Driving_License_Issue_Date__c)}
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!applicant.Driving_License_Issue_Date__c == NULL}">
+                            {!applicant.Applicant_Financials__r[0].Total_Work_Experience__c}
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </td>
+
+                <!-- cell 2 -->
+                <td style="{!tableDataStyle}" width="25%">
+                    <apex:outputPanel rendered="{!applicant.Customer_Type__c == 'Individual'}">
+                        <apex:outputPanel rendered="{!applicant.Driving_License_Issue_Date__c <> NULL}">
+                            Drivers License
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </td>
+
+                <!-- cell 3 -->
+                <td style="{!tableDataStyle}" width="25%">
+                    <apex:outputPanel rendered="{!applicant.Customer_Type__c == 'Individual'}">
+                        <apex:outputPanel rendered="{!applicant.Driving_License_Issue_Date__c <> NULL}">
+                            <apex:outputField value="{!applicant.Driving_License_Issue_Date__c}"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!applicant.Customer_Type__c <> 'Individual'}">
+                        <apex:outputField value="{!applicant.Date_of_Establishment__c}"/>
+                    </apex:outputPanel>
+                </td>
+
+                <!-- cell 4 -->
+                <td style="{!tableDataStyle}" width="25%">
+                    <apex:outputPanel rendered="{!applicant.Customer_Type__c == 'Individual'}">
+                        <apex:outputPanel rendered="{!applicant.Driving_License_Issue_Date__c <> NULL}">
+                            <apex:outputField value="{!applicant.Driving_License_Expiry_Date__c}"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </td>
+            </tr>
+        </table>
+    </div>
+</apex:component>

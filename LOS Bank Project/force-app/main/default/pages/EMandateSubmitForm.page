@@ -1,0 +1,20 @@
+<apex:page >
+    
+<div id="eMandateForm"></div>
+<!--<input type="submit"></input>-->
+<script>
+    window.addEventListener("message",function(event){
+        console.log('event '+JSON.stringify(event));
+        const node = document.createElement("input");
+        const att = document.createAttribute("type");
+        att.value = "submit";
+        const att2 = document.createAttribute("hidden");
+        att2.value = "true";
+        node.setAttributeNode(att);
+        node.setAttributeNode(att2);
+        document.getElementById("eMandateForm").innerHTML = event.data;
+        document.getElementById("TheForm").appendChild(node);
+        document.getElementById("TheForm").submit();
+    },false);
+</script>
+</apex:page>

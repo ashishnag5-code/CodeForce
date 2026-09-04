@@ -1,0 +1,290 @@
+<template>
+	<div class="slds-is-relative">
+	<!--<c-custom-spinner show-spinner={isLoading}></c-custom-spinner>-->
+	<!--<template if:true={isShowModal}>
+		<c-generic-modal content="Please create SR"></c-generic-modal>
+	</template>-->
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+	<lightning-layout>
+		<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+			<lightning-card icon-name="standard:account" >
+				<h1 slot="title" class="no-wrap"><a>{applicantRecord.strCustomerName}</a></h1>
+				<div slot="actions">
+					<a><lightning-icon icon-name="utility:back" onclick={viewAllRecords} size="small" alternative-text="Close" title="Close"></lightning-icon></a>
+				</div>
+				<div slot="footer" class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<template if:true={isMobile}>
+							<figure>
+								<div class="slds-align_absolute-center">
+									<lightning-icon icon-name="action:announcement" onclick={nameNotMatch} size="x-small" alternative-text="announcement" title="announcement"></lightning-icon>
+								</div>
+								<figcaption class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">Name Not Match</figcaption>
+							</figure>
+						</template>
+						<template if:false={isMobile}>
+							<lightning-button onclick={nameNotMatch} data-id={applicantRecord.strCustomerID} label="Name Not Match" slot="actions"></lightning-button>
+						</template>
+					</div>
+					<div class="slds-size_1-of-2">
+						<template if:false={applicantRecord.boolIsCopyDisabled}>
+							<template if:true={isMobile}>
+								<figure>
+									<div class="slds-align_absolute-center">
+										<lightning-icon icon-name="action:clone" onclick={copySelected} size="x-small" alternative-text="Copy" title="Copy"></lightning-icon>
+									</div>
+									<figcaption class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">Copy To Application</figcaption>
+								</figure>
+							</template>
+						</template>
+						<template if:false={isMobile}>
+							<lightning-button onclick={copySelected} data-id={applicantRecord.strCustomerID} disabled={applicantRecord.boolIsCopyDisabled} label="Copy to Application" slot="actions"></lightning-button>
+						</template>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer ID</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCustomerID}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Type</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCustomerType}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Prefix</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strPrefix}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">First Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strFirstName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Middle Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strMiddleName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Last Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strLastName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Short Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strShortName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Constitution Type</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strConstitutionType}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Sex</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strSex}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Mobile Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strMobileNumber}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Address Line 1</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strAddressLine1}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Address Line 2</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strAddressLine2}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Address Line 3</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strAddressLine3}
+					</div>
+				</div>
+				<template if:true={applicantRecord.boolIsInputApplicantIndividual}>
+					<div class="slds-grid slds-wrap slds-p-around_xx-small">
+						<div class="slds-size_1-of-2">
+							<b><label class="slds-form-element__label">Aadhaar</label></b>
+						</div>
+						<div class="slds-size_1-of-2">
+							{applicantRecord.strAadhaar}
+						</div>
+					</div>
+				</template>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">PAN</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strPAN}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">City</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCity}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">State</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strState}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Country</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCountry}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Pincode</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strPincode}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">DOB</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strDOB}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Email ID</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strEmailID}
+					</div>
+				</div>
+				<div class="slds-card__header slds-grid">
+					<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					  <div class="slds-media__figure">
+						<span class="slds-icon_container slds-icon-standard-account" title="account">
+							<lightning-icon icon-name="utility:summarydetail" size="small"></lightning-icon>
+						  <span class="slds-assistive-text">account</span>
+						</span>
+					  </div>
+					  <div class="slds-media__body">
+						<h2 class="slds-card__header-title">
+						  <a href="#" class="slds-card__header-link slds-truncate" title="Accounts">
+							<label class="slds-form-element__label">Accounts Details</label>
+						  </a>
+						</h2>
+					  </div>
+					</header>
+				</div>
+				<!--<h1>Account Details</h1>-->
+				<template if:true={applicantRecord.lstAccountWrapper}>
+					<lightning-accordion allow-multiple-sections-open>
+						<template if:true={booleanODCC}>
+							<lightning-accordion-section label="OD/CC Account">
+								<template for:each={applicantRecord.lstAccountWrapper} for:item="objAccountWrapper">
+									<template if:true={objAccountWrapper.boolIsODCCAccount}>
+										<c-lead-Dedupe-C-B-S-Account_details key={objAccountWrapper.strLoanNumber} obj-account-record={objAccountWrapper} spinner-image={spinnerImage}></c-lead-Dedupe-C-B-S-Account_details>
+									</template>
+								</template>
+							</lightning-accordion-section>
+						</template>
+						<template if:true={booleanLoan}>
+							<lightning-accordion-section name="B" label="Loan Account">
+								<template for:each={applicantRecord.lstAccountWrapper} for:item="objAccountWrapper">
+									<template if:true={objAccountWrapper.boolIsLoanAccount}>
+										<c-lead-Dedupe-C-B-S-Account_details key={objAccountWrapper.strLoanNumber} obj-account-record={objAccountWrapper} applicant-o-d-record={applicantODRecord}   spinner-image={spinnerImage}></c-lead-Dedupe-C-B-S-Account_details>
+									</template>
+								</template>
+							</lightning-accordion-section>
+						</template>
+						<template if:true={booleanCASA}>
+							<lightning-accordion-section name="C" label="CASA Account">
+								<template for:each={applicantRecord.lstAccountWrapper} for:item="objAccountWrapper">
+									<template if:true={objAccountWrapper.boolIsCASAAccount}>
+										<c-lead-Dedupe-C-B-S-Account_details key={objAccountWrapper.strLoanNumber} obj-account-record={objAccountWrapper} spinner-image={spinnerImage}></c-lead-Dedupe-C-B-S-Account_details>
+									</template>
+								</template>
+							</lightning-accordion-section>
+						</template>
+						<template if:true={booleanFDRDA}>
+							<lightning-accordion-section name="D" label="FD/RD Account">
+								<template for:each={applicantRecord.lstAccountWrapper} for:item="objAccountWrapper">
+									<template if:true={objAccountWrapper.boolIsFDRDAccount}>
+										<c-lead-Dedupe-C-B-S-Account_details key={objAccountWrapper.strLoanNumber} obj-account-record={objAccountWrapper} spinner-image={spinnerImage}></c-lead-Dedupe-C-B-S-Account_details>
+									</template>
+								</template>
+							</lightning-accordion-section>
+						</template>
+						<template if:true={booleanCredit}>
+							<lightning-accordion-section name="E" label="Credit Card">
+								<template for:each={applicantCreditCard.CreditCardResponse} for:item="objCreditCardWrapper">
+									<!--<template if:true={objAccountWrapper.boolIsCCAccount}>-->
+										<c-lead-dedupe-C-B-S-credit-card_details key={objCreditCardWrapper.AccountNumber} obj-account-record={objCreditCardWrapper} spinner-image={spinnerImage}></c-lead-dedupe-C-B-S-credit-card_details>
+									<!--</template>-->
+								</template>
+							</lightning-accordion-section>
+						</template>
+					</lightning-accordion>
+				</template>
+				<lightning-input class="slds-p-left_xx-large" type="checkbox" label="Address Change" onchange={handleChange} ></lightning-input>
+				<c-lead-C-B-S-Pre-Approved-Offer applicant-input={applicantInput} bool-is-n-p-a={boolIsNPA} 
+					spinner-image={spinnerImage} bool-d-p-d-found={boolDPDFound}>
+				</c-lead-C-B-S-Pre-Approved-Offer>
+			</lightning-card>
+		</lightning-layout-item>
+	</lightning-layout>
+</div>
+</template>

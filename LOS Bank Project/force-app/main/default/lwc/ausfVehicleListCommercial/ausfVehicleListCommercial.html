@@ -1,0 +1,16 @@
+<template>
+
+    <!-- Commercial Vehicle - Car Taxi / CV Loading / CV Passenger -->
+    <c-ausf-vehicle-list-commercial-vehicle
+        record-id={recordId}
+        lwc:if={isCommercialVehicle}
+    ></c-ausf-vehicle-list-commercial-vehicle>
+
+    <!-- Construction Equipment -->
+     <c-ausf-vehicle-list-construction-equipment onnewsave={handleSave}
+        record-id={recordId}
+        lwc:if={isConstructionEquipment}
+    ></c-ausf-vehicle-list-construction-equipment>
+
+    <p class="slds-has-error">{error}</p>
+</template>

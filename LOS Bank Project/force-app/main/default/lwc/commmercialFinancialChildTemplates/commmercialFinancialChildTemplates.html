@@ -1,0 +1,131 @@
+<!--
+  @description       : 
+  @author            : Ashish
+  @group             : 
+  @last modified on  : 10-26-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <lightning-card>
+        <lightning-accordion allow-multiple-sections-open active-section-name="A">
+            <lightning-accordion-section name="A" label="IV Profile" class="accordClass">
+                <lightning-layout multiple-rows>
+                    <template lwc:if={renderHireVsBuy}>
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                            padding="around-small" data-id="HireVsBuy_Amt__c">
+                            <lightning-input type="text" name="HireVsBuy_Decision__c" disabled
+                                value={parentFinancialRecord.HireVsBuy_Decision__c} data-name="HireVsBuy_Decision__c"
+                                label="HIRE Vs BUY"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <template lwc:else>
+                        <template if:true={isBodyFunding}>
+                            <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                padding="around-small" data-id="HireVsBuy_Amt__c">
+                                <lightning-input type="text" name="HireVsBuy_Decision__c" disabled
+                                    value={parentFinancialRecord.HireVsBuy_Decision__c}
+                                    data-name="HireVsBuy_Decision__c" label="HIRE Vs BUY"></lightning-input>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                padding="around-small" data-id="Emi__c">
+                                <lightning-input type="number" name="Emi__c" value={parentFinancialRecord.Emi__c}
+                                    onchange={handleChange} data-name="Emi__c" label="EMI"></lightning-input>
+                            </lightning-layout-item>
+                            <template if:false={hideFCF}>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" data-id="Free_Cash_Flow__c">
+                                    <lightning-input type="number" name="Free_Cash_Flow__c" disabled
+                                        value={parentFinancialRecord.Free_Cash_Flow__c} onchange={handleChange}
+                                        data-name="Free_Cash_Flow__c" label="Free Cash Flow"></lightning-input>
+                                </lightning-layout-item>
+                            </template>
+                        </template>
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                            padding="around-small" data-id="FCF_EMI__c">
+                            <lightning-input type="number" name="FCF_EMI__c" disabled
+                                value={parentFinancialRecord.FCF_EMI__c} onchange={handleChange} data-name="FCF_EMI__c"
+                                label="Free Cash flow (FCF)/ EMI"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <template lwc:if={isMonthlyBreakup}>
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                            padding="around-small" data-id="Monthly_Income__c">
+                            <lightning-input type="number" name="Monthly_Income__c" disabled
+                                value={parentFinancialRecord.Monthly_Income__c} onchange={handleChange}
+                                data-name="Monthly_Income__c" label="Documented Income"></lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                            padding="around-small" data-id="Other_Income__c">
+                            <lightning-input type="number" name="Other_Income__c" disabled
+                                value={parentFinancialRecord.Other_Income__c} onchange={handleChange}
+                                data-name="Other_Income__c" label="Assessed Income"></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+
+                <template if:true={isBodyFunding}>
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                            <lightning-button label="Save" variant="brand" onclick={handleUpdateBodyFundingFinancials}
+                                class="slds-var-m-around_small"></lightning-button>
+                        </div>
+                    </lightning-layout>
+                </template>
+
+            </lightning-accordion-section>
+        </lightning-accordion>
+    </lightning-card>
+    <!--Viability Sheets-->
+    <template lwc:if={showViabilitySheets}>
+        <template if:true={renderCommercialViabilitySheet}>
+            <lightning-card class="slds-var-m-top_medium">
+                <c-ausf-viability-c-v current-applicant={currentApplicant} child-records={childRecords}
+                    parent-financial-record={parentFinancialRecord} loan-application={loanApplication}
+                    is-mobile={isMobile} onchildfinancialsubmit={handleChildSubmit}></c-ausf-viability-c-v>
+            </lightning-card>
+        </template>
+        <template if:true={renderCommercialSmallViabilitySheet}>
+            <lightning-card class="slds-var-m-top_medium">
+                <c-viability-sheet-chhote-wala current-applicant={currentApplicant} child-records={childRecords}
+                    parent-financial-record={parentFinancialRecord} loan-application={loanApplication}
+                    is-mobile={isMobile} onchildfinancialsubmit={handleChildSubmit}></c-viability-sheet-chhote-wala>
+            </lightning-card>
+        </template>
+        <template if:true={renderCommercialConstructionViabilitySheet}>
+            <lightning-card class="slds-var-m-top_medium">
+                <c-ausf-viability-c-e current-applicant={currentApplicant} child-records={childRecords}
+                    parent-financial-record={parentFinancialRecord} loan-application={loanApplication}
+                    is-mobile={isMobile} onchildfinancialsubmit={handleChildSubmit}></c-ausf-viability-c-e>
+            </lightning-card>
+        </template>
+        <template if:true={renderHireVsBuy}>
+            <lightning-card class="slds-var-m-top_medium">
+                <c-ausf-hirevs-buy current-applicant={currentApplicant} parent-financial-record={parentFinancialRecord}
+                    child-records={childRecords} loan-application={loanApplication} is-mobile={isMobile}
+                    onchildfinancialsubmit={handleChildSubmit}></c-ausf-hirevs-buy>
+            </lightning-card>
+        </template>
+    </template>
+
+    <!-- Financial Template to be filled by credit -->
+    <template if:true={selectedApplicantId}>
+        <lightning-card class="slds-var-m-top_medium">
+            <c-ausfb-financial-by-credit applicant-id={selectedApplicantId}></c-ausfb-financial-by-credit>
+        </lightning-card>
+    </template>
+    <!-- Financial Template to be filled by credit -->
+
+    <!--Existing  Sheets-->
+    <template if:true={renderEmpTemplates}>
+        <lightning-card class="slds-var-m-top_medium">
+            <article class="slds-box">
+                <c-templates-based-on-emp-type applicant-financial-id={parentFinancialRecord.Id} is-mobile={isMobile}
+                    child-records={childRecords} current-applicant-id={currentApplicant.Id} loan-id={loanId}
+                    onchildfinancialsubmit={handleChildSubmit}></c-templates-based-on-emp-type>
+            </article>
+        </lightning-card>
+    </template>
+
+</template>

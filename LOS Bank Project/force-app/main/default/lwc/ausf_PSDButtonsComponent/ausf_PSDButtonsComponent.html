@@ -1,0 +1,195 @@
+<template>
+    <div if:true={isLoaded} class="backgroundInverse">
+        <lightning-spinner alternative-text="Loading..." variant="inverse">
+        </lightning-spinner>
+    </div>
+    <template if:true={isSmallDevice}>
+        <div class="slds-p-around_small" style="text-align :center;">
+            <div class="slds-grid slds-gutters">
+                <template if:true={renderButtons.submitToMaker}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={submitToOpsMaker} size="large"
+                                onclick={handleSubmitToMaker}></lightning-avatar>
+                        </span><br />
+                        <span>
+                            Submit
+                        </span>
+                    </div>
+                </template>
+                <template if:true={showSendBackToRO}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={sendBackIcon} size="large"
+                                onclick={handleSendBackToRO}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                           Send Back To DDE
+                        </span>
+                    </div>
+                </template>
+                <template if:true={breRunRequired}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={breRunIcon} size="large"
+                                onclick={handleBre}></lightning-avatar>
+                               <!-- <lightning-button label="ReRun BRE" onclick={handleBre}></lightning-button>-->
+                        </span><br/>
+                        <span>
+                            ReRun BRE
+                        </span>
+                    </div>
+                </template>
+            </div>
+            <div class="slds-grid slds-gutters">
+        
+
+                
+                <template if:true={renderButtons.generateButton}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                                onclick={handleDocumentGenerate}></lightning-avatar>
+                        </span><br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Generate DO/ Sanction
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.cancelButton}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={handleCancelDocument}></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Cancel DO/ Sanction 
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateEsignButton}>
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-avatar src={generateEsign} size="large"
+                                onclick={handleSignDeskEsign}></lightning-avatar>
+                        </span>
+                        <br />
+                        <span class="overflow-wrap: break-word; slds-m-right_x-small">
+                            Generate Esign
+                        </span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={isLargeDevice}>
+        <div style="text-align :center;">
+            <div class="slds-grid slds-gutters slds-grid_align-end">
+                <template if:true={renderButtons.submitToMaker}>
+                    <div class="slds-col">
+                        <span>
+                            <lightning-avatar src={submitToOpsMaker} size="large"
+                                    onclick={handleSubmitToMaker}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                            Submit
+                        </span>
+                    </div>
+                    <!--span style="margin:0.5%;">
+                        <lightning-button label="Submit to Ops Maker" name="Submit to Ops Maker"
+                        onclick={handleSubmitToMaker}></lightning-button>  </span>  -->
+                        
+                   
+                </template>
+                <template if:true={showSendBackToRO}>
+                    <div class="slds-col">
+                        <span>
+                            <lightning-avatar src={sendBackIcon} size="large"
+                                onclick={handleSendBackToRO}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                            Send Back To DDE
+                        </span>
+                    </div>
+                </template>
+                <template if:true={breRunRequired}>
+                    <div class="slds-col">
+                      <!--  <span>
+                                <lightning-button label="ReRun BRE" onclick={handleBre}></lightning-button>
+                        </span><br/>-->
+                        <span>
+                            <lightning-avatar src={breRunIcon} size="large"
+                                onclick={handleBre}></lightning-avatar>
+                               <!-- <lightning-button label="ReRun BRE" onclick={handleBre}></lightning-button>-->
+                        </span><br/>
+                        <span>
+                            ReRun BRE
+                        </span>
+                    </div>
+                </template>
+                <template if:true={renderButtons.generateButton}>
+                    <div class="slds-col">
+                        <span>
+                            <lightning-avatar src={generateDoSanction} size="large"
+                                    onclick={handleDocumentGenerate}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                            Generate Letters
+                        </span>
+                    </div>
+                    
+                </template>
+                <template if:true={renderButtons.cancelButton}>
+                    <div class="slds-col">
+                        <span>
+                            <lightning-avatar src={cancelDoSanction} size="large"
+                                onclick={handleCancelDocument}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                            Cancel Letters
+                        </span>
+                    </div>
+                    
+                    <!--span style="margin:0.5%;">
+                         <lightning-button label="Cancel DO/Sanction" name="Cancel DO/Sanction"
+                        onclick={handleCancelDocument}></lightning-button> </span> -->
+                        
+                    
+                                       
+                </template>
+                <template if:true={renderButtons.generateEsignButton}>
+                    <div class="slds-col">
+                        <span>
+                            <lightning-avatar src={generateEsign} size="large"
+                                onclick={handleSignDeskEsign}></lightning-avatar>
+                        </span><br/>
+                        <span>
+                           E-Sign
+                        </span>
+                    </div>
+                    <!--span style="margin:0.5%;">
+                        
+                        <c-generate-esign-component record-id={loanId}></c-generate-esign-component> </span>-->
+
+                    
+                </template>
+                <!--template if:true={renderButtons.rejectButton}>
+                <span style="margin:0.5%;">
+                    <lightning-button label="Reject" name = "Reject" onclick = {handleRejectDocument}></lightning-button>
+                </span>
+            </template-->
+            </div>
+        </div>
+    </template>
+
+    <template if:true={loadEsign}>
+        <c-generate-esign-component record-id={loanId} onreturntosummary={handleReturnToSummary} ongenerateesignclick={handleGenerateEsignClick}></c-generate-esign-component>
+    </template>
+    <c-ausf_-generate-document-button-l-w-c onrefresh={handleRefresh}></c-ausf_-generate-document-button-l-w-c>
+    <c-ausf_-cancel-documents-button-l-w-c onrefresh={handleRefresh}></c-ausf_-cancel-documents-button-l-w-c>
+    <!--c-ausf_reject-document-button-l-w-c onrefresh={handleRefresh}></c-ausf_reject-document-button-l-w-c-->
+    <c-bre-component-model loan-application={loanApplicationRecord} ontoggle={handleModelActions} if:true={runBre}></c-bre-component-model>
+    
+</template>

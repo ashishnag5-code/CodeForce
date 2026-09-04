@@ -1,0 +1,187 @@
+<template>
+    <!--<div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>-->
+	<lightning-card class="wizard">
+        <template if:false={insideRecordPage}>
+            <template if:true={loanApplicationRecord.Application_Id__c}>
+                <h1 slot="title">Loan Application : {loanApplicationRecord.Application_Id__c}</h1>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.QuickLoan}>
+            <template if:true={sCurrentFlowConfig.QuickLoan.currentVal}>
+                <c-los-quick-loan class="component" record-id={recordId}
+                    current-applicant-record={applicantRecord} onnext={nextHandler}>
+                </c-los-quick-loan>
+            </template>
+        </template>
+
+        <template if:true={sCurrentFlowConfig.AddIndividual}>
+            <template if:true={sCurrentFlowConfig.AddIndividual.currentVal}>
+                <c-los-add-ind-non-ind class="component" record-id={recordId} s-object-name={sObjectName} applicant-id={applicantRecord.Id} app-count={aapCount} onnext={nextHandler}>
+                </c-los-add-ind-non-ind>
+            </template>
+        </template>
+
+        <template if:true={sCurrentFlowConfig.Dedupe}>
+            <template if:true={sCurrentFlowConfig.Dedupe.currentVal}>
+                <c-lead-dedupe-parent  class="component" applicant-id-input={applicantRecord} onnext={nextHandler}>
+                </c-lead-dedupe-parent>
+            </template>
+        </template>
+
+        <template if:true={sCurrentFlowConfig.AadhaarKYC}>
+            <template if:true={sCurrentFlowConfig.AadhaarKYC.currentVal}>
+                <c-los-k-y-c-component class="component" onnext={nextHandler} applicant-id={applicantRecord.Id}>
+                </c-los-k-y-c-component>
+            </template>
+        </template>
+
+        <template if:true={sCurrentFlowConfig.PANKYC}>
+            <template if:true={sCurrentFlowConfig.PANKYC.currentVal}>
+                <c-los-pan-verification class="component" is-pan-mandatory={isPanMandatory} onnext={nextHandler} applicant-record={applicantRecord}
+                    loan-amount={loanApplicationRecord.Loan_Amount__c}>
+                </c-los-pan-verification>
+            </template>
+        </template>
+
+        <template if:true={sCurrentFlowConfig.CustomerInformation}>
+            <template if:true={sCurrentFlowConfig.CustomerInformation.currentVal}>
+                <c-ausfb_customer-detail-component class="component" applicant-id-input={applicantRecord.Id} onnext={nextHandler}>
+                </c-ausfb_customer-detail-component>
+            </template>
+        </template>
+		
+        <template if:true={sCurrentFlowConfig.AddressDetails}>
+            <template if:true={sCurrentFlowConfig.AddressDetails.currentVal}>
+                <c-address-information-component class="component" applicant-id={applicantRecord} loan-application={loanApplicationRecord}
+                    onnext={nextHandler}>
+                </c-address-information-component>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.AMLCIBIL}>
+            <template if:true={sCurrentFlowConfig.AMLCIBIL.currentVal}>
+                <c-ausf_-scoring-lwc class="component" record-id={applicantRecord.Id}
+                    onnext={nextHandler}>
+                </c-ausf_-scoring-lwc>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.RelatedApplicants}>
+            <template if:true={sCurrentFlowConfig.RelatedApplicants.currentVal}>
+                <c-ausfb_-related-applicans-component class="component" bool-is-wizard-mode=true
+                    current-applicant-record={applicantRecord} record-id={loanApplicationRecord.Id} 
+                        onwizardevent={onWizardEvent} onnext={nextHandler}>
+                </c-ausfb_-related-applicans-component>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.LoanDetails}>
+            <template if:true={sCurrentFlowConfig.LoanDetails.currentVal}>
+                <c-loan-details class="component" record-id={loanApplicationRecord.Id} inside-record-page={insideRecordPage}
+                    onwizardevent={onWizardEvent} onnext={nextHandler}>
+                </c-loan-details>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.VehicleDetails}>
+            <template if:true={sCurrentFlowConfig.VehicleDetails.currentVal}>
+                <!--<c-ausf-vehicle-list class="component" record-id={loanApplicationRecord.Id}
+                    onwizardevent={onWizardEvent} onnext={nextHandler}>
+                </c-ausf-vehicle-list>-->
+                <c-ausf-vehicle-parent class="component" record-id={loanApplicationRecord.Id}
+                    onwizardevent={onWizardEvent} onnext={nextHandler}>
+                </c-ausf-vehicle-parent>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.Financial}>
+            <template if:true={sCurrentFlowConfig.Financial.currentVal}>
+                <c-income-details-parent class="component"
+                    record-id={loanApplicationRecord.Id}
+                    onwizardevent={onWizardEvent} onnext={nextHandler}>
+                </c-income-details-parent>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.References}>
+            <template if:true={sCurrentFlowConfig.References.currentVal}>
+                <c-related-references-component class="component" record-id={loanApplicationRecord.Id} onnext={nextHandler}>
+                </c-related-references-component>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.CPVWaiver}>
+            <template if:true={sCurrentFlowConfig.CPVWaiver.currentVal}>
+                <c-cpv-waiver-documents-component class="component" record-id={loanApplicationRecord.Id} onnext={nextHandler}>
+                </c-cpv-waiver-documents-component>
+            </template>
+        </template>
+        <template if:true={sCurrentFlowConfig.breRun}>
+            <template if:true={sCurrentFlowConfig.breRun.currentVal}>
+                <c-bre-component class="component" record-id={loanApplicationRecord.Id} onnext={nextHandler}>
+                </c-bre-component>
+            </template>
+        </template>
+        <template if:false={insideRecordPage}>
+            <template if:true={isMobile}>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-align_absolute-center">
+                        <figure>
+                            <div class="slds-align_absolute-center">
+                                <lightning-icon icon-name="action:back" size="x-small" alternative-text="Previous"
+                                    title="Previous" onclick={previousHandler} disabled={disablePrevious} slot="actions">
+                                </lightning-icon>
+                            </div>
+                            <figcaption
+                                class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                Previous</figcaption>
+                        </figure>
+                    </div>
+                    <template if:true={loanApplicationRecord.Id}>
+                        <div class="slds-col slds-align_absolute-center">
+                            <figure>
+                                <div class="slds-align_absolute-center">
+                                    <lightning-icon icon-name="action:close" size="x-small" alternative-text="Cancel"
+                                        title="Cancel" onclick={cancelHandler} slot="actions"></lightning-icon>
+                                </div>
+                                <figcaption
+                                    class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                    Cancel</figcaption>
+                            </figure>
+                        </div>
+                    </template>
+                    <div class="slds-col slds-align_absolute-center">
+                        <figure>
+                            <div class="slds-align_absolute-center">
+                                <lightning-icon icon-name="action:update_status" size="x-small" alternative-text="Next"
+                                    title="Next" onclick={childNextHandler} disabled={disableNext} slot="actions">
+                                </lightning-icon>
+                            </div>
+                            <figcaption
+                                class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                Next</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </template>
+            <template if:false={isMobile}>
+                <lightning-layout>
+                    <lightning-layout-item>
+                        <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}
+                            class="slds-m-left_small" disabled={disablePrevious}></lightning-button>
+                    </lightning-layout-item>
+                    <template if:true={loanApplicationRecord.Application_Id__c}>
+                        <lightning-layout-item>
+                            <lightning-button label="Cancel" icon-name="utility:close" onclick={cancelHandler}
+                                class="slds-m-left_small"></lightning-button>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item flexibility="grow">
+                    </lightning-layout-item>
+
+                    <lightning-layout-item>
+                        <lightning-button label={nextLabel} icon-name="utility:chevronright" icon-position="right"
+                            onclick={childNextHandler} class="slds-m-right_small" disabled={disableNext}></lightning-button>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </template>
+
+    </lightning-card>
+</template>

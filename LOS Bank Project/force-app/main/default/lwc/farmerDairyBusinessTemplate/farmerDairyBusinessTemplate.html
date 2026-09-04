@@ -1,0 +1,56 @@
+<template>
+
+<div class="slds-border_top">
+    <div class="slds-p-top_medium">
+
+    <lightning-card title="Dairy Details" icon-name="action:adjust_value">
+        <template if:false={changedData}>
+            <template for:each={dairyBusinessList} for:item="dairyItem" for:index="index">
+                <c-farmer-dairy-business-child-component applicant-id={applicantId} financial-id={financialId} 
+                key={dairyItem.key} send-key={dairyItem.key} record={dairyItem} loan-id={loanId}
+                initial-record={initialRecord} record-type-id={recordTypeId} oncalculatemonthlyincome={passIncomeToParent}
+                removed-record={removedRecord} oncalculatetotal={calculateTotal} ondeletedrecord={handleDeleteRow}
+                onfarmerevent={handleFarmerEvent} is-r2={isR2}> </c-farmer-dairy-business-child-component>
+            </template>
+        </template>
+
+        <template if:true={changedData}>
+            <template for:each={dairyBusinessList} for:item="item" for:index="index">
+                <c-farmer-dairy-business-child-component applicant-id={applicantId} financial-id={financialId} 
+                key={item.key} send-key={item.key} new-record={item} loan-id={loanId}
+                record-type-id={recordTypeId} oncalculatemonthlyincome={passIncomeToParent}
+                oncalculatetotal={calculateTotal} ondeletedrecord={handleDeleteRow}
+                onfarmerevent={handleFarmerEvent} is-r2={isR2}> </c-farmer-dairy-business-child-component>
+                </template>
+            </template>
+            <lightning-card class="slds-align_absolute-center slds-p-around_small">
+                <h1 slot="title">
+                    Total Income: <span class="slds-badge badgeProperty">
+                                <lightning-formatted-number value={dairyTotalIncome} format-style="currency" 
+                                                            currency-code="INR"></lightning-formatted-number>
+                        </span>
+                </h1>
+            </lightning-card>
+        <template if:false={isR2}>
+            <template if:false={changedData}>
+            <div class="slds-align--absolute-center">
+                Add Dairy Income<lightning-icon title="Add Other Income" class="slds-m-around_small" icon-name="action:new" size="x-small" alternative-text="" id={index} 
+                onclick={addDairyBusinessIncome}></lightning-icon>
+            </div>
+            </template>
+        </template>
+        <template if:true={isR2}>
+            <div class="slds-align--absolute-center">
+                Add Dairy Income<lightning-icon title="Add Other Income" class="slds-m-around_small" icon-name="action:new" size="x-small" alternative-text="" id={index} 
+                onclick={addDairyBusinessIncome}></lightning-icon>
+            </div>
+        </template>
+    </lightning-card>
+   
+    
+    
+
+    
+    </div>
+    </div>
+</template>

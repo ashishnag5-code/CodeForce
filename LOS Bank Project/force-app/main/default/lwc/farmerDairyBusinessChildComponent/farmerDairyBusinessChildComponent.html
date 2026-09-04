@@ -1,0 +1,241 @@
+<template>
+    
+        <lightning-card>
+            <lightning-accordion allow-multiple-sections-open active-section-name="A">
+                <lightning-accordion-section name='A' label='Dairy Income' class="accordClass">
+                    <template if:true={edit}>
+                        <span slot="actions">
+                            <lightning-icon title="Edit Dairy Income Detail" 
+                            icon-name="action:edit" size="x-small" 
+                            alternative-text="" 
+                            access-key={index}
+                            class="slds-m-right_small"
+                            onclick={handleEdit}
+                            
+                            ></lightning-icon>
+                        </span>
+                        <!-- Added in R2-->
+                         <template if:true={isDelete}>
+                         <span slot="actions">
+                            <lightning-icon title="Delete Dairy Income Detail" 
+                            icon-name="action:delete" size="x-small" 
+                            alternative-text="" 
+                            access-key={index}
+                            class="slds-m-right_small"
+                            onclick={handleDeleteRow}></lightning-icon>
+                        </span>
+                        </template>
+                        </template>
+                        <!--<template if:false={edit}>
+                            <template if:true={displayButtons}>
+                                <span slot="actions">
+                                    <lightning-icon title="Close Dairy Income Detail" 
+                                    icon-name="action:reject" size="x-small" 
+                                    alternative-text="" 
+                                    access-key={index}
+                                    class="slds-m-around_small"
+                                    onclick={handleClose}></lightning-icon>
+                                </span>
+                            </template>
+                        </template>-->
+    
+                        <template if:true={showRecordViewForm}>
+                        <div class="slds-form">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">No of Cattle</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="text" placeholder="" readonly="" value={No_of_Cattle__c} class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    
+                                        <div class="slds-form-element slds-form-element_stacked">
+                                            <label class="slds-form-element__label" for="stacked-input-id-01">Total Daily Supply of Milk (Ltrs)</label><!--R2-2365 label change-->
+                                            <div class="slds-form-element__control">
+                                              <input type="number" placeholder="" value={Daily_Supply_of_Milk_Ltrs__c} readonly="" class="slds-input" />
+                                            </div>
+                                          </div>
+                                        
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Average Sale Price Per Liter</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" readonly="" value={Average_Sale_Price_Per_Liter__c} class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Daily Collection</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Daily_Collection__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Monthly Receipts</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Monthly_Receipts__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Profit Margin</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Profit_Margin__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Monthly Net Income</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Monthly_Net_Income__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Any Other Income</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Any_Other_Income__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Any Other Expense</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Any_Other_Expense__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                                    <div class="slds-form-element slds-form-element_stacked">
+                                        <label class="slds-form-element__label" for="stacked-input-id-01">Total Net Income</label>
+                                        <div class="slds-form-element__control">
+                                          <input type="number" placeholder="" value ={Total_Net_Income__c} readonly="" class="slds-input" />
+                                        </div>
+                                      </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                     </div>
+                </template>
+               
+    
+                <template if:false={showRecordViewForm}>
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="No_of_Cattle__c">
+                                <lightning-input type="number" name="No_of_Cattle__c" label="No of Cattle"
+                                value={No_of_Cattle__c} onchange={handleChange} access-key={index}
+                                read-only={readOnly}></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+    
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Daily_Supply_of_Milk_Ltrs__c">
+                                <lightning-input type="number" name="Daily_Supply_of_Milk_Ltrs__c" label="Total Daily Supply of Milk (Ltrs)"
+                                value={Daily_Supply_of_Milk_Ltrs__c} onchange={handleDailyCollection} access-key={index}
+                                read-only={readOnly}></lightning-input> <!--R2-2365 label change-->
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Average_Sale_Price_Per_Liter__c">
+                                <lightning-input type="number" name="Average_Sale_Price_Per_Liter__c" label="Average Sale Price per Ltr"
+                                value={Average_Sale_Price_Per_Liter__c} onchange={handleDailyCollection} access-key={index}
+                                read-only={readOnly}></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Daily_Collection__c">
+                                <lightning-input type="number" name="Daily_Collection__c" label="Daily Collection"
+                                value={Daily_Collection__c} access-key={index}
+                                read-only={readOnly} disabled></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Monthly_Receipts__c">
+                                <lightning-input type="number" name="Monthly_Receipts__c" label="Monthly Receipts"
+                                value={Monthly_Receipts__c} access-key={index}
+                                read-only={readOnly} disabled></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Profit_Margin__c">
+                                <lightning-input type="decimal" name="Profit_Margin__c" label="Profit Margin %"
+                                value={Profit_Margin__c} onchange={handleprofitMarginChange} access-key={index}
+                                read-only={readOnly}></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Monthly_Net_Income__c">
+                                <lightning-input type="number" name="Monthly_Net_Income__c" label="Monthly Net Income"
+                                value={Monthly_Net_Income__c} access-key={index}
+                                read-only={readOnly} disabled></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Any_Other_Income__c">
+                                <lightning-input type="number" name="Any_Other_Income__c" label="Any Other Income"
+                                value={Any_Other_Income__c} onchange={handleChange} access-key={index}
+                                read-only={readOnly}></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Any_Other_Expense__c">
+                                <lightning-input type="number" name="Any_Other_Expense__c" label="Any Other Expense"
+                                value={Any_Other_Expense__c} onchange={handleChange} access-key={index}
+                                read-only={readOnly}></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                            <div class="component slds-hide" data-id="Total_Net_Income__c">
+                                <lightning-input type="number" name="Total_Net_Income__c" label="Total Net Income"
+                                value={Total_Net_Income__c} access-key={index}
+                                read-only={readOnly} disabled></lightning-input> 
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                        <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                            large-device-size="6">
+                            <c-bank-statement-upload-financials  parent-name='financial' showonly-itr=true
+                        applicant-id={applicantId} document-type='Bank Account Statement'
+                        read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                         applicant-record-id={applicantId}
+                       ></c-bank-statement-upload-financials>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                        
+                <div class="slds-align--absolute-center">
+                <template if:false={edit}>
+                <!--<template if:false={displayButtons}>
+                    <lightning-icon title="Close Dairy Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                        access-key={index}></lightning-icon> 
+                </template>
+                <template if:true={displayButtons}>
+                    <lightning-icon  title="Delete Income" class="slds-m-around_small" icon-name="action:delete" size="x-small" alternative-text="" id={index} 
+                        access-key={key} onclick={handleDeleteRow}></lightning-icon>
+                </template>-->
+                <lightning-icon title="Close Dairy Income Detail" class="slds-m-around_x-small" icon-name="action:reject" size="x-small" alternative-text="" id={index} onclick={handleClose} 
+                        access-key={index}></lightning-icon> 
+                    <lightning-icon title="Save Income" class="slds-m-around_x-small" icon-name="action:approval" size="x-small" alternative-text="" id={index} 
+                    access-key={index} onclick={saveIncome}></lightning-icon>
+                </template>
+                </div>
+            
+            
+            
+    </lightning-accordion-section>
+    </lightning-accordion>    
+    </lightning-card>
+        
+</template>

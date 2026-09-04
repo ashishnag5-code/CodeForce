@@ -1,0 +1,201 @@
+<template>
+    <!--Spinner Section-->
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <!--End-->
+
+    <!--New Form-->
+    <template if:false={showEditView}>
+        <lightning-accordion-section name="A" label="Without Audited Financials">
+            <template if:true={isR2}>
+            <template if:true={readAttribute}>
+                <div slot="actions">
+                    <lightning-icon icon-name=action:edit size="x-small" onclick={handleEdit}></lightning-icon>
+                </div>
+            </template>
+            </template>
+              <!-- Added in R2-->
+              <template if:true={isDelete}>
+                <template if:true={readAttribute}>
+                    <span slot="actions" class="slds-p-left--small">
+                        <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                            alternative-text="" access-key={index} class="slds-m-right_small"
+                            onclick={handleDeleteRow}></lightning-icon>
+                    </span>
+                </template>
+            </template>
+            <!--End-->
+            <template if:true={isMobile}>
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <div class="component" data-id="Annual_Net_Profit__c">
+                            <label class="slds-form-element__label">
+                                Net Profit As Per ITR (₹)
+                            </label>
+                            <lightning-input type="number" name="Annual_Net_Profit__c" value={annualNetProfit}
+                                min-length="1" read-only={readAttribute} max-length="10" onchange={handleChange}
+                                step="0.01" label="Annually"></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <div class="component " data-id="Monthly_Net_Profit__c">
+                            <label class="slds-form-element__label slds-hidden">
+                                Monthly
+                            </label>
+                            <lightning-input type="number" name="Monthly_Net_Profit__c" value={monthlyNetProfit}
+                                label="Monthly" step="0.01" onchange={handleChange} disabled></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <div class="component " data-id="Year__c">
+                            <lightning-combobox name="Year__c" label="Assessment Year" data-name="" class="validate"
+                                read-only={readAttribute} value={yearValue} options={yearOptions} required
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <div class="component " data-id="Filing_Date__c">
+                            <lightning-input type="date" name="Filing_Date__c" label="Filing Date" value={filingValue}
+                                max={maxDate} read-only={readAttribute} onchange={handleChange}></lightning-input>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <c-bank-statement-upload-financials parent-name='financial' showonly-itr=true
+                            applicant-id={applicantId} document-type='ITR Statement' read-attribute={disableUpload}
+                            heading-value="Upload Bank Statement" applicant-record-id={applicantId}
+                            onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+            <template if:false={isMobile}>
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Annual_Net_Profit__c">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static">
+                                        <label class="slds-form-element__label">
+                                            Net Profit As Per ITR (₹)
+                                        </label>
+                                        <lightning-input type="number" name="Annual_Net_Profit__c"
+                                            value={annualNetProfit} min-length="1" read-only={readAttribute}
+                                            max-length="10" onchange={handleChange} step="0.01"
+                                            label="Annually"></lightning-input>
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Monthly_Net_Profit__c">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static">
+                                        <label class="slds-form-element__label slds-hidden">
+                                            Monthly
+                                        </label>
+                                        <lightning-input type="number" name="Monthly_Net_Profit__c"
+                                            value={monthlyNetProfit} label="Monthly" step="0.01" onchange={handleChange}
+                                            disabled></lightning-input>
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Year__c">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static">
+                                        <label class="slds-form-element__label slds-hidden">
+                                            Year
+                                        </label>
+                                        <lightning-combobox name="Year__c" label="Assessment Year" data-name=""
+                                            class="validate" read-only={readAttribute} value={yearValue}
+                                            options={yearOptions} required onchange={handleChange}>
+                                        </lightning-combobox>
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                    <div class="slds-col slds-size_1-of-3 slds-hide" data-id="Filing_Date__c">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static">
+                                        <lightning-input type="date" name="Filing_Date__c" label="Filing Date"
+                                            value={filingValue} max={maxDate} class="validate" read-only={readAttribute}
+                                            onchange={handleChange}></lightning-input>
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-3">
+                        <span>
+                            <lightning-layout-item flexibility="auto">
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static">
+                                        <c-bank-statement-upload-financials parent-name='financial' showonly-itr=true
+                                            applicant-id={applicantId} document-type='ITR Statement'
+                                            read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                                            applicant-record-id={applicantId}
+                                            onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                                    </span>
+                                </div>
+                            </lightning-layout-item>
+                        </span>
+                    </div>
+                </div>
+            </template>
+
+        </lightning-accordion-section><br>
+        <!--Button Section-->
+        <lightning-layout multiple-rows class="slds-p-bottom_small">
+            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                <template if:false={isR2}>
+                    <lightning-button label="Back" title="Back" onclick={redirectHome}
+                        class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                </template>
+                <lightning-button label="Save Income" class="buttonClass disabled-submit-button slds-m-left_x-small"
+                    variant="brand" name='save' disabled={isButtonDisabled} onclick={handleSubmit}></lightning-button>
+
+            </div>
+        </lightning-layout>
+
+        <!--End-->
+    </template>
+    <!--End-->
+
+    <!--Edit Form-->
+    <template if:true={showEditView}>
+        <!--Calling Child Component-->
+        <template for:each={existingDetails} for:item="item" for:index="index">
+            <c-without-audited-edit-view is-r2={isR2} key={item.id} instance={item} onhome={redirectHome} applicant-id={applicantId}
+                onotherincome={handleOtherIncome}  is-delete={isDelete} ondeletedrecord={handleEditDelete}>
+            </c-without-audited-edit-view>
+        </template>
+        <!--End-->
+    </template>
+    <!--End-->
+</template>

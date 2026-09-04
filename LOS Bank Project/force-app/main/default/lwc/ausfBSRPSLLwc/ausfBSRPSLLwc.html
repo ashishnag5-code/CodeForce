@@ -1,0 +1,435 @@
+<template>
+    <lightning-card title="BSR-PSL Application" icon-name="standard:lead">
+
+        <!-- <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template> -->
+
+        <c-custom-spinner
+            show-spinner={isloading}
+            spinner-image={spinnerImage}
+        >
+        </c-custom-spinner>
+
+        
+        <lightning-accordion active-section-name="PSL-BSR" >
+            
+            <lightning-record-edit-form object-api-name="BSR_PSL_Details__c" record-id={pslRecordId}>    
+                <lightning-accordion-section name="PSL" label="PSL" class="accordClass" style="margin-bottom: 1%">
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">Sector</label>
+                        <lightning-combobox label="Sector" placeholder="Select Sector" value={sectorValue}
+                            name="Sector__c" class="validate" variant="label-hidden" options={sectorOptions} data-name="Sector"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">Industry</label>
+                        <lightning-combobox label="Industry" placeholder="Select Industry" value={industryValue}
+                            name="Industry__c" class="validate" variant="label-hidden" options={industryOptions} data-name="Industry"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">Industry Subtype</label>
+                        <lightning-combobox label="Industry Subtype" placeholder="Select Industry Subtype" value={industrySubtypeValue}
+                            name="Sub_Industry__c" class="validate" variant="label-hidden" options={subIndustryOptions} data-name="Industry Subtype"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">Occupation</label>
+                        <lightning-combobox label="Occupation" placeholder="Select Occupation" value={occupationValue}
+                            name="Occupation__c" class="validate" variant="label-hidden" options={occupationOptions} data-name="Occupation"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item> 
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">PSL Code</label>
+                        <lightning-combobox label="PSL Code" placeholder="Select PSL Code" value={pslCodeValue}
+                            name="PSL_Code__c" class="validate" variant="label-hidden" options={pslCodeOptions} data-name="PSL Code"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">
+                            <template if:true={isNotTwoWheeler}><abbr class="slds-required" title="required">* </abbr></template>PSL Classification Type</label>
+                        <lightning-combobox label="PSL Classification Type" placeholder="Select PSL Classification Type" value={pslClassificationTypeValue}
+                            name="PSL_Classification_Type__c" class="validate" variant="label-hidden" options={pslClassificationTypeOptions} data-name="PSL Classification Type"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">
+                            <template if:true={isNotTwoWheeler}><abbr class="slds-required" title="required">* </abbr></template>PSL Classification Category</label>
+                        <lightning-combobox label="PSL Classification Category" placeholder="Select PSL Classification Category" value={pslClassificationCategoryValue}
+                            name="PSL_Classification_Category__c" class="validate" variant="label-hidden" options={pslClassificationCategoryOptions} data-name="PSL Classification Category"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">PSL Segment</label>
+                        <lightning-combobox label="PSL Segment" placeholder="Select PSL Segment" value={pslSegmentValue}
+                            name="PSL_Segment__c" class="validate" variant="label-hidden" options={pslSegmentOptions} data-name="PSL Segment"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+                    <template if:true={isUdyamVisible}>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Udyam_Status__c" name="Udyam_Status__c" variant="label-stacked" onchange={handleChange} value={udyamStatusValue} required={isNotTwoWheeler} data-name="Udyam Status"></lightning-input-field>
+                        </lightning-layout-item>
+                    
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input name="UDYAM_Registration_Number__c" label="Udyam Registration" data-name="Udyam Registration" data-value={udyamRegistrationNo} value={udyamRegistrationNo} placeholder="UDYAM-AA-11-1111111" pattern="[U]{1}[D]{1}[Y]{1}[A]{1}[M]{1}-[A-Z]{2}-[0-9]{2}-[0-9]{7}" onchange={handleChange}></lightning-input>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-input name="Caste__c" label="Caste" value={caste} onchange={handleChange} disabled data-name="Caste" ></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-input name="Religion__c" label="Religion" value={religion} onchange={handleChange} disabled data-name="Religion"></lightning-input>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-input-field field-name="Weaker_Section__c" name="Weaker_Section__c" variant="label-stacked" onchange={handleChange} value={weakerSectionValue} disabled data-name="Weaker Section"></lightning-input-field>
+                    </lightning-layout-item>
+                    <template if:true={isReasonForMultipleVisible}>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Reasons_for_Multiple_Weaker_Section__c" name="Reasons_for_Multiple_Weaker_Section__c" variant="label-stacked" onchange={handleChange} value={weakerReasonValue} disabled data-name="Reasons for Multiple Weaker Section"></lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-input-field field-name="Agri_Land_Available__c" name="Agri_Land_Available__c" variant="label-stacked" onchange={handleChange} value ={isAgriLandAvailable} required={isNotTwoWheeler} data-name="Agri Land Available"></lightning-input-field>
+                    </lightning-layout-item>
+
+                    <template if:true={showLandHolding}>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Document_Type__c" name="Document_Type__c" variant="label-stacked" onchange={handleChange} value={documnetType} data-name="Document Type"></lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+
+                    <template if:false={showLandHolding}>
+                        <template if:true={isActivityVisible}>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Activity__c" name="Activity__c" value={activityValue} variant="label-stacked" onchange={handleChange} data-name="Activity"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                    
+                    <template if:true={showLandHolding}>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Land_Ownership__c" name="Land_Ownership__c" value={landOwnerValue} variant="label-stacked" onchange={handleChange} data-name="Land Ownership"></lightning-input-field>
+                        </lightning-layout-item>
+                        
+                        <template if:true={isRelativeVisible}>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <!--<lightning-input-field field-name="If_Applicant_Relative__c" name="If_Applicant_Relative__c" value={relativeValue} variant="label-stacked" onchange={handleChange}></lightning-input-field>-->
+                                <label class="slds-form-element__label">If Applicant Relative</label>
+                                <lightning-combobox label="If Applicant Relative" placeholder="Select If Applicant Relative" value={relativeValue}
+                                    name="If_Applicant_Relative__c" class="validate" variant="label-hidden" options={relativeOptions} data-name="If Applicant Relative"
+                                    onchange={handleChange}>
+                                </lightning-combobox>
+                            </lightning-layout-item>
+                        </template>
+                    
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Land_Holding_in_acre__c" name="Land_Holding_in_acre__c" variant="label-stacked" onchange={handleChange} value={landHoldingAcre} required={isNotTwoWheeler} data-name="Land Holding (in acre)"></lightning-input-field>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input name="Land_Area_in_Hector__c" label="Land Area in Hector" onchange={handleChange} value={landHoldingHector} data-name="Land Area in Hector" disabled></lightning-input>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Small_Marginal_Other__c" variant="label-stacked" name="Small_Marginal_Other__c" onchange={handleChange} value={smallMarginalValue} data-name="Small Marginal Other"></lightning-input-field>
+                        </lightning-layout-item>
+                    </template>
+                    <!-- <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <lightning-input-field field-name="End_use_of_Vehicle__c" variant="label-stacked" name="End_use_of_Vehicle__c" onchange={handleChange} value={endOfUse} required={isNotTwoWheeler} data-name="End use of Vehicle"></lightning-input-field>
+                    </lightning-layout-item>
+--> 
+
+                   <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">
+                            <template if:true={isNotTwoWheeler}><abbr class="slds-required" title="required">* </abbr></template>End use of Vehicle</label>
+                        <lightning-combobox label="End use of Vehicle" placeholder="Select End use of Vehicle" value={endOfUse}
+                            name="End_use_of_Vehicle__c" class="validate" variant="label-hidden" options={endUseVehicleOptions} data-name="End use of Vehicle"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-horizontal_small" flexibility="auto">
+                        <label class="slds-form-element__label">
+                            <template if:true={isNotTwoWheeler}><abbr class="slds-required" title="required">* </abbr></template>Purpose of Loan</label>
+                        <lightning-combobox label="Purpose of Loan" placeholder="Select Purpose of Loan" value={loanPurposeValue}
+                            name="Purpose_of_Loan__c" class="validate" variant="label-hidden" options={_loanPurposeOptions} data-name="Purpose of Loan"
+                            onchange={handleChange}>
+                        </lightning-combobox>
+                    </lightning-layout-item>
+
+<template if:true={showEndUseOfProducts}>
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="12"
+                        class="slds-p-horizontal_small slds-m-top_small" flexibility="auto">
+                        <div class="slds-box slds-box_x-small slds-theme_shade">
+                            <template if:true={hideSection}>
+                              <lightning-icon icon-name="utility:chevronright" onclick={handleOpenSection} size="x-small"></lightning-icon>
+                            </template>
+                            <template if:false={hideSection}>
+                              <lightning-icon icon-name="utility:chevrondown" onclick={handleHideSection} size="x-small"></lightning-icon>
+                            </template>
+                            &nbsp;<b>End use of Funds ({recordCount})</b>
+                        </div>   
+
+                        <template if:false={hideSection}>
+                            <lightning-card>
+                                <div style="overflow-x:scroll;" >
+                                <lightning-layout>
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                                       
+                                            <table class="slds-m-bottom_xx-large slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                                                <thead>
+                                                    <tr class="slds-line-height_reset">
+                                                        <th class="" scope="col">
+                                                            <div class="slds-truncate" title="">                                    
+                                                                <lightning-formatted-text value="" class="slds-text-body_small"></lightning-formatted-text>
+                                                            </div>
+                                                        </th>
+                                                        <th class="" scope="col">
+                                                            <div class="slds-truncate" title="Label">
+                                                                <lightning-formatted-text value="Label" class="slds-text-body_small"></lightning-formatted-text>
+                                                            </div>
+                                                        </th>
+                                                            <th  if:false={isPersonalCOW} class="" scope="col">
+                                                                <div  class="slds-truncate">
+                                                                    <lightning-formatted-text value="Amount" class="slds-text-body_small"></lightning-formatted-text>
+                                                                </div>
+                                                            </th>
+                                                            <th if:false={isPersonalCOW}  class="" scope="col">
+                                                                <div class="slds-truncate">
+                                                                    <lightning-formatted-text value="Expected Validation" class="slds-text-body_small"></lightning-formatted-text>
+                                                                </div>
+                                                            </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template for:each={endUseOfFunds} for:item="relatedRecord" for:index="index">
+                                                    <tr class="slds-hint-parent" key={relatedRecord.key}>
+                                                        <td data-label="Check">
+                                                            <div class="slds-truncate">
+                                                                <div class="slds-align_absolute-center">
+                                                                    <lightning-input onchange={handleFunds} disabled={readOnly} name="isChecked" access-key={relatedRecord.key} variant="label-hidden" type="checkbox" value={relatedRecord.isChecked} checked={relatedRecord.isChecked}></lightning-input>
+                                                                </div>  
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Label">
+                                                            <div title={relatedRecord.Label__c}>
+                                                                <lightning-combobox name="Label__c"
+                                                                access-key={relatedRecord.key}
+                                                                                data-name="Label__c"
+                                                                                required
+                                                                                read-only={readOnly}
+                                                                                variant="label-hidden"
+                                                                                options={endUseOfFundOptions}
+                                                                                value={relatedRecord.Label__c}
+                                                                                onchange={handleFunds}></lightning-combobox>
+                                                                                </div>
+                                                        </td>
+                                                            <td  if:false={isPersonalCOW} data-label="Amount">     
+                                                                <div  title={relatedRecord.Amount__c}>                   
+                                                                    <lightning-input name="Amount__c"
+                                                                                    access-key={relatedRecord.key}
+                                                                                    data-name="Amount__c"
+                                                                                    required
+                                                                                    read-only={readOnly}
+                                                                                    variant="label-hidden"
+                                                                                    type="text" pattern="^[0-9]*" 
+                                                                                    value={relatedRecord.Amount__c}
+                                                                                    onchange={handleFunds}>
+                                                                    </lightning-input>
+                                                        
+                                                            </div>
+                                                        </td>
+                                                        <td if:false={isPersonalCOW} data-label="Expected Validation">     
+                                                            <div  title={relatedRecord.Expected_Validation__c}>                   
+                                                                <lightning-combobox required label="Expected Validation" placeholder="Select Expected Validation" value={relatedRecord.Expected_Validation__c} variant="label-hidden"
+                                                                name="Expected_Validation__c" access-key={relatedRecord.key} read-only={readOnly} class="validate" options={expectedValidationOptions} data-name="Expected_Validation__c"
+                                                                onchange={handleFunds}>
+                                                                </lightning-combobox>
+                                                    
+                                                        </div>
+                                                    </td>
+                                                    </tr>
+                                                            <!--<c-balance-transfer-child onrecordchange={handleChanges} type={type} collateral={collateral} key={relatedRecord.keyId} bt-type={btType} read-only={readOnly} is-record-saved={relatedRecord.isSaved} ondeletebt={handleDeleteAction} inserted-bt={relatedRecord} onrowaction={handleRowAction} add-b-t={addBT}  key-id={relatedRecord.keyId} loan-app={loanApp}></c-balance-transfer-child>-->
+                                                    </template>
+                                                    <tr class="slds-hint-parent">  
+                                                        <td data-label="Check">
+                                                            <div class="slds-truncate">
+                                                                <div class="slds-align_absolute-center">
+                                                                </div>  
+                                                            </div>
+                                                        </td>
+                                                        <td data-label="Amount">
+                                                            <div class="slds-truncate">
+                                                                <div class="slds-align_absolute-center">
+                                                                </div>  
+                                                            </div>
+                                                        </td>
+                                                            <td if:false={isPersonalCOW} data-label="Expected Validation">
+                                                                <div  class="slds-truncate"><b>Total Amount</b>
+                                                                </div>
+                                                            </td>
+                                                            <td if:false={isPersonalCOW} data-label="Amount__c">
+                                                                <div  class="slds-truncate"><b>{totalAmount}</b>
+                                                                </div>
+                                                            </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                </div>
+                            </lightning-card>
+                        </template>
+                        <template if:true={displayButtons}>
+                            <template if:true={readOnly}>
+                                <div class="slds-align_absolute-center">
+                                    <span slot="actions">
+                                        <lightning-icon class="slds-m-around_x-small" icon-name="action:edit" size="xx-small" onclick={handleEdit}></lightning-icon>
+                                </span>
+                                </div>
+                            </template>
+                            <template if:false={readOnly}>
+                                <div class="slds-align_absolute-center">
+                        
+                                        <lightning-icon class="slds-m-around_x-small" icon-name="action:approval"  size="xx-small" onclick={handleSave}></lightning-icon>
+                                        <template if:false={isDelete}>
+                                            <lightning-icon class="slds-m-around_x-small" icon-name="action:new" size="xx-small" onclick={handleAddNewFund}></lightning-icon>
+                                        </template>
+                                        <template if:true={isDelete}>
+                                            <lightning-icon class="slds-m-around_x-small" icon-name="action:delete" size="xx-small" onclick={handleDeleteAction}></lightning-icon>
+                                        </template>
+                                    </div>
+                            </template>
+                        </template>
+
+                       </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+                </lightning-accordion-section>
+            </lightning-record-edit-form>
+            
+            <lightning-record-edit-form object-api-name="BSR_PSL_Details__c" record-id={bsrRecordId}>
+                <lightning-accordion-section name="BSR" label="BSR" class="accordClass">
+                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Group</label>
+                            <lightning-combobox label="Group" placeholder="Select Group" value={groupValue}
+                                name="Group__c" class="validate" variant="label-hidden" options={groupSelectOptions} data-name="Group"
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Sub Group</label>
+                            <lightning-combobox label="Sub Group" placeholder="Select Sub Group" value={subGroupValue}
+                                name="Sub_Group__c" class="validate" variant="label-hidden" options={subGroupOptions} data-name="Sub Group"
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Occupation</label>
+                            <lightning-combobox label="Occupation" placeholder="Select Occupation" value={occupationGroupValue}
+                                name="Occupation_Group__c" class="validate" variant="label-hidden" options={occupationGroupOptions} data-name="Occupation"
+                                onchange={handleChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Organisation_Type__c" name="Organisation_Type__c" value={organisationType} variant="label-stacked" onchange={handleChange} required data-name="Organisation Type"></lightning-input-field>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Organisation__c" variant="label-stacked" name="Organisation__c" onchange={handleChange} value={organisation} required data-name="Organisation"></lightning-input-field>
+                        </lightning-layout-item>
+                        
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Industry__c" variant="label-stacked" name="Industry__c" value={industry} required data-name="Industry"></lightning-input-field>
+                            </lightning-layout-item>
+
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-p-horizontal_small" flexibility="auto">
+                            <lightning-input-field field-name="Borrower_Category__c" variant="label-stacked" name="Borrower_Category__c" onchange={handleChange} value={borrowerCat} required data-name="Borrower Category"></lightning-input-field>
+                        </lightning-layout-item>
+
+                        <template if:true={isPMVisible}>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Investment_in_P_M__c" variant="label-stacked" name="Investment_in_P_M__c" onchange={handleChange} value={investmentPM} required data-name="Investment in PM"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+
+                        <template if:true={isEquipmentVisible}>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Investment_in_Equipment__c" variant="label-stacked" name="Investment_in_Equipment__c" onchange={handleChange} value={investmentEquip} required data-name="Investment in Equipment"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+
+                        <template if:true={isOthersVisible}>
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                class="slds-p-horizontal_small" flexibility="auto">
+                                <lightning-input-field field-name="Others__c" variant="label-stacked" name="Others__c" onchange={handleChange} value={others} required data-name="Others"></lightning-input-field>
+                            </lightning-layout-item>
+                        </template>
+
+                    </lightning-layout>
+                </lightning-accordion-section>  
+            </lightning-record-edit-form>
+        </lightning-accordion>
+        <div align="center"><lightning-button variant="Brand" label="Save" onclick={saveRecord}></lightning-button></div>
+    </lightning-card>
+</template>

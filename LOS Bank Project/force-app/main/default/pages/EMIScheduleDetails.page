@@ -1,0 +1,16 @@
+<apex:page controller="EMIScheduleParentController">
+    <apex:includeLightning />
+
+    <script>
+        /*window.onload = function() {  
+            alert('Here');
+            alert('{!$Page.EMISchedule}?id={!recordId}');
+            var newwindow=window.open('{!$Page.EMISchedule}?id={!recordId}');
+            if(window.focus){
+                newwindow.focus();
+            }
+            
+        } */
+        
+    </script>   
+</apex:page>

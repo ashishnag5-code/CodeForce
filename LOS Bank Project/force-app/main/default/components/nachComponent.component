@@ -1,0 +1,286 @@
+<!--
+@ Logs - 
+@ Date          -       Last Modified By                -       Comments
+@ Sept-5-2023   -       Mohit M.                        -       SFAU-5066 - Change Default "To" Date and Default uncheck "Untill Uncheck"
+-->
+<apex:component >
+    <apex:attribute name="loanObj" type="Loan_Application__c" description="The loan object" />
+    <apex:attribute name="appObj" type="Applicant__c" description="The applicant object" />
+    <apex:attribute name="endDate" type="String" description="The emi end date" />
+    <apex:attribute name="fromDate" type="String" description="The emi start date" />
+    <apex:attribute name="customerName" type="String" description="The customer name" />
+    <apex:attribute name="today" type="String" description="Today" />
+    <apex:attribute name="referenceOne" type="String" description="Reference name" />
+    <apex:attribute name="referenceTwo" type="String" description="Reference name" />
+    <apex:attribute name="ifscList" type="String[]" description="IFSC" />
+    <apex:attribute name="accNo" type="String[]" description="IFSC" />
+    <div id="mandate_Instruction_Form" class="mandateDiv">
+        <div class="center">
+            <span style="font-size:10px;"><b>Mandate Instruction Form for NACH</b></span>
+        </div>
+        <div class="mandate_logo">
+            <img id="mandatelogo" width="10%" src="{!URLFOR($Resource.AUSF_LOGOS,'AUSF_LOGOS/images/sanction_header2.png')}"/>
+            <!--<apex:image value="{!URLFOR($Resource.ApplicationForm,'Logo.png')}" styleClass="mandate_logo" ></apex:image-->
+        </div>
+        <div class="umrnDate" font-size="10px;">
+            <br/>
+            <table id="umrn_Date" class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:12%;text-align:left;"><b>UMRN</b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="noBorder" style="width:4%"><b>Date</b></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="center" style="width:12%;"><b>{!today}</b></td>
+                    <!--
+                    <td class="placeHolder">D</td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">M</td>
+                    <td class="placeHolder">M</td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>-->
+                </tr>
+            </table> 
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:12%;text-align:left;"><b>Utility Code</b></td>
+                    <td style="width:25%;"><b>NACH00000000006531</b></td>
+                    <td class="noBorder" style="width:2%;"></td>
+                    <td class="center" style="width:55%;">
+                    <span>
+                        <apex:image value="{!$Resource.checkbox_checked}" styleClass="checkbox" /><b>Create</b>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                        <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />
+                        <b>Modify</b>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span>
+                        <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />
+                        <b>Cancel</b>
+                    </span>
+                    </td>
+                </tr>
+            </table> 
+        </div>
+        <div>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:18%;text-align:left;"><b>Sponsor Bank Code</b></td>
+                    <td style="width:18%;text-align:center;"><b>AUBL0000001</b></td>
+                    <td class="noBorder" style="width:25%;text-align:right;"><b>I/We hereby authorise&nbsp;</b></td>
+                    <td class="center" style="width:25%;text-align:center;">
+                        <span style="font-size:10px;">
+                            <b>AU Small Finance Bank Ltd.</b>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:14%;text-align:left;">
+                        <span>
+                            <b>to debit (tick) &nbsp; <apex:image value="{!$Resource.tick_check_mark}" styleClass="checkbox" /></b>
+                        </span>
+                        <span >
+                            <td class="left" style="width:32%;" >
+                                <span style="font-size:6px;">
+                                    <div style="vertical-align: top;">&nbsp;<apex:image value="{!$Resource.tick_check_mark}" styleClass="checkbox" rendered="{!loanObj.Repayment_Account_Type__c='SB'}"/>&nbsp;<apex:image value="{!$Resource.tick_check_mark}" styleClass="checkbox" style="padding-left:22px;" rendered="{!loanObj.Repayment_Account_Type__c='CA'}"/></div>
+                                    <b>&nbsp;SB / CA / CC / SB-NRE / SB- NRO / OTHER</b>
+                                </span>
+                            </td>
+                        </span>
+
+                    </td>
+                    <td class="noBorder" style="width:15%;"><b>Bank A/C Number</b></td>
+                    <apex:repeat value="{!accNo}" var="att">
+                        <td class="center"><b>&nbsp;{!att}</b></td>
+                    </apex:repeat>
+                    <!--<td class="center"><b>&nbsp;{!loanObj.Repayment_Account_Number__c}</b></td>-->
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:10%"><b>With Bank</b></td>
+                    <td class="center" style="width:28%"><b>{!loanObj.Repayment_Bank_Name__c}</b></td>
+                    <td class="noBorder" style="width:12%;text-align:right;"><b>IFSC / MICR&nbsp;</b></td>
+                    <!--<td class="center"><b>&nbsp;{!loanObj.IFSC_Code__c}</b></td>-->
+                    <apex:repeat value="{!ifscList}" var="att">
+                        <td class="center"><b>{!att}</b></td>
+                    </apex:repeat>
+                </tr>
+            </table>
+            <br/>
+            <table id="amount_Of_Inr" class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:18%"><b>an amount of Rupees&nbsp;</b></td>
+                    <td class="center" style="width:56%"><b>{!loanObj.Loan_Amount_In_Words__c}</b></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="center" style="width:28%">
+                        <span>
+                            <apex:image value="{!$Resource.INR_tick}"/>
+                        </span> &nbsp;<b>
+                            <apex:outputText value="{0, number, ##,##,##,##0}">
+                                <apex:param value="{!loanObj.Total_Loan_Amount__c}" />
+                            </apex:outputText></b>
+                    </td>
+
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:30%">
+                        <span><b><u>DEBIT TYPE</u></b></span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />&nbsp;<b>Fixed</b>
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_checked}" styleClass="checkbox"/>&nbsp;&nbsp;<b>Maximum</b>
+                        </span>
+                        </td>
+                        <td class="noBorder" style="width:70%">
+                        <span>
+                            <b><u>FREQUENCY</u></b>&nbsp;
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_checked}" styleClass="checkbox"/>&nbsp;&nbsp;<b>Monthly</b>
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />&nbsp;<b>Quarterly</b>
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />&nbsp;<b>Half Yearly</b>
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />&nbsp;<b>Yearly</b>
+                        </span>
+                        <span>
+                            <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox" />&nbsp;<b>As &amp; when presented </b>&nbsp;
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:6%"><b>Reference 1</b></td>
+                    <td class="center" style="width:30%;"><b>{!referenceOne}</b></td>
+                    <td class="noBorder" style="width:6%"><b>Reference 2</b></td>
+                    <td class="center" style="width:30%;"><b>{!referenceTwo}</b></td>
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:100%;">
+                        <span style="font-size:9px;"><b>1. I agree for the debit of mandate processing charges by the bank whom I am authorizing to debit my account as per latest schedule of charges of the bank. 2. This is to confirm that the declaration has been carefully read, understood &amp; made by me/us. I am authorising the user entity / Corporate to debit my account, based on the instructions as agreed and signed by me. 3. I have understood that I am
+                            authorized to cancel / amend inis mandate by appropriately communicating the cancellation / amendment request to the user / corporate or the bank where I have authorized the debit</b>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+            <table class="mandate-info-align" style="width:35%">
+                <tr>
+                    <td class="noBorder" style="width:10%;"><b>From</b></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="center"><b>{!fromDate}</b></td>
+                    <!--td class="placeHolder"></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">M</td>
+                    <td class="placeHolder">M</td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="noBorder" style="width:2%;"></td-->
+                </tr>
+            </table>
+            <table class="mandate-info-align" style="width:35%">
+                <tr>
+                    <td class="noBorder" style="width:10%;"><b>To</b></td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="center"><b>{!endDate}</b></td>   <!--Add To Date SFAU-5066 -->
+                    <!--td class="placeHolder">D</td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">M</td>
+                    <td class="placeHolder">M</td>
+                    <td class="noBorder" style="width:1%;"></td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="placeHolder">Y</td>
+                    <td class="noBorder" style="width:2%;"></td-->
+                </tr>
+            </table>
+            <table class="mandate-info-align" style="width:35%">
+                <tr>
+                    <td class="noBorder" style="width:10%;"><b>Or</b></td>
+                    <td class="noBorder" style="width:25%;" >
+                        <apex:image value="{!$Resource.checkbox_unchecked}" styleClass="checkbox"/><b>&nbsp;&nbsp;Until Cancelled</b>   <!-- SFAU-5066 Default Uncheck -->
+                    </td>
+                </tr>
+            </table>
+            <table class="mandate-info-align">
+                <tr>
+                    <td class="noBorder" style="width:5%"><b>Phone&nbsp;</b></td>
+                    <td class="noBorder" style="width:1%;" ></td>
+                    <td class="center" style="width:15%"><b>{!appObj.Mobile_Number__c}</b></td>
+                    <td class="noBorder" style="width:1%;" ></td>
+                    <td class="noBorder" style="width:30%;">
+                        <span class="placeHolder noBorder">Signature of Primary Account Holder
+                        </span>
+                        <span>_________________________</span>
+                    </td>
+                    <td class="noBorder" style="width:25%;">
+                        <span class="placeHolder noBorder">Signature of Account Holder</span>
+                        <span>_________________________</span>
+                    </td>
+                    <td class="noBorder" style="width:25%;">
+                        <span class="placeHolder noBorder">Signature of Account Holder</span>
+                        <span>_________________________</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="noBorder" style="width:5%"></td>
+                    <td class="noBorder" style="width:1%;" ></td>
+                    <td class="noBorder" style="width:15%"></td>
+                    <td class="noBorder" style="width:1%;" ></td>
+                    <td class="noBorder" style="width:30%;">
+                        <span>1</span>
+                        <span class="placeHolder noBorder">Name as in bank records</span>
+                    </td>
+                    <td class="noBorder" style="width:25%;">
+                        <span>2</span>
+                        <span class="placeHolder noBorder">Name as in bank records</span>
+                    </td>
+                    <td class="noBorder" style="width:25%;">
+                        <span>3</span>
+                        <span class="placeHolder noBorder">Name as in bank records</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</apex:component>

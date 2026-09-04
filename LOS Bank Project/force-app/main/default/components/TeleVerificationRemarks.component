@@ -1,0 +1,39 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="tvrRecordDetails" description="This is the value for the component."
+    type="TVR__c[]" required="true" assignTo="{!tvrRecords}"/>
+
+    <!-- SFAU-5287 - Align TVR Remarks -->
+    <!--<style type="text/css">
+        .align-unset__imp{
+            text-align: unset !important;
+        }
+    </style>commenting the code as it is creating issues while rendering page as pdf-->
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Televerification Remarks">
+        </apex:pageBlockSection>
+            <table style="{!tableStyle}">
+                <tr style="{!tableRowStyle}">
+                    <th style="{!tableHeadDataStyle} width:7% !important">TVR Date</th>
+                    <th style="{!tableHeadDataStyle} width:15% !important">Name Of Employee</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">Employee ID</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">TVR Done With</th>
+                    <th style="{!tableHeadDataStyle} width:7% !important">Mobile No.</th>
+                    <th style="{!tableHeadDataStyle} width:20% !important">Remark</th>
+                </tr>
+                <apex:repeat value="{!tvrRecords}" var="tvr">
+                    <tr style="{!tableRowStyle}">
+                        <td style="{!tableDataStyle}">
+                            <apex:outputText value="{0,date,MM-dd-yyyy}"> <apex:param value="{!tvr.TVR_Date__c}"/> </apex:outputText>
+                        </td>
+                        <td style="{!tableDataStyle}">{!tvr.Name_Of_Employee__c}</td>
+                        <td style="{!tableDataStyle}">{!tvr.Employee_ID__c}</td>
+                        <td style="{!tableDataStyle}">{!tvr.TVR_Done_With__c}</td>
+                        <td style="{!tableDataStyle}">{!tvr.Mobile_Number__c}</td>
+                        <!-- SFAU-5287 - Align TVR Remarks -->
+                        <td style="{!tableDataStyle} text-align: unset !important;"><apex:outputField value="{!tvr.Remark__c}"></apex:outputField></td><!--removed class class="align-unset__imp"-->
+                    </tr>
+                </apex:repeat>
+            </table>
+    </div>        
+</apex:component>

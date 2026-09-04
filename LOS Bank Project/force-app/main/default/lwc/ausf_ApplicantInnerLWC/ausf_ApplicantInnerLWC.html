@@ -1,0 +1,156 @@
+<template>
+    <article class="slds-box">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=standard:user size="small">
+                    </lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a href="#" class="slds-card__header-link slds-truncate"
+                            title={applicantData.Name}>{applicantData.name}</a>
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                    <template lwc:if={renderFetchButton}>
+                        <c-ausf-fetch-button-component applicant-id={applicantData.applicantId} loan-id={loanId} stage={stage}
+                                                       customer-id={applicantData.cif} is-disabled={applicantData.disableFetchButton}>
+                        </c-ausf-fetch-button-component>
+
+                    </template>
+                    
+                </div>
+                
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={displayComponent}>
+                <div class="slds-grid slds-gutters slds-wrap">
+                    <div class="slds-col slds-size_1-of-2">
+                        <span class="slds-form-element slds-hide" data-id="Name">
+                            <label class="slds-form-element__label"><strong>Name</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                {applicantData.name}
+                            </div> 
+                        </span> 
+                        <span class="slds-form-element slds-hide" data-id="Father_Name">
+                            <label class="slds-form-element__label"><strong>Father Name</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                {applicantData.fatherName}
+                            </div> 
+                        </span> 
+                        <span class="slds-form-element slds-hide" data-id="Customer_Entity">
+                            <label class="slds-form-element__label"><strong>Customer Entity</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                {applicantData.customerEntity}
+                            </div> 
+                        </span> 
+                        <span class="slds-form-element slds-hide" data-id="Mobile_Number">
+                            <label class="slds-form-element__label"><strong><lightning-icon icon-name="utility:dialing" alternative-text="Contact" size="x-small" title="large size">
+                            </lightning-icon></strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                <lightning-formatted-phone value={applicantData.mobileNumber} ></lightning-formatted-phone> <!--SFAU-3785-->
+                            </div>
+                        </span>
+                        <span class="slds-form-element slds-hide" data-id="CIBIL">
+                            <label class="slds-form-element__label"><strong>CIBIL</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                <a href="" onclick={handleClick} target="_blank">{applicantData.cibil}</a>
+                            </div>
+                        </span>
+                        <span class="slds-form-element slds-hide" data-id="CFR">
+                            <label class="slds-form-element__label"><strong>CFR</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                {applicantData.cfr}
+                            </div>
+                        </span>
+                        <span class="slds-form-element slds-hide" data-id="ALM">
+                            <label class="slds-form-element__label"><strong>AML Status</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                {applicantData.aml}
+                            </div>
+                        </span>
+                        <!--1780,82-->
+                        <span class="slds-form-element slds-hide" data-id="Insurance_Type">
+                            <label class="slds-form-element__label"><strong>Insurance Type</strong></label>
+                            <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                
+                            </div> 
+                        </span> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-form-element slds-hide" data-id="Type">
+                                <label class="slds-form-element__label"><strong>Type</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.type}
+                                </div> 
+                            </span>
+                            <span class="slds-form-element slds-hide" data-id="PSL">
+                                <label class="slds-form-element__label"><strong>PSL/BSR</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.psl}
+                                </div> 
+                            </span> 
+                            <span class="slds-form-element slds-hide" data-id="Case_Category">
+                                <label class="slds-form-element__label"><strong>Case Category</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.caseCategory}
+                                </div> 
+                            </span> 
+                            <span class="slds-form-element slds-hide" data-id="Address">
+                                <label class="slds-form-element__label"><strong>Location/Address</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.address}
+                                </div>
+                            </span>
+                            <span class="slds-form-element slds-hide" data-id="FI">
+                                <label class="slds-form-element__label"><strong>FI</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    <a href={applicantData.fiLink} target="_blank">{applicantData.fi}</a>
+                                </div>
+                            </span>
+                            <span class="slds-form-element slds-hide" data-id="All_Validation">
+                                <label class="slds-form-element__label"><strong>Validation</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.allValidation}
+                                </div>
+                            </span>
+                            <span class="slds-form-element slds-hide" data-id="NegativeCheck">
+                                <label class="slds-form-element__label"><strong>Negative Check</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    {applicantData.negativeCheck}
+                                </div>
+                            </span>
+                            <template if:true={applicantData.displayValuationStatus}>
+	                            <span class="slds-form-element slds-hide" data-id="Valuation_Status">
+	                                <label class="slds-form-element__label"><strong>Valuation Status(Used)</strong></label>
+	                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+	                                    {applicantData.valuationStatus}
+	                                </div>
+	                            </span>
+                            </template>
+                            <!--1780,82-->
+                            <span class="slds-form-element slds-hide" data-id="Valuation_Type">
+                                <label class="slds-form-element__label"><strong>Type Of valuation</strong></label>
+                                <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                    TBD
+                                </div> 
+                            </span> 
+                                            
+                    </div>
+    
+                </div>
+
+            </template>
+            
+
+            
+        </div>
+    </article>
+
+    <template if:true={showCibilReport}>
+        <c-cibil-report-pop-over record-id={applicantData.applicantId} onback={handleBackFromCibil} hide-share-button="true" render-back-to-summary="true"></c-cibil-report-pop-over>
+    </template>
+    
+</template>

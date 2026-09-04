@@ -1,0 +1,190 @@
+<apex:component controller="AusfLoanApprovalEmailTemplate" access="global">
+    <apex:attribute name="AccId" type="Id" description="Id of the account" assignTo="{!accountId}"/>
+    <apex:attribute name="ApproverName" type="String" description="Id of the account"/>
+    <apex:attribute name="CustomerName" type="String" description="Id of the account"/>
+    <apex:attribute name="Grade" type="String" description="Id of the account"/>
+    <apex:attribute name="Profile" type="String" description="Id of the account"/>
+    <apex:attribute name="CibilScore" type="String" description="Id of the account"/>
+    <apex:attribute name="Scheme" type="String" description="Id of the account"/>
+    <apex:attribute name="Tenure" type="String" description="Id of the account"/>
+    <apex:attribute name="LoanAmount" type="String" description="Id of the account"/>
+    <apex:attribute name="IRR" type="String" description="TBD"/>
+    <apex:attribute name="SourcingChannel" type="String" description="Id of the account"/>
+    <apex:attribute name="SourcingChannelName" type="String" description="Id of the account"/>
+    <apex:attribute name="DealerName" type="String" description="Id of the account"/>
+    <apex:attribute name="RoName" type="String" description="Id of the account"/>
+    <apex:attribute name="RoMobileNumber" type="Integer" description="Id of the account"/>
+<html>
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .center {
+          text-align: center
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--<p>Dear {!ApproverName},</p>-->
+
+    <p>Request pricing approval:</p>
+
+    <p></p>
+
+    <p>Customer Details : {!CustomerName},{!Profile},{!Grade}</p>
+
+    <p>Residence: {!Vehicle.residence},{!Vehicle.stability}</p>
+
+    <p>CIBIL Score :{!CibilScore}</p>
+
+    <table style="width:100%">
+        <tr>
+            <th colspan="3" style="background:#FED8B1">Vehicle Detail
+            </th>
+        </tr>
+        <tr>
+            <td>{!Vehicle.product}</td>
+            <td>{!Vehicle.make}/{!Vehicle.model}/{!Vehicle.manufacturer}- {!Vehicle.manufacturerYear}</td>
+            <td>{!Vehicle.ltvCost}</td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    <table style="width:100%">
+        <tr>
+            <th colspan="3" style="background:#FED8B1">Loan Detail
+            </th>
+        </tr>
+        <tr>
+            <td>{!Scheme}</td>
+            <td>{!LoanAmount}/{!IRR}/{!Tenure}</td>
+        </tr>
+        <tr>
+            <td>RBP :{!IRR}</td>
+            <td>Reasons of RBP</td>
+        </tr>
+        <tr>
+            <td>PF :{!Vehicle.processingFees}</td>
+            <td>DC :{!Vehicle.documentationCharge}</td>
+        </tr>
+        <tr>
+            <td>Other charges :{!Vehicle.otherCharges}</td>
+            <td>LS:{!Vehicle.loanSurakshaCharge}</td>
+        </tr>
+        <tr>
+            <td>Motor insurance with AU</td>
+            <td></td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    <table style="width:100%">
+        <tr>
+            <th colspan="3" style="background:#FED8B1">Sourcing Dealer  Detail
+            </th>
+        </tr>
+        <tr>
+            <td>{!SourcingChannel}</td>
+            <td>{!SourcingChannelName}</td>
+        </tr>
+        <tr>
+            <td>Dealer Name:{!DealerName}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Mapped Dealer/ DSA payout</td>
+            <td>1.25%</td>
+        </tr>
+        <tr>
+            <td>Payout on this deal</td>
+            <td>in %age</td>
+        </tr>
+        <tr>
+            <td>DSM/ DSE Payout:</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>RO Name_ Mobile</td>
+            <td>{!Vehicle.roName}/{!Vehicle.roMobileNumber}</td>
+        </tr>
+        <tr>
+            <td>BM Name_ Mobile</td>
+            <td>{!Vehicle.branchManagerName}/{!Vehicle.branchManagerMobileNumber}</td>
+        </tr>
+    </table>
+
+    <br />
+    <br />
+    <table style="width:100%">
+        <tr>
+            <th colspan="3" style="background:#FED8B1">Performance
+            </th>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="center">WIRR Current Month</td>
+            <td class="center">WIRR last Month</td>
+        </tr>
+        <tr>
+            <td>Branch</td>
+            <td>{!Vehicle.wirr.branchCurrentWIRR}</td>
+            <td>{!Vehicle.wirr.branchLastWIRR}</td>
+        </tr>
+        <tr>
+            <td>Hub</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Region</td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>RPM -RO</td>
+            <td colspan="2" rowspan="2" class="center">
+            Unit/Amount/WIRR - current month:{!Vehicle.wirr.roWIRRCurrent}<br/>
+            Unit/Amount/WIRR - Last month:{!Vehicle.wirr.roWIRRLast}
+            </td>
+            
+        </tr>
+    </table>
+    <br/>
+    <br/>
+    <table style="width:100%">
+        <tr>
+            <th colspan="7" style="background:#FF7F50"><label style="color:white;">Pricing Deviations</label>
+            </th>
+        </tr>
+        <tr style="background:#E8E8E8">
+            <th>Department</th>
+            <th>Rule Type</th>
+            <th>Policy Value</th>
+            <th>Actual Value</th>
+            <th>Variance</th>
+            <th>Deviation level</th>
+            <th>Mitigates</th>
+        </tr>
+        <apex:repeat value="{!Vehicle.pricingDeviations}" var="deviation">
+            <tr>
+                <td>{!deviation.Department__c}</td>
+                <td>{!deviation.Deviation_Type__c}</td>
+                <td>{!deviation.Policy_Value__c}</td>
+                <td>{!deviation.Actual_Value__c}</td>
+                <td>{!deviation.Variance__c}</td>
+                <td>{!deviation.Level__c}</td>
+                <td>{!deviation.Mitigates__c}</td>
+            </tr>
+        </apex:repeat>
+    </table>
+</body>
+
+</html>
+</apex:component>

@@ -1,0 +1,112 @@
+<apex:page controller="LOSPDDApprovalCtrl" action="{!doInit}" renderAs="html" showHeader="false" sidebar="true" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" lightningStyleSheets="true">
+    <apex:slds />
+    <apex:outputPanel id="gr1" styleClass="centercontainer">
+        
+        <div class="slds-align_absolute-center"  style="align: centre; border-style: solid;width:50%;padding: 40px;">
+            <span>
+                Application Number:  {!loanNumber}<br/>
+                Branch Name		  :  {!branchName} <br/>
+                Customer Name     :  {!customerName} <br/>
+                <br/>
+                <br/>
+            </span>
+            <apex:outputpanel rendered="{!showTable}">
+                Below documents have been submitted by you - 
+                <br/>
+                
+                <html>
+                    <head>
+                        <style>
+                            .ft12 {
+                            font-family: Times;
+                            color: #000000;
+                            white-space: wrap;
+                            line-height: 140%;
+                            font-size: 12px;
+                            }
+                            .ft13 {            
+                            margin-top: 7%;
+                            }  
+                            .page-break {
+                            display:block;
+                            page-break-after:always;
+                            }
+                            
+                            .table-bordered {
+                            border: 1px solid #000;
+                            border-collapse : collapse;
+                            font-size : .7em;
+                            }
+                            thead>tr>th {
+                            vertical-align: bottom;
+                            border: 1px solid #000;
+                            border-spacing: 0;
+                            text-align:center;
+                            border-collapse: collapse;
+                            background : #7944a0;
+                            color:white;
+                            padding: 8px 15px;
+                            }
+                            
+                            td {
+                            vertical-align: bottom;
+                            border: 1px solid #000;
+                            border-spacing: 0;
+                            border-collapse: collapse;
+                            text-align:center;
+                            padding: 8px 15px;
+                            }
+                            
+                            .header>td{
+                            font-weight:bold;
+                            background : #c4c4c4;
+                            padding: 8px 15px;
+                            }
+                            
+                            .centercontainer {
+                                display: flex;
+                                justify-content: center;
+                                /* align-content: center; */
+                            }
+                            
+                            
+                        </style>
+                    </head>
+                    <body>
+                        <table width="100%" class="table-bordered ft12">
+                            <thead>
+                                <tr>
+                                    <th colspan="1"><b>Document Name</b></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <apex:repeat value="{!docCheckRecords}" var="doc" >
+                                    <tr>
+                                        
+                                        <td>
+                                            {!doc.Document_Master__r.Document_Name__c}
+                                        </td>
+                                    </tr>
+                                </apex:repeat> 
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                    </body>
+                </html>
+                <apex:form >
+                    <apex:outputPanel styleClass="slds-align_absolute-center">
+                        <apex:commandButton rendered="{!showAccept}" reRender="gr1,docAccepted" style="background-color: #a8732c;color: white;padding: 12px 28px;text-align: center; font-size: 12px;margin-botton:20px;" value="Accept" action="{!acceptDocuments}"></apex:commandButton>
+                    </apex:outputPanel>
+                </apex:form>
+            </apex:outputpanel>
+            <apex:outputpanel id="docAccepted" rendered="{!showSuccess}">
+                Documents are accepted Successfully
+            </apex:outputpanel>
+            <apex:outputpanel rendered="{!showAlreadySubmitted}">
+                Already Accepted Documents !!
+            </apex:outputpanel>
+        </div>
+    </apex:outputPanel>
+    
+</apex:page>

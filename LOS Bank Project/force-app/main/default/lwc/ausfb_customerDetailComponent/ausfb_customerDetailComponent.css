@@ -1,0 +1,121 @@
+.verifyButton {
+    margin-top: 20px;
+}
+
+.input-icon{
+    position: absolute;
+    bottom: 1px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+}
+
+.right-icon{
+    right: 1px;
+}
+ 
+.buttonIn {
+    width: 100%;
+    position: relative;
+}
+ 
+.input {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    outline: none;
+    height: 30px;
+    border-radius: 5px;
+}
+ 
+.button {
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+    right: 0px;
+    z-index: 2;
+    border: none;
+    top: 2px;
+    height: 30px;
+    cursor: pointer;
+    /* color: white; */
+    /* background-color: #1e90ff; */
+    transform: translateX(2px);
+    right: 4px;
+}
+
+.slds-form-element__label{
+    padding-top: 10px;
+}
+
+.content {
+    padding: 8px;
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+}
+
+img.product {
+    height: 120px;
+    max-width: initial;
+    pointer-events: none;
+}
+
+.title {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.photodiv{
+    min-height: 8.75rem;
+
+}
+.imagediv{
+    border: 1px solid black;
+    border-radius: 1rem;
+    border-width: initial;
+    height: 10rem;
+    width: 10rem;
+    max-width: initial;
+    pointer-events: none;
+}
+.uploaddiv{
+    border: 1px solid black;
+    border-radius: 1rem;
+    border-width: initial;
+    height: 10rem;
+    width: 10rem;
+    max-width: initial;
+}
+.camIcon{
+    width: 2rem;
+    height:2rem;
+    pointer-events: none;
+}
+.retakeButon{
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+@media (min-width: 992px) { 
+    .uploaddiv{
+        border: 1px solid black;
+        border-radius: 1rem;
+        border-width: initial;
+        height: 12rem;
+        width: 16rem;
+        max-width: initial;
+    }
+    .imagediv{
+        border: 1px solid black;
+        border-radius: 1rem;
+        border-width: initial;
+        height: 12rem;
+        width: 16rem;
+        max-width: initial;
+        pointer-events: none;
+    }
+    .retakeButon{
+        font-size: 1rem;
+        font-weight: 900;
+    }
+}

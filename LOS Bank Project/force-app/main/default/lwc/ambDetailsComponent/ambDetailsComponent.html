@@ -1,0 +1,485 @@
+<template>
+    <lightning-card>
+        <div if:true={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+        <div slot="actions" class="slds-float--right ">
+            <!--<lightning-icon icon-name="action:back" size="xx-small" alternative-text="Cancel" onclick={showParentTable}>
+            </lightning-icon>-->
+            <lightning-button class="buttonColor" label="Back" icon-position="right" icon-name="action:back"
+                variant="brand" onclick={showParentTable}></lightning-button>
+        </div>
+        <!--New Form
+        <template if:true={showAmbNewFormView}>
+            <div slot="actions" class="slds-float--right slds-m-around--small">
+                &nbsp; <lightning-button class="buttonColor" label="Submit" icon-position="right"
+                    icon-name="action:approval" variant="brand" onclick={handleSubmit}></lightning-button>
+            </div>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Name">Month</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="A/C Number"> Year </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="IFSC Code"> Balance on 5th </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Bank Name"> Balance as on 15th </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Branch Name"> Balance as on 25th </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Account Type"> Average 5, 15 , 25 </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Start DDMMYY"> AMB </div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="END DDMMYY">AMC </div>
+                        </th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <template for:each={ambList} for:item="item" for:index="index">
+                        <tr key={item.Id} class="slds-line-height_reset">
+
+                            <td data-label="Name" scope="row">
+                                <div class="slds-truncate">
+                                    <lightning-input type="text" variant="label-hidden" name="month"
+                                        onchange={handleChange} value={test}>
+                                    </lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="text" variant="label-hidden" name="year"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="balance5"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="balance15"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="balance25"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="averageBalance"
+                                        disabled="true" onchange={handleChange} value={averageBalanceVal}>
+                                    </lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="amb"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                            <td data-label="">
+                                <div class="slds-truncate">
+                                    <lightning-input type="number" variant="label-hidden" name="amc"
+                                        onchange={handleChange} value={test}></lightning-input>
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </template>
+                </tbody>
+            </table>
+
+            <template if:true={showModal}>
+                <lightning-card class="slds-align_absolute-center">
+                    <h1>
+                        Do you want to add New AMB Details?
+                        <div class="slds-align_absolute-center">
+                            <lightning-icon class="slds-m-around_small" icon-name="action:approval" size="x-small"
+                                alternative-text="" onclick={handleOkay}></lightning-icon>
+                            <lightning-icon class="slds-m-around_small" icon-name="action:reject" size="x-small"
+                                alternative-text="No" onclick={handleReject}>
+                            </lightning-icon>
+                        </div>
+                    </h1>
+                </lightning-card>
+            </template>
+        </template>
+        END New Form-->
+
+        <!--View Form -->
+        <template if:true={showView}>
+            <div class="table-container">
+                <!--<div slot="actions" class="button-container-inner slds-float--right  slds-var-m-top_medium">
+                   <lightning-button class="buttonColor" label="Add New" icon-position="right"
+                        icon-name="action:new" variant="brand" onclick={handleNew}>
+                        <lightning-button class="slds-m-left_small" label="Back" icon-position="right" icon-name="action:back"
+                        variant="brand" onclick={showParentTable}></lightning-button>
+                    </lightning-button>
+                </div>-->
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name">Month</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="A/C Number"> Year </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="IFSC Code"> Balance on 5th </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Bank Name"> Balance as on 15th </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Branch Name"> Balance as on 25th </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Account Type"> Average 5, 15 , 25 </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start DDMMYY"> AMB </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="END DDMMYY">AMC </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Edit">Edit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Delete">Delete</div>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <template for:each={ambViewRecords} for:item="relatedRecord" for:index="index">
+
+                            <tr key={relatedRecord.month} class=" rowHeight slds-line-height_reset">
+
+                                <td data-label="Name" scope="row">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.month}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.year}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.averageBalanceOn5th}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.averageBalanceOn15th}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.averageBalanceOn25th}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.averageBalance}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.amb}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    {relatedRecord.amc}
+
+                                </td>
+
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <template if:true={relatedRecord.manualcheck}>
+                                            <lightning-icon icon-name=action:edit size="x-small" alternative-text={relatedRecord.amb}
+                                                title={relatedRecord.month} data-id={relatedRecord.recordId}
+                                                data-record-name={relatedRecord.year} onclick={handleRowAction}>
+                                            </lightning-icon>
+                                        </template>
+                                    </div>
+
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <template if:true={relatedRecord.manualcheck}>
+                                            <lightning-icon icon-name=action:delete size="x-small"
+                                                title={relatedRecord.month} data-id={relatedRecord.recordId} alternative-text={relatedRecord.amb}
+                                                data-record-name={relatedRecord.year} onclick={handleRowDeleteAction}>
+                                            </lightning-icon>
+                                        </template>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <!-- </template>-->
+
+                        </template>
+                        <!--New Form Section -->
+                        <template if:true={showAmbNewFormView}>
+                        <template for:each={ambList} for:item="item" for:index="index">
+                            
+                            <!--<c-amb-child-component key={item.Id} onambdetails={handleAmbRecord}  ></c-amb-child-component>-->
+                            
+                            <tr key={item.Id} class="slds-line-height_reset">
+    
+                                <td data-label="Name" scope="row">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="month"
+                                            onchange={handleChange} value={test}>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="year"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="averageBalanceOn5th"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="averageBalanceOn15th"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="averageBalanceOn25th"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="averageBalance"
+                                            disabled="true" onchange={handleChange} value={averageBalanceVal}>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="amb"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="amc"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                            </tr> 
+                           
+                        </template>
+                        </template>
+                        <!--End New Form Section-->
+
+                    </tbody>
+                </table>
+
+                <!--New Form Button Section-->
+                <template if:true={showAmbNewFormView}>
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                    &nbsp; <lightning-button class="buttonColor" label="Back" icon-position="right"
+                            icon-name="action:back" variant="brand" onclick={handleNewFormBack}></lightning-button>
+                        <lightning-button class="buttonColor  slds-m-left_small" label="Submit" icon-position="right"
+                            icon-name="action:approval" variant="brand" onclick={handleSubmit}></lightning-button>
+
+                    </div>
+                   <!-- <template if:true={showModal}>
+                        <lightning-card class="slds-align_absolute-center">
+                            <h1>
+                                Do you want to add New AMB Details?
+                                <div class="slds-align_absolute-center">
+                                    <lightning-icon class="slds-m-around_small" icon-name="action:approval" size="x-small"
+                                        alternative-text="" onclick={handleOkay}></lightning-icon>
+                                    <lightning-icon class="slds-m-around_small " icon-name="action:reject" size="x-small"
+                                        alternative-text="No" onclick={handleReject}>
+                                    </lightning-icon>
+                                </div>
+                            </h1>
+                        </lightning-card>
+                    </template>-->
+                 </template>
+                 <template if:false={showAmbNewFormView}>
+                    <div  class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-button class="buttonColor" label="Add New" icon-position="right"
+                             icon-name="action:new" variant="brand" onclick={handleNew}>
+                             <lightning-button class=" buttonColor slds-m-left_small" label="Back" icon-position="right" icon-name="action:back"
+                             variant="brand" onclick={showParentTable}></lightning-button>
+                         </lightning-button>
+                     </div>
+                 </template>
+                 <!--END -New Form Button Section-->
+
+
+                <!--Average Details Section-->
+                <lightning-layout multiple-rows class="slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="6"
+                        large-device-size="3">
+                        <div class="component">
+                            <label class="slds-form-element__label"><b>Balance 5 Average</b></label>
+                            {balance5Average}
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="6"
+                        large-device-size="3">
+                        <div class="component">
+                            <label class="slds-form-element__label"><b>Balance 15 Average</b></label>
+                            {balance15Average}
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="6"
+                        large-device-size="3">
+                        <div class="component">
+                            <label class="slds-form-element__label"><b>Balance 25 Average</b></label>
+                            {balance25Average}
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="6"
+                    large-device-size="3">
+                    <div class="component">
+                        <label class="slds-form-element__label"><b> Average</b></label>
+                        {balanceAverage}
+                    </div>
+                </lightning-layout-item>
+
+
+                </lightning-layout>
+                <!--End-->
+            </div>
+        </template>
+        <!--End View Form -->
+
+        <!--Edit Form-->
+        <template if:true={showEditForm}>
+            <lightning-record-edit-form record-id={bankRecordId} object-api-name="Bank_Account_Records__c"
+                onsuccess={handleSuccess} onsubmit={handleEditSubmit} mode="readonly">
+                <lightning-messages></lightning-messages>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Month
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="month" onchange={handleEditChange}
+                            value={ambSelectedRecords.month}>
+                        </lightning-input>
+
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Year
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="year" onchange={handleEditChange}
+                            value={ambSelectedRecords.year}></lightning-input>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Balance on 5th
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="averageBalanceOn5th" onchange={handleEditChange}
+                            value={ambSelectedRecords.averageBalanceOn5th}></lightning-input>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Balance on 15th
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="averageBalanceOn15th" onchange={handleEditChange}
+                            value={ambSelectedRecords.averageBalanceOn15th}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Balance on 25th
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="averageBalanceOn25th" onchange={handleEditChange}
+                            value={ambSelectedRecords.averageBalanceOn25th}></lightning-input>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            Average 5, 15 , 25
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="averageBalance"
+                            onchange={handleEditChange} value={ambSelectedRecords.averageBalance}></lightning-input>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            AMB
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="amb" onchange={handleEditChange}
+                            value={ambSelectedRecords.amb}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <label class="slds-form-element__label">
+                            AMC
+                        </label>
+                        <lightning-input type="text" variant="label-hidden" name="amc" onchange={handleEditChange}
+                            value={ambSelectedRecords.amc}></lightning-input>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+                <!--Buttons Section-->
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        &nbsp; <lightning-button class="buttonColor" label="Back" icon-position="right"
+                                icon-name="action:back" variant="brand" onclick={handleBack}></lightning-button>
+                            <lightning-button class="buttonColor  slds-m-left_small" label="Submit" icon-position="right"
+                                icon-name="action:approval" variant="brand"  type="submit"></lightning-button>
+    
+                        </div>
+
+                   
+                </lightning-layout>
+
+            </lightning-record-edit-form>
+        </template>
+        <!--End Edit Form-->
+
+    </lightning-card>
+</template>

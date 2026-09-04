@@ -1,0 +1,150 @@
+<template>
+	<!--<div class="slds-is-relative">-->
+	<c-custom-spinner show-spinner={isLoading}></c-custom-spinner>
+	<!--<lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name="A">
+		<lightning-accordion-section name="A" label="Existing Collateral Detail">
+			<template if:true={boolNorecordsFull}>
+				No results Found
+			</template>-->
+			<template if:true={boolNorecordsFull}>
+				No results Found
+			</template>
+			<template if:false={viewMoreFull}>
+				<template if:true={totalApplicantsFull}>
+				<template for:each={totalApplicantsFull} for:item="applicant">
+					<lightning-layout key={applicant.strCollateralId}>
+						<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+							<lightning-card  data-id={applicant.strCollateralId} data-card="full">
+								<div slot="actions">
+								<!--<template if:true={objapplicant.boolIsSelected}> 
+									<lightning-icon icon-name="action:approval" class="slds-float_right" size="xx-small" alternative-text="Approved" title="Approved"></lightning-icon>
+								</template>-->
+								<div class="slds-grid slds-wrap slds-p-around_xx-small">
+									<!--<div class="slds-size_1-of-2">
+										<b><label class="slds-form-element__label">Considered</label></b>
+									</div>
+									<div class="slds-size_1-of-2"> 
+										<lightning-input type="checkbox" label="Considered" name="input1"></lightning-input>
+									</div>-->
+									<!--<lightning-input onchange={allSelected} label="Considered" type="checkbox"></lightning-input> disabled={applicant.isDisabled}-->
+									<lightning-input type="checkbox" data-id={applicant.strCollateralId} label="Considered" checked={applicant.isSelected} disabled={applicant.isDisabled}  value={applicant.index} data-element="subscribe-checkbox" name="input1" onchange={handleSelected}></lightning-input>
+								</div>
+								</div>
+								<h1 slot="title" onclick={viewMoreHandler} data-id={applicant.strCollateralId} class="no-wrap"><a>{applicant.strCollateralId}</a></h1>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Collateral ID</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strCollateralId}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Collateral Type</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strCollateralName}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Product Name Code</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strProductNameCode}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Linkage Type</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strCollateralType}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Name</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strPropertyOwnerName}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer ID</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strCustomerId}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Linked Account</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strAccountNumber}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Relationship</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{applicant.strAccountCustomerRelation}
+										</div>
+									</div>
+									<div class="component slds-hide" data-divid={applicant.strCollateralId}>
+										<div class="slds-grid slds-wrap slds-p-around_xx-small">
+											<div class="slds-size_1-of-2">
+												<b><label class="slds-form-element__label">Apportioned Loan Amount</label></b>
+											</div>
+											<div class="slds-size_1-of-2">
+												<lightning-input type="number" variant="label-hidden" label=""
+													required name="ApportionedAmount"
+													value={applicant.strApportionedAmount} onchange={handleValueChange}>
+												</lightning-input>
+											</div>
+										</div>
+									</div>
+							</lightning-card>
+						</lightning-layout-item>
+					</lightning-layout>
+					<div class="slds-var-p-bottom_x-small" key={applicant.strCollateralId}></div>
+				</template>
+				</template>
+				<!--<div class="slds-var-m-vertical_medium">
+					<c-lead-dedupe-pagination records={totalApplicantsFull} record-size="6" onpaginate={updateApplicantsHandler}></c-lead-dedupe-pagination>
+				</div>-->
+			</template>
+			<template if:true={viewMoreFull}>
+				<lightning-layout>
+					<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+						<lightning-card icon-name="standard:account" >
+							<h1 slot="title"><a>{applicantRecord.strCollateralId}</a></h1>
+							<div slot="actions">
+								<a><lightning-icon icon-name="utility:back" onclick={viewLessHandler} class="slds-float_right" size="small" alternative-text="Close" title="Close"></lightning-icon></a>
+							</div>
+							<template if:true={isAutomobileView}>
+								<c-ausf-collatral-detail collateral-list={collatralDetailAutomobile} section-title="Collatral Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={linkageDetailAutomobile} section-title="Linkage Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={automobileDetail} section-title="Automobile Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={valuationDetailAutombile} section-title="Valuation Detail"></c-ausf-collatral-detail>
+							</template>
+							<template if:true={isPropertyView}>
+								<c-ausf-collatral-detail collateral-list={collatralDetailProperty} section-title="Collatral Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={linkageDetailProperty} section-title="Linkage Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={propertyDetail} section-title="Property Detail"></c-ausf-collatral-detail>
+								<c-ausf-collatral-detail collateral-list={valuationDetailProperty} section-title="Valuation Detail"></c-ausf-collatral-detail>
+							</template>
+						</lightning-card>
+					</lightning-layout-item>
+				</lightning-layout>
+				<!--<c-ausf-customer-collateral-enquiry-details is-automobile-view ={isAutomobileView} is-property-view={isPropertyView} onviewall={viewLessHandler} applicant-record={applicantRecord} collatral-detail={collatralDetail} linkage-detail={linkageDetail} automobile-detail={automobileDetail} valuation-detail={valuationDetail} property-detail={propertyDetail}></c-ausf-customer-collateral-enquiry-details>-->
+				<!--<c-lead-Dedupe-C-R-M-_details onviewall={viewLessHandler} applicant-record={applicantRecord} applicant-input={applicantInput}></c-lead-Dedupe-C-R-M-_details>-->
+			</template>
+		<!--</lightning-accordion-section>
+	</lightning-accordion>-->
+	<!--</div>-->
+</template>

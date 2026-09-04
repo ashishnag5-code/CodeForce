@@ -1,0 +1,24 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="applicantList" description="This is the value for the component."
+        type="Applicant__c[]" required="true" assignTo="{!applicants}"/>
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection showHeader="true" title="Agri Land Verification" columns="1">
+            <table style="{!tableStyle}" width="100%">
+                <tr style="{!tableRowStyle}" width="100%">
+                    <th style="{!tableHeadDataStyle} !important" width="30%">Agri Land Owner Name</th>
+                    <th style="{!tableHeadDataStyle} !important" width="40%">Relation with Applicant</th>
+                    <th style="{!tableHeadDataStyle} !important" width="30%">Area of Land (Acre)</th>
+                </tr>
+                <apex:repeat value="{!applicants}" var="eachApp">
+                    <tr style="{!tableRowStyle}" width="100%">
+                        <td style="{!tableDataStyle}" width="30%">
+                            {!eachApp.RecordType.Name}_{!eachApp.Customer_Name__c}
+                        </td>
+                        <td style="{!tableDataStyle}" width="40%">{!eachApp.Relationship_with_applicant__c}</td>
+                        <td style="{!tableDataStyle}" width="30%">{!eachApp.Applicant_Financials__r[0].Agri_Land_in_Acres__c}</td>
+                    </tr>
+                </apex:repeat>
+            </table>
+        </apex:pageBlockSection>
+    </div>
+</apex:component>

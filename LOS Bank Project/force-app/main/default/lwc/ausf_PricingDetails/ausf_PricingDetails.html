@@ -1,0 +1,146 @@
+<template>
+    <article class="slds-card slds-card_boundary">
+        <div class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=standard:user size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Pricing Details</span>
+                        <!--<a href="#" class="slds-card__header-link slds-truncate" title="Address">
+                                    <span>Addresses ({recordCount})</span>
+                                </a>-->
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                </div>
+            </header>
+        </div>
+
+
+        <div class="slds-card__body slds-card__body_inner">
+            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                <li class="slds-size_1-of-1 slds-medium-size_3-of-3 slds-p-horizontal_small slds-p-bottom_small"
+                     data-record-name="ViewMoreInformation">
+                     <article class="slds-box">
+                    
+                        <div class="slds-card__body slds-card__body_inner">
+                            <lightning-layout horizontal-align="space" multiple-rows>
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="IRR_offered">
+                                        <label class="slds-form-element__label"><strong>IRR Offered</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.roi}
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="Rate_Variance">
+                                        <label class="slds-form-element__label"><strong>Rate Variance</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.rateVariance}
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="EMI_Due_Date">
+                                        <label class="slds-form-element__label"><strong>EMI Due Date</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.emiDate}
+                                            
+                                        </div>
+                                    </div>
+                                    <!--div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="WIRR_Current_Month">
+                                        <label class="slds-form-element__label"><strong>WIRR Current Month</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.wirrCurrentMonth}
+                                            
+                                        </div>
+                                    </div-->
+                                    
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" flexibility="auto">
+                                    <!--div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="Policy_Rate">
+                                        <label class="slds-form-element__label"><strong>Policy Rate</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.policyRate}
+                                            
+                                        </div>
+                                    </div-->
+                                    
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="EMI_Frequency">
+                                        <label class="slds-form-element__label"><strong>EMI Frequency</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.emiFrequency}
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="EMI_Amount">
+                                        <label class="slds-form-element__label"><strong>EMI Amount</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.emiAmount}
+                                            
+                                        </div>
+                                    </div>
+                                    <!--div class="slds-form-element slds-form-element_horizontal slds-hide" data-id="WIRR_Last_Month">
+                                        <label class="slds-form-element__label"><strong>WIRR Last Month</strong></label>
+                                        <div class="slds-form-element__control" style="margin: 0.6%;">
+                                            {pricingWrapper.wirrLastMonth}
+                                            
+                                        </div>
+                                    </div-->
+                                    
+                                </lightning-layout-item>
+                            </lightning-layout> 
+                            <h2 style="padding-bottom: 4px;"><strong style="margin-left: 3px;">WIRR</strong></h2>
+                            <table width="100%" style = "border: solid 2px darkgray;
+                                                         border-collapse: separate;
+                                                         width: 100% !important;
+                                                         text-align: center;
+                                                         border-radius: 7px !important;padding-top:7px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30%"></th>
+                                        <th style="width:30%">Current Month</th>
+                                        <th style="width:30%">Last Month</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch Aggregate</td>
+                                        <td>{pricingWrapper.aggregateBranchWIRRCurrMonth}</td>
+                                        <td>{pricingWrapper.aggregateBranchWIRRPrevMonth}</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px">RO Aggregate</td>
+                                        <td>{pricingWrapper.aggregateROWIRRCurrMonth}</td>
+                                        <td>{pricingWrapper.aggregateROWIRRPrevMonth}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch {pricingWrapper.branchLoanLabel}</td>
+                                        <td>{pricingWrapper.wirrCurrentMonth}</td>
+                                        <td>{pricingWrapper.wirrLastMonth}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td style="height : 29px !important; padding-left : 10px;">Branch {pricingWrapper.branchOverallLoanLabel}</td>
+                                        <td>{pricingWrapper.overall4_2WCurrMonth}</td>
+                                        <td>{pricingWrapper.overall4_2WPrevMonth}</td>
+                                        
+                                    </tr>
+                                </tbody>
+                             </table>
+                            
+    
+                            
+                        </div>
+                    </article>
+                </li>
+                    
+            </ul>
+            <!--End -->
+        </div>
+    </article>
+    
+</template>

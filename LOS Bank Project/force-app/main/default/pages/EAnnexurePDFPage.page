@@ -1,0 +1,50 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+                ul li{list-style-type:lower-alpha;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <h4 style="text-align: center;">
+                ANNEXURE AD
+            </h4><br/>
+            <p>To,<br/>
+            AU Small Finance Bank Limited<br/>
+            Jaipur, Rajasthan</p>
+            <br/>
+            <p>Dear Sir/Madam,</p>
+            <h4>RE: Acknowledgment Letter </h4>
+            <p style="text-align: justify;">Pursuant to the terms of MITC cum Key Fact Statement and Agreement for Loan cum Hypothecation dated {!todaysDate}<strong>(“Documents”)</strong> 
+                executed by the Borrower in favour of AU Small Finance Bank <strong>(“Bank”)</strong>, this acknowledgment letter is submitted whereby the 
+                Borrower confirms the Bank of having purchased the Asset, details whereof are in the below Schedule, out of the Loan amount 
+                sanctioned by the Bank under the aforesaid Documents. </p>
+            <p>The Borrower hereby confirms that:</p>
+            <ul>
+                <li>The delivery of the Asset as detailed below has been taken in good working condition.</li>
+                <li>The Asset is hypothecated and charged in favour of the Bank by way of first and exclusive charge on the Assets.</li>
+                <li>This Annexure AD submitted to the Bank shall form part and parcel of the aforesaid Documents.</li>
+            </ul>
+            <h4 style="text-align: center;">
+                SCHEDULE
+            </h4>
+            <h4 style="text-align: center;">
+                (ASSET DETAILS)
+            </h4>
+            <h4>Vehicle/Equipment Make and Model - {!collateral.Make__c} {!collateral.Model__c}</h4>
+            <h4>Engine Number - {!collateral.Engine_Number__c}</h4>
+            <h4>Vehicle / Equipment Registration No. - {!collateral.Registration_Number__c}</h4>
+            <h4>Year of Manufacture - {!collateral.Manufacture_year_month__c}</h4>
+            <h4>Chassis Number - {!collateral.Chasis_Number__c}</h4>
+            <h4>Insured Amount - {!collateral.IDV__c}</h4><br/>
+            <p>Thank You,<br/>
+            {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}<br/><br/>
+            </p>
+            <p>Date: {!todaysDate}</p>
+            <p>Place: {!loan.Branch_Master__r.Account_Name__c}</p>
+            <p>Enclosed: </p>
+        </body>
+    </html>
+</apex:page>

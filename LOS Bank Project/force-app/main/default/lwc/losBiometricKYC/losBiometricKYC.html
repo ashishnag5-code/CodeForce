@@ -1,0 +1,70 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 12-26-2022
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <lightning-card title="KYC - BIOMETRIC" icon-name="standard:lead">
+
+        <c-custom-spinner show-spinner={isloading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template-->
+        <template if:true={showBIOMETRICKYC}>
+            <div class="slds-var-m-around_small slds-var-m-bottom_large back">
+                <a onclick={showKYCOptions} class="slds-float_right slds-var-m-right_small">Back
+                </a>
+            </div>
+            <br/><br/>
+            <template if:true={isMobile}>
+                <lightning-layout>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small slds-var-m-around_xx-small slds-var-p-around_xx-small" flexibility="auto">
+                    <div class="slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-button disabled={disableButton} variant="brand" label="Fetch Details"
+                                title="Fetch Details" onclick={getApplicantDetails}>
+                        </lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-var-m-top_large">
+                <c-los-k-y-c-consent type="OTP" onsetconsent={updateConsent} consent={consent}></c-los-k-y-c-consent>
+            </div>
+            </template>
+            <template if:false={isMobile}>
+                <lightning-messages class="slds-hide" data-id='errorMessage'>
+                </lightning-messages>
+            </template>
+            
+        </template>
+    </lightning-card>
+    <template if:true={showAadhaarDetails}>
+        <!-- <c-generic-data-display pan-response ={aadharResponse} onback={showDetails} display-type="aadhaar"></c-generic-data-display> -->
+            <lightning-card icon-name="standard:account"
+                class="slds-card_boundary slds-var-p-around_small slds-var-m-around_large my-card" title="OCR Details">
+                <template if:true={isloading}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template>
+                <template for:each={dataValues} for:item="data">
+                    <div class="slds-grid slds-wrap slds-var-p-around_xx-small divComp" key={data.key}>
+                        <div class="slds-size_1-of-2">
+                            <b>{data.label}</b>
+                        </div>
+                        <div class="slds-size_1-of-2 textContent">
+                            {data.value}
+                        </div>
+                    </div>
+                </template>
+                <div class="slds-align_absolute-center slds-var-m-top_medium">
+                    <lightning-button  disabled={disableOkButton}  label="Ok" variant="brand" title="Ok" onclick={updateRecords} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                    <lightning-button  disabled={disableOkButton}  variant="brand" label="Not Ok" title="Save" onclick={backToBio} class="slds-var-m-left_x-small">
+                    </lightning-button>
+                </div>
+            </lightning-card>
+    </template>
+
+
+</template>

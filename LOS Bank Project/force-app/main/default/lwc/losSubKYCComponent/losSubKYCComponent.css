@@ -1,0 +1,11 @@
+.imageCss{
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+.back{
+    display: block;
+    width: 100%;
+  }

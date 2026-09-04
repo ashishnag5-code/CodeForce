@@ -1,0 +1,294 @@
+<template>
+    
+    <lightning-record-edit-form object-api-name="Field_Investigation__c" onsuccess={handleSuccess} onerror={handleError}
+        onsubmit={handleSubmit} record-id={recordId} onload={handleOnload}>
+        <div if:true={isLoaded} >
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+
+        <template lwc:if={renderApplicantComponent}>
+            <lightning-accordion allow-multiple-sections-open onsectiontoggle={handleSectionToggle} active-section-name={section}>
+                <!--Applicant Details Section-->
+                <lightning-accordion-section name="Applicant Details" label="Applicant Details">
+                    <div class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+                        <lightning-output-field field-name='Loan_Application__c' label="number"></lightning-output-field>
+                        <lightning-output-field field-name='FI_Allocation_Date_Time__c'></lightning-output-field>
+                        
+                        <!-- lightning-input type="date" label = "FI Conducted Date"  field-name='FI_Conducted_Date_Time__c' value={currentdate}></lightning-input>
+                        <lightning-input type="time" label = "FI Conducted Date" field-name='FI_Conducted_Date_Time__c' value={currenttime}></lightning-input -->
+                       
+                        <lightning-input-field field-name='FI_Conducted_Date_Time__c'></lightning-input-field>
+                        <lightning-output-field field-name='FI_Office_Name_Code_Agency_Name_Formula__c'></lightning-output-field>
+                        <!--R2 1801-->
+                        <lightning-output-field field-name='FI_Submission_Date_Time__c'></lightning-output-field>
+                        <div class='slds-form-element slds-form-element_horizontal slds-is-editing '>
+                            <label class="slds-form-element__label slds-m-left_xxx-small">Name of {applicantType}</label>
+                            <lightning-output-field field-name='Name_of_Party__c' variant="label-hidden"></lightning-output-field>
+                        </div>
+                        <lightning-output-field field-name='Father_Husband_Name__c'></lightning-output-field>
+                        <lightning-output-field field-name='Mobile_No__c'></lightning-output-field>
+                        <lightning-output-field field-name='DOB__c'></lightning-output-field>
+            
+                    </div>
+                    
+                </lightning-accordion-section>
+    
+                <!--Reference Details Section-->
+                <lightning-accordion-section name="Reference Details" label="Reference Details">
+                    <div class="slds-text-heading_x-small">Reference 1
+                        <div class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+                            <lightning-input-field field-name='Reference1_Name__c'></lightning-input-field>
+                            <!--lightning-input type="text" data-id="Reference1_Name__c" label="Name"></lightning-input-->
+                            <lightning-input-field field-name='Reference1_Address__c'></lightning-input-field>
+                            <!--lightning-textarea data-id="Reference1_Address__c" label="Address" max-length="300"></lightning-textarea-->
+                            <lightning-input-field field-name='Reference1_Pincode__c'></lightning-input-field>
+                            <!--lightning-input-field field-name='Reference1_Mobile__c'  data-id="Reference1_Mobile__c"></lightning-input-field-->
+                            <lightning-input type="text" data-id="Reference1_Mobile__c" onchange={handleMobileValueChange} value={initialMobileValuesMap.Reference1_Mobile__c} onfocusout={handleFocustOutMobile}
+                             label="Mobile"></lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-text-heading_x-small">Reference 2
+                        <div class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+                        
+                            <lightning-input-field field-name='Reference2_Name_c__c' ></lightning-input-field>
+                            <!--R2 1801-->
+                            <lightning-input-field field-name='Reference2_Address__c'></lightning-input-field>
+                            <lightning-input-field field-name='Reference2_Pincode__c'></lightning-input-field>
+                            <!--lightning-input-field field-name='Reference2_Mobile__c'  data-id="Reference2_Mobile__c"></lightning-input-field-->
+                            <lightning-input type="text" data-id="Reference2_Mobile__c" value={initialMobileValuesMap.Reference2_Mobile__c} onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} label="Mobile"></lightning-input>
+                        </div>
+                    </div>
+                </lightning-accordion-section>
+            </lightning-accordion>
+        </template>
+        
+        
+        
+
+        <!--Repetitive Question Section-->
+        
+        <template for:each={borrowerListNew} for:item="borrowerListMap">
+            <template if:true={checkPermanent}>
+                <template if:true={borrowerListMap.permanent}>
+                    <template if:true={checkTwoWheelerType}>
+                        <template if:true={borrowerListMap.twoWheeler}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+                                
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}>
+                                        <template if:true={borrowerListMap.isMandatory}>
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                        </template>
+                                        {borrowerListMap.helpText}
+                                    </label>
+                                    <template if:false={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input-field field-name={borrowerListMap.apiName} 
+                                        required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                        disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                    </template>
+                                    <template if:true={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                         onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                         label="Mobile" variant="label-hidden"></lightning-input>
+                                    </template>
+                                    
+                                </template>
+
+                                
+                                
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={checkAutoLoan}>
+                        <template if:true={borrowerListMap.autoLoan}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}>
+                                        <template if:true={borrowerListMap.isMandatory}>
+                                            <abbr class="slds-required" title="required">*</abbr>
+                                        </template>
+                                        {borrowerListMap.helpText}
+                                    </label>
+                                    <template if:false={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input-field field-name={borrowerListMap.apiName} 
+                                        required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                        disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                    </template>
+                                    <template if:true={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                         onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                         label="Mobile" variant="label-hidden"></lightning-input>
+                                    </template>
+                                    
+                                </template>
+                                <!--lightning-input-field field-name={borrowerListMap.apiName} data-id={borrowerListMap.apiName}
+                                    required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} 
+                                    disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field-->
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </template>
+
+
+
+
+            <template if:true={checkOffice}>
+                <template if:true={borrowerListMap.office}>
+                    <template if:true={checkAutoLoan}>
+                        <template if:true={borrowerListMap.autoLoan}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}><template
+                                        if:true={borrowerListMap.isMandatory}>
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                    </template>{borrowerListMap.helpText}
+                                </label>
+
+                                <template if:false={borrowerListMap.isMobileNumberField}>
+                                    <lightning-input-field field-name={borrowerListMap.apiName} 
+                                    required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                    disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                </template>
+                                <template if:true={borrowerListMap.isMobileNumberField}>
+                                    <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                     onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                     variant="label-hidden"></lightning-input>
+                                </template>
+
+                                <!--lightning-input-field field-name={borrowerListMap.apiName} data-id={borrowerListMap.apiName}
+                                    required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} 
+                                    disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field-->
+
+                                </template>
+                                
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={checkTwoWheelerType}>
+                        <template if:true={borrowerListMap.twoWheeler}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}><template
+                                        if:true={borrowerListMap.isMandatory}>
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                    </template>{borrowerListMap.helpText}
+                                    </label>
+
+                                    <template if:false={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input-field field-name={borrowerListMap.apiName} 
+                                        required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                        disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                    </template>
+                                    <template if:true={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                        onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                        label="Mobile" variant="label-hidden"></lightning-input>
+                                    </template>
+
+                                    <!--lightning-input-field field-name={borrowerListMap.apiName} onchange={handleOnChange} data-id={borrowerListMap.apiName}
+                                        disabled={borrowerListMap.isDisabled} class="validate" required={borrowerListMap.isMandatory} 
+                                        variant="label-hidden"></lightning-input-field-->
+
+                                </template>
+                                
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </template>
+
+
+            <template if:true={checkCurrent}>
+                <template if:true={borrowerListMap.current}>
+                    <template if:true={checkAutoLoan}>
+                        <template if:true={borrowerListMap.autoLoan}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}><template
+                                        if:true={borrowerListMap.isMandatory}>
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                    </template>{borrowerListMap.helpText}
+                                    </label>
+
+                                    <template if:false={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input-field field-name={borrowerListMap.apiName} 
+                                        required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                        disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                    </template>
+                                    <template if:true={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                        onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                        label="Mobile" variant="label-hidden"></lightning-input>
+                                    </template>
+                                    <!--lightning-input-field field-name={borrowerListMap.apiName} onchange={handleOnChange} data-id={borrowerListMap.apiName}
+                                        disabled={borrowerListMap.isDisabled} class="validate" required={borrowerListMap.isMandatory} 
+                                        variant="label-hidden"></lightning-input-field-->
+
+                                </template>
+                                
+                            </div>
+                        </template>
+                    </template>
+                    <template if:true={checkTwoWheelerType}>
+                        <template if:true={borrowerListMap.twoWheeler}>
+                            <div key={borrowerListMap.apiName}
+                                class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+                                <template if:false={borrowerListMap.isNotFirstTimeRendered}>
+                                    <label class="slds-form-element__label" for={borrowerListMap.helpText}><template
+                                        if:true={borrowerListMap.isMandatory}>
+                                        <abbr class="slds-required" title="required">*</abbr>
+                                    </template>{borrowerListMap.helpText}
+                                    </label>
+
+                                    <template if:false={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input-field field-name={borrowerListMap.apiName} 
+                                        required={borrowerListMap.isMandatory} class="validate" onchange={handleOnChange} data-id={borrowerListMap.apiName} 
+                                        disabled={borrowerListMap.isDisabled} variant="label-hidden"></lightning-input-field>
+                                    </template>
+                                    <template if:true={borrowerListMap.isMobileNumberField}>
+                                        <lightning-input type="text" data-id={borrowerListMap.apiName} required={borrowerListMap.isMandatory} disabled={borrowerListMap.isDisabled}
+                                                        onchange={handleMobileValueChange} onfocusout={handleFocustOutMobile} value={borrowerListMap.defaultValue}
+                                                        label="Mobile" variant="label-hidden"></lightning-input>
+                                    </template>
+                                    <!--lightning-input-field field-name={borrowerListMap.apiName} onchange={handleOnChange} data-id={borrowerListMap.apiName}
+                                        disabled={borrowerListMap.isDisabled} class="validate" required={borrowerListMap.isMandatory} 
+                                        variant="label-hidden"></lightning-input-field-->
+
+                                </template>
+                                
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </template>
+        </template>
+
+        <div class="slds-grid slds-align_absolute-center">
+
+            
+            <lightning-button onclick={handleBack} variant="brand-outline buttonColor" label="Back">
+            </lightning-button>
+            <lightning-button label={saveButtonName} type="submit" class="slds-m-left_x-small buttonColor" variant="brand">
+            </lightning-button></lightning-button>
+        </div>
+        <lightning-input-field field-name="Fill_Questionaire__c" class="slds-hide"></lightning-input-field>
+        <lightning-input-field field-name="Stage__c" class="slds-hide"></lightning-input-field>
+
+    </lightning-record-edit-form>
+
+</template>

@@ -1,0 +1,26 @@
+<template>
+    <!-- <template if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template> -->
+
+    <c-custom-spinner
+        show-spinner={isLoaded}
+        record-id={recordId}
+        spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+
+    <lightning-card title="Please select Next Approver">
+    <div class="slds-p-around_small">
+        <lightning-combobox
+            name="Approver"
+            label="Approver Name"
+            placeholder="Select Approver"
+            value={selectedApproverId}
+            onchange={handleChange}
+            options={statusOptions}>
+        </lightning-combobox>
+    </div>
+    <lightning-button label="Save" name={name}  onclick={handleSave} slot="footer"></lightning-button>
+</lightning-card>
+</template>

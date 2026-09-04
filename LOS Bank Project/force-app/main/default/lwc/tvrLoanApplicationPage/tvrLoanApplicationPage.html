@@ -1,0 +1,207 @@
+<template>
+    <c-common-toast></c-common-toast>
+
+    <!-- Internal observation -->
+    <c-custom-spinner
+        show-spinner={isLoaded}
+                spinner-image={spinnerImage}
+        >
+    </c-custom-spinner>
+
+    
+    <!-- <div if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div> -->
+    <!-- Internal observation -->
+
+    <div class="slds-box slds-theme--default">
+        <div class="slds-text-color_inverse slds-text-heading_large header" >
+                TVR
+        </div>
+        <table
+            class="slds-table slds-table_bordered slds-table_col-bordered slds-max-medium-table--stacked-horizontal slds-no-row-hover ">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate slds-cell-wrap" title="Name Of Employee">Name Of Employee</div>
+                    </th>
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate slds-cell-wrap" title="Employee ID">Employee ID</div>
+                    </th>
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate" title="Mobile Number">Mobile Number</div>
+                    </th>
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate" title="TVR Date">TVR Date</div>
+                    </th>
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate" title="TVR Done With">TVR Done With</div>
+                    </th>
+                    <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate" title="Remark">Remark</div>
+                    </th>
+                    <th class="slds-size_1-of-12 slds-cell-fixed" scope="col">
+                        <div class="slds-truncate" title="Delete">Delete</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={records} for:item="loadRec" for:index="loadIndex">
+                    <tr key={loadRec.Id} class="slds-hint-parent">
+                        <td class="slds-cell-wrap " data-label="Name Of Employee"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Select CheckBox">
+                                <lightning-formatted-text value={loadRec.Name_Of_Employee__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap " data-label="Employee ID"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Ro Name">
+                                <lightning-formatted-text value={loadRec.Employee_ID__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap" data-label="Mobile Number"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Employee Code">
+                                <lightning-formatted-text value={loadRec.Mobile_Number__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap" data-label="TVR Date"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Load Count">
+                                <lightning-formatted-text value={loadRec.TVR_Date__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap" data-label="TVR Done With"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Load Count">
+                                <lightning-formatted-text value={loadRec.TVR_Done_With__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap" data-label="Remark"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <div class="slds-cell-wrap" title="Load Count">
+                                <lightning-formatted-text value={loadRec.Remark__c}></lightning-formatted-text>
+                            </div>
+                        </td>
+                        <td class="slds-cell-wrap" data-label="Delete"
+                            style="padding: var(--lwc-tableCellSpacing,0.5rem) !important;">
+                            <template if:true={loadRec.isDeleteable}>
+                                <div class="slds-cell-wrap" title="Load Count">
+                                    <lightning-icon size="x-small" data-id={loadRec.Id} icon-name="action:delete"
+                                        onclick={handleDelete} alternative-text="Delete"
+                                        title="Delete"></lightning-icon>
+                                </div>
+                            </template>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+       
+    </div>
+    <lightning-record-edit-form object-api-name="TVR__c" onsuccess={handleSuccess} onsubmit={handleSubmit}  onerror={handleError}>
+        <lightning-messages></lightning-messages>
+        <div
+            class='slds-m-left_large slds-size_7-of-8 slds-form-element slds-form-element_horizontal slds-is-editing slds-m-vertical_small '>
+
+            <lightning-input-field field-name='TVR_Date__c' value={todayDate} onchange={handleTVRForm}
+                data-id="TVRDate" required></lightning-input-field>
+
+            <!--lightning-input-field field-name='Name_Of_Employee__c' value={Name} required></lightning-input-field-->
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    <abbr title="required" class="slds-required">*</abbr>
+                    <span class="">Employee Name</span>
+                </label>
+                <div class="slds-form-element__control">
+                    
+                        <lightning-input type="text" data-id="Name_Of_Employee__c" value={Name}
+                                         pattern="^[a-zA-Z ]*$" message-when-pattern-mismatch="Enter a Valid Name" variant="label-hidden"
+                                         onchange={handleNameChange} required>
+                        </lightning-input>
+                        
+                    
+                </div>
+            </div>
+
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    <abbr title="required" class="slds-required">*</abbr>
+                    <span class="">Employee Id</span>
+                </label>
+                <div class="slds-form-element__control">
+                    
+                        <lightning-input type="text" data-id="Employee_ID__c" value={employeeCode}
+                                         pattern="^[0-9]*$" message-when-pattern-mismatch="Please provide a valid employee id"
+                                         variant="label-hidden"
+                                         onchange={handleEmpIdChange} required>
+                        </lightning-input>
+                        
+                    
+                </div>
+            </div>
+            
+
+            <!--lightning-input-field field-name='Employee_ID__c' value={employeeCode} required></lightning-input-field-->
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">
+                    <span class="">{fieldLabelTVRDoneWith}</span>
+                </label>
+                <div class="slds-form-element__control">
+                    <div class="slds-select_container">
+                        <select class="slds-select" 
+                                onchange={selectionChangeHandler} 
+                                required>
+                            <option value="">Select</option>
+                            <template for:each={tvrDoneWithOptions} for:item="option">
+                                <option key={option.label} class="uiInputSelectOption" value={option.value}>{option.label}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <lightning-input-field field-name='TVR_Done_With__c' data-id="tvrDoneWith" class="slds-hide" value={tvrDoneWith}></lightning-input-field>
+
+            <!--lightning-input-field  field-name='Mobile_Number__c' value={mobileNumber} onchange={handleFieldChange} required></lightning-input-field-->
+            <template if:true={isTVRdonewithSelected}>
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label">
+                        <abbr title="required" class="slds-required">*</abbr>
+                        <span class="">Mobile Number</span>
+                    </label>
+                    <div class="slds-form-element__control">
+                            <lightning-formatted-text value={mobileNumber}></lightning-formatted-text>
+                        <!--
+                            <lightning-input type="text" data-id="Mobile_Number__c" value={mobileNumber}
+                                             pattern="^[0-9 ]*$" message-when-pattern-mismatch="Please provide a valid Phone Number"
+                                             variant="label-hidden" maxlength="10" minlength="10"
+                                             onchange={handlePhoneNumberChange} required>
+                            </lightning-input>
+                          -->  
+                        
+                    </div>
+                </div>
+            </template>
+            <lightning-input-field field-name='Remark__c' value={remarks} required></lightning-input-field>
+
+            <lightning-input-field field-name='Loan_Application__c' value={recordId}
+                class="slds-hide"></lightning-input-field>
+
+            <div class="slds-align_absolute-center slds-m-bottom_x-small">
+         
+                <lightning-button type="submit" variant="brand" label="Save"
+                    class="slds-m-right_x-small slds-float_right button" disabled={isLoaded} ></lightning-button>
+                    <lightning-button variant="brand" label="Cancel"
+                    class="slds-m-right_x-small slds-float_right button" onclick={closeQuickAction}></lightning-button>
+            </div>
+
+
+        </div>
+    </lightning-record-edit-form>
+
+
+
+
+</template>

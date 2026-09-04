@@ -1,0 +1,1141 @@
+<template>
+    <!--<div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>-->
+    <c-custom-spinner show-spinner={isLoaded}></c-custom-spinner>
+    <template if:true={isModalOpen}>
+        <c-ausf-update-loan-application is-modal-open={isModalOpen} scheme-record={schemeMasterRecord}
+            onshowloandetails={showDetails} onclosemodal={closeModal}></c-ausf-update-loan-application>
+    </template>
+    <template if:true={showLoanDetails}>
+        <c-loan-details class="component" record-id={loanApplicationRecord.Id} show-save=true
+            onshowvehicle={showVehicleDetail}>
+        </c-loan-details>
+    </template>
+    <!-- Existing Applicant Section-->
+    <!--<template if:false={editVehicleRecordPage}>-->
+    <template if:true={showVehicle}>
+        <template if:true={showSection}>
+            <lightning-card>
+                <!-- <article class="slds-card slds-card_boundary">-->
+                <div class="slds-card__header slds-grid ">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name=custom:custom31 size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+
+                                <a class="slds-card__header-link slds-truncate" title="Applicants"
+                                    onclick={handleGotoRelatedList}>
+                                    <span>Vehicle</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="slds-no-flex">
+                            <template if:true={showApplicantInsertion}>
+                                <lightning-icon icon-name=action:new size="small"
+                                    onclick={handleAdditionalInformationClick}></lightning-icon>
+                            </template>
+                        </div>
+                    </header>
+                </div>
+                <template if:true={showMainSection}>
+                    <lightning-layout>
+                        <lightning-layout-item size="12" small-device-size="6" medium-device-size="12"
+                            large-device-size="12">
+                            <div class="slds-card__body slds-card__body_inner">
+                                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                    <template if:false={viewMorePartial}>
+                                        <template for:each={applicantLst} for:item="relatedRecord">
+
+                                            <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-var-p-horizontal_small slds-var-p-bottom_small"
+                                                key={relatedRecord.Id} data-id={relatedRecord.Id}
+                                                data-record-name="ViewMoreInformation">
+                                                <article class="slds-box">
+                                                    <div class="slds-card__header slds-grid">
+                                                        <header
+                                                            class="slds-media slds-media_center slds-has-flexi-truncate">
+                                                            <div class="slds-media__figure">
+                                                                <lightning-icon icon-name=custom:custom31 size="small">
+                                                                </lightning-icon>
+                                                            </div>
+                                                            <div class="slds-media__body">
+                                                                <h2 class="slds-card__header-title">
+                                                                    <a class="slds-card__header-link slds-truncate"
+                                                                        title={relatedRecord.Name}
+                                                                        data-id={relatedRecord.Id}>{relatedRecord.Collateral_ID__c}</a>
+                                                                    <!--onclick={navigateToAppRecordPage}-->
+                                                                </h2>
+                                                            </div>
+                                                            <div class="slds-no-flex">
+                                                                <lightning-icon icon-name=action:edit size="x-small"
+                                                                    data-id={relatedRecord.Id}
+                                                                    data-record-name={relatedRecord.Name}
+                                                                    alternative-text={relatedRecord.Name}
+                                                                    title={relatedRecord.Name}
+                                                                    onclick={handleRowAction}>
+                                                                </lightning-icon>
+                                                                <lightning-icon icon-name=action:delete size="x-small"
+                                                                    data-id={relatedRecord.Id}
+                                                                    data-record-name={relatedRecord.Name}
+                                                                    alternative-text={relatedRecord.Name}
+                                                                    title={relatedRecord.Name}
+                                                                    onclick={handleDeleteAction}
+                                                                    if:true={canDeleteCollateral}
+                                                                ></lightning-icon>
+                                                            </div>
+                                                        </header>
+
+                                                    </div>
+                                                    <div class="slds-card__body slds-card__body_inner">
+                                                        <div class="slds-form-element">
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">Collateral
+                                                                        ID</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Collateral_ID__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">Collateral
+                                                                        Name</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Collateral_Name__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span
+                                                                        class="slds-form-element__label">Product</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Loan__r.Product__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">Make
+                                                                        variant</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Variant__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <template if:false={isSingleImplement}>
+                                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                    <div class="slds-size_1-of-2">
+                                                                        <span class="slds-form-element__label">Cost</span>
+                                                                    </div>
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Final_Cost__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">Apportioned
+                                                                        Loan
+                                                                        Amount</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.Apportioned_Loan_Amount__c}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">LTV offered %</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.LTV_offered__c}<span if:true={relatedRecord.LTV_offered__c}>%</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-grid slds-wrap slds-var-p-around_xx-small" if:true={isFourWheeler}>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <span class="slds-form-element__label">Ex-Showroom LTV</span>
+                                                                </div>
+                                                                <div class="slds-size_1-of-2">
+                                                                    <div class="slds-form-element__control">
+                                                                        <div class="slds-form-element__static">
+                                                                            {relatedRecord.LTV_offered_Ex_showroom__c}<span if:true={relatedRecord.LTV_offered_Ex_showroom__c}>%</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </li>
+                                        </template>
+                                    </template>
+                                </ul>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                <!--</article>-->
+                <!--</template>-->
+                <!--End -->
+
+            </lightning-card>
+        </template>
+        <!-- Add New Applicant Details-->
+        <template if:true={addNewApplicant}>
+            
+            <lightning-card title={title} icon-name="custom:custom31" class="slds-box">
+                <template if:false={showBackButton}>
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                        active-section-name={activeSections}>
+                        <lightning-accordion-section name="A" label="Vehicle Detail">
+                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+
+                                    <div class="component slds-hide" data-id="Collateral_ID__c">
+                                        <label class="slds-form-element__label"></abbr>Collateral ID</label>
+                                        <lightning-input type="text" variant="label-hidden" disabled
+                                            value={newVehicleRecord.Collateral_ID__c}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Collateral_Type__c">
+                                        <label class="slds-form-element__label"></abbr>Collateral Type</label>
+                                        <lightning-combobox name="Collateral_Type__c" data-name="Collateral_Type__c"
+                                            class="validate" variant="label-hidden" required disabled
+                                            value={newVehicleRecord.Collateral_Type__c} options={collateralTypes}
+                                            onchange={handleValueChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Product__c">
+                                        <label class="slds-form-element__label"></abbr>Product</label>
+                                        <lightning-input type="text" variant="label-hidden" disabled value={productName}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Collateral_Name__c">
+                                        <label class="slds-form-element__label"></abbr>Collateral Name</label>
+                                        <lightning-combobox name="Collateral_Name__c" label="Manufacturer"
+                                            data-name="Collateral_Name__c" class="validate" variant="label-hidden"
+                                            value={newVehicleRecord.Collateral_Name__c} options={collateralNames} disabled
+                                            onchange={handleCollateralName}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <!--  Parent Loan Application - (Primary Asset loan) -->
+                                    <div class="slds-large-size_1-of-1 slds-small-size_1-of-1 slds-x-small-size_1-of-1 slds-xx-small-size_1-of-1 slds-medium-size_1-of-1" lwc:if={isImplementLoan}>
+                                        <label class="slds-form-element__label">
+                                            Parent Loan Application
+                                        </label>
+                                        <div class="slds-grid slds-grid_reverse">
+                                            <lightning-input
+                                                type="text"
+                                                variant="label-hidden"
+                                                class=""
+                                                label="Parent Loan Application"
+                                                value={parentLoanIdentifier}
+                                                name="Parent_Loan__c"
+                                                style="flex:1;"
+                                                lwc:ref="parentLoan"
+                                                onchange={handleParentLoanChange}
+                                                disabled={isCollateralUpdatedPostCreation}
+                                            ></lightning-input>
+
+                                            <!-- Validate Parent Loan -->
+                                            <lightning-button
+                                                variant="base"
+                                                class="slds-is-absolute slds-p-right_small"
+                                                label={parentLoanValiationButtonLabel}
+                                                title="validate"
+                                                onclick={validateParentLoan}
+                                                disabled={allowParentLoanValidate}
+                                            ></lightning-button>
+                                        </div>
+                                    </div>
+
+                                    <template if:true={isSingleImplement}>
+                                        <div class="component" data-id="Implement_Type__c">
+                                            <label class="slds-form-element__label"></abbr>Implement Type</label>
+                                            <lightning-combobox name="Implement_Type__c" label="Manufacturer"
+                                                data-name="Implement_Type__c" class="validate" variant="label-hidden"
+                                                value={newVehicleRecord.Implement_Type__c} options={implementNames}
+                                                onchange={handleImplementName}>
+                                            </lightning-combobox>
+                                        </div>
+                                    </template>
+
+                                    <div class="component slds-hide" data-id="Make__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Make</label>
+                                        <lightning-combobox name="Make__c" label="Make" class="validate"
+                                            disabled={desableField.Make__c} required variant="label-hidden"
+                                            value={makeOptionValue} options={makeOptions} onchange={handleMakeValueChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Model__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Model</label>
+                                        <lightning-combobox name="Model__c" label="Model" class="validate"
+                                            disabled={desableField.Model__c} required variant="label-hidden"
+                                            value={modelOptionValue} options={modelOptions}
+                                            onchange={handleModelValueChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Variant__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Variant</label>
+                                        <lightning-combobox name="Variant__c" label="Variant__c" data-name="Variant__c"
+                                            class="validate" variant="label-hidden" required value={variantOptionValue}
+                                            options={variantOptions} disabled={desableField.Variant__c}
+                                            onchange={handleVaiantValueChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <!--<div class="component slds-hide" data-id="Collateral_Name__c">
+                                        <label class="slds-form-element__label"></abbr>Collateral Name</label>
+                                        <lightning-combobox name="Collateral_Name__c" label="Manufacturer"
+                                            data-name="Collateral_Name__c" class="validate" variant="label-hidden"
+                                            value={newVehicleRecord.Collateral_Name__c} options={collateralNames}
+                                            onchange={handleCollateralName}>
+                                        </lightning-combobox>
+                                    </div>-->
+                                    <template if:false={isSingleImplement}>
+                                        <div class="component slds-hide" data-id="HP__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>HP</label>
+                                            <lightning-input type="text" variant="label-hidden" disabled value={newVehicleRecord.HP__c}>
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    
+                                    <div class="component slds-hide" data-id="Vehicle_Color__c" if:false={isTwoWheeler}>
+                                        <!--<label class="slds-form-element__label">Vehicle Color</label>
+                                        <lightning-input type="text" variant="label-hidden" label=""
+                                            value={newVehicleRecord.Vehicle_Color__c} name="Vehicle_Color__c"
+                                            disabled={dataFromApi.Vehicle_Color__c} onchange={handleValueChange}>
+                                        </lightning-input>-->
+                                        <c-generic-custom-lookup name="Color_Code__c" label="Vehicle Colour"
+                                                record-type-name="Vehicle Color"
+                                                dependent-field-api="Color_Code__c" fieldapi="Color_Code__c"
+                                                object-name="Generic Master" s-object-api-name="Generic_Master__c" default-record-id={newVehicleRecord.Vehicle_Color__c}
+                                                onlookupselect={handleLookupSelect}>
+                                            </c-generic-custom-lookup>
+                                    </div>
+                                    
+                                    <template if:false={isSingleImplement}>
+                                        <div class="component slds-hide" data-id="Fuel_Type__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>Fuel Type</label>
+                                            <lightning-combobox name="Fuel_Type__c" label="Fuel Type" variant="label-hidden"
+                                                required value={newVehicleRecord.Fuel_Type__c}
+                                                disabled={desableField.Fuel_Type__c} class="validate" options={fuelTypeOptions}
+                                                onchange={handleValueChange}>
+                                            </lightning-combobox>
+                                        </div>
+
+
+                                        <div class="component slds-hide" data-id="Engine_Category__c" if:false={isTwoWheeler}>
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>Engine Category</label>
+                                            <lightning-combobox name="Engine_Category__c" label="Engine Category"
+                                                data-name="Engine_Category__c" class="validate" variant="label-hidden" required
+                                                value={newVehicleRecord.Engine_Category__c} options={engineCategoryOptions}
+                                                onchange={handleValueChange} disabled>
+                                            </lightning-combobox>
+                                        </div>
+                                    </template>
+
+                                    <div class="component slds-hide" data-id="Vehicle_Category__c" if:false={isTwoWheeler}>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Vehicle Category</label>
+                                        <lightning-combobox name="Vehicle_Category__c" class="validate"
+                                            label="Vehicle Usage" variant="label-hidden"
+                                            value={newVehicleRecord.Vehicle_Category__c}
+                                            disabled={desableField.Vehicle_Category__c} options={vehicleCategoryOptions} required
+                                            onchange={handleCategoryChange}>
+                                        </lightning-combobox>
+                                    </div>
+                                    <!--
+                                    <div class="component slds-hide" data-id="Scheme__c" if:false={isTwoWheeler}>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Scheme</label>
+                                        <lightning-combobox name="Scheme__c" class="validate" label="Scheme"
+                                            variant="label-hidden" value={schemeOptionValue}
+                                            disabled={desableField.Scheme__c} options={vehicleSchemeOptions} required
+                                            onchange={handleSchemeChange}>
+                                        </lightning-combobox>
+                                    </div>
+                                    -->
+
+                                    <div class="component slds-hide" data-id="Vehicle_Usage__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Vehicle Usage</label>
+                                        <lightning-combobox name="Vehicle_Usage__c" class="validate" label="Vehicle Usage"
+                                            variant="label-hidden" value={newVehicleRecord.Original_Vehicle_Usage__c} disabled
+                                            options={vehicleUsageOptions} required onchange={handleValueChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Manufacture_year_month__c">
+
+                                        <!--<label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Manufacture Month</label>
+                                        <lightning-input type="text" variant="label-hidden" class="validate"
+                                            label="manufactureMonth" required disabled={dataFromApi.manufactureMonth}
+                                            name="Manufacture_year_month__c" value={manufactureMonth}
+                                            onchange={handleValueChange}>
+                                        </lightning-input>-->
+                                        <!-- <lightning-combobox name="Manufacture_year_month__c" class="validate" label="manufactureMonth"
+                                            variant="label-hidden" value={manufactureMonth} disabled={dataFromApi.manufactureMonth}
+                                            options={manufactureMonthOptions} required onchange={handleValueChange}>
+                                        </lightning-combobox> -->
+
+
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Manufacture Year</label>
+                                        <!-- <lightning-input type="text" variant="label-hidden" class="validate" pattern="^(0|[1-9][0-9]*)$" 
+                                            label="manufactureYear" required disabled={dataFromApi.manufactureYear} message-when-pattern-mismatch="Only numbers can be entered"
+                                            name="Manufacture_year_month__c" value={manufactureYear} maxlength="4" formatter="number"
+                                            onchange={handleValueChange}>
+                                        </lightning-input> -->
+                                        <!-- Start - SFAU-2799 - Month not required if manufacture year is current year -->
+                                        <lightning-combobox
+                                            name="Manufacture_year_month__c"
+                                            options={manufactureYearOptions}
+                                            variant="label-hidden"
+                                            label="manufactureYear"
+                                            class="validate"
+                                            value={manufactureYear}
+                                            onchange={handleValueChange}
+                                        ></lightning-combobox>
+
+
+                                        <label class="slds-form-element__label" if:true={allowMonthSelection}>
+                                            <abbr class="slds-required" title="required">* </abbr>
+                                            Manufacture Month
+                                        </label>
+                                        <lightning-combobox if:true={allowMonthSelection}
+                                            name="Manufacture_year_month__c"
+                                            class="validate"
+                                            label="manufactureMonth"
+                                            variant="label-hidden"
+                                            value={manufactureMonth}
+                                            disabled={dataFromApi.manufactureMonth}
+                                            options={manufactureMonthOptions}
+                                            required
+                                            onchange={handleValueChange}>
+                                        </lightning-combobox>
+                                        <!-- END - SFAU-2799 - Month not required if manufacture year is current year -->
+                                    </div>
+                                
+
+                                    <div class="component slds-hide" data-id="Vehicle_Delivery__c" if:false={isTwoWheeler}>
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>{vehicleDeliveryLabel}</label>
+                                        <lightning-combobox name="Vehicle_Delivery__c" class="validate"
+                                            label="Vehicle Delivery Status" variant="label-hidden"
+                                            value={newVehicleRecord.Vehicle_Delivery__c}
+                                            disabled={desableField.Vehicle_Delivery__c} options={vehicleDeliveryOptions} required
+                                            onchange={handleVehicleDeliveryChange}>
+                                        </lightning-combobox>
+                                    </div>
+
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    
+                    <template if:false={isSingleImplement}>
+                        <template if:true={isCollateralRequired}>
+                            <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                                active-section-name={activeSections}>
+                                <lightning-accordion-section name="D" label="Collateral Dedupe Section">
+                                    <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                            class="slds-var-p-horizontal_small" flexibility="auto">
+                                            <div class="component" data-id="Engine_Number__c">
+                                                <label class="slds-form-element__label">
+                                                    <abbr class="slds-required" title="required">* </abbr>Engine no</label>
+                                                <lightning-input type="text" variant="label-hidden" label="Engine no" class="validate"
+                                                    required value={newVehicleRecord.Engine_Number__c} name="Engine_Number__c"
+                                                    onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </div>
+                                            <div class="component" data-id="Chasis_Number__c">
+                                                <label class="slds-form-element__label">
+                                                    <abbr class="slds-required" title="required">* </abbr>Chasis no</label>
+                                                <lightning-input type="text" variant="label-hidden" label="Chasis no" class="validate"
+                                                    required value={newVehicleRecord.Chasis_Number__c} name="Chasis_Number__c"
+                                                    onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                            class="slds-var-p-horizontal_small" flexibility="auto">
+                                            <div class="component" data-id="Date_of_Delivery__c">
+                                                <label class="slds-form-element__label">
+                                                    <abbr class="slds-required" title="required">* </abbr>Date of Delivery</label>
+                                                <lightning-input type="date" variant="label-hidden" class="validate" label="" 
+                                                    required name="Date_of_Delivery__c" value={newVehicleRecord.Date_of_Delivery__c} 
+                                                    onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </div>
+                                            <div class="component" data-id="Hours_Meter_Reading__c">
+                                                <label class="slds-form-element__label">
+                                                    <abbr class="slds-required" title="required">* </abbr>Hours Meter Reading</label>
+                                                <lightning-input type="number" variant="label-hidden" class="validate" label=""
+                                                    required name="Hours_Meter_Reading__c" min="0" max="100000"
+                                                    value={newVehicleRecord.Hours_Meter_Reading__c} onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                    <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                            class="slds-var-p-horizontal_small" flexibility="auto">
+                                            <lightning-button class="slds-align_absolute-center slds-var-m-left_x-small"
+                                                variant="brand" label="Search Collateral" title="Primary action" onclick={handleClick}>
+                                            </lightning-button>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                    <!--lightning-layout multiple-rows class="slds-var-p-bottom_small"-->
+                                        <template if:true={showSearchResult}>
+                                            <c-ausf-vehicle-record-card search-data={searchData} oncopycollateral={handleCopyToCollateral}
+                                                bool-from-cam-report=true>
+                                            </c-ausf-vehicle-record-card>
+                                        </template>
+                                        <template if:true={showErrorMessage}>
+                                            <p>{errorMessage}</p>
+                                        </template>
+                                    <!--/lightning-layout-->
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+                        </template>
+                    </template>
+
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                        active-section-name={activeSections}>
+                        <lightning-accordion-section name="B" label="Price Details">
+                            
+
+                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide" data-id="Ex_Showroom_Price__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Ex-Showroom Price</label>
+                                        <lightning-input type="number" variant="label-hidden" class="validate" label=""
+                                            required name="Ex_Showroom_Price__c"
+                                            value={newVehicleRecord.Ex_Showroom_Price__c} onchange={handleValueChange} disabled={desableField.Ex_Showroom_Price__c}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="Discount__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Discount</label>
+                                        <lightning-input type="number" variant="label-hidden" class="validate" label=""
+                                            required name="Discount__c" value={newVehicleRecord.Discount__c}
+                                            onchange={handleValueChange}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="Net_of_Discount_Price__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Net of Discount
+                                            Price</label>
+                                        <lightning-input type="number" variant="label-hidden" disabled label=""
+                                            class="validate" required name="Net_of_Discount_Price__c"
+                                            value={netOfDiscountPrice}>
+                                            <!--onchange={handleValueChange}-->
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="FMP__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>FMV</label>
+                                        <lightning-input type="number" variant="label-hidden" disabled label=""
+                                            class="validate" required name=""
+                                            value={newVehicleRecord.FMP__c}>
+                                            <!--onchange={handleValueChange}-->
+                                        </lightning-input>
+                                    </div>
+                                    <template if:false={isSingleImplement}>
+                                        <div class="component slds-hide" data-id="Cost_to_be_Consider__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>Cost to be Consider</label>
+                                            <lightning-helptext content="FMP and NOD whichever is less"></lightning-helptext>
+                                            <lightning-input type="number" variant="label-hidden" disabled label=""
+                                                class="validate" required name="Cost_to_be_Consider__c"
+                                                value={costToConsider}>
+                                                <!--onchange={handleValueChange}-->
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                    
+
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <!--
+                                    <div class="component slds-hide" data-id="Accessories__c">
+                                        <label class="slds-form-element__label">Accessories</label>
+                                        <lightning-input type="number" variant="label-hidden" label=""
+                                            name="Accessories__c" value={newVehicleRecord.Accessories__c}
+                                            onchange={handleValueChange}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="Other_Costs__c">
+                                        <label class="slds-form-element__label">Other Costs</label>
+                                        <lightning-input type="number" variant="label-hidden" class="" label=""
+                                            name="Other_Costs__c" value={newVehicleRecord.Other_Costs__c}
+                                            onchange={handleValueChange}>
+                                        </lightning-input>
+                                    </div>-->
+                                    <template if:false={isSingleImplement}>
+                                        <div class="component slds-hide" data-id="Insurance__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>Insurance</label>
+                                            <lightning-input type="number" variant="label-hidden" class="validate" label=""
+                                                required name="Insurance__c" value={newVehicleRecord.Insurance__c}
+                                                onchange={handleValueChange} disabled={desableField.Insurance__c}>
+                                            </lightning-input>
+                                        </div>
+                                        <div class="component slds-hide" data-id="RTO_Taxes__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>RTO Taxes</label>
+                                            <lightning-input type="number" variant="label-hidden" class="validate" label=""
+                                                required name="RTO_Taxes__c" value={newVehicleRecord.RTO_Taxes__c}
+                                                onchange={handleValueChange} disabled={desableField.RTO_Taxes__c}>
+                                            </lightning-input>
+                                        </div>
+                                        
+                                        <div class="component slds-hide" data-id="LS_API__c">
+                                            <label class="slds-form-element__label">
+                                                <abbr class="slds-required" title="required">* </abbr>LS</label>
+                                            <lightning-input type="number" variant="label-hidden" label="" required
+                                                class="validate" name="LS_API__c" onchange={handleValueChange} 
+                                                value={newVehicleRecord.LS_API__c} disabled={desableField.LS_API__c}>
+                                            </lightning-input>
+                                        </div>
+                                        
+                                        <div class="component slds-hide" data-id="Final_Cost__c">
+                                            <label class="slds-form-element__label">Final Cost</label>
+                                            <lightning-helptext content={finalCostCalculationLabel}>
+                                            </lightning-helptext>
+                                            <lightning-input type="number" variant="label-hidden" disabled label=""
+                                                name="Final_Cost__c" value={finalPrice}>
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                    <!--
+                                    <div class="component slds-hide" data-id="Apportioned_Loan_Amount__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Apportioned Loan
+                                            Amount</label>
+                                        <lightning-helptext content="Total Loan Amount"></lightning-helptext>
+                                        <lightning-input type="number" variant="label-hidden" label="" required
+                                            name="Apportioned_Loan_Amount__c" value={calculateApportionedLoanAmount}
+                                            disabled class="validate">
+                                        </lightning-input>
+                                    </div>
+                                    -->
+                                    <div class="component slds-hide" data-id="Apportioned_Loan_Amount__c">
+                                        <label class="slds-form-element__label">
+                                            <abbr class="slds-required" title="required">* </abbr>Loan Amount on Proposed Asset
+                                        </label>
+                                        <lightning-helptext content="Loan Amount on Proposed Assest"></lightning-helptext>
+                                        <lightning-input type="number" variant="label-hidden" label="" required
+                                            name="Apportioned_Loan_Amount__c" onchange={handleValueChange}
+                                            value={calculateApportionedLoanAmount} disabled={desableField.Apportioned_Loan_Amount__c}
+                                            class="validate">
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                        active-section-name={activeSections}>
+                        <lightning-accordion-section name="D" label="LTV Calculation">
+                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide" data-id="Approved_LTV__c">
+                                        <label class="slds-form-element__label"></abbr>Approved LTV(%)</label>
+                                        <lightning-input type="text" variant="label-hidden" label="" name="Approved_LTV__c"
+                                            disabled value={newVehicleRecord.Approved_LTV__c}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="Loan_Eligibilty__c">
+                                        <label class="slds-form-element__label">Loan Eligibilty</label>
+                                        <lightning-input type="text" variant="label-hidden" label=""
+                                            name="Loan_Eligibilty__c" disabled value={loanEligibilty}>
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide" data-id="LTV_offered__c">
+                                        <label class={ltvOfferedLabelStyles}>LTV offered %</label>
+                                        <lightning-input type="text" variant="label-hidden" label="" class={ltvOfferedStyles}
+                                            name="LTV_offered__c" value={ltvOffered}
+                                            onchange={handleValueChange}>
+                                        </lightning-input>
+                                        <p class="slds-text-color_error" if:true={isLTVInvalid}>The calculated LTV offered % can not be greater than 100.</p>
+                                    </div>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide">
+                                        <label class="slds-form-element__label"> LTV(%) on vehicle cost</label>
+                                        <lightning-input type="text" variant="label-hidden" label=""
+                                            name="LTV_on_Vehicle_Cost__c" disabled value={ltvofferedExshowroomPrice}>
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+
+                                <div class="component slds-hide">
+                                    <label class="slds-form-element__label">
+                                        On Road Price</label>
+                                    <lightning-input type="number" variant="label-hidden" label="" required
+                                        name="On_Road_Price__c" value={calculateOnRoadPrice} disabled={desableField.On_Road_Price__c}>
+                                        <!--onchange={handleValueChange} -->
+                                    </lightning-input>
+                                </div>
+
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide">
+                                        <label class="slds-form-element__label"> LTV(%) on On-Road Price</label>
+                                        <lightning-input type="text" variant="label-hidden" label=""
+                                            name="LTV_on_Vehicle_Cost__c" disabled value={ltvOfferedOnroadPrice}>
+                                        </lightning-input>
+                                    </div>
+
+                                    
+                                </lightning-layout-item>
+
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                    active-section-name={activeSections}>
+                    <lightning-accordion-section name="D" label="LTV Enhancer">
+                        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                            class="slds-var-p-horizontal_small" flexibility="auto">
+                            <div data-id="LTVEnhancer">
+                                <label class={ltvOfferedLabelStyles}>LTV Enhancer</label>
+                              <!--     <lightning-dual-listbox
+                                          options={LTVEnhancerOptions}
+                                          value={LTVEnhancerValues}
+                                          onchange={handleLTVEnhancerValueChange}>
+                                </lightning-dual-listbox>-->
+                        <lightning-checkbox-group
+                                name="options"
+                                options={options}
+                                value={LTVEnhancerValues}
+                                onchange={handleLTVEnhancerValueChange}>
+                            </lightning-checkbox-group> 
+                                <div class="slds-p-vertical_medium">
+                                <label class={ltvOfferedLabelStyles}>LTV Descriptions</label><br></br>
+                                <ol style="list-style: ordered;">
+                                <template for:each={LTVdescriptions} for:item="desc">
+                                    <div class="slds-p-around_xx-small" key={desc}>
+                                      <li >{desc}</li>  
+                                    </div>
+                                </template>
+                                </ol>
+                                </div>
+                            </div>
+                        </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    <!-- Scheme details section that only shows up for Two Wheeler --
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name={activeSections} if:true={isTwoWheeler}>
+                        <lightning-accordion-section name="E" label="Scheme Details">
+                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component" data-id="Vehicle_Category__c">
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>Vehicle Category</label>
+                                    <lightning-combobox name="Vehicle_Category__c" class="validate"
+                                        label="Vehicle Usage" variant="label-hidden"
+                                        value={newVehicleRecord.Vehicle_Category__c}
+                                        disabled={desableField.Fuel_Type__c} options={vehicleCategoryOptions} required
+                                        onchange={handleCategoryChange}>
+                                    </lightning-combobox>
+                                </div>
+
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="12" small-device-size="12" large-device-size="6" class="slds-var-p-horizontal_small" flexibility="auto">
+                                <div class="component" data-id="Scheme__c">
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>Scheme</label>
+                                    <lightning-combobox name="Scheme__c" class="validate" label="Scheme"
+                                        variant="label-hidden" value={schemeOptionValue}
+                                        disabled={desableField.Scheme__c} options={vehicleSchemeOptions} required
+                                        onchange={handleSchemeChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </lightning-layout-item>
+                            </lightning-layout>
+
+                            </lightning-accordion-section>
+                    </lightning-accordion-->
+                    <!--<template if:false={isSingleImplement}>-->
+                        <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                            active-section-name={activeSections}>
+                            <lightning-accordion-section name="C" label="Other Funding Items">
+                                <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                    <!--<lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                        class="slds-var-p-horizontal_small" flexibility="auto" if:true={isOtherFundingLeftPortionVisible}>
+                                        <div class="component slds-hide" data-id="Insurance_Funding__c" if:true={isInsuranceAvailable}>
+                                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                                                    <label class="slds-form-element__label">Insurance</label>
+                                                    <!<lightning-combobox name="Insurance_Funding__c" label="Engine Category" 
+                                                        data-name="Insurance_Funding__c" variant="label-hidden"
+                                                        value={newVehicleRecord.Insurance_Funding__c} options={insuranceFundingOptions}
+                                                        onchange={handleInsuranceFundingValueChange}>
+                                                    </lightning-combobox> >
+                                                    <lightning-input type="toggle" variant="label-hidden"
+                                                        message-toggle-active="Yes" message-toggle-inactive="No"
+                                                        checked={newVehicleRecord.Insurance_Funding__c}
+                                                        name="Insurance_Funding__c" onchange={handleToggleChange}>
+                                                    </lightning-input>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                                    <template if:true={newVehicleRecord.Insurance_Funding__c}>
+                                                        <label class="slds-form-element__label"></abbr>Insurance Amount</label><!validate>
+                                                        <lightning-input type="number" variant="label-hidden"
+                                                            label="Insurance Amount" class="insurance validate"
+                                                            name="Insurance_Value__c"
+                                                            value={newVehicleRecord.Insurance_Value__c}
+                                                            onchange={handleValueChange}>
+                                                        </lightning-input>
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </div>
+                                        <div class="component slds-hide" data-id="RTO_Tax__c" if:true={isRtoTaxAvailable}>
+                                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                                                    <label class="slds-form-element__label"></abbr>RTO Tax</label>
+                                                    <lightning-input type="toggle" variant="label-hidden" name="RTO_Tax__c"
+                                                        checked={newVehicleRecord.RTO_Tax__c} message-toggle-active="Yes"
+                                                        message-toggle-inactive="No" onchange={handleToggleChange}>
+                                                    </lightning-input>
+                                                    <!<lightning-combobox name="RTO_Tax__c" label="RTO Tax" data-name="RTO_Tax__c"
+                                                    variant="label-hidden" value={newVehicleRecord.RTO_Tax__c}
+                                                    options={rtoTaxOptions} onchange={handleRTOTaxValueChange}>
+                                                </lightning-combobox>>
+
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                                    <template if:true={newVehicleRecord.RTO_Tax__c}>
+                                                        <label class="slds-form-element__label"></abbr>RTO Amount</label>
+                                                        <lightning-input type="number" variant="label-hidden" label="RTO Amount"
+                                                            class="insurance validate" name="RTO_Tax_Value__c"
+                                                            value={newVehicleRecord.RTO_Tax_Value__c}
+                                                            onchange={handleValueChange}>
+                                                        </lightning-input>
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </div>
+                                        <div class="component slds-hide" data-id="Accessories_Funding__c" if:true={isAccessoriesAvailable}>
+                                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+
+                                                    <label class="slds-form-element__label">Accessories</label>
+                                                    <lightning-input type="toggle" variant="label-hidden"
+                                                        name="Accessories_Funding__c" message-toggle-active="Yes"
+                                                        message-toggle-inactive="No"
+                                                        checked={newVehicleRecord.Accessories_Funding__c}
+                                                        onchange={handleToggleChange}>
+                                                    </lightning-input>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                                    <template if:true={newVehicleRecord.Accessories_Funding__c}>
+                                                        <label class="slds-form-element__label"></abbr>Accessories
+                                                            Amount</label>
+                                                        <lightning-input type="number" variant="label-hidden" label="" class="insurance validate"
+                                                            name="Accessories_Value__c"
+                                                            value={newVehicleRecord.Accessories_Value__c}
+                                                            onchange={handleValueChange}>
+                                                        </lightning-input>
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </div>
+
+                                        <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                            class="slds-var-p-horizontal_small" flexibility="auto">
+                                            <div class="component slds-hide" data-id="Body__c">
+                                                <label class="slds-form-element__label"></abbr>Body</label>
+                                                <lightning-input type="toggle" variant="label-hidden" name="Body__c"
+                                                    message-toggle-active="Yes" message-toggle-inactive="No"
+                                                    checked={newVehicleRecord.Body__c} onchange={handleToggleChange}>
+                                                </lightning-input>
+                                            </div>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                            class="slds-var-p-horizontal_small" flexibility="auto">
+                                            <template if:true={newVehicleRecord.Body__c}>
+                                                <label class="slds-form-element__label"></abbr>Body Value</label>
+                                                <lightning-input type="number" variant="label-hidden" label=""
+                                                    name="Body_Value__c" value={newVehicleRecord.Body_Value__c}
+                                                    onchange={handleValueChange}>
+                                                </lightning-input>
+                                            </template>
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+
+
+                                    </lightning-layout-item>-->
+                                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                        class="slds-var-p-horizontal_small" flexibility="auto">
+                                        
+                                        <div class="component slds-hide" data-id="LS__c">
+                                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                                    <label class="slds-form-element__label"></abbr>LS</label>
+                                                    <!--<lightning-combobox name="LS__c" label="Engine Category" data-name="LS__c"
+                                                        variant="label-hidden" value={newVehicleRecord.LS__c}
+                                                        options={lsOptions} onchange={handleLsValueChange}>
+                                                    </lightning-combobox>-->
+                                                    <lightning-input type="toggle" variant="label-hidden" name="LS__c"
+                                                        message-toggle-active="Yes" message-toggle-inactive="No"
+                                                        checked={newVehicleRecord.LS__c} onchange={handleToggleChange}>
+                                                    </lightning-input>
+
+                                                </lightning-layout-item>
+                                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                                    <template if:true={newVehicleRecord.LS__c}>
+                                                        <label class="slds-form-element__label"></abbr>LS Amount</label>
+                                                        <lightning-input type="number" variant="label-hidden" label="" class="validate"
+                                                            name="LS_Value__c" value={newVehicleRecord.LS_Value__c}
+                                                            onchange={handleValueChange}>
+                                                        </lightning-input>
+                                                    </template>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                        </div>
+                                        <!--template if:true={newVehicleRecord.LS__c}>
+                                            <div class="component" data-id="Loan_suruksha_to_Whom__c">
+                                                <label class="slds-form-element__label">Loan suruksha to Whom</label>
+                                                <lightning-combobox name="Loan_suruksha_to_Whom__c" class="validate"
+                                                    label="Vehicle Usage" variant="label-hidden"
+                                                    value={newVehicleRecord.Loan_suruksha_to_Whom__c}
+                                                    disabled={desableField.Loan_suruksha_to_Whom__c} options={mdetailsOptions}
+                                                    onchange={handleValueChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                            <div class="component" data-id="Company_of_Loan_suraksha__c">
+                                                <label class="slds-form-element__label">Company of Loan suraksha</label>
+                                                <lightning-combobox name="Company_of_Loan_suraksha__c" class="validate"
+                                                    label="Vehicle Usage" variant="label-hidden"
+                                                    value={newVehicleRecord.Company_of_Loan_suraksha__c}
+                                                    disabled={desableField.Company_of_Loan_suraksha__c} options={companyofLoanSurakshaOptions} required
+                                                    onchange={handleValueChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                            <div class="component" data-id="Product_of_Loan_suraksha__c">
+                                                <label class="slds-form-element__label">Product of Loan suraksha</label>
+                                                <lightning-combobox name="Product_of_Loan_suraksha__c" class="validate"
+                                                    label="Vehicle Usage" variant="label-hidden"
+                                                    value={newVehicleRecord.Product_of_Loan_suraksha__c}
+                                                    disabled={desableField.Product_of_Loan_suraksha__c} options={productofLoanSurakshaOptions} required
+                                                    onchange={handleValueChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                        </template-->
+                                    </lightning-layout-item>
+                                </lightning-layout>
+
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    <!--</template>-->
+                    <!--
+                    <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                        active-section-name={activeSections}>
+                        <lightning-accordion-section name="D" label="Combined LTV Calculation">
+                            <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide" data-id="Total_Loan_Amount__c">
+                                        <label class="slds-form-element__label"></abbr>Total Loan Amount</label>
+                                        <lightning-input type="text" variant="label-hidden" label="" name="Total_Loan_Amount__c"
+                                            disabled value={calculateTotalLoanAmount}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="component slds-hide" data-id="Vehicle_Cost__c">
+                                        <label class="slds-form-element__label">Vehicle Cost</label>
+                                        <lightning-helptext content={finalCostCalculationLabel}>
+                                        </lightning-helptext>
+                                        <lightning-input type="number" variant="label-hidden" disabled label=""
+                                            name="Vehicle_Cost__c" value={vehicleCost}>
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                                    class="slds-var-p-horizontal_small" flexibility="auto">
+                                    <div class="component slds-hide" data-id="Final_Vehicle_Cost__c">
+                                        <label class="slds-form-element__label">Final Vehicle Cost</label>
+                                        <lightning-helptext content={finalCostCalculationLabel}>
+                                        </lightning-helptext>
+                                        <lightning-input type="number" variant="label-hidden" disabled label=""
+                                            name="Final_Vehicle_Cost__c" value={finalVehicleCost}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="LTV_on_Vehicle_Cost__c">
+                                        <label class="slds-form-element__label"> LTV(%) on vehicle cost</label>
+                                        <lightning-input type="text" variant="label-hidden" label=""
+                                            name="LTV_on_Vehicle_Cost__c" disabled value={ltvofferedExshowroomPrice}>
+                                            <!onchange={handleValueChange}>
+                                        </lightning-input>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="LTV_offered_On_final_cost__c">
+                                        <label class={ltvOfferedLabelStyles}>LTV(%) on Final vehicle cost</label>
+                                        <lightning-input type="text" variant="label-hidden" label="" class={ltvOfferedStyles}
+                                            name="LTV_offered_On_final_cost__c" disabled value={ltvOfferedOnFinalCost}>
+                                        </lightning-input>
+                                        <p class="slds-text-color_error" if:true={isLTVInvalid}>The calculated LTV offered % can not be greater than 100.</p>
+                                    </div>
+
+                                    <div class="component slds-hide" data-id="Quantity__c">
+                                        <label class="slds-form-element__label"></abbr>Quantity</label>
+                                        <lightning-input type="number" variant="label-hidden" label="" name="Quantity__c"
+                                            value={newVehicleRecord.Quantity__c} disabled>
+                                        </lightning-input>
+                                    </div>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    -->
+                    
+                    <!--<template if:false={showCBSCollDetail}>-->
+                        <lightning-accordion allow-multiple-sections-open class="example-accordion" active-section-name="A">
+                            <lightning-accordion-section name="A" label="Existing Collateral Detail">
+                                <!--<template if:true={showApplicantSelection}>-->
+                                    <c-applicant-selection record-val={recordId} onselection={handleChange} label-text={labelVal}></c-applicant-selection>
+                                <!--</template>-->
+                                <c-ausf-existing-collateral-detail-card loan-id={recordId} existing-collateral-list={existingCollateralListCBS} label="Existing Collaterals" onexistingcollateral={handleActionOnExistingCollateral}></c-ausf-existing-collateral-detail-card>
+                                <template if:true={showCollateral}>
+                                    <c-ausf-customer-collateral-enquiry is-checked={isChecked} bool-norecords-full={boolNorecordsFull} total-applicants-full={totalApplicantsFull} onselectedcoll={getSelectedCollateral} ondeletedcoll={getDeletedCollateral}></c-ausf-customer-collateral-enquiry>
+                                </template>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                        
+                    <!--</template>-->
+
+                    <!--<template if:true={showCBSCollDetail}>
+                        <c-ausf-existing-collateral-detail-card existing-collateral-list={existingCollateralListCBS} label="Existing Collaterals" onexistingcollateral={handleActionOnExistingCollateral}></c-ausf-existing-collateral-detail-card>
+                    </template>-->
+
+                </template>
+                <template if:true={isTractor}>
+                    <template if:false={showBackButton}>
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                            <lightning-button variant="brand-outline" class="slds-var-m-left_medium" label="Additional Collateral Detail" onclick={handleAdditionalClick} ></lightning-button>
+                        </div>
+                    </template>
+                    <template if:true={showManualCollDetail}>
+                        <c-ausf-add-manual-collateral record-id={recordId}></c-ausf-add-manual-collateral>
+                    </template>
+                    <!--<template if:true={showBackButton}>
+                        <template if:false={showManualCollDetail}>
+                            <c-ausf-add-manual-collateral record-id={recordId}></c-ausf-add-manual-collateral>
+                        </template>
+                        <template if:true={showManualCollDetail}>
+                            <c-ausf-existing-collateral-detail-card existing-collateral-list={existingCollateralListManual} label="Manually Added Collaterals" onexistingcollateral={handleActionOnExistingCollateral}></c-ausf-existing-collateral-detail-card>
+                        </template>
+                    </template>-->
+                </template>
+                <lightning-layout multiple-rows class="slds-var-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <template if:true={showCancelButton}>
+                            <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+                                onclick={handleCancelForm}></lightning-icon>
+                        </template>
+                        <template if:false={showBackButton}>
+                            <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                            class="slds-var-m-left_small" onclick={handleSubmitForm}></lightning-icon>
+                        </template>
+                        <template if:true={showBackButton}>
+                        <lightning-icon icon-name="action:back" size="x-small" alternative-text="Back"
+                            class="slds-var-m-left_small" onclick={handleBack}></lightning-icon>
+                        </template>
+                    </div>
+                </lightning-layout>
+            </lightning-card>
+        </template>
+    </template>
+    <!--</template>-->
+    <!--<template if:true={editVehicleRecordPage}>
+        <c-generic-wizard record-id={recordId} bool-re-fetch-data={boolReFetchData}
+            vehicle-id-for-edit={vehicleIdForEdit} flow-name={flowName} child-to-flow={childToFlow}></c-generic-wizard>
+    </template>-->
+</template>

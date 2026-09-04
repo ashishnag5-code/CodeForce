@@ -1,0 +1,384 @@
+<template>
+	<!--<div if:true={isLoaded} class="slds-is-relative">
+		<lightning-spinner alternative-text="Loading..." variant="brand">
+		</lightning-spinner>
+	</div>-->
+	<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+	<c-co-applicant-validation-message record-id={recordId}></c-co-applicant-validation-message>
+	<!-- Existing Applicant Section-->
+	<template if:true={showMainSection}>
+		<template if:false={addNewApplicant}>
+			<div class="slds-card__header slds-grid ">
+				<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					<div class="slds-media__figure">
+						<lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+					</div>
+					<div class="slds-media__body">
+						<h2 class="slds-card__header-title">
+
+							<a class="slds-card__header-link slds-truncate" title="Applicants"
+								onclick={handleGotoRelatedList}>
+								<span>Applicants ({recordCount})</span>
+							</a>
+						</h2>
+					</div>
+					<div class="slds-no-flex">
+						<template if:true={showApplicantInsertion}>
+							<lightning-icon icon-name=action:new size="small"
+								onclick={handleAdditionalInformationClick}></lightning-icon>
+						</template>
+					</div>
+				</header>
+			</div>
+
+
+			<div class="slds-card__body slds-card__body_inner">
+				<ul class="slds-grid slds-wrap slds-grid_pull-padded">
+					<template if:false={viewMorePartial}>
+						<template for:each={applicantLst} for:item="relatedRecord">
+
+							<li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+								key={relatedRecord.Id} data-id={relatedRecord.Id}
+								data-record-name="ViewMoreInformation">
+								<article class="slds-box">
+									<div class="slds-card__header slds-grid">
+										<header class="slds-media slds-media_center slds-has-flexi-truncate">
+											<div class="slds-media__figure">
+												<lightning-icon icon-name=custom:custom9 size="small">
+												</lightning-icon>
+											</div>
+											<div class="slds-media__body">
+												<h2 class="slds-card__header-title">
+													<a class="slds-card__header-link slds-truncate"
+														title={relatedRecord.Name} data-id={relatedRecord.Id}
+														onclick={navigateToAppRecordPage}>{relatedRecord.Applicant_Name__c}</a>
+												</h2>
+											</div>
+											<div class="slds-no-flex slds-grid">
+												<!--added by Gaurav to show swap icon only on QDE stage (Bug:SFAU-2682)-->
+												<!--Change START-->
+												<template if:true={isShowSwap}>
+													<div class="slds-size_1-of-3">
+														<lightning-icon icon-name=action:change_record_type
+															size="x-small" data-id={relatedRecord.Id} data-button="swap"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name}
+															title={relatedRecord.Name} onclick={handleRowAction}>
+														</lightning-icon>
+													</div>
+													<template if:true={isShowDelete}>
+                                                        <template if:false={relatedRecord.isApplicant}>
+                                                            <div class="slds-size_1-of-3">
+                                                                <lightning-icon icon-name=action:delete size="x-small"
+                                                                    data-id={relatedRecord.Id} data-button="delete"
+                                                                    data-record-name={relatedRecord.Name}
+                                                                    alternative-text={relatedRecord.Name}
+                                                                    title={relatedRecord.Name} onclick={handleRowAction}>
+                                                                </lightning-icon>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <div class="slds-size_1-of-3 slds-p-left_xxx-small">
+                                                        <lightning-icon icon-name=action:edit size="x-small"
+                                                            data-id={relatedRecord.Id} data-button="edit"
+                                                            data-record-name={relatedRecord.Name}
+                                                            alternative-text={relatedRecord.Name}
+                                                            title={relatedRecord.Name} onclick={handleRowAction}>
+                                                        </lightning-icon>
+                                                    </div>
+                                                </template>
+                                                <template if:false={isShowSwap}>
+                                                    <template if:true={isShowDelete}>
+                                                        <template if:false={relatedRecord.isApplicant}>
+                                                            <div class="slds-size_1-of-2">
+                                                                <lightning-icon icon-name=action:delete size="x-small"
+                                                                    data-id={relatedRecord.Id} data-button="delete"
+                                                                    data-record-name={relatedRecord.Name}
+                                                                    alternative-text={relatedRecord.Name}
+                                                                    title={relatedRecord.Name} onclick={handleRowAction}>
+                                                                </lightning-icon>
+                                                            </div>
+                                                        </template>
+
+                                                    </template>
+
+													<div class="slds-size_1-of-2">
+														<lightning-icon icon-name=action:edit size="x-small"
+															data-id={relatedRecord.Id} data-button="edit"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name}
+															title={relatedRecord.Name} onclick={handleRowAction}>
+														</lightning-icon>
+													</div>
+												</template>
+												<!--Change END-->
+											</div>
+										</header>
+									</div>
+									<div class="slds-card__body slds-card__body_inner">
+										<div class="slds-form-element" key={relatedRecord.Id}>
+
+											<span class="slds-form-element__label">Name</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Customer_Name__c}
+												</div>
+											</div>
+											<template if:true={relatedRecord.isIndividual}>
+												<span class="slds-form-element__label">Bureau Score</span>
+												<div class="slds-form-element__control">
+													<div class="slds-form-element__static">
+														{relatedRecord.Bureau_Score__c}
+													</div>
+												</div>
+											</template>
+
+											<span class="slds-form-element__label">Customer Type</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Customer_Type__c}
+												</div>
+											</div>
+											<span class="slds-form-element__label">Record Type</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.RecordType.Name}
+												</div>
+											</div>
+											<!--SFAU-3806-->
+											<span class="slds-form-element__label">Relationship with applicant</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Relationship_with_applicant__c}
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="slds-card__footer">
+										<lightning-button data-id={relatedRecord.Id} variant="neutral"
+											label="Customer Detail" onclick={handleCustomerDetail}></lightning-button>
+									</div>
+								</article>
+							</li>
+						</template>
+					</template>
+				</ul>
+			</div>
+		</template>
+	</template>
+	<!--End -->
+
+	<!-- In Active Applicant Section-->
+	<template if:true={showInActiveSection}>
+		<template if:false={addNewApplicant}>
+			<div class="slds-card__header slds-grid ">
+				<header class="slds-media slds-media_center slds-has-flexi-truncate">
+					<div class="slds-media__figure">
+						<lightning-icon icon-name=custom:custom9 size="medium"></lightning-icon>
+					</div>
+					<div class="slds-media__body">
+						<h2 class="slds-card__header-title">
+
+							<a class="slds-card__header-link slds-truncate" title="Applicants"
+								onclick={handleGotoRelatedList}>
+								<span>In-Active Applicants ({inactiveRecordCount})</span>
+							</a>
+						</h2>
+					</div>
+					<!--div class="slds-no-flex">
+						<template if:true={showApplicantInsertion}>
+							<lightning-icon icon-name=action:new size="small"
+								onclick={handleAdditionalInformationClick}></lightning-icon>
+						</template>
+					</div-->
+				</header>
+			</div>
+
+
+			<div class="slds-card__body slds-card__body_inner">
+				<ul class="slds-grid slds-wrap slds-grid_pull-padded">
+					<template if:false={viewMorePartial}>
+						<template for:each={inactiveApplicantList} for:item="relatedRecord">
+
+							<li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+								key={relatedRecord.Id} data-id={relatedRecord.Id}
+								data-record-name="ViewMoreInformation">
+								<article class="slds-box">
+									<div class="slds-card__header slds-grid">
+										<header class="slds-media slds-media_center slds-has-flexi-truncate">
+											<div class="slds-media__figure">
+												<lightning-icon icon-name=custom:custom9 size="small">
+												</lightning-icon>
+											</div>
+											<div class="slds-media__body">
+												<h2 class="slds-card__header-title">
+													<a class="slds-card__header-link slds-truncate"
+														title={relatedRecord.Name} data-id={relatedRecord.Id}
+														onclick={navigateToAppRecordPage}>{relatedRecord.Applicant_Name__c}</a>
+												</h2>
+											</div>
+											<div class="slds-no-flex slds-grid">
+												<!--added by Gaurav to show swap icon only on QDE stage (Bug:SFAU-2682)-->
+												<!--Change START-->
+												<!--template if:true={isShowSwap}>
+													<div class="slds-size_1-of-3">
+														<lightning-icon icon-name=action:change_record_type
+															size="x-small" data-id={relatedRecord.Id} data-button="swap"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name}
+															title={relatedRecord.Name} onclick={handleRowAction}>
+														</lightning-icon>
+													</div>
+													<template if:true={isShowDelete}>
+														<div class="slds-size_1-of-3">
+															<lightning-icon icon-name=action:delete size="x-small"
+																data-id={relatedRecord.Id} data-button="delete"
+																data-record-name={relatedRecord.Name}
+																alternative-text={relatedRecord.Name}
+																title={relatedRecord.Name} onclick={handleRowAction}>
+															</lightning-icon>
+														</div>
+													</template>
+													<div class="slds-size_1-of-3 slds-p-left_xxx-small">
+														<lightning-icon icon-name=action:edit size="x-small"
+															data-id={relatedRecord.Id} data-button="edit"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name}
+															title={relatedRecord.Name} onclick={handleRowAction}>
+														</lightning-icon>
+													</div>
+												</template>
+												<template if:false={isShowSwap}>
+													<template if:true={isShowDelete}>
+														<div class="slds-size_1-of-2">
+															<lightning-icon icon-name=action:delete size="x-small"
+																data-id={relatedRecord.Id} data-button="delete"
+																data-record-name={relatedRecord.Name}
+																alternative-text={relatedRecord.Name}
+																title={relatedRecord.Name} onclick={handleRowAction}>
+															</lightning-icon>
+														</div>
+													</template>
+													<div class="slds-size_1-of-2">
+														<lightning-icon icon-name=action:edit size="x-small"
+															data-id={relatedRecord.Id} data-button="edit"
+															data-record-name={relatedRecord.Name}
+															alternative-text={relatedRecord.Name}
+															title={relatedRecord.Name} onclick={handleRowAction}>
+														</lightning-icon>
+													</div>
+												</template-->
+												<!--Change END-->
+											</div>
+										</header>
+
+									</div>
+									<div class="slds-card__body slds-card__body_inner">
+										<div class="slds-form-element" key={relatedRecord.Id}>
+
+											<span class="slds-form-element__label">Name</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Customer_Name__c}
+												</div>
+											</div>
+											<template if:true={relatedRecord.isIndividual}>
+											<span class="slds-form-element__label">Bureau Score</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Bureau_Score__c}
+												</div>
+											</div>
+											</template>
+											<span class="slds-form-element__label">Customer Type</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.Customer_Type__c}
+												</div>
+											</div>
+											<span class="slds-form-element__label">Record Type</span>
+											<div class="slds-form-element__control">
+												<div class="slds-form-element__static">
+													{relatedRecord.RecordType.Name}
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="slds-card__footer">
+										<lightning-button data-id={relatedRecord.Id} variant="neutral"
+											label="Customer Detail" onclick={handleCustomerDetail}></lightning-button>
+									</div>
+								</article>
+							</li>
+						</template>
+					</template>
+				</ul>
+			</div>
+		</template>
+	</template>
+	<!--End -->
+
+	<!-- Add New Applicant Details-->
+	<template if:true={addNewApplicant}>
+		<c-generic-wizard record-id={recordId} bool-re-fetch-data={boolReFetchData} applicant-id-for-edit={editRecordId}
+			flow-name={flowName} child-to-flow={childToFlow} aap-count={appCount}></c-generic-wizard>
+	</template>
+
+	<!-- Edit Applicant Section-->
+	<template if:true={editApplicant}>
+		<lightning-card title="Edit Customer Type" icon-name="custom:custom9" class="slds-box">
+			<lightning-record-edit-form record-id={editRecordId} record-type-id={appRecTypeVal}
+				object-api-name="Applicant__c" onsuccess={handleSuccess} onsubmit={handleSubmit} mode="readonly">
+				<lightning-messages></lightning-messages>
+				<lightning-layout multiple-rows class="slds-p-around_small">
+					<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+						medium-device-size="12" large-device-size="6">
+						<label class="slds-form-element__label">Customer Name</label>
+						<lightning-input type="text" class="" label="" name="Customer_Name__c" value={customerNameVal}
+							variant="label-hidden" readonly></lightning-input>
+					</lightning-layout-item>
+
+					<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+						medium-device-size="12" large-device-size="6">
+						<label class="slds-form-element__label">Bureau Score</label>
+						<lightning-input type="text" class="" label="" name="Bureau_Score__c" value={bureauScoreVal}
+							variant="label-hidden" readonly></lightning-input>
+					</lightning-layout-item>
+
+					<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+						medium-device-size="12" large-device-size="6">
+
+						<label class="slds-form-element__label">Customer Type</label>
+						<lightning-input type="text" class="" label="" name="Customer_Type__c" value={customerTypeVal}
+							variant="label-hidden" readonly></lightning-input>
+					</lightning-layout-item>
+
+					<lightning-layout-item size="12" small-device-size="12" class="slds-p-around--xxx-small"
+						medium-device-size="12" large-device-size="6">
+						<lightning-combobox name="RecordTypeId" label="Record Type" data-name="RecordTypeId" required
+							class="validate" value={appRecTypeVal} options={appRecTypes} onchange={handleApplicantType}>
+						</lightning-combobox>
+					</lightning-layout-item>
+
+				</lightning-layout>
+				<lightning-layout multiple-rows class="slds-p-around_small">
+					<div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+						<lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel"
+							onclick={handleRecordUpdateCancel}></lightning-icon>
+						<lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" type="submit"
+							class="slds-m-left_small"></lightning-icon>
+
+					</div>
+				</lightning-layout>
+			</lightning-record-edit-form>
+		</lightning-card>
+	</template>
+
+	<template if:true={showCustomerDetail}>
+		<c-ausfb_customer-detail-component class="component" applicant-id-input={applicantIdInput}
+			onsave={saveCustomerDetailHandler} bool-from-related=true spinner-image={spinnerImage}>
+		</c-ausfb_customer-detail-component>
+	</template>
+</template>

@@ -1,0 +1,98 @@
+<apex:component >
+    <apex:attribute name="bsrDetails" description="PSL/BSR details of the application" type="BSR_PSL_Details__c"/>
+    <p class="subHeadingStyles">C. PRIORITY SECTOR CATEGORY</p>
+    <apex:panelGrid columns="2">
+        <div class="pslTextInBold">Farm Credit</div>
+        <apex:outputText >Individual Farmers directly engaged in Agriculture and Allied Activities, viz., dairy, fishery, animal husbandry, poultry, bee-keeping and sericulture.</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="16">
+        <div class="pslTextInBold" style="width: 50px"></div>
+        <apex:outputText >Land (acres)</apex:outputText>
+        <apex:outputPanel rendered="{!AND(bsrDetails.Land_Holding_in_acre__c >= 0, bsrDetails.Land_Holding_in_acre__c <= 2.47)}">
+            <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!NOT(AND(bsrDetails.Land_Holding_in_acre__c >= 0, bsrDetails.Land_Holding_in_acre__c <= 2.47))}">
+            <div class="whiteUncheckedBox"></div>
+        </apex:outputPanel>
+        <apex:outputText >0-2.47</apex:outputText>
+        <apex:outputPanel rendered="{!AND(bsrDetails.Land_Holding_in_acre__c >= 2.48, bsrDetails.Land_Holding_in_acre__c <= 4.94)}">
+            <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!NOT(AND(bsrDetails.Land_Holding_in_acre__c >= 2.48, bsrDetails.Land_Holding_in_acre__c <= 4.94))}">
+            <div class="whiteUncheckedBox"></div>
+        </apex:outputPanel>
+        <apex:outputText >2.48-4.94</apex:outputText>
+        <apex:outputPanel rendered="{!bsrDetails.Land_Holding_in_acre__c >= 4.95}">
+            <apex:image styleclass="checkBoxStyles" url="{!URLFOR($Resource.ApplicationForm, 'checkBox.png')}"/>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!bsrDetails.Land_Holding_in_acre__c < 4.95}">
+            <div class="whiteUncheckedBox"></div>
+        </apex:outputPanel>
+        <apex:outputText >4.95 &amp; above</apex:outputText>
+        <div class="pslTextInBold" style="width: 100px">&nbsp;</div>
+        <apex:outputText >&nbsp;</apex:outputText>
+        <div class="pslTextInBold">Specify (acres): </div>
+        <apex:outputText >{!bsrDetails.Land_Holding_in_acre__c}</apex:outputText>
+        <div class="pslTextInBold">Location: </div>
+        <apex:outputText >_____________</apex:outputText>
+        <div class="pslTextInBold">PIN: </div>
+        <apex:outputText >_____________</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="2">
+        <div class="pslTextInBold">Agri Infrastructure:</div>
+        <apex:outputText >Loans for construction of storage facilities (warehouses, market yards, godowns and silos) including cold storage designed to store agriculture produce/products</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="2">
+        <div class="pslTextInBold">Ancillary activities:</div>
+        <apex:outputText >Food &amp; Agro processing</apex:outputText>
+    </apex:panelGrid>                     
+    <apex:panelGrid columns="10">
+        <div class="pslTextInBold">Manufacturing Enterprise:</div>
+        <apex:outputText >Manufacturing unit with investment in plant &amp; machinery</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >upto INR 25 Lakh</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >&gt; INR 25 Lakh to INR 5 Cr.</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >&gt; INR 5 Cr. to INR 10 Cr.</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >10 Cr. &amp; above</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="4">
+        <div style="width: 100px">&nbsp;</div>
+        <apex:outputText >&nbsp;</apex:outputText>
+        <div class="pslTextInBold">Value of Investment ():</div>
+        <apex:outputText >_____________</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="10">
+        <div class="pslTextInBold">Service Enterprise</div>
+        <apex:outputText >Service unit with investment in equipment</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >upto INR 10 Lakh</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >&gt; INR 10 Lakh to INR 2 Cr.</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >&gt; INR 2 Cr. to INR 5 Cr.</apex:outputText>
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >5 Cr. &amp; above</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="5">
+        <apex:outputText style="width: 100px; font-size: 10px;">(Professional/Non-Professional/SRTO/Trade/Retail Trade)</apex:outputText>
+        <div style="width: 100px">&nbsp;</div>
+        <apex:outputText >&nbsp;</apex:outputText>
+        <div class="pslTextInBold">Value of Investment ():</div>
+        <apex:outputText >_____________</apex:outputText>
+    </apex:panelGrid>
+    <div class="pslTextInBold">Khadi &amp; village industries (KVI sector)</div>
+    <div class="pslTextInNormalFont">Declaration: I/we hereby declare/confirm that the vehicle purchased/ to be purchased/loan availed to be availed by me/us shall be used:</div>
+    <apex:panelGrid columns="2">
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >For the purpose of Agriculture and/or assist the transport of agriculture input and farm product.</apex:outputText>
+    </apex:panelGrid>
+    <apex:panelGrid columns="2">
+        <div class="whiteUncheckedBox"></div>
+        <apex:outputText >For the purpose of Business : I/We are aware that it is on the faith of this representation, declaration and confirmation that you have agreed to
+         consider my loan application for financial assistance under the category of priority sector advances. I/We shall indemnify the bank to make the loss of good in the event
+         of any loss or damage that may arise on account of false/incorrect declaration by me/us.</apex:outputText>
+    </apex:panelGrid>
+</apex:component>

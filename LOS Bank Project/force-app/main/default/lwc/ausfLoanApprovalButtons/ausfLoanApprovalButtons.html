@@ -1,0 +1,180 @@
+<template>
+    <!-- <template if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template> -->
+
+    <c-custom-spinner
+        show-spinner={isLoaded}
+        spinner-image={spinnerImage}
+    >
+    </c-custom-spinner>
+    <template if:true={showComp}>
+    <lightning-card>
+        <lightning-layout multiple-rows >
+            <lightning-layout-item size="4" flexibility="auto" padding="horizontal-small" class="slds-grid_vertical-align-center">
+                <div if:true={isCreditStage}><b>Required Approval Level: </b>{loanAppRecord.BRE_Approval_Level__c}</div>
+            </lightning-layout-item>
+            <lightning-layout-item size="8" flexibility="auto" padding="horizontal-small" class="slds-text-align_right">
+            
+            <!-- Case Assignment actions -->
+            <lightning-button label="Accept" name="Accept" onclick={acceptApproval} if:true={needPreApprovalAction}></lightning-button>
+            
+            <lightning-button label="Relook" onclick={handleRelook} if:true={allowRelookBySomeone}></lightning-button>
+            <template if:false={hideApprovalActions}>
+
+                <!--<lightning-button-group>-->
+                    <!-- TODO - Mobile icon to be replaced once we get it -->
+                    <lightning-button variant="brand" class="buttonColor slds-m-around--x-small" label="Deal Background" onclick={addDealBackground} lwc:if={isCreditStage}></lightning-button>
+                    <template if:false={isMobile}>
+                        <lightning-button variant="brand" class="buttonColor slds-m-around--x-small" label={approveActionLabel} onclick={handleApprove}></lightning-button>
+                        <template if:false={isPricingStage}>
+                            <lightning-button variant="brand" class="buttonColor"  label="Reject" onclick={handleReject}></lightning-button>
+                        </template>
+                        <lightning-button variant="brand" class="buttonColor slds-m-around--x-small" label="Send Back To RO" onclick={handleSendBackToRo}></lightning-button>
+                        <lightning-button variant="brand" class="buttonColor slds-m-around--x-small" label="Forward" name="Forward" onclick={handleForward} disabled={isBreReRunRequired}></lightning-button>
+                        <lightning-button label="Revoke" onclick={handleDelegatedUserRevoke} if:true={allowRevoke}></lightning-button>
+                    </template>
+                    <template if:true={isMobile}>
+                        <div class="slds-p-around_small" style="text-align :center;">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-3">
+                                    <span>
+                                        <lightning-avatar src={loan_ApprovalIconSrc} size="large"
+                                            onclick={handleApprove}></lightning-avatar>
+                                    </span><br />
+                                    <span>
+                                        {approveActionLabel}
+                                    </span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <span>
+                                        <lightning-avatar src={loan_ApprovalSentBackIconSrc} size="large"
+                                            onclick={handleSendBackToRo}></lightning-avatar>
+                                    </span><br />
+                                    <span>
+                                        Send Back To RO
+                                    </span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3">
+                                    <span>
+                                        <lightning-avatar src={loan_ApprovalForwardIconSrc} size="large"
+                                            onclick={handleForward} disabled={isBreReRunRequired}></lightning-avatar>
+                                    </span><br />
+                                    <span>
+                                        Forward
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--lightning-button-icon icon-name="utility:approval" class="slds-m-around--x-small" alternative-text={approveActionLabel} title={approveActionLabel} onclick={handleApprove}>
+                        </lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:back" class="slds-m-around--x-small" alternative-text="Send Back To RO" title="Send Back To RO" onclick={handleSendBackToRo}>
+                        </lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:forward" class="slds-m-around--x-small" alternative-text="Forward" data-id="Forward" title="Forward" onclick={handleForward} disabled={isBreReRunRequired}>
+                        </lightning-button-icon-->
+                        <br/>
+                        
+                    </template>
+                    
+                    
+                    <!--<template if:true={isPricingStage}>-->
+                        
+                        <!--</template>-->
+                        <!--</lightning-button-group>-->
+            </template>
+            <!-- Two wheeler re-assignment :: Credit User can reassigne to anyone without accepting the case /   -->
+            <lightning-button label="Re Assign" class="buttonColor" variant="brand" name="Reassign" onclick={handleForward} if:true={allowReassign}></lightning-button>
+                    
+        </lightning-layout-item>
+        </lightning-layout>
+
+        <!-- Approver Remarks -->
+        <template if:true={isBeingApproved}>
+            <lightning-textarea
+                label="Remarks"
+                name="Remarks__c"
+                class="slds-p-around_small"
+                value={currentApprovalRecord.Remarks__c} 
+                message-when-value-missing="Please input your remarks"
+                message-when-too-long="You can only input upto 255 characters"
+                max-length="255"
+                required
+                onchange={populateCreditUserRemarks}
+                if:true={isBeingApproved}>
+            </lightning-textarea>
+
+            <div class="slds-grid slds-grid_horizontal" if:true={showApprovalSubmissionActions}>
+                <lightning-button variant="brand" class="slds-align_absolute-center" onclick={handleSubmit} label="Submit"></lightning-button>
+                <lightning-button variant="" class="slds-align_absolute-center" onclick={handleCancel} label="Cancel"></lightning-button>
+            </div>
+        </template>
+    <template if:true={isApprove}>
+        <c-ausf-approver-list name='approve' record-id={recordId} onassignednextapprover={handleNextApprover} status-options={items} current-approval-record={currentApprovalRecord}></c-ausf-approver-list>
+    </template>
+
+    <template if:true={isRelook}>
+        <!-- <c-ausf-approver-list status-options={relookApprovers}  name="relook" record-id={recordId} selected-approver-id={rejectedApprover} onsuccess={handleRelookSucces}></c-ausf-approver-list> -->
+        <c-ausf-level-vs-approver level-options={levelOptions} onforwardapprover={handleFowardApprover} record-id={recordId} name='Relook' level-vs-approver-map={levelVsApproverMap} current-approval-record={currentApprovalRecord}></c-ausf-level-vs-approver>
+    </template>
+
+    <template if:true ={isReAssign}>
+        <c-ausf-level-vs-approver level-options={levelOptions} onforwardapprover={handleFowardApprover} record-id={recordId} name='Reassign' level-vs-approver-map={levelVsApproverMap} current-approval-record={currentApprovalRecord}></c-ausf-level-vs-approver>
+    </template>
+    <template if:true ={isForward}>
+        <c-ausf-level-vs-approver level-options={levelOptions} onforwardapprover={handleFowardApprover} record-id={recordId} name='Forward' level-vs-approver-map={levelVsApproverMap} current-approval-record={currentApprovalRecord}></c-ausf-level-vs-approver>
+    </template>
+
+        <c-bre-component-model loan-application={loanAppRecord} ontoggle={handleModelActions} if:true={isBreScreen}></c-bre-component-model>
+
+        <template if:true={isBeingRejected}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleModelActions}>
+                        <lightning-icon icon-name="utility:close"></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <!-- <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal header</h1>
+                    </div> -->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-ausf_-reject-application-quick-action-v2
+                            record-id={recordId}
+                            onclosequickaction={handleModelActions}
+                            is-approval-screen
+                        ></c-ausf_-reject-application-quick-action-v2>
+                    </div>
+                <!-- <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close">Cancel</button>
+                    <button class="slds-button slds-button_brand">Save</button>
+                </div> -->
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+        <!-- R2-2764 | Deal Background section -->
+        <template lwc:if={showDealBackgroundSection}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="deal-background" class="slds-modal slds-fade-in-open slds-modal_medium">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeDealBackgroundModal}>
+                        <lightning-icon icon-name="utility:close"></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Deal Background</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <c-loan-deal-background
+                            record-id={recordId}
+                            is-read-only
+                            ondealsummaryupdate={closeDealBackgroundModal}
+                        ></c-loan-deal-background>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </template>
+
+    </lightning-card>
+</template>
+</template>

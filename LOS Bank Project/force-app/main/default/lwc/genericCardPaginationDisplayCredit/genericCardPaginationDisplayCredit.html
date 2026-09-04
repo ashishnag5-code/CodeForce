@@ -1,0 +1,212 @@
+<template>
+	
+		<template for:each={objDataList} for:item="obj">
+		<template if:false={showSchemaDetails}>
+			<tr key={obj.key}>
+			<td scope="row" class="colcolor">
+			{obj.key}
+	     	</td>
+			 <td scope="row" >{obj.value}</td>
+			</tr>	
+			</template>
+			</template>
+			<template lwc:if={showSchemaDetails}>
+				<template for:each={eligibleSchemesArray} for:item="obj">
+					<tr key={obj.EligibleSchemeName}>
+					<td class="colcolor" scope="row" style=" padding-top: 8px;">
+						Scheme Selected By RO
+					</td>
+		
+				<td scope="row">
+					<lightning-button variant="base" label={obj.EligibleSchemeName} title="Click to view the details"  onclick={displayDetails} data-scheme={obj.EligibleSchemeName}></lightning-button>
+				</td>
+				<template if:true={obj.isEligible}>
+					<td>
+						<lightning-input type="checkbox" name={obj.EligibleSchemeName} value={obj.EligibleSchemeName} disabled={isDisabled} checked={obj.enableSelection} onclick={selectSchemeHandle}
+									></lightning-input>
+					</td>	
+				
+				</template>
+				<td></td>
+			</tr>	
+				
+			</template>
+		
+	</template>
+
+	<template for:each={otherSchemesArray} for:item="obj">
+		    <tr key={obj.SchemeName}>
+            <td class="colcolor" scope="row">Other Eligible schemes</td>
+            <td scope="row">
+                <lightning-button variant="base" label={obj.SchemeName} title="Click to view the details"  onclick={displayDetails} data-scheme={obj.SchemeName}></lightning-button>
+            </td>
+            <template if:true={obj.isEligible}>
+                <td>
+                    <lightning-input type="checkbox" name={obj.SchemeName} value={obj.SchemeName} disabled={isDisabled} checked={isChecked} onclick={selectSchemeHandle}
+                                    ></lightning-input>
+                </td>
+            </template>
+			<td></td>
+		</tr>
+	</template>
+	<template if:true={showSchemeAdd}>
+		<tr>
+			<td class="colcolor">Eligibility Under Scheme</td>
+			<td>{schemeName}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">Loan Amount</td>
+			<td>{loanAmt}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">Tenure</td>
+			<td>{tenure}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">IRR</td>
+			<td>{IRR}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">LTV</td>
+			<td>{LTV}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">processingFee</td>
+			<td>{processingFee}</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<template if:true={showReasonIsSTP}>
+			<tr>
+				<th class="subheader" colspan="4" scope="row">Reasons for STP</th>
+			</tr>
+			<tr class="colcolor">
+				<th class="colcolor align" scope="col" colspan="2" style="padding-right: 250px;">
+					<div >Rule Level</div>
+				</th>
+				<th class="colcolor align" scope="col" colspan="2" style="padding-left: 200px;">
+					<div>Reason Text</div>
+				</th>
+			</tr>
+			<template for:each={eligibilityRules} for:item="obj">
+				<tr class="slds-hint-parent" key={obj.ReasonText}>
+					<td data-label="Rule Level" style="padding-left:150px">
+						<div class="slds-truncate">{obj.RuleLevel}</div>
+					</td>
+					<td></td>
+					<td></td>
+					<td data-label="Reason Text" style="margin-left:80px">
+						<div class="slds-truncate">{obj.ReasonText}</div>
+					</td>
+				</tr>
+			</template>
+		</template>
+		<template if:true={showReasonIsNSTP}>
+			<tr>
+				<th class="subheader" colspan="4" scope="row">Deviation</th>
+			</tr>
+			<tr class="slds-line-height_reset">
+				<th class="colcolor" scope="col">
+					<div >Deviation Type</div>
+				</th>
+				<th class="colcolor" scope="col">
+					<div>Variance</div>
+				</th>
+				<th class="colcolor" scope="col">
+					<div>Level</div>
+				</th>
+			</tr>
+			<template for:each={deviationDetailsArray} for:item="obj">
+				<tr class="slds-hint-parent" key={obj.key}>
+					<td data-label="Deviation Type">
+						<div class="slds-truncate">{obj.DeviationType}</div>
+					</td>
+					<td data-label="Variance">
+						<div class="slds-truncate">{obj.variance}</div>
+					</td>
+					<td data-label="Level">
+						<div class="slds-truncate">{obj.Level}</div>
+					</td>
+					<td></td>
+				</tr>
+			</template>
+		</template>
+	</template>
+	
+	<template if:true={showFiInitiationDetails}>
+		<c-generic-card-pagination-display object-list={fiInitiationDetailsArray} loan-scheme-code={loanSchemeCode}
+                card-title="FI Initiated"></c-generic-card-pagination-display>
+	</template>
+	<template if:true={displayuwcriteria}>
+		<template if:true={showUwCriterias}>
+			<c-generic-card-pagination-display object-list={uwCriteriasArray} loan-scheme-code={loanSchemeCode}
+                    card-title="UW Criteria"></c-generic-card-pagination-display>
+		</template>
+	</template>
+	<template if:true={showReasonIsNSTP}>
+		<!--<template if:true={showDeviationDetails}>--></template>
+	
+	<template if:true={showSubjectivityMsgs}>
+		<tr>
+			<th class="subheader" colspan="4" scope="row">Subjectivity Check</th>
+		</tr>
+		<tr class="slds-line-height_reset">
+			<th class="colcolor align" scope="col" colspan="2">
+				<div >Subjectivity</div>
+			</th>
+			<th class="colcolor align" scope="col" colspan="2">
+				<div>Owner (Ops / Credit)</div>
+			</th>
+		</tr>
+		<template for:each={subjectivityMessagesArray} for:item="obj">
+			<tr class="slds-hint-parent" key={obj.key}>
+				<td data-label="Subjectivity" colspan="2">
+					<div class="slds-truncate">{obj.Subjectivity}</div>
+				</td>
+				<td data-label="Owner (Ops / Credit)" colspan="2">
+					<div class="slds-truncate">{obj.Owner}</div>
+				</td>
+				<!-- td></td>
+				<td></td -->
+			</tr>
+		</template>
+	</template>
+	<template if:true={showUwAuthority}>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="colcolor">Approval Authority</td>
+			<td>{uwAuthority}</td>
+			<td></td>
+			<td></td>
+		  </tr>
+	</template>
+	<template if:true={isChecked}>
+	<tr class="marginleft">
+		<td></td>
+		<td>
+				<lightning-button variant="brand" label="Update Scheme" title="Update Scheme"
+                            onclick={handleConfirmClick} class="slds-m-left_x-small" style="margin-top: 40px;margin-left: 217px;"></lightning-button>
+		</td>
+	</tr>
+</template>
+</template>

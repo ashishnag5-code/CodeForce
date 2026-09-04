@@ -1,0 +1,55 @@
+<apex:page standardController="Field_Investigation__c" extensions="FIPrintReportPageController_V3" readOnly="true"
+             renderAs="PDF"
+             applyBodyTag="false"  applyHtmlTag="false" showHeader="false" sidebar="false">
+
+    <html>
+        <head>
+            <style>
+                @page { margin: 0.25in; size: 10in 11.69in; }
+            </style>
+        </head>
+
+        <body>
+            <apex:pageBlock >
+            
+                <table style="width:100%;" border ="1">
+                    <apex:repeat value="{!FIRecordList}" var="fir" id="idfirecord">
+                            <tr>
+                                <td style="width:50%;"><apex:outputLabel value="{!fir.helpText}"/></td>
+                                <td><apex:outputLabel value="{!fir.data}"/></td>
+                            </tr>
+                    </apex:repeat>
+                </table>
+                
+                <br/>
+                    <h2>
+                        Applicant Details
+                    </h2>
+                    <table border ="1">
+                        <apex:repeat value="{!lstUpdatedApplicant}" var="app" id="idapp">
+                            <tr>
+                                <td style="width:2%;"><apex:outputLabel value="{!app.counter}" /></td>
+                                <td style="width:70%;"><apex:outputLabel value="{!app.helpText}" /></td>
+                                <td><apex:outputLabel value="{!app.data}"/></td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                    <h2>
+                        Vehicle Details
+                    </h2>
+                    <table border ="1">
+                        <apex:repeat value="{!lstUpdatedVehicle}" var="veh" id="idvehicle">
+                            <tr>
+                                <td style="width:2%;"><apex:outputLabel value="{!veh.counter}"/></td>
+                                <td style="width:70%;"><apex:outputLabel value="{!veh.helpText}" /></td>
+                                <td><apex:outputLabel value="{!veh.data}"/></td>
+                            </tr>
+                        </apex:repeat>
+                    </table>
+                <apex:repeat value="{!lstImage}" var="app" id="idimage">
+                        <td><apex:image style="padding:10%;" width="70px" height="70px" url="{!app}"/></td>
+                </apex:repeat>
+            </apex:pageBlock>
+        </body>
+    </html>
+</apex:page>

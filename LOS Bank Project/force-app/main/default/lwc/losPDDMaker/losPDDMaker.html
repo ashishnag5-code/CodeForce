@@ -1,0 +1,1402 @@
+<!--
+  @description       : 
+  @author            : Kunal
+  @group             : 
+  @last modified on  : 12-18-2023
+  @last modified by  : Ajitesh
+-->
+<template>
+    <lightning-card title="PDD Maker" icon-name="standard:lead">
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+
+        <lightning-layout if:true={showPage} multiple-rows class="slds-p-bottom_small">
+
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="12"
+                class="slds-p-horizontal_small" flexibility="auto">
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12 slds-var-m-top_medium">
+                     <!--   <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Vehicle Delivery</label> -->
+                        <lightning-combobox label="Vehicle Delivery" placeholder="Select Vehicle Delivery"
+                            value={dataObj.vehicleDelivery} options={picklistValues.vehicleDelivery} required
+                            name="vehicleDelivery" class="validate" onchange={handleInput}
+                            disabled={disableDeferral}>
+                        </lightning-combobox>
+                    </div>
+                    <!--SFAU-5835-->
+                    <div if:true={dataObj.isUsedOrCOW} class="slds-col slds-size_1-of-1 slds-large-size_4-of-12 slds-var-m-top_medium">
+                        <label class="slds-form-element__label">
+                            <abbr class="slds-required" title="required">* </abbr>Case In Deferral</label>
+                        <lightning-combobox label="Case In Deferral" placeholder="Select Case In Deferral"
+                            value={dataObj.caseDeferral} options={picklistValues.caseDeferral} name="caseDeferral"
+                            class="validate" variant="label-hidden" onchange={handleInput} read-only="true" disabled>
+                        </lightning-combobox>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_4-of-12 slds-var-m-top_medium">
+
+                        <template lwc:if={renderDeferralCategory}>
+                            <label class="slds-form-element__label">
+                                <abbr class="slds-required" title="required">* </abbr>Deferral Category</label>
+                            <lightning-combobox label="Deferral Category" placeholder="Select Deferral Category"
+                                value={dataObj.deferralCategory} options={picklistValues.deferralCategory}
+                                name="deferralCategory" class="validate" variant="label-hidden" onchange={handleInput}
+                                read-only={isReadOnlyDeferralCategory}>
+                            </lightning-combobox>
+                        </template>
+                    </div>
+                </div>
+                <br>
+
+                <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+
+                    <lightning-accordion-section if:true={isOpsUser} name="pddModule" label="PDD Module"
+                        class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Product" name="product" disabled
+                                    value={dataObj.product}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Dealer Name" name="dealerName" disabled
+                                    value={dataObj.dealerName}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Loan Number" name="loanNumber" disabled
+                                    value={dataObj.loanNumber}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="CustomerName" name="customerName" disabled
+                                    value={dataObj.customerName}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Loan Amount" name="loanAmount" disabled
+                                    value={dataObj.loanAmount}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Asset Cost (Ex-Showroom Price / On-Road Price)"
+                                    name="assetCost" disabled value={dataObj.assetCost}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Loan Type" name="loanType" disabled
+                                    value={dataObj.loanType}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Loan Sub Type" name="loanSubType" disabled
+                                    value={dataObj.loanSubType}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Manufacturing Year" name="manufacturingYear"
+                                    disabled value={dataObj.manufacturingYear}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Maker" name="maker" disabled value={dataObj.maker}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Model" name="model" disabled value={dataObj.model}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Case In Deferral" name="caseDeferral" disabled
+                                    value={dataObj.caseDeferral}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Engine Number" name="engineNo" disabled
+                                    value={dataObj.engineNo}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input lwc:if={isImplement} type="text" label="Serial Number" name="serialNoImplement" disabled
+                                    value={dataObj.serialNoImplement}></lightning-input>
+                                <lightning-input lwc:else type="text" label="Chassis Number" name="chasisNumber" disabled
+                                    value={dataObj.chasisNumber}></lightning-input>
+                            </div>
+                        </div>
+                    </lightning-accordion-section>
+                    <br>
+                    <template if:false={hideInvoiceSection}>
+                    <lightning-accordion-section lwc:if={isInvoiceSectionVisible} name="documentTypeInvoice" label="Invoice" class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="invoiceStatus" label="Invoice Status" onchange={handleInput}
+                                    options={picklistValues.invoiceStatus} disabled={disableInvoice} required={invoiceStatusMandatory}
+                                    value={dataObj.invoiceStatus}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Invoice Number" name="invoiceNumber" required={invoiceRequired}
+                                    onchange={handleInput}  value={dataObj.invoiceNumber} disabled={disableInvoice}
+                                    maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            
+                            <div if:false={isImplement} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="invoiceDate" onchange={handleInput} required={invoiceRequired}
+                                    date-style="short" placeholder="DD/MM/YYYY" disabled={disableInvoice}
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY"
+                                    value={dataObj.invoiceDate} label="Invoice Date" >
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="number" name="invoiceAmount" label="Invoice Amount" required={invoiceRequired} disabled={disableInvoice}
+                                    value={dataObj.invoiceAmount} onchange={handleInput}>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div if:false={isImplement} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="hpnInvoice" label="HPN On Invoice" onchange={handleInput} required={invoiceRequired} disabled={disableInvoice}
+                                    options={picklistValues.hpnInvoice}  value={dataObj.hpnInvoice}>
+                                </lightning-combobox>
+                            </div>
+<div lwc:if={isEngineNoVisible} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input  type="text" label="Engine Number" class="engineNo highlightEngine"
+                                    name="engineNo" max-length="255" min-length="13" disabled={disableInvoice}
+                                    message-when-too-short="Engine number should be min 13 characters."
+                                    data-api="Engine_Number__c" required={invoiceRequired} onchange={handleInput}
+                                     value={dataObj.engineNo}>
+                                </lightning-input>
+                            </div>
+</div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div lwc:if={isSerialNoVisible} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input  type="text" label="Serial Number" name="serialNoImplement" max-length="255"
+                                    class="serialNoImplement highlightSerial"
+                                    data-api="PDD_Implement_Serial_No__c" disabled={disableInvoice}
+                                    message-when-bad-input="Only Alphabates and numbers are allowed"
+                                    required={invoiceRequired} onchange={handleInput} 
+                                    value={dataObj.serialNoImplement}>
+                                </lightning-input>
+                        </div>
+
+                        <div lwc:else class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input  type="text" label="Chassis Number" name="chasisNumber" max-length="255"
+                                    min-length="17" class="chasisNumber highlightChasis"
+                                    message-when-too-short="Chassis number should be min 17 characters."
+                                    data-api="Chasis_Number__c" disabled={disableInvoice}
+                                    message-when-bad-input="Only Alphabates and numbers are allowed"
+                                    required={invoiceRequired} onchange={handleInput} 
+                                    value={dataObj.chasisNumber}>
+                                </lightning-input>
+                            </div>
+<div lwc:if={isNOCFinanceVisible}  class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="originalNocStatus" label="Original NOC Status" onchange={handleInput} required={invoiceRequired} disabled={disableInvoice}
+                                    options={picklistValues.originalNocStatus}  value={dataObj.originalNocStatus}>
+                                </lightning-combobox>
+                            </div>
+                            <div lwc:if={isNOCFinanceVisible}  class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <c-generic-custom-lookup data-id='Financial_Institution__c'
+                                    selected-record={dataObj.financierName} name="Financial_Institution__c"
+                                    label="Financier Name" record-type-name="Financial Institution Name" search-fields="Bank_Name__c"
+                                    stepid="0" data-fieldapi="financierName" fieldapi="Financial_Institution__c" object-name="Generic Master"
+                                    s-object-api-name="Generic_Master__c"  onlookupselect={handleLookupSelect}>
+                                </c-generic-custom-lookup>
+                            </div>
+
+                            <div if:false={dataObj.isUsedOrCOW}
+                                class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 slds-m-top_x-large">
+                                <lightning-button class="buttonClass slds-var-m-top_medium"
+                                    label="Check Duplicate Record" stretch variant="neutral" name='duplicateCheck'
+                                    disabled={disableDuplicateCheckButton} onclick={getCollateralList}></lightning-button>
+                            </div>
+                        </div>
+                        <template if:true={invoiceDoc}>
+                            <div  class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-combobox name="opsActionInvoice" label="Ops Action" disabled={isNotOpsMaker}
+                                        onchange={handleOpsDetails} value={invoiceDoc.opsAction} options={OpsActionOptions}
+                                        >
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-textarea name="opsRemarkInvoice" label="Ops Remark" disabled={isNotOpsMaker}
+                                     onchange={handleOpsDetails}
+                                    value={invoiceDoc.opsRemark}
+                                    >
+                                </lightning-textarea>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-input type="text" label="Document Tracker ID" disabled value={invoiceDoc.documentTrackerId}></lightning-input>
+                                </div>
+                            </div>
+    
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <template if:false={disableInvoice}>
+                                        <template if:false={invoiceDoc.isUploded}>
+                                            <c-los-generic-document-upload isloading={isloading} isdocmanager="true"
+                                                show-upload-component="true" hidefiledetails="true"
+                                                collateral-id={invoiceDoc.docName.Collateral__c}
+                                                doc-name={invoiceDoc.docName.Document_Master__r.Name}
+                                                ondocumentsuccess={handleSuccess}
+                                                uploadtypename={invoiceDoc.docName.Document_Master__r.Document_Name__c}>
+                                            </c-los-generic-document-upload>
+                                        </template>
+                                    </template>
+
+                                    <template if:true={invoiceDoc.isUploded} for:each={invoiceDoc.filesList}
+                                        for:item="fileRecord" for:index="fileIndex">
+                                        <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                            <lightning-button variant="base" label={fileRecord.fileName}
+                                                name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                                data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                                title="Document Name" onclick={handlePreviewClick}
+                                                class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                            </lightning-button>
+                                            <a if:true={invoiceDoc.canDownload} target="_blank" 
+                                                class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl}
+                                                download>
+                                                <lightning-icon icon-name="utility:download" size="x-small"
+                                                    alternative-text="Download" title="Download"></lightning-icon>
+                                            </a>
+                                            <lightning-icon class="slds-col slds-align_absolute-center"
+                                                icon-name="utility:delete" size="x-small" alternative-text="Delete" if:false={disableInvoice}
+                                                title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}>
+                                            </lightning-icon>
+                                            <br />
+                                        </div>
+                                    </template>
+    
+                                </div>
+                            </div>
+                        </template>
+                    </lightning-accordion-section>
+                    <br>
+                    </template>
+
+                    <template if:false={hideInsuranceSection}>
+                    <lightning-accordion-section name="documentTypeInsurance" label="Insurance" class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="insuranceStatus" label="Insurance Status" disabled={disableInsurance}
+                                    required={insuranceStatusMandatory} onchange={handleInput} options={statusValues}
+                                     value={dataObj.insuranceStatus}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Insurance Policy Number" name="insuranceNumber" disabled={disableInsurance}
+                                    onchange={handleInput}  value={dataObj.insuranceNumber}
+                                    required={requiredInsuranceRC} maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="insuranceStartDate" onchange={handleInput}
+                                    date-style="short" placeholder="DD/MM/YYYY" required={requiredInsuranceRC} disabled={disableInsurance}
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY"
+                                    value={dataObj.insuranceStartDate} label="Insurance Start Date" >
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="insuranceEndDate" onchange={handleInput} if:false={dataObj.isUsedOrCOW}
+                                    date-style="short" placeholder="DD/MM/YYYY" required={requiredInsuranceRC} disabled={disableInsurance}
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY" min={minInsuranceDate}
+                                    value={dataObj.insuranceEndDate} label="Insurance End Date" >
+                                </lightning-input>
+                                <lightning-input type="date" name="insuranceEndDate" onchange={handleInput} if:true={dataObj.isUsedOrCOW}
+                                    date-style="short" placeholder="DD/MM/YYYY" required={requiredInsuranceRC}
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY" disabled={disableInsurance}
+                                    value={dataObj.insuranceEndDate} label="Insurance End Date" >
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Insurance IDV" name="insuranceIDV" required={requiredInsuranceRC}
+                                    onchange={handleInput}  value={dataObj.insuranceIDV} disabled={disableInsurance}
+                                    maxlength=255></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="hpnInsurance" label="HPN On Insurance" onchange={handleInput}
+                                    required={requiredInsuranceRC} options={picklistValues.hpnInsurance} disabled={disableInsurance}
+                                     value={dataObj.hpnInsurance}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="ownershipInsurance" label="Ownership Insurance"
+                                    required={requiredInsuranceRC} onchange={handleInput} disabled={disableInsurance}
+                                    options={picklistValues.ownershipInsurance} 
+                                    value={dataObj.ownershipInsurance}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Insurance Agent Name" name="insuranceAgentName"
+                                    required={requiredInsuranceRC} onchange={handleInput} disabled={disableInsurance}
+                                    value={dataObj.insuranceAgentName} maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <!-- <lightning-input type="text" label="Insurance Company Name" name="insuranceCompanyName"
+                                    required={requiredInsuranceFields} onchange={handleInput} disabled={disableInsurance}
+                                    value={dataObj.insuranceCompanyName} maxlength=255></lightning-input>
+                                 -->
+                                 <c-generic-custom-lookup name="Name__c" label="Insurance Company Name"
+                                    record-type-name="Previous Insurer" is-disabled={disableInsurance}
+                                    fieldapi="Existing_Policy_Insurer_Company__c"
+                                    object-name="Generic Master"
+data-fieldapi="insuranceCompany"
+                                    s-object-api-name="Generic_Master__c"
+                                    default-record-id={dataObj.insuranceCompanyName}
+                                    onlookupselect={handleLookupSelect}
+                                ></c-generic-custom-lookup>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="thirdPartyInsurance" label="Third Party Insurance"
+                                    required={requiredInsuranceRC} onchange={handleInput} disabled={disableInsurance}
+                                    options={picklistValues.thirdPartyInsurance} 
+                                    value={dataObj.thirdPartyInsurance}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="insuranceType" label="Insurance Type" onchange={handleInput}
+                                    required={requiredInsuranceRC} options={picklistValues.insuranceType} disabled={disableInsurance}
+                                     value={dataObj.insuranceType}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="insuranceEndorsement" label="Insurance Endorsement"
+                                    required={requiredInsuranceRC} onchange={handleInput}
+                                    options={picklistValues.insuranceEndorsement} disabled={disableInsurance}
+                                    value={dataObj.insuranceEndorsement}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="insuranceDoneBy" label="Insurance Done By"
+                                    required={requiredInsuranceRC} onchange={handleInput} disabled={disableInsurance}
+                                    options={picklistValues.insuranceDoneBy} 
+                                    value={dataObj.insuranceDoneBy}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Premium" name="premium" onchange={handleInput}
+                                    required={requiredInsuranceRC}  value={dataObj.premium} disabled={disableInsurance}
+                                    maxlength=255></lightning-input> 
+                            </div>
+                        </div>
+
+                        <template if:true={insuranceDoc}>
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-combobox name="opsActionInsurance" label="Ops Action" disabled={isNotOpsMaker}
+                                        onchange={handleOpsDetails} value={insuranceDoc.opsAction} options={OpsActionOptions}
+                                        >
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-textarea name="opsRemarkInsurance" label="Ops Remark" disabled={isNotOpsMaker}
+                                     onchange={handleOpsDetails}
+                                    value={insuranceDoc.opsRemark}
+                                    >
+                                </lightning-textarea>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-input type="text" label="Document Tracker ID" disabled value={insuranceDoc.documentTrackerId}></lightning-input>
+                                </div>
+                            </div>
+                        <div if:true={insuranceDoc} class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <template if:false={disableInsurance}>
+                                <template if:false={insuranceDoc.isUploded}>
+                                    <c-los-generic-document-upload isloading={isloading} hidefiledetails="true"
+                                        isdocmanager="true" show-upload-component="true"
+                                        collateral-id={insuranceDoc.docName.Collateral__c}
+                                        doc-name={insuranceDoc.docName.Document_Master__r.Name}
+                                        ondocumentsuccess={handleSuccess}
+                                        uploadtypename={insuranceDoc.docName.Document_Master__r.Document_Name__c}>
+                                    </c-los-generic-document-upload>
+                                </template>
+                            </template>
+
+                                <template if:true={insuranceDoc.isUploded} for:each={insuranceDoc.filesList}
+                                    for:item="fileRecord" for:index="fileIndex">
+                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                        </lightning-button>
+                                        <a if:true={insuranceDoc.canDownload} target="_blank"
+                                            class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl}
+                                            download>
+                                            <lightning-icon icon-name="utility:download" size="x-small"
+                                                alternative-text="Download" title="Download"></lightning-icon>
+                                        </a>
+                                        <lightning-icon class="slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete" if:false={disableInsurance}
+                                            title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}>
+                                        </lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        </template>
+                    </lightning-accordion-section>
+                    <br>
+                    </template>
+
+
+                    <!--ROC CHarges Section Code starts-->
+                    <lightning-accordion-section name="rocCharge" label="ROC Charges"
+                        class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="number" label="ROC Charge" name="product" disabled
+                                    value={rocChargeData.ROC_Charge__c}></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium" style="padding-top: 1%;">
+                                <lightning-input  type="checkbox" data-id="ROC_Charge_Status__c" label="ROC Charge Status" disabled
+                                                  checked={rocChargeData.ROC_Charge_Status__c}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox data-id="ROC_Creation_Status__c"
+                                                    name="ROC_Creation_Status__c"
+                                                    label="ROC Creation Status"
+                                                    value={rocChargeData.ROC_Creation_Status__c}
+                                                    placeholder="Select Status"
+                                                    options={rocCreationStatusOptions}
+                                                    onchange={handleROCChange} ></lightning-combobox>
+                                
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium" >
+                                <lightning-textarea name="ROC " label="ROC Remarks" value={rocChargeData.ROC_Remarks__c} data-id="ROC_Remarks__c" onchange={handleROCChange}></lightning-textarea>
+                                <!--lightning-input type="text" label="ROC Remarks" name="customerName" 
+                                    value={rocChargeData.ROC_Remarks__c}--></lightning-input>
+                            </div>
+                        </div>
+                        
+                    </lightning-accordion-section>
+                    <br>
+                    <!--ROC Charges Section COde ends-->
+
+                    <template if:false={hideTaxSection}>
+                    <lightning-accordion-section name="documentTypeTax" label="Tax Receipt" class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters" if:false={disableTax}>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-button variant="base" label="Click here to scan QR code/Tax receipt"
+                                    title="1" onclick={handleBeginClickNew} class="linkClass slds-var-m-left_x-small">
+                                </lightning-button>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="taxReceiptStatus" label="Tax Receipt Status" onchange={handleInput}
+                                    options={picklistValues.taxReceiptStatus} disabled={disableTax} required={taxStatusMandatory}
+                                    value={dataObj.taxReceiptStatus}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Receipt No." name="recieptNo" onchange={handleInput} disabled={disableTax}
+                                     value={dataObj.recieptNo} maxlength=255></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input  type="number" label="Receipt Amount" name="receiptAmount" disabled={disableTax}
+                                    onchange={handleInput}  value={dataObj.receiptAmount}
+                                    maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium"> 
+                                <lightning-input type="text" label="Engine No" class="engineNo" name="engineNo" disabled={disableTax}
+                                    max-length="255" min-length="13"
+                                    message-when-too-short="Engine number should be min 13 characters."
+                                    required={requiredVahaanFields} data-api="Engine_Number__c" onchange={handleInputVahaan}
+                                     value={vahanData.engineNo}></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input lwc:if={isSerialNoVisible}  type="text" label="Serial Number" name="chasisNumber" max-length="255"
+                                        class="chasisNumber serialNoImplement highlightSerial"
+                                        data-api="Chasis_Number__c" disabled={disableTax}
+                                        message-when-bad-input="Only Alphabates and numbers are allowed"
+                                        required={taxRequired} onchange={handleInputVahaan} 
+                                        value={vahanData.chasisNumber}>
+                                </lightning-input>
+
+                                <lightning-input lwc:else  type="text" label="Chassis Number" name="chasisNumber" max-length="255"
+                                    min-length="17" class="chasisNumber" disabled={disableTax}
+                                    message-when-too-short="Chassis number should be min 17 characters."
+                                    data-api="Chasis_Number__c"
+                                    message-when-bad-input="Only Alphabates and numbers are allowed"
+                                    required={requiredVahaanFields} onchange={handleInputVahaan} 
+                                    value={vahanData.chasisNumber}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Temp Vehicle No" name="tempVehicleNo" disabled={disableTax}
+                                    onchange={handleInput}  value={dataObj.tempVehicleNo}
+                                    maxlength=255></lightning-input>
+                            </div>
+                            <div if:true={taxDoc}
+                                class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <template if:false={disableTax}>
+                                <template if:false={taxDoc.isUploded}>
+                                    <c-los-generic-document-upload isloading={isloading} hidefiledetails="true"
+                                        isdocmanager="true" show-upload-component="true"
+                                        collateral-id={taxDoc.docName.Collateral__c}
+                                        doc-name={taxDoc.docName.Document_Master__r.Name}
+                                        ondocumentsuccess={handleSuccess}
+                                        uploadtypename={taxDoc.docName.Document_Master__r.Document_Name__c}>
+                                    </c-los-generic-document-upload>
+                                </template>
+                            </template>
+
+                                <template if:true={taxDoc.isUploded} for:each={taxDoc.filesList} for:item="fileRecord"
+                                    for:index="fileIndex">
+                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                        </lightning-button>
+                                        <a if:true={taxDoc.canDownload} target="_blank"
+                                            class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl}
+                                            download>
+                                            <lightning-icon icon-name="utility:download" size="x-small"
+                                                alternative-text="Download" title="Download"></lightning-icon>
+                                        </a>
+                                        <lightning-icon class="slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete" if:false={disableTax}
+                                            title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}>
+                                        </lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <template if:true={taxDoc}>
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-combobox name="opsActionTax" label="Ops Action" disabled={isNotOpsMaker}
+                                        onchange={handleOpsDetails} value={taxDoc.opsAction} options={OpsActionOptions}
+                                        >
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-textarea name="opsRemarkTax" label="Ops Remark" disabled={isNotOpsMaker}
+                                     onchange={handleOpsDetails}
+                                    value={taxDoc.opsRemark}
+                                    >
+                                </lightning-textarea>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-input type="text" label="Document Tracker ID" disabled value={taxDoc.documentTrackerId}></lightning-input>
+                                </div>
+                            </div>
+                        </template>
+
+                    </lightning-accordion-section>
+                    <br>
+                    </template>
+
+                    <template if:false={hideRCSection}>
+                    <lightning-accordion-section name="documentTypeVehicleRC"
+                        label="Vehicle Registration Certificate (RC)" class="accordClass">
+                        <div  class="slds-grid slds-wrap slds-gutters">
+                            <div if:false={hideVahaanCheck} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-m-top_x-large">
+                                <lightning-button class="buttonClass slds-var-m-top_medium"
+                                    label="Vahaan Check" stretch variant="neutral" name='vahanCheck' disabled={disableButtons}
+                                     onclick={callToVahaan}></lightning-button>
+                            </div>
+                        <div if:true={isNotTractorCommercialConstructionEquipment} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox  name="assignmentCase" label="Assignment Case" onchange={handleInput} 
+                                required={requiredInsuranceRC} options={picklistValues.assignmentCaseOptions} disabled={disableRC}
+                                value={dataObj.assignmentCase}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+            
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="rCStatus" label="RC Status" onchange={handleInput} class="rcStatus"
+                                    required={rcSectionStatusMandatory} options={rcStatusValues} disabled={disableRC}
+                                    value={dataObj.rCStatus}>
+                                </lightning-combobox>
+                            </div>
+
+                            <template if:true={showRCSubStatus}><!--R2-879-->
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-combobox name="subStatus" label="Sub-Status" onchange={handleInput} class="subStatus"
+                                        required options={subStatusValues} disabled={disableRC}
+                                        value={dataObj.subStatus}>
+                                    </lightning-combobox>
+                                </div>
+                            </template>
+                        </div>
+
+                        
+            
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="rcType" label="RC Type" onchange={handleInput} 
+                                required={requiredRCFields} options={picklistValues.rcType} disabled={disableRC}
+                                value={dataObj.rcType}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Registration Number" class="registrationNumber" pattern="[A-Za-z0-9]{6,10}"
+                                    name="registrationNumber" onchange={handleInput}  disabled={disableRegisterNumber} message-when-pattern-mismatch="Please Enter Alphanumeric values"
+                                    value={dataObj.registrationNumber} required={requiredRCFields} maxlength=255>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <!---5598 Changes-->
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Registration City" class="registrationNumber"
+                                    name="registrationCity" disabled required={requiredRCFields}
+                                    value={dataObj.registrationCityVahaan}>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Father Name" class="fatherName"
+                                    name="fatherName" disabled={disableVahaanRC}
+                                    value={dataObj.fatherNameVahaan}>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div if:true={showVahanFields} class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Vehicle Number" class="registrationNumber" pattern="[A-Za-z0-9]{6,10}" 
+                                name="registrationNumber" onchange={handleInput}  disabled={disableRC} message-when-pattern-mismatch="Please Enter Alphanumeric values"
+                                value={vahanData.registrationNumber} required={requiredVahaanFields2} maxlength=255>
+                            </lightning-input>
+                            </div>
+                        </div>
+
+                        <div if:true={showVahanFields} class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="HPN With (Financiers Name)" class="hpnFinancer" 
+                                 name="hpnFinancer" onchange={handleInputVahaan} value={vahanData.hpnFinancer}  disabled={disableVahaanRC}
+                                 required={requiredVahaanFields2} maxlength=255>
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Current Owner Name" value={vahanData.currentOwnerName} 
+                                    name="currentOwnerName" onchange={handleInputVahaan}  disabled={disableVahaanRC} class="currentOwnerName"
+                                     required={requiredVahaanFields2} maxlength=255>
+                                </lightning-input>
+                            </div>
+                        </div>
+                        <div if:true={showVahanFields} class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Owner Serial number" value={vahanData.ownerSerialNumber} 
+                                 name="ownerSerialNumber" onchange={handleInputVahaan}  disabled={disableVahaanRC} class="ownerSerialNumber"
+                                 required={requiredVahaanFields2} maxlength=255>
+                            </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Registration City" value={vahanData.registrationCity} 
+                                    name="registrationCity" onchange={handleInputVahaan}  disabled={disableVahaanRC} class="registrationCity"
+                                     required={requiredVahaanFields2} maxlength=255>
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="registrationDate" class="registrationDate"
+                                    onchange={handleInput} date-style="short" placeholder="DD/MM/YYYY"
+                                    required={requiredRCFields} disabled
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY"
+                                    value={dataObj.registrationDate} label="Registration Date" >
+                                </lightning-input><!--Permanent Disbaled-->
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="hpnOnRC" label="HPN On RC" onchange={handleInput}
+                                    required={requiredRCFields} options={picklistValues.hpnOnRC} disabled={disableRC}
+                                    value={dataObj.hpnOnRC}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div if:true={dataObj.isUsedOrCOW} class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="ownershipTransferOnRC" label="Ownership Transfer On RC"
+                                    required={requiredRCFields} onchange={handleInput} disabled={disableRC}
+                                    options={picklistValues.ownershipTransferOnRC} 
+                                    value={dataObj.ownershipTransferOnRC}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="Sourcing Detail" name="sourcingDetail"  required={requiredRCFields}
+                                    onchange={handleInput}  value={dataObj.sourcingDetail} disabled
+                                    maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <template if:true={rcDoc}>
+                            <div  class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-combobox name="opsActionRC" label="Ops Action"  disabled={isNotOpsMaker}
+                                        onchange={handleOpsDetails} value={rcDoc.opsAction} options={OpsActionOptions}
+                                        >
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-textarea name="opsRemarkRC" label="Ops Remark" disabled={isNotOpsMaker}
+                                     onchange={handleOpsDetails} 
+                                    value={rcDoc.opsRemark}
+                                    >
+                                </lightning-textarea>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-input type="text" label="Document Tracker ID" disabled value={rcDoc.documentTrackerId}></lightning-input>
+                                </div>
+                            </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div
+                                class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <template if:false={disableRC}>
+                                    <template if:true={isManualRC}>
+                                    <c-los-generic-document-upload isloading={isloading} hidefiledetails="true"
+                                        isdocmanager="true" show-upload-component="true"
+                                        collateral-id={rcDoc.docName.Collateral__c}
+                                        doc-name={rcDoc.docName.Document_Master__r.Name}
+                                        ondocumentsuccess={handleSuccess}
+                                        uploadtypename={rcDoc.docName.Document_Master__r.Document_Name__c}>
+                                    </c-los-generic-document-upload>
+                                     </template>
+                                </template>
+
+                                <template if:true={rcDoc.isUploded} for:each={rcDoc.filesList} for:item="fileRecord"
+                                    for:index="fileIndex">
+                                    <div class="slds-grid slds-gutters" key={fileRecord.contentDocId}>
+                                        <lightning-button variant="base" label={fileRecord.fileName}
+                                            name={fileRecord.recordId} data-filetpe={fileRecord.fileType}
+                                            data-url={fileRecord.url} data-id={fileRecord.contentDocId}
+                                            title="Document Name" onclick={handlePreviewClick}
+                                            class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                        </lightning-button>
+                                        <a if:true={rcDoc.canDownload} target="_blank"
+                                            class="slds-col slds-align_absolute-center" href={fileRecord.downloadurl}
+                                            download>
+                                            <lightning-icon icon-name="utility:download" size="x-small"
+                                                alternative-text="Download" title="Download"></lightning-icon>
+                                        </a>
+                                        <lightning-icon class="slds-col slds-align_absolute-center"
+                                            icon-name="utility:delete" size="x-small" alternative-text="Delete" if:false={disableRC}
+                                            title="Delete" name={fileRecord.contentVerId} onclick={handleClickDelete}>
+                                        </lightning-icon>
+                                        <br />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        </template>
+                    </lightning-accordion-section>
+                    <br>
+                </template>
+
+                    <lightning-accordion-section if:true={showDeferralSection} name="deferralRegisterForRTO"
+                        label="Deferral Register for RTO Agent Action" class="accordClass">
+                        <div class="slds-grid slds-wrap slds-gutters slds-float_right" style="margin-top: -2rem">
+                            <lightning-icon icon-name="utility:favorite" alternative-text="Progress" variant="favorite"
+                                class="slds-col iconimg" title="info variant small" size="small"> </lightning-icon>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="originalDocumentDate" disabled={disableDeferral}
+                                    onchange={handleDeferralRegister} date-style="short" placeholder="DD/MM/YYYY"
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY"
+                                    value={deferralRegister.originalDocumentDate} required={isDeferralMandatory}
+                                    label="Date of Original documents collected" >
+                                </lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="documentHandoverto" label="Document handed over to" required={isDeferralMandatory}
+                                    onchange={handleDeferralRegister} options={documentHandoverToOptions} disabled={disableDeferral}
+                                     value={deferralRegister.documentHandoverto}>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="RTO Agent name/BM Name/CM Name/ COM Name" required={isDeferralMandatory}
+                                    name="rtoAgentName" onchange={handleDeferralRegister} disabled={disableDeferral}
+                                    value={deferralRegister.rtoAgentName} maxlength=255></lightning-input>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="text" label="RTO Agent ID/ BM Emp ID/ CM Emp ID / COM emp ID"
+                                    name="rtoAgentID" onchange={handleDeferralRegister} disabled={disableDeferral} required={isDeferralMandatory}
+                                    value={deferralRegister.rtoAgentID} maxlength=255></lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <div class="slds-is-relative ">
+                                    <label class="slds-form-element__label">
+                                        <abbr class="slds-required" title="required">* </abbr>RTO Agent Phone number/ BM
+                                        phone no/CM phone no/com phone no</label>
+                                    <div class="buttonIn">
+                                        <lightning-input type="text"
+                                            label="RTO Agent Phone number/ BM phone no/CM phone no/com phone no"
+                                            name="rtoAgentNumber" onchange={handleDeferralRegister} disabled={disableDeferral}
+                                            variant="label-hidden" value={deferralRegister.rtoAgentNumber} required={isDeferralMandatory}
+                                            maxlength=255>
+                                        </lightning-input>
+
+                                        <template if:true={boolSendOtp}>
+                                            <lightning-button variant="base" label="SEND SMS" disabled={boolCheckMobileNumber} title="Looks like a link"
+                                                onclick={handleSendOTP} class="button"></lightning-button>
+                                        </template>
+                                        <template if:true={boolResendOtp}>
+                                            <lightning-button variant="base" label="RESEND SMS" title="Looks like a link" 
+                                                onclick={handleSendOTP} disabled={boolCheckMobileNumber} class="button">
+                                            </lightning-button>
+                                        </template>
+                                        <template if:true={boolRequestOtp}>
+                                            Request SMS in&nbsp;<b>{increse1Second}</b>s
+                                        </template>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                    <lightning-input type="date" name="documentHandedOverDate"
+                                        onchange={handleDeferralRegister} date-style="short" placeholder="DD/MM/YYYY"
+                                        message-when-bad-input="Put date in correct format DD/MM/YYYY"  required={isDeferralMandatory}
+                                        value={deferralRegister.documentHandedOverDate} disabled={disableDeferral}
+                                        label="Documents handed over – Date." >
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="confirmationRecieved" label="Confirmation Received"  required={isDeferralMandatory}
+                                    onchange={handleDeferralRegister} options={YesNoOptions} disabled={disableDeferral}
+                                    value={deferralRegister.confirmationRecieved}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="confirmationRecievedDate" 
+                                    onchange={handleDeferralRegister} date-style="short" placeholder="DD/MM/YYYY"
+                                    disabled message-when-bad-input="Put date in correct format DD/MM/YYYY"  required={isDeferralMandatory}
+                                    value={dataObj.confirmationRecievedDate} label="Confirmation Received Date"
+                                    >
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-combobox name="status" label="Status" onchange={handleDeferralRegister} disabled={disableDeferral}
+                                    options={StatusOptions}  required={isDeferralMandatory} value={deferralRegister.status}>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_6-of-12 slds-var-m-top_medium">
+                                <lightning-input type="date" name="commitmentDate" onchange={handleDeferralRegister}
+                                    date-style="short" placeholder="DD/MM/YYYY" disabled={disableDeferral}
+                                    message-when-bad-input="Put date in correct format DD/MM/YYYY"  required={isDeferralMandatory}
+                                    value={deferralRegister.commitmentDate} label="Commitment date" >
+                                </lightning-input>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap slds-gutters">
+                            <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12 slds-var-m-top_medium">
+                                <lightning-textarea name="remarks" onchange={handleDeferralRegister} disabled={disableDeferral}
+                                    value={deferralRegister.remarks}  required={isDeferralMandatory} label="Remark">
+                                </lightning-textarea>
+                            </div>
+                        </div>
+
+                    </lightning-accordion-section>
+                    <br>
+
+                    <lightning-accordion-section name="originalDocsCollected" if:true={showAdditionalDocuments}
+                        label="List of Original Docs collected from Customer" class="accordClass">
+                        <br>
+
+                        <div class="slds-card slds-scrollable">
+
+                            <template if:true={isMobile}>
+                                <!-- FORM FACTOR MOBILE-->
+                                <div class="slds-card__body slds-card__body--inner">
+
+                                    <div class="slds-tile">
+                                        <ul data-id="docLIST" class="slds-has-dividers_around-space">
+                                            <template for:each={propertyDocListToBeDisplayed} for:item="doc"
+                                                for:index="docIndex">
+
+                                                <li key={doc} class="slds-hint-parent slds-item">
+                                                    <article class="slds-tile slds-tile_board">
+
+                                                        <h1 class="slds-truncate"
+                                                            title={doc.docName.Document_Master__r.Document_Name__c}>
+                                                            <lightning-formatted-text
+                                                                class="tileHeaderClass slds-truncate"
+                                                                value={doc.docName.Document_Master__r.Document_Name__c}>
+                                                            </lightning-formatted-text>
+                                                        </h1>
+
+                                                        <div class="slds-tile__detail slds-text-body_small">
+
+                                                            <!-- <fieldset class="slds-form-element">
+                                                                <div class="slds-form-element__row">
+                                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                                        <span
+                                                                            class="slds-form-element__label">Received/Not
+                                                                            Received: </span>
+                                                                        <div class="slds-form-element__control">
+                                                                            <span class="slds-form-element__static">
+                                                                                <lightning-combobox name="isReceived"
+                                                                                    label="Document Received"
+                                                                                    variant="label-hidden"
+                                                                                    onchange={handleInputDoc}
+                                                                                    value={doc.isReceived}
+                                                                                    options={DocumentInfoOptions}
+                                                                                    data-index={docIndex}
+                                                                                    >
+                                                                                </lightning-combobox>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset> -->
+
+                                                                <fieldset class="slds-form-element">
+                                                                    <div class="slds-form-element__row">
+                                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                                            <span class="slds-form-element__label">Ops
+                                                                                Action: </span>
+                                                                            <div class="slds-form-element__control">
+                                                                                <span class="slds-form-element__static">
+                                                                                    <lightning-combobox name="opsAction"
+                                                                                        label="Ops Action" disabled={isNotOpsMaker}
+                                                                                        variant="label-hidden"
+                                                                                        onchange={handleInputDoc}
+                                                                                        value={doc.opsAction}
+                                                                                        options={OpsActionOptions}
+                                                                                        data-index={docIndex}
+                                                                                        >
+                                                                                    </lightning-combobox>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </fieldset>
+
+                                                                <fieldset class="slds-form-element">
+                                                                    <div class="slds-form-element__row">
+                                                                        <div class="slds-form-element slds-size_1-of-1">
+                                                                            <span
+                                                                                class="slds-form-element__label">Remark:
+                                                                            </span>
+                                                                            <div class="slds-form-element__control">
+                                                                                <span class="slds-form-element__static">
+                                                                                    <lightning-textarea name="opsRemark"
+                                                                                        label="Ops Remark"
+                                                                                        variant="label-hidden" disabled={isNotOpsMaker}
+                                                                                        onchange={handleInputDoc}
+                                                                                        value={doc.opsRemark}
+                                                                                        data-index={docIndex}
+                                                                                        >
+                                                                                    </lightning-textarea>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </fieldset>
+
+                                                            <fieldset class="slds-form-element">
+                                                                <div class="slds-form-element__row">
+                                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                                        <span class="slds-form-element__label">View:
+                                                                        </span>
+                                                                        <div class="slds-form-element__control">
+                                                                            <span class="slds-form-element__static">
+                                                                                <template for:each={doc.filesList}
+                                                                                    for:item="fileRecord"
+                                                                                    for:index="fileIndex">
+                                                                                    <div class="slds-grid slds-gutters"
+                                                                                        key={fileRecord.contentDocId}>
+                                                                                        <lightning-button variant="base"
+                                                                                            label={fileRecord.fileName}
+                                                                                            name={fileRecord.recordId}
+                                                                                            data-filetpe={fileRecord.fileType}
+                                                                                            data-url={fileRecord.url}
+                                                                                            data-id={fileRecord.contentDocId}
+                                                                                            title="Document Name"
+                                                                                            onclick={handlePreviewClick}
+                                                                                            class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                                                                        </lightning-button>
+                                                                                        <a if:true={doc.canDownload}
+                                                                                            target="_blank"
+                                                                                            class="slds-col slds-align_absolute-center"
+                                                                                            href={fileRecord.downloadurl}
+                                                                                            download>
+                                                                                            <lightning-icon
+                                                                                                icon-name="utility:download"
+                                                                                                size="x-small"
+                                                                                                alternative-text="Download"
+                                                                                                title="Download">
+                                                                                            </lightning-icon>
+                                                                                        </a>
+                                                                                        <lightning-icon
+                                                                                            class="slds-col slds-align_absolute-center"
+                                                                                            icon-name="utility:delete"
+                                                                                            size="x-small"
+                                                                                            alternative-text="Delete"
+                                                                                            title="Delete" if:false={disableDeferral}
+                                                                                            name={fileRecord.contentVerId}
+                                                                                            onclick={handleClickDelete}>
+                                                                                        </lightning-icon>
+                                                                                        <br />
+                                                                                    </div>
+                                                                                </template>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+
+                                                            <fieldset class="slds-form-element">
+                                                                <div class="slds-form-element__row">
+                                                                    <div class="slds-form-element slds-size_1-of-1">
+                                                                        <span class="slds-form-element__label">Upload /
+                                                                            Delete: </span>
+                                                                        <div class="slds-form-element__control">
+                                                                            <span class="slds-form-element__static">
+                                                                                <c-los-generic-document-upload
+                                                                                    isloading={isloading}
+                                                                                    isdocmanager="true"
+                                                                                    show-upload-component="true"
+                                                                                    collateral-id={doc.docName.Collateral__c}
+                                                                                    doc-name={doc.docName.Document_Master__r.Name}
+                                                                                    ondocumentsuccess={handleSuccess}
+                                                                                    uploadtypename={doc.docName.Document_Master__r.Document_Name__c}>
+                                                                                </c-los-generic-document-upload>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </fieldset>
+                                                        </div>
+                                                    </article>
+                                                </li>
+                                            </template>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template if:false={isMobile}>
+                                <!-- FORM FACTOR DESKTOP / TABLET-->
+                                <template if:true={isloadingTable}>
+                                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                                </template>
+                                <table
+                                    class="slds-table slds-table_cell-buffer tableClass slds-table_bordered slds-table_col-bordered slds-no-row-hover">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="slds-size_3-of-12 slds-cell-shrink slds-theme_shade slds-cell-fixed"
+                                                scope="col">
+                                                <div class="slds-truncate slds-cell-wrap" title="Document Name">Document
+                                                    Name</div>
+                                            </th>
+                                            <!-- <th class="slds-size_2-of-12 slds-cell-fixed" scope="col">
+                                                <div class="slds-truncate" title="Upload">Recieved/Not Received</div>
+                                            </th> -->
+                                            <th  class="slds-size_2-of-12 slds-cell-fixed"
+                                                scope="col">
+                                                <div class="slds-truncate" title="Upload">Ops Action</div>
+                                            </th>
+                                            <th  class="slds-size_3-of-12 slds-cell-fixed"
+                                                scope="col">
+                                                <div class="slds-truncate" title="Upload">Remark </div>
+                                            </th>
+                                            <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                                <div class="slds-truncate" title="View">View </div>
+                                            </th>
+                                            <th class="slds-size_3-of-12 slds-cell-fixed" scope="col">
+                                                <div class="slds-truncate" title="Upload">Upload / Delete </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={propertyDocListToBeDisplayed} for:item="doc"
+                                            for:index="docIndex">
+                                            <tr key={doc} class="slds-hint-parent">
+                                                <td>
+                                                    <div class="slds-cell-wrap" title="Document Name">
+                                                        <lightning-formatted-text
+                                                            value={doc.docName.Document_Master__r.Document_Name__c}>
+                                                        </lightning-formatted-text>
+                                                    </div>
+                                                </td>
+                                                <!-- <td>
+
+                                                    <div class="slds-cell-wrap" title="Document Received/Not Received">
+                                                        <lightning-combobox name="isReceived" label="Document Received"
+                                                            variant="label-hidden" onchange={handleInputDoc}
+                                                            value={doc.isReceived} options={DocumentInfoOptions}
+                                                            data-index={docIndex} >
+                                                        </lightning-combobox>
+                                                    </div>
+                                                </td> -->
+                                                <td>
+                                                    <div class="slds-cell-wrap" title="Ops Action">
+                                                        <lightning-combobox name="opsAction" label="Ops Action" disabled={isNotOpsMaker}
+                                                            variant="label-hidden" onchange={handleInputDoc}
+                                                            value={doc.opsAction} options={OpsActionOptions}
+                                                            data-index={docIndex} >
+                                                        </lightning-combobox>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="slds-cell-wrap" title="Ops Remark">
+                                                        <lightning-textarea name="opsRemark" label="Ops Remark"
+                                                            variant="label-hidden" onchange={handleInputDoc} disabled={isNotOpsMaker}
+                                                            value={doc.opsRemark} data-index={docIndex}
+                                                            >
+                                                        </lightning-textarea>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="slds-cell-wrap" title="Document Name">
+                                                        <template for:each={doc.filesList} for:item="fileRecord"
+                                                            for:index="fileIndex">
+                                                            <div class="slds-grid slds-gutters"
+                                                                key={fileRecord.contentDocId}>
+                                                                <lightning-button variant="base"
+                                                                    label={fileRecord.fileName}
+                                                                    name={fileRecord.recordId}
+                                                                    data-filetpe={fileRecord.fileType}
+                                                                    data-url={fileRecord.url}
+                                                                    data-id={fileRecord.contentDocId}
+                                                                    title="Document Name" onclick={handlePreviewClick}
+                                                                    class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                                                </lightning-button>
+                                                                <a if:true={doc.canDownload} target="_blank"
+                                                                    class="slds-col slds-align_absolute-center"
+                                                                    href={fileRecord.downloadurl} download>
+                                                                    <lightning-icon icon-name="utility:download"
+                                                                        size="x-small" alternative-text="Download"
+                                                                        title="Download"></lightning-icon>
+                                                                </a>
+                                                                <lightning-icon
+                                                                    class="slds-col slds-align_absolute-center"
+                                                                    icon-name="utility:delete" size="x-small"
+                                                                    alternative-text="Delete" title="Delete"
+                                                                    name={fileRecord.contentVerId}
+                                                                    onclick={handleClickDelete}></lightning-icon>
+                                                                <br />
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <c-los-generic-document-upload isloading={isloading}
+                                                        isdocmanager="true" show-upload-component="true"
+                                                        collateral-id={doc.docName.Collateral__c}
+                                                        doc-name={doc.docName.Document_Master__r.Name}
+                                                        ondocumentsuccess={handleSuccess}
+                                                        uploadtypename={doc.docName.Document_Master__r.Document_Name__c}>
+                                                    </c-los-generic-document-upload>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </template>
+
+
+
+                        </div>
+
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </lightning-layout-item>
+            <!--<lightning-layout multiple-rows class="slds-p-bottom_small">-->
+            <lightning-layout-item if:false={isNotOpsUser} size="12" small-device-size="12"
+                class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <lightning-input label="Remarks" data-id="remark" name="OPS_PDD_Remark__c" type="text" onchange={handleOpsAction} disabled={disableDeferral}
+                    value={remarksLoan}></lightning-input>
+            </lightning-layout-item>
+            <lightning-layout-item if:false={isNotOpsUser} size="12" small-device-size="12"
+                class="component slds-p-around_small slds-size_12-of-12 slds-small-size_12-of-12 slds-large-size_6-of-12"
+                medium-device-size="12" large-device-size="6">
+                <label class="slds-form-element__label">Action</label>
+                <lightning-combobox label="Action" data-id="action" placeholder="Select Action" value={opsActionLoan} onchange={handleOpsAction} disabled={disableDeferral}
+                    name="OPS_PDD_Action__c" class="validate" variant="label-hidden" options={opsPDDActionOptions}> 
+                </lightning-combobox>
+            </lightning-layout-item>
+            <!--</lightning-layout>-->
+            <template if:true={isMobile}>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-icon icon-name="action:reject" size="x-small" alternative-text="Cancel" disabled={disableDeferral}
+                            if:true={showCancel} onclick={handleCancel}></lightning-icon>
+                        <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save" type="submit" disabled={disableDeferral}
+                            class="slds-m-left_small" onclick={checkRCNotification}></lightning-icon>
+                            <lightning-icon if:true={showSubmit} icon-name="action:approval"  size="x-small" alternative-text="Submit" type="submit" disabled={disableDeferral}
+                            class="slds-m-left_small" onclick={handleReSubmit}></lightning-icon>
+                    </div>
+                </lightning-layout-item>
+
+                <!-- <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-align_absolute-center">
+                            <figure>
+                                <div class="slds-align_absolute-center">
+                    
+                                    <img src={cancelLogo} onclick={handleCancel} slot="actions"/>
+                                </div>
+                                <figcaption
+                                    class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                    Cancel</figcaption>
+                            </figure>
+                        </div>
+                    <div class="slds-col slds-align_absolute-center">
+                        <figure>
+                            <div class="slds-align_absolute-center">
+                        
+                                <img src={nextLogo} onclick={handleSubmit} slot="actions"/>
+                            </div>
+                            <figcaption
+                                class="slds-align_absolute-center slds-text-body_small slds-p-top_xx-small slds-text-color_weak">
+                                Save</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </lightning-layout-item> -->
+            </template>
+            <template if:false={isMobile}>
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                    <div class="slds-m-top_large slds-align_absolute-center slds-m-right_small">
+                        <lightning-button label="Cancel" icon-name="utility:close" if:true={showCancel} disabled={disableDeferral}
+                            onclick={handleCancel} class="buttonClass slds-m-right_small"></lightning-button>
+                            <lightning-button data-id="modifyCollateral" label="Update Collateral" variant="brand" disabled={disableDeferral} if:true={showModifyCollateral}
+                            onclick={handleModifyCollateral} class="buttonClass slds-m-right_small"></lightning-button>
+                        <lightning-button label="Save" icon-name="utility:chevronright" icon-position="right" disabled={disableDeferral}
+                            onclick={checkRCNotification} class="buttonClass slds-m-right_small" >
+                        </lightning-button>
+                        <lightning-button label="Save & Submit"  if:true={showSubmit} icon-name="utility:chevronright" icon-position="right"
+                        onclick={handleReSubmit} class="buttonClass slds-m-right_small">
+                    </lightning-button>
+                    </div>
+                </lightning-layout-item>
+
+            </template>
+
+            <!-- <lightning-layout-item size="12" small-device-size="12" large-device-size="12">
+                    <lightning-button label="Cancel" class="slds-m-right_small" variant="brand-outline" name='cancel'
+                        onclick={handleCancel}></lightning-button>
+                    <lightning-button label="Submit" disabled={disableSubmit} class="disabled-submit-button"
+                        variant="brand" name='save' onclick={handleSubmit}></lightning-button>
+            </lightning-layout-item> -->
+        </lightning-layout>
+
+        <template if:true={showPopup}>
+            <!-- Modal/Popup Box LWC starts here -->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box LWC header here -->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                            <lightning-icon icon-name="utility:close"
+                                alternative-text="close"
+                                variant="inverse"
+                                size="small" ></lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Do you wish to continue</h2>
+                    </header>
+                    <!-- Modal/Popup Box LWC body starts here -->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        Invoice and RC details do not match, do you wish to continue ?
+                    </div>
+                    <!-- Modal/Popup Box LWC footer starts here -->
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_brand" onclick={handleSubmit} title="Yes">Yes</button>
+                        <button class="slds-button slds-button_brand" onclick={closeModal} title="No">No</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+         
+    </lightning-card>
+
+</template>

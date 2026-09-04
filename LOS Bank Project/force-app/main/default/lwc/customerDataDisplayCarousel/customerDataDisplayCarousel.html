@@ -1,0 +1,48 @@
+<template>
+
+    <div class="slds-p-around_small">
+        <article class="slds-box">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <!--<lightning-icon icon-name="standard:user" size="small"></lightning-icon>-->
+                    <div class="slds-media__body slds-p-right_small">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate" title={customerRecord.CustomerID}
+                                data-id={customerRecord.CustomerID}>&nbsp;&nbsp;{customerRecord.CustomerID}</a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning-icon icon-name="action:update_status" onclick={handleSelection} size="xx-small">
+                        </lightning-icon>
+                    </div>
+                </header>
+            </div>
+    
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-form">
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Customer Full Name</label>
+                        <div class="slds-form-element__control">{customerRecord.CustomerFullName}</div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">PAN</label>
+                        <div class="slds-form-element__control">{customerRecord.PAN}</div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Aadhaar Number</label>
+                        <div class="slds-form-element__control">{customerRecord.AadhaarNumber}</div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Mobile Number</label>
+                        <div class="slds-form-element__control">{customerRecord.MobileNumber}</div>
+                    </div>
+                    <div class="slds-form-element">
+                        <label class="slds-form-element__label">Date Of Birth</label>
+                        <div class="slds-form-element__control">{customerRecord.DateOfBirth}</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+</template>

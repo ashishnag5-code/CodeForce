@@ -1,0 +1,92 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <h4 style="text-align: center;">
+                Annexure I
+            </h4>
+            <p style="text-align: center;">(To be printed on stamp Paper)</p>
+            <p>To,<br/>
+            The Branch Manager<br/>
+            AU Small Finance Bank Ltd.</p>
+            <p>Subject: Payment of Loan amount in favor of {!btPayment.Beneficiary_Name__c}</p>
+            <p>Dear Sir,</p>
+            <p>Refer to my loan application no. {!loan.Application_Id__c} dated {!createdDate} for finance on
+vehicle model {!collateral.Make__c} {!collateral.Model__c} bearing Registration no. {!collateral.Registration_Number__c}, I
+would like to inform you that I have purchased the above said vehicle from
+___________________ S/O _______________ resident
+_____________________________________________ Registered owner
+of the said vehicle is {!collateral.Current_Owner_Name__c}
+S/O____________________.</p>
+            <p>I request you kindly make the payment of Rs. <apex:outputField value="{!btPayment.Net_Amount__c}"/>
+from the sanctioned loan amount of Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/>,
+I do not have any objection in this.</p>
+            <p>Any dispute arises due to any reason related to the above said vehicle,
+should be my own responsibility. I will not hold EMI repayment due to any
+legal dispute in transfer of vehicle or and legal case related to the above. I
+also confirm that the above said vehicle is in my possession.</p>
+            <p>Thanking You<br/><br/><br/><br/>
+            Signature<br/>
+            {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}<br/>
+            {!customerCurrentAddress.Address_Line_1__c},&nbsp;
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_2__c))}">{!customerCurrentAddress.Address_Line_2__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.Address_Line_3__c))}">{!customerCurrentAddress.Address_Line_3__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.District__c))}">{!customerCurrentAddress.District__c},&nbsp;</apex:outputText>
+            <apex:outputText rendered="{!NOT(ISBLANK(customerCurrentAddress.City__c))}">{!customerCurrentAddress.City__c},&nbsp;</apex:outputText>{!customerCurrentAddress.State__c},&nbsp;{!customerCurrentAddress.Pincode__c}
+            </p>
+
+            <div style="page-break-after:always;"/>
+
+            <h4 style="text-align: center;">
+                Annexure 2
+            </h4>
+            <p style="text-align: center;">(To be printed on Company letter head)</p>
+            <p>To,<br/>
+            {!btPayment.Beneficiary_Name__c}<br/>
+            {!btPayment.Bank_Name_Lookup__r.Branch_Name__c}<br/>
+            (Name and address of Finance company)</p>
+            <p>Subject: Payment of Settlement amount of Loan account no {!btPayment.Loan_Number__c}</p>
+            <p>Dear Sir,</p>
+            <p>In reference to you Foreclosure letter date ______________ bearing account number
+                {!btPayment.Loan_Number__c}
+                In the name of {!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}, we are attaching the payment
+                of
+                Rs. <apex:outputField value="{!btPayment.Net_Amount__c}"/> through Cheque / DD number _______________________ payable
+                at_________________________</p>
+            <p>Please acknowledge the duplicate copy of this letter as a token of acceptance of payment
+                towards full and final payment of loan account number {!btPayment.Loan_Number__c}
+                You are requested to handover the NOC to us and not customer in any condition.</p><br/>
+            <p>Thanking You</p>
+            <p>
+                Yours Faithfully
+            </p>
+            <br/>
+            <p>Authorized Signatory</p>
+            <h5>For AU Small Finance Bank Ltd.</h5>
+
+            <div style="page-break-after:always;"/>
+            <h4 style="text-align: center;">
+                Annexure 3
+            </h4>
+            <p>To,<br/>
+            The Manager,<br/>
+            {!btPayment.Beneficiary_Name__c}<br/>
+            {!btPayment.Bank_Name_Lookup__r.Branch_name__c}<br/>
+            (Name of Finance Company)</p>
+            <p>Subject: Authorization for Loan Closure and NOC issue</p>
+            <p>Dear Sir,</p>
+            <p>In reference to the above, I would like to inform you that I have taken a loan on vehicle number
+                {!collateral.Registration_Number__c} vide loan account number {!btPayment.Loan_Number__c}.</p>
+            <p>I have approached AU Small Finance Bank Ltd. for takeover the above said loan and which is
+                sanction by them. I hereby authorized AU Small Finance Bank Ltd. to get the entire related
+                document (NOC) from you on my behalf; I do not have any objection in it.</p><br/>
+            <p>Thanking You<br/>
+            Yours Faithfully<br/>
+            {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</p>
+        </body>
+    </html>
+</apex:page>

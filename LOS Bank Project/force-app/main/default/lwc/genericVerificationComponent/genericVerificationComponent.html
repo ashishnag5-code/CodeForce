@@ -1,0 +1,62 @@
+<template>
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <div class="slds-is-relative ">
+        <label class="slds-form-element__label">Aadhaar Number
+        </label>
+
+        <div class="buttonIn">
+                <lightning-input type="text" placeholder="Enter Aadhaar/VID Number here" data-id="aadhaarInput"
+                    name="Aadhaar_Number__c" class="validate input mobilebutton" value={aadhaarNumberOnUi} variant="label-hidden"
+                    onchange={handleChangeNumber} max-length="16" min-length="12"
+                    message-when-pattern-mismatch="Enter Valid Aadhaar or VID" disabled="true"></lightning-input>
+
+            <!--    <div class="button slds-align_absolute-center">    
+                    <lightning-icon size="small" icon-name="utility:preview"
+                    data-id="previewAadhaar" class="previewIcon" alternative-text="preview"
+                    title="Preview" onclick={unMaskNumber}></lightning-icon>
+                </div>  -->
+
+            <template if:true={boolSendOtp}>
+                <lightning-button variant="base" label="SEND OTP" disabled={boolCheckaadhaarNumber}
+                    title="Looks like a link" onclick={handleSendOTP} class="button"></lightning-button>
+            </template>
+
+            <template if:true={boolResendOtp}>
+                <lightning-button variant="base" label="RESEND OTP" title="Looks like a link" onclick={handleResendOTP}
+                    disabled={boolCheckaadhaarNumber} class="button"></lightning-button>
+            </template>
+
+            <template if:true={isVerified}>
+                <!--<lightning-button variant="base" label="Show Details" title="Looks like a link"
+                    onclick={showAadhaarDetails} class="button"></lightning-button>-->
+                    <lightning-icon size="small" variant="success" class="button"
+                                    icon-name="utility:success" title="Mobile"></lightning-icon>
+            </template>
+        </div>
+    </div>
+    <br><br>
+
+    <template if:true={isEnterOtp}>
+        <div class="slds-is-relative">
+            <label class="slds-form-element__label">
+                <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+            <div class="buttonIn">
+
+                <lightning-input type="Text" max-length="6" pattern="[0-9]{6}" class="validate checkValidity"
+                    placeholder="Enter OTP here" variant="label-hidden" onchange={handleChangeOtp}
+                    message-when-pattern-mismatch="Please enter a valid OTP." label="Enter OTP">
+                </lightning-input>
+
+                <lightning-button variant="base" label="VERIFY" title="Looks like a link" onclick={handleVerify}
+                    disabled={boolVerify} class="button"></lightning-button>
+            </div>
+        </div>
+        <div class="slds-align_absolute-center slds-m-top_small">
+            <template if:true={boolRequestOtp}>
+                Request OTP in&nbsp;<b>{increse1Second}</b>s
+            </template>
+        </div>
+    </template>
+</template>

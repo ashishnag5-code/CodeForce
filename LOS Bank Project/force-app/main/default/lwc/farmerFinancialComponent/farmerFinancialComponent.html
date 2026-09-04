@@ -1,0 +1,192 @@
+<template>
+
+    <div class="slds-border_top">
+        <div class="slds-p-top_medium">
+            <template if:false={displayRecordEdit}>
+            <lightning-card title="Agriculture Details" icon-name="action:adjust_value">
+                <template if:true={displayTable}>
+                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                    aria-label="Existing Agriculture Income Details">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" class="slds-cell-wrap">
+                                <div title="Opportunity Name"> Existing Income Source</div>
+                            </th>
+                            <th scope="col" class="slds-cell-wrap slds-m-left_small">
+                                <div title="Account Name">Annual Income</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={incomeList} for:item="income" for:index="index">
+                            <tr class="slds-hint-parent" key={income.Name}>
+                                <td data-label="Income Source" class="slds-cell-wrap">
+                                    <div title={income.Name}>{income.Name}</div>
+                                </td>
+                                <td data-label="Annual Income" class="slds-cell-wrap slds-m-left_small">
+                                    <div title={income.Value}>
+                                        Rs. <lightning-formatted-number value={income.Value} format-style="decimal" maximum-fraction-digits="0"></lightning-formatted-number>
+                                    </div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <br/><br/>
+                </template>
+
+                <template for:each={agricultureIncomeDetailsList} for:item="item" for:index="index">
+
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections} key={item.id}>
+                        <lightning-accordion-section name={item.label} label={item.label}>
+        
+                        <lightning-layout>
+                            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                                <lightning-combobox name="agricultureType" 
+                                label="Please select the type of Agriculture Income" 
+                                value={item.agricultureType} 
+                                options={agricultureTypeOptions} 
+                                required
+                                access-key={index}
+                                onchange={handleChange}
+                                padding="around-small"></lightning-combobox>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                            
+
+        
+
+                            <template if:true={item.renderOwnLandTemplate}>
+                                <c-farmer-own-land-rcl-template 
+                                applicant-id={applicantId} 
+                                financial-id={financialId}
+                                new-records={ownLandRecords}
+                                oncalculatemonthlyincome={passIncomeToParent}
+                                initial-record={initialRecord}
+                                onfarmerevent={passToParent}
+                                own-land-records={ownLandRecords}
+                                record-type-id={recordTypeId}
+                                loan-id={loanAppId} 
+                                is-r2={isR2}
+                                type={type}></c-farmer-own-land-rcl-template>
+                            </template>
+
+                            <template if:true={item.renderRclTemplate}>
+                                <c-farmer-own-land-rcl-template 
+                                applicant-id={applicantId} 
+                                financial-id={financialId}
+                                new-records={rclRecords}
+                                oncalculatemonthlyincome={passIncomeToParent}
+                                initial-record={initialRecord}
+                                onfarmerevent={passToParent}
+                                rcl-records={rclRecords}
+                                record-type-id={recordTypeId}
+                                loan-id={loanAppId} 
+                                is-r2={isR2}
+                                type={type}></c-farmer-own-land-rcl-template>
+                            </template>
+
+                            <template if:true={item.renderCommercialAgriHaulageTemplate}>
+                                <c-farmer-commercial-agri-haulage-template 
+                                commercial-records={commercialRecords}
+                                applicant-id={applicantId} 
+                                financial-id={financialId}
+                                initial-record={initialRecord}
+                                new-records={commercialRecords}
+                                oncalculatemonthlyincome={passIncomeToParent}
+                                onfarmerevent={passToParent}
+                                loan-id={loanAppId}
+                                is-r2={isR2}
+                                record-type-id={commercialRecordTypeId}></c-farmer-commercial-agri-haulage-template>
+                            </template>
+
+                            <template if:true={item.renderDairyBusinessTemplate}>
+                                <c-farmer-dairy-business-template 
+                                dairy-records={dairyRecords}
+                                applicant-id={applicantId} 
+                                financial-id={financialId}
+                                new-records={dairyRecords}
+                                record-type-id={dairyRecordTypeId}
+                                oncalculatemonthlyincome={passIncomeToParent}
+                                onfarmerevent={passToParent}
+                                loan-id={loanAppId}
+                                is-r2={isR2}
+                                initial-record={initialRecord}
+                                ></c-farmer-dairy-business-template>
+                            </template>
+            
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                <div class="slds-border_top" key={item.id}></div>
+                </template>
+
+                
+
+            </lightning-card>
+        </template>
+        </div>
+    </div>
+
+    <template if:true={displayRecordEdit}>
+        <template if:true={renderDairyBusinessTemplate}>
+            <c-farmer-dairy-business-template 
+            dairy-records={dairyRecords}
+            applicant-id={applicantId} 
+            financial-id={financialId}
+            record-type-id={dairyRecordTypeId}
+            oncalculatemonthlyincome={passIncomeToParent}
+            onfarmerevent={passToParent}
+            loan-id={loanAppId}
+            is-r2={isR2}
+            ></c-farmer-dairy-business-template>
+        </template>
+        <template if:true={renderCommercialAgriHaulageTemplate}>
+            <c-farmer-commercial-agri-haulage-template 
+            commercial-records={commercialRecords}
+            applicant-id={applicantId} 
+            financial-id={financialId}
+            initial-record={initialRecord}
+            oncalculatemonthlyincome={passIncomeToParent}
+            onfarmerevent={passToParent}
+            loan-id={loanAppId}
+            is-r2={isR2}
+            record-type-id={commercialRecordTypeId}></c-farmer-commercial-agri-haulage-template>
+        </template>
+        <template if:true={renderOwnLandTemplate}>
+            <c-farmer-own-land-rcl-template 
+            applicant-id={applicantId} 
+            financial-id={financialId}
+            oncalculatemonthlyincome={passIncomeToParent}
+            initial-record={initialRecord}
+            onfarmerevent={passToParent}
+            new-records={ownLandRecords}
+            record-type-id={recordTypeId}
+            loan-id={loanAppId}
+            is-r2={isR2}
+            type={type}></c-farmer-own-land-rcl-template>
+        </template>
+        <template if:true={renderRclTemplate}>
+            <c-farmer-own-land-rcl-template 
+            applicant-id={applicantId} 
+            financial-id={financialId}
+            oncalculatemonthlyincome={passIncomeToParent}
+            initial-record={initialRecord}
+            onfarmerevent={passToParent}
+            new-records={rclRecords}
+            record-type-id={recordTypeId}
+            loan-id={loanAppId}
+            is-r2={isR2}
+            type={type}></c-farmer-own-land-rcl-template>
+        </template>
+        <!--<div class="slds-align_absolute-center">
+            <lightning-icon size="x-small" icon-name="action:back" class="slds-m-around_small" onclick={handleCloseAll}></lightning-icon>
+        </div>-->
+    </template>
+    <template if:false={isR2}>
+        <lightning-button class="slds-m-around_small slds-align_absolute-center buttonColor" variant="brand" label="Back" 
+        onclick={handleCloseAll}></lightning-button>
+    </template>
+    
+    
+    
+</template>

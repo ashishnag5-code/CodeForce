@@ -1,0 +1,141 @@
+<template>
+    <!-- Spinner Section-->
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+    <!--End-->
+    <lightning-layout>
+        <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+            <lightning-card class="no-wrap" icon-name="standard:account">
+                <h1 slot="title" class="no-wrap"><a> {objAccountRecord.Account_Number__c}</a></h1>
+                <div class="component slds-hide" data-id="Account_Number__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">CASA Account No</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.Account_Number__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="OD_Limit_Sanctioned__c">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Limit Amount</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {objAccountRecord.OD_Limit_Sanctioned__c}
+                        </div>
+                    </div>
+                </div>
+                <div class="component slds-hide" data-id="SOA">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                           <!-- <b><label class="slds-form-element__label">SOA</label></b>-->
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            <lightning-button variant="base" label="View" title="Looks like a link" onclick={handleCC}
+                                class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Response Section-->
+                <template if:true={showODReponseSection}>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Over Limit Amount</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.limitAmount}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Over Limit DPD</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Start Date</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.startDate}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">End Date</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.endDate}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Drawing Power</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.drawingPower}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Secured</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.isSecured}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Renewal Mode</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.renewalMode}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Next Expiry Date</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.nextexpiryDate}
+                        </div>
+                    </div>
+                </div>
+                <div class="component">
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                        <div class="slds-size_1-of-2">
+                            <b><label class="slds-form-element__label">Fixed Interest Rate</label></b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {responseStatement.fixedInterestRate}
+                        </div>
+                    </div>
+                </div>
+                </template>
+            </lightning-card>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="slds-p-bottom--small"></div>
+</template>

@@ -1,0 +1,128 @@
+<template>
+    <c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+    <lightning-accordion allow-multiple-sections-open>
+        <lightning-accordion-section name={objAccountRecord.strLoanTitle} label={objAccountRecord.strLoanTitle}>
+            <lightning-layout>
+                <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                    <lightning-card  class="no-wrap" icon-name="standard:account" >
+                        <h1 slot="title" class="no-wrap"><a>{objAccountRecord.strLoanTitle}</a></h1>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Loan Number</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strLoanNumber}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Product</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strProduuct}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Branch Name</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strBranchName}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Customer Relationship</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strCustomerRelationship}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Current Status</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strCurrentStatus}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Loan Amount</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strLoanAmount}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Tenure (Month)</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strTenureMonth}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Account Opening Date</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strAccountOpeningDate}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Maturity Date</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strMaturityDate}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">No of Emi Paid</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strNoofEmiPaid}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">Total Outstanding</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strTotalOutstanding}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">EMI Amount</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strEMIAmount}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">ROI</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                {objAccountRecord.strROI}
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small">
+                            <div class="slds-size_1-of-2">
+                                <b><label class="slds-form-element__label">POS</label></b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                  <!--{objAccountRecord.strPOS}-->
+                                  {posVal}
+                            </div>
+                        </div>
+                    </lightning-card>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-accordion-section>
+        <div class="slds-border_bottom"></div>
+    </lightning-accordion>
+</template>

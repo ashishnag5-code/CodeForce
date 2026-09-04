@@ -1,0 +1,48 @@
+<apex:page controller="CAMReportVFPageController" readOnly="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false">
+    <html>
+        <head>
+        
+            <style>
+                body{
+                    border:1px;
+                    border-block-start: 2px;
+                    border-block-start-color: rgb(222, 222, 222);
+                    border-block-end-style: solid; 
+                }
+                .pbSubheader{
+                    background-color: rgb(109,48,120);
+                    font-size: medium;
+                
+                }
+                .pbSubheader h3{
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    font-size: 14px;
+                }   
+            </style>
+        </head>
+        <body>
+            <apex:pageBlock title="">
+                <c:CaseSummaryR2 loanApp="{!loan}" applicantDetails="{!applicant}" pslDetailsRecord="{!pslDetails}"
+                productDetailsValue="{!productDetails}" RODetails="{!RO}" vahaanValue="{!vahaanPdf}" currentUserVar="{!currentUser}"/>
+                <c:VerificationDetailsR2 productRTMapping="{!productRT}" addressRecords="{!addressList}" cpvDetailsForApp="{!cpvDetails}" loanApp="{!loan}" factorDetails="{!factor}" applicantList="{!applicants}" productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" vehiclededupe="{!vehiclededupe}" bureauScore="{!bureauScore}" ></c:VerificationDetailsR2>
+                <c:CustomerDetailsR2 addressRecords="{!addressList}" productDetailsValue="{!productDetails}" fieldInvestigationRecordDetails="{!fiStatusRecords}" collateralDetails="{!collateral}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}"></c:CustomerDetailsR2>
+                <c:FIStatus fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" factorDetails="{!factor}" loanApp="{!loan}"></c:FIStatus>
+                <c:VehicleAndFinanceDetailsR2 productDetailsValue="{!productDetails}" subProductValue="{!subProduct}" vahaanValue="{!vahaanPdf}" productRTMapping="{!productRT}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" valuvationDetails="{!valuation}"></c:VehicleAndFinanceDetailsR2>
+                <c:IncomeProfileR2 loanApp="{!loan}" applicantIdList="{!applicantIds}" applicantList="{!applicants}" financialRecord="{!financialsR2}" cbsCibilLoansRecords="{!cbsCibilLoanRecords}"></c:IncomeProfileR2>
+                <c:ExposureDetails loanApp="{!loan}" exposureCBSAccountRecords="{!cbsRecords}"></c:ExposureDetails>
+                <c:ExposureDetailsForApplicant applicantDetail="{!applicant}" loanApp="{!loan}" exposureDetailsForAppBankRecords="{!applicantExposure}"></c:ExposureDetailsForApplicant>
+                <c:AccountsFD cbsRecordsDetailsFD="{!cbsRecordsFD}"></c:AccountsFD>
+                <c:BankingDetails cartRecordsDetails="{!cartRecords}" sentFromDetail="{!sentFromVF}"></c:BankingDetails>
+                <c:FleetDetails fleetRecordsList="{!fleetRecords}"></c:FleetDetails>
+                <c:CibilSummary cibilRecordsDetails="{!cibilRecords}"></c:CibilSummary>
+                <c:Query queryRecords="{!queries}"></c:Query>
+                <c:TeleVerificationRemarks tvrRecordDetails="{!tvrRecords}"></c:TeleVerificationRemarks>
+                <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!subPage}" subProductValue="{!subProduct}"></c:SanctionCondition>
+                <c:ApprovalFlow loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}"></c:ApprovalFlow>
+            
+            </apex:pageBlock>
+        </body>
+    </html>
+</apex:page>

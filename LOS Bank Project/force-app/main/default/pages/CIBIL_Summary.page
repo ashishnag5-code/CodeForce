@@ -1,0 +1,746 @@
+<apex:page standardController="Applicant__c" extensions="CIBIL_Summary_Controller" renderAs="html" showHeader="false" sidebar="true" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+    <apex:variable var="conCount" value="{!1}"/>
+    <apex:variable var="emailCount" value="{!1}"/>
+    <apex:variable var="addrssCount" value="{!1}"/>
+    <html>
+        <head>
+            <style>
+                .ft12 {
+                font-family: Times;
+                color: #000000;
+                white-space: wrap;
+                line-height: 140%;
+                font-size: 12px;
+                }
+                .ft13 {            
+                margin-top: 7%;
+                }  
+                .page-break {
+                display:block;
+                page-break-after:always;
+                }
+                
+                .table-bordered {
+                border: 1px solid #000;
+                border-collapse : collapse;
+                font-size : .7em;
+                }
+                thead>tr>th {
+                vertical-align: bottom;
+                border: 1px solid #000;
+                border-spacing: 0;
+                text-align:center;
+                border-collapse: collapse;
+                background : #7944a0;
+                color:white;
+                padding: 8px 15px;
+                }
+                
+                td {
+                vertical-align: bottom;
+                border: 1px solid #000;
+                border-spacing: 0;
+                border-collapse: collapse;
+                text-align:center;
+                padding: 8px 15px;
+                }
+                
+                .header>td{
+                font-weight:bold;
+                background : #c4c4c4;
+                padding: 8px 15px;
+                }
+                
+                
+            </style>
+        </head>
+        <body>
+            <table width="80%" class="table-bordered ft12" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="3"><b>Customer Demographic</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Customer Name</td>
+                        <td colspan="2">{!customerName}</td>
+                    </tr>
+                    <tr>
+                        <td>Relationship with Case</td>
+                        <td colspan="2">{!rltnshpWithCase}</td>
+                    </tr>
+                    <tr>
+                        <td>Age (in Years) &amp; DOB</td>
+                        <td colspan="2">{!ageAndDob}</td>
+                    </tr>
+                    <apex:repeat var="contact" value="{!conList}">
+                        <tr>
+                            <td>Contact no {!conCount}</td>
+                            <td colspan="2">{!contact}</td>
+                        </tr>
+                        <apex:variable var="conCount" value="{!conCount+1}"/>
+                    </apex:repeat>
+                    <apex:repeat var="email" value="{!emailList}">
+                        <tr>
+                            <td>Email id {!emailCount}</td>
+                            <td colspan="2">{!email}</td>
+                        </tr>
+                        <apex:variable var="emailCount" value="{!emailCount+1}"/>
+                    </apex:repeat>
+                    <apex:repeat var="address" value="{!addrssList}">
+                        <tr>
+                            <td>Address{!address.enquiry} {!addrssCount}</td>
+                            <td>{!address.address}</td>
+                            <td>{!address.dateReported}</td>
+                        </tr>
+                        <apex:variable var="addrssCount" value="{!addrssCount+1}"/>
+                    </apex:repeat>
+                    <tr>
+                        <td>Bureau Vintage</td>
+                        <td colspan="3">{!bureauVintageDate}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table width="80%" class="table-bordered ft12 ft13" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="6"><b>Score &amp; Thickness</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bureau Score</td>
+                        <td colspan="5"><b>{!bureauScore}</b></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>Particulars</b></td>
+                        <td rowspan="2"><b>Unsecured Facility</b></td>
+                        <td colspan="3"><b>Secured Facility</b></td>
+                        <td rowspan="2"><b>Total</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicle Loan</b></td>
+                        <td><b>Home Loan</b></td>
+                        <td><b>Others</b></td>
+                    </tr>
+                    <tr>
+                        <td>Total Facilities (Nos &amp; Value)</td>
+                        <td>
+                            {!ttlFacltsUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlFacltsUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlFacltsVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlFacltsVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                            
+                        </td>
+                        <td>{!ttlFacltsHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlFacltsHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlFacltsOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlFacltsOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlFacltsLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlFacltsLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Live_POS_amount (Rs.)</td>
+                        <td>{!ttlLivePOSUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLivePOSUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLivePOSVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLivePOSVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLivePOSHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLivePOSHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLivePOSOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLivePOSOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLivePOSLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLivePOSLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Overdue_amt (Rs.)</td>
+                        <td>{!ttlOvrDueUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Availed Facility in last 3 year (Nos &amp; value)</td>
+                        <td>{!ttlAvldFacltUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlAvldFacltUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlAvldFacltVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlAvldFacltVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlAvldFacltHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlAvldFacltHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlAvldFacltOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlAvldFacltOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlAvldFacltLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlAvldFacltLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Closed_facilities (Nos &amp; Value)</td>
+                        <td>{!ttlClsdFacltUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlClsdFacltUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlClsdFacltVhclLoanCount} - 
+                             <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlClsdFacltVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlClsdFacltHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlClsdFacltHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlClsdFacltOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlClsdFacltOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlClsdFacltLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlClsdFacltLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Live_Loan Amt (Nos &amp; Value)</td>
+                        <td>{!ttlLiveLoanUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLiveLoanUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLiveLoanVhclLoanCount} - 
+                             <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLiveLoanVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLiveLoanHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLiveLoanHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLiveLoanOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLiveLoanOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlLiveLoanLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlLiveLoanLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Overdue_facilities (Nos &amp; Value)</td>
+                        <td>{!ttlOvrDueFacltUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueFacltUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueFacltVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueFacltVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueFacltHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueFacltHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueFacltOthrLoanCount} -
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueFacltOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlOvrDueFacltLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlOvrDueFacltLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Suitfiled facility(Last 3 Year) - Yes/No</td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltUnscrdLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltVhclLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltHomeLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltOthrLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltLoan}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Writeoff facility (Last 3 Year)- Yes/No</td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltUnscrdLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltVhclLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltHomeLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltOthrLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltLoan}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Willfull Default (Yes/NO)</td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltUnscrdLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltVhclLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltHomeLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltOthrLoan}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!sutfldFacltLoan}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table width="80%" class="table-bordered ft12 ft13" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="6"><b>Loan In Capacity</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><b>Particulars</b></td>
+                        <td rowspan="2"><b>Unsecured Facility</b></td>
+                        <td colspan="3"><b>Secured Facility</b></td>
+                        <td rowspan="2"><b>Total</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicle Loan</b></td>
+                        <td><b>Home Loan</b></td>
+                        <td><b>Others</b></td>
+                    </tr>
+                    <tr>
+                        <td>SOW (Nos &amp; value)</td>
+                        <td>{!ttlSOWUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlSOWUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlSOWVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlSOWVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlSOWHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlSOWHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlSOWOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlSOWOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlSOWLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlSOWLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Co-app (Nos &amp; value)</td>
+                        <td>{!ttlCoAppUnscrdLoanCount} -
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlCoAppUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText> 
+                        </td>
+                        <td>{!ttlCoAppVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlCoAppVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlCoAppHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlCoAppHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlCoAppOthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlCoAppOthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlCoAppLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlCoAppLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>GTR (Nos &amp; value)</td>
+                        <td>{!ttlGTRUnscrdLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlGTRUnscrdLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlGTRVhclLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlGTRVhclLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlGTRHomeLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlGTRHomeLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlGTROthrLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlGTROthrLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                        <td>{!ttlGTRLoanCount} - 
+                            <apex:outputText value="{0, number, 0}">
+                                <apex:param value="{!ttlGTRLoanSnctnAmount}"/>
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table width="80%" class="table-bordered ft12 ft13" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="5"><b>Highest DPD</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><b>Particulars</b></td>
+                        <td rowspan="2"><b>Unsecured Facility</b></td>
+                        <td colspan="3"><b>Secured Facility</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicle Loan</b></td>
+                        <td><b>Home Loan</b></td>
+                        <td><b>Others</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>SOW &amp; Joint</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Last 12 months</td>
+                        <td>{!lstTwlvMnthHghstDpdUnscrdSowJnt}</td>
+                        <td>{!lstTwlvMnthHghstDpdVhclSowJnt}</td>
+                        <td>{!lstTwlvMnthHghstDpdHomeSowJnt}</td>
+                        <td>{!lstTwlvMnthHghstDpdOtherSowJnt}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 12-24 months</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdUnscrdSowJnt}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdVhclSowJnt}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdHomeSowJnt}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdOtherSowJnt}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 24-36 months</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdUnscrdSowJnt}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdVhclSowJnt}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdHomeSowJnt}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdOtherSowJnt}</td>
+                    </tr>
+                    
+                     <tr>
+                        <td><b>Guarantee</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Last 12 months</td>
+                        <td>{!lstTwlvMnthHghstDpdUnscrdGrntee}</td>
+                        <td>{!lstTwlvMnthHghstDpdVhclGrntee}</td>
+                        <td>{!lstTwlvMnthHghstDpdHomeGrntee}</td>
+                        <td>{!lstTwlvMnthHghstDpdOtherGrntee}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 12-24 months</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdUnscrdGrntee}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdVhclGrntee}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdHomeGrntee}</td>
+                        <td>{!lstTwlvToTwntyFourMnthHghstDpdOtherGrntee}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 24-36 months</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdUnscrdGrntee}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdVhclGrntee}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdHomeGrntee}</td>
+                        <td>{!lstTwntyFourToThrtySixMnthHghstDpdOtherGrntee}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table width="80%" class="table-bordered ft12 ft13" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="6"><b>Enquiry Trend</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><b>Particulars</b></td>
+                        <td rowspan="2"><b>Unsecured Facility</b></td>
+                        <td colspan="3"><b>Secured Facility</b></td>
+                        <td rowspan="2"><b>Total</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicle Loan</b></td>
+                        <td><b>Home Loan</b></td>
+                        <td><b>Others</b></td>
+                    </tr>
+                    <tr>
+                        <td>Last 1 month</td>
+                        <td>{!ttlLstOneMnthUnscrdEnqCount}</td>
+                        <td>{!ttlLstOneMnthVhclEnqCount}</td>
+                        <td>{!ttlLstOneMnthHomeEnqCount}</td>
+                        <td>{!ttlLstOneMnthOthrEnqCount}</td>
+                        <td>{!ttlLstOneMnthEnqCount}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 1-3 months</td>
+                        <td>{!ttlLstOneToThreeMnthUnscrdEnqCount}</td>
+                        <td>{!ttlLstOneToThreeMnthVhclEnqCount}</td>
+                        <td>{!ttlLstOneToThreeMnthHomeEnqCount}</td>
+                        <td>{!ttlLstOneToThreeMnthOthrEnqCount}</td>
+                        <td>{!ttlLstOneToThreeMnthEnqCount}</td>
+                    </tr>
+                    <tr>
+                        <td>Last 4-6 months</td>
+                        <td>{!ttlLstFourToSixMnthUnscrdEnqCount}</td>
+                        <td>{!ttlLstFourToSixMnthVhclEnqCount}</td>
+                        <td>{!ttlLstFourToSixMnthHomeEnqCount}</td>
+                        <td>{!ttlLstFourToSixMnthOthrEnqCount}</td>
+                        <td>{!ttlLstFourToSixMnthEnqCount}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table width="80%" class="table-bordered ft12 ft13" style="margin-left:10% !important;">
+                <thead>
+                    <tr>
+                        <th colspan="6"><b>Borrowing pattern Heat-map (Nos)</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2"><b>Particulars</b></td>
+                        <td rowspan="2"><b>Unsecured Facility</b></td>
+                        <td colspan="3"><b>Secured Facility</b></td>
+                        <td rowspan="2"><b>Total</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>Vehicle Loan</b></td>
+                        <td><b>Home Loan</b></td>
+                        <td><b>Others</b></td>
+                    </tr>
+                    <tr>
+                    <td>Last 3 months</td>
+                        <td>{!ttlLstThreeMnthUnscrdLoanCount}</td>
+                        <td>{!ttlLstThreeMnthVhclLoanCount}</td>
+                        <td>{!ttlLstThreeMnthHomeLoanCount}</td>
+                        <td>{!ttlLstThreeMnthOthrLoanCount}</td>
+                        <td>{!ttlLstThreeMnthLoanCount}</td>
+                    </tr>
+                    <tr>
+                    <td>Last 3-6 months</td>
+                        <td>{!ttlLstThreeToSixMnthUnscrdLoanCount}</td>
+                        <td>{!ttlLstThreeToSixMnthVhclLoanCount}</td>
+                        <td>{!ttlLstThreeToSixMnthHomeLoanCount}</td>
+                        <td>{!ttlLstThreeToSixMnthOthrLoanCount}</td>
+                        <td>{!ttlLstThreeToSixMnthLoanCount}</td>
+                    </tr>
+                    <tr>
+                    <td>Last 7-12 months</td>
+                        <td>{!ttlLstSvnToTwlvMnthUnscrdLoanCount}</td>
+                        <td>{!ttlLstSvnToTwlvMnthVhclLoanCount}</td>
+                        <td>{!ttlLstSvnToTwlvMnthHomeLoanCount}</td>
+                        <td>{!ttlLstSvnToTwlvMnthOthrLoanCount}</td>
+                        <td>{!ttlLstSvnToTwlvMnthLoanCount}</td>
+                    </tr>
+                    <tr>
+                    <td>Last 12 months</td>
+                        <td>{!ttlLstTwlvPlusUnscrdLoanCount}</td>
+                        <td>{!ttlLstTwlvPlusMnthVhclLoanCount}</td>
+                        <td>{!ttlLstTwlvPlusMnthHomeLoanCount}</td>
+                        <td>{!ttlLstTwlvPlusMnthOthrLoanCount}</td>
+                        <td>{!ttlLstTwlvPlusMnthLoanCount}</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <table class="table-bordered ft12 ft13" style="overflow-x:auto;width:100%;display:block;">
+                <thead>
+                    <tr>
+                        <th width="10%"><b>Financiers Name</b></th>
+                        <th width="5%"><b>Type</b></th>
+                        <th width="5%"><b>Start Date</b></th>
+                        <th width="5%"><b>End Date</b></th>
+                        <th width="10%"><b>Date of Last report to CBIL</b></th>
+                        <th width="5%"><b>Amount</b></th>
+                        <th width="5%"><b>Pmt Frequency</b></th>
+                        <th width="5%"><b>Tenor</b></th>
+                        <th width="5%"><b>EMI Paid</b></th>
+                        <th width="5%"><b>EMI OD</b></th>
+                        <th width="5%"><b>OD Amount</b></th>
+                        <th width="5%"><b>EMI Amount</b></th>
+                        <th width="5%"><b>Peak Delay 12 months</b></th>
+                        <th width="5%"><b>Average Delay 12 months</b></th>
+                        <th width="5%"><b>Ownership</b></th>
+                        <th width="5%"><b>Status</b></th>
+                        <th width="5%"><b>Peak Delay overall</b></th>
+                        <th width="5%"><b>Average Delay overall</b></th>
+                    </tr>
+                </thead>
+                <tbody>
+                   <apex:repeat var="bar" value="{!barWrapList}">
+                        <tr>
+                            <td>{!bar.fnncrName}</td>
+                            <td>{!bar.loanType}</td>
+                            <td>{!bar.startDate}</td>
+                            <td>{!bar.endDate}</td>
+                            <td>{!bar.dateRprtd}</td>
+                            <td>
+                                {!bar.loanAmount}
+                            </td>
+                            <td>{!bar.pmtFrqncy}</td>
+                            <td>{!bar.tenure}</td>
+                            <td>{!bar.emiPaid}</td>
+                            <td>{!bar.emiOd}</td>
+                            <td>{!bar.odAmount}</td>
+                            <td>{!bar.emiAmount}</td>
+                            <td>{!bar.peakDelayInTwlvMnths}</td>
+                            <td>{!bar.avgDelayInTwlvMnths}</td>
+                            <td>{!bar.ownrshp}</td>
+                            <td>{!bar.status}</td>
+                            <td>{!bar.peakDelayOvrall}</td>
+                            <td>{!bar.avgDelayOvrall}</td>
+                        </tr>
+                    </apex:repeat>
+                </tbody>
+            </table>
+          
+
+        </body>
+    </html>
+</apex:page>

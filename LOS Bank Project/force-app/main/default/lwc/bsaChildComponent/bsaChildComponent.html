@@ -1,0 +1,965 @@
+<template>
+    <template if:true={showParent}>
+        <div if:true={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>
+        <!--New Form
+        <template if:true={showNewFormView}>
+            <div class="table-container">
+                <div slot="actions" class="slds-float--right slds-m-around--small">
+                    &nbsp; <lightning-button class="buttonColor" label="Submit" icon-position="right" icon-name="action:approval" variant="brand"
+                        onclick={handleSubmit}></lightning-button>
+                    
+                </div>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                    aria-label="Example default base table of Opportunities">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name">A/C Holder Name </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="A/C Number"> A/C Number</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="IFSC Code"> IFSC Code</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Bank Name"> Bank Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Branch Name"> Branch Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Account Type"> Account Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start DDMMYY"> Start DDMMYY</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="END DDMMYY"> END DDMMYY</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Nos of Credit"> Total Nos of Credit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Nos of Debit">Total Nos of Debit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="AMB">AMB</div>
+                            </th>
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="AMC"> AMC</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="I/W Cheque Bounce">I/W Cheque Bounce</div>
+                            </th>
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="O/W Cheque Bounce"> O/W Cheque Bounce</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total No. of EMI"> Total No. of EMI</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total of EMI Amount">Total of EMI Amount</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Salary Confirm in Bank">Salary Confirm in Bank</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Uploaded Bank statement">Uploaded Bank statement</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Cart View">Cart View</div>
+                            </th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        <template for:each={bankRecords} for:item="relatedRecord" for:index="index">
+                            <tr key={relatedRecord.Id} class="slds-line-height_reset">
+
+                                <td data-label="Name" scope="row">
+                                    <div class="slds-truncate">
+
+                                        <lightning-input type="text" variant="label-hidden" name="Account_Name__c"
+                                            value={accName} onchange={handleChange}>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Account_Number__c"
+                                            onchange={handleChange} value={accNo}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="IFSC_Code__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Bank_Name__c"
+                                            onchange={handleChange} value={bankName}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Branch_Name__c"
+                                            onchange={handleChange} value={branchName}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Account_Type__c"
+                                            onchange={handleChange} value={accType}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="date" variant="label-hidden"
+                                            name="Statement_Start_Date__c" onchange={handleChange} value={stStartDate}>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="date" variant="label-hidden" name="Statement_End_Date__c"
+                                            onchange={handleChange} value={stEndDate}></lightning-input>
+                                    </div>
+                                </td>
+
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="Total_Credit__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="Total_Debit__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate" onclick={showAMBSection}>
+                                        <lightning-input type="number" variant="label-hidden" name="inputForDataField"
+                                            onchange={handleChange} value={test} onclick={showAMBSection}>>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate" onclick={showAMCSection}>
+                                        <lightning-input type="number" variant="label-hidden" name="inputForDataField"
+                                            onchange={handleChange} value={test} onclick={showAMCSection}>>
+                                        </lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Inward_Cheque_Bounce__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="text" variant="label-hidden" name="Outward_Cheque_Bounce__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="No_of_Emi_Paid__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="EMI_Amount__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-input type="number" variant="label-hidden" name="Total_Salary__c"
+                                            onchange={handleChange} value={test}></lightning-input>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        View
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-button variant="base" data-id={relatedRecord.fileID} label="View"
+                                            title="Looks like a link" onclick={handlePreview}
+                                            class="slds-m-left_x-small">
+                                        </lightning-button>
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                          
+
+                        </template>
+                    </tbody>
+                </table>
+                <template if:true={showModal}>
+                    <lightning-card class="slds-align_absolute-center">
+                        <h1>
+                            Do you want to add New BSA Details?
+                            <div class="slds-align_absolute-center">
+                                <lightning-icon class="slds-m-around_small" icon-name="action:approval" size="x-small"
+                                    alternative-text="" onclick={handleOkay}></lightning-icon>
+                                <lightning-icon class="slds-m-around_small" icon-name="action:reject" size="x-small"
+                                    alternative-text="No" onclick={handleReject}>
+                                </lightning-icon>
+                            </div>
+                        </h1>
+                    </lightning-card>
+                </template>
+            </div>
+        </template>
+        End-->
+
+        <!--View Form-->
+        <template if:true={showView}>
+            <div class="table-container">
+                <!--<div slot="actions" class="slds-float--right slds-m-around--small">
+                    &nbsp; <lightning-button class="buttonColor" label="Add New" icon-position="right"
+                        icon-name="action:new" variant="brand" onclick={handleNew}>
+                    </lightning-button>
+                </div>-->
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                    aria-label="Example default base table of Opportunities">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Name">A/C Holder Name </div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="A/C Number"> A/C Number</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="IFSC Code"> IFSC Code</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Bank Name"> Bank Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Branch Name"> Branch Name</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Account Type"> Account Type</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start DDMMYY"> Start YYYYMMDD</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="END DDMMYY"> END YYYYMMDD</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Nos of Credit"> Total Nos of Credit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total Nos of Debit">Total Nos of Debit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="AMB">AMB</div>
+                            </th>
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="AMC"> AMC</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="I/W Cheque Bounce">I/W Cheque Bounce</div>
+                            </th>
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="O/W Cheque Bounce"> O/W Cheque Bounce</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total No. of EMI"> Total No. of EMI</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Total of EMI Amount">Total of EMI Amount</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Salary Confirm in Bank">Salary Confirm in Bank</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Uploaded Bank statement">Uploaded Bank statement</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Cart View">Cart View</div>
+                            </th>
+
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Edit">Edit</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Delete">Delete</div>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <template for:each={bankAccountRecords} for:item="relatedRecord" for:index="index">
+                            <tr key={relatedRecord.recordId} class=" rowHeight slds-line-height_reset">
+
+                                <td data-label="Name" scope="row">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.accHolderName}
+
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.accountNumber}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.ifscCode}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.bankNme}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.branchName}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.accountType}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.startDate}
+                                    </div>
+                                </td>
+
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.endDate}
+                                    </div>
+                                </td>
+
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.totalNoCredit}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.totalNoDebit}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate" data-id={relatedRecord.recordId}
+                                        onclick={showAMBSection}>
+                                       <p style="color:cornflowerblue">
+                                        {relatedRecord.AverageMonthlyBalance}
+                                       </p>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate" data-id={relatedRecord.recordId}
+                                        onclick={showAMCSection}>
+                                        <p style="color:cornflowerblue">{relatedRecord.AverageMonthlyCredit}</p>
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.iwCheque}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.owCheque}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.totalNoEmi}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.totalNoEmiAmount}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        {relatedRecord.salaryConfirm}
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+
+                                    </div>
+                                </td>
+                                <td data-label="">
+                                    <div class="slds-truncate">
+                                        <lightning-button variant="base" data-id={relatedRecord.fileID} label="View"
+                                            title="Looks like a link" onclick={handlePreview}
+                                            class="slds-m-left_x-small">
+                                        </lightning-button>
+                                    </div>
+
+                                </td>
+                                <template if:true={relatedRecord.manualCheck}>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-icon icon-name=action:edit size="x-small"
+                                                data-id={relatedRecord.recordId} onclick={handleRowAction}>
+                                            </lightning-icon>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-icon icon-name=action:delete size="x-small"
+                                                data-id={relatedRecord.recordId} onclick={handleRowDeleteAction}>
+                                            </lightning-icon>
+                                        </div>
+                                    </td>
+                                </template>
+                            </tr>
+
+                           
+                        </template>
+                        <!--New Form-->
+                        <template if:true={showNewFormView}>
+                            <template for:each={bankRecords} for:item="relatedRecord" for:index="index">
+                                <tr key={relatedRecord.Id} class="slds-line-height_reset">
+
+                                    <td data-label="Name" scope="row">
+                                        <div class="slds-truncate">
+
+                                            <lightning-input type="text" variant="label-hidden" name="Account_Name__c"
+                                                value={accName} onchange={handleChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden" name="Account_Number__c" class="validate"
+                                                onchange={handleChange} value={accNo}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden" name="IFSC_Code__c"
+                                                onchange={handleChange} value={test}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden" name="Bank_Name__c"
+                                                onchange={handleChange} value={bankName}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden" name="Branch_Name__c"
+                                                onchange={handleChange} value={branchName}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden" name="Account_Type__c"
+                                                onchange={handleChange} value={accType}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="date" variant="label-hidden"
+                                                name="Statement_Start_Date__c" onchange={handleChange}
+                                                value={stStartDate}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="date" variant="label-hidden"
+                                                name="Statement_End_Date__c" onchange={handleChange} value={stEndDate}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" variant="label-hidden" name="Total_Credit__c"
+                                                onchange={handleChange} value={test}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" variant="label-hidden" name="Total_Debit__c"
+                                                onchange={handleChange} value={test}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label=""><!--onclick={showAMBSection}  onclick={showAMBSection}-->
+                                        <div class="slds-truncate" >
+                                            <lightning-input type="number" variant="label-hidden"
+                                                name="Average_Monthly_Balance__c" onchange={handleChange} value={test}
+                                               >
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label=""><!-- onclick={showAMCSection}  onclick={showAMCSection}-->
+                                        <div class="slds-truncate" >
+                                            <lightning-input type="number" variant="label-hidden"
+                                                name="Average_Monthly_Credit__c" onchange={handleChange} value={test}
+                                               >
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden"
+                                                name="Inward_Cheque_Bounce__c" onchange={handleChange} value={test}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="text" variant="label-hidden"
+                                                name="Outward_Cheque_Bounce__c" onchange={handleChange} value={test}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" variant="label-hidden"
+                                                name="No_of_Emi_Paid__c" onchange={handleChange} value={test}>
+                                            </lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" variant="label-hidden" name="EMI_Amount__c"
+                                                onchange={handleChange} value={test}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-input type="number" variant="label-hidden" name="Total_Salary__c"
+                                                onchange={handleChange} value={test}></lightning-input>
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            View
+                                        </div>
+                                    </td>
+                                    <td data-label="">
+                                        <div class="slds-truncate">
+                                            <lightning-button variant="base" data-id={relatedRecord.fileID} label="View"
+                                                title="Looks like a link" onclick={handlePreview}
+                                                class="slds-m-left_x-small">
+                                            </lightning-button>
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            </template>
+
+                        </template>
+                        <!--End New Form-->
+                    </tbody>
+                </table>
+
+                 <!--Average Details Section-->
+                <lightning-layout multiple-rows class=" slds-align_absolute-center ">
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                    medium-device-size="12" large-device-size="6">
+                    <label class="slds-form-element__label">
+                    <b>AMB Total </b>
+                    </label>
+                    {ambTotal}
+               
+                </lightning-layout-item>
+                </lightning-layout>
+                <!--END of Average Section-->
+
+                <!--New Form Buttons Section-->
+                <template if:true={showNewFormView}>
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        &nbsp; <lightning-button class="buttonColor" label="Back" icon-position="right"
+                            icon-name="action:back" variant="brand" onclick={handleNewFormBack}></lightning-button>
+                        <lightning-button class="buttonColor  slds-m-left_small" label="Submit" icon-position="right" disabled={isButtonDisabled}
+                            icon-name="action:approval" variant="brand" onclick={handleSubmit}></lightning-button>
+
+                    </div>
+                 <!--   <template if:true={showModal}>
+                        <lightning-card class="slds-align_absolute-center">
+                            <h1>
+                                Do you want to add New BSA Details?
+                                <div class="slds-align_absolute-center">
+                                    <lightning-icon class="slds-m-around_small" icon-name="action:approval"
+                                        size="x-small" alternative-text="" onclick={handleOkay}></lightning-icon>
+                                    <lightning-icon class="slds-m-around_small" icon-name="action:reject" size="x-small"
+                                        alternative-text="No" onclick={handleReject}>
+                                    </lightning-icon>
+                                </div>
+                            </h1>
+                        </lightning-card>
+                    </template>-->
+                </template>
+                <template if:false={showNewFormView}>
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-button class="buttonColor" label="Add New" icon-position="right"
+                            icon-name="action:new" variant="brand" onclick={handleNew}>
+                        </lightning-button>
+                    </div>
+                </template>
+                <!--End New Form Buttons Section-->
+                <!--<template if:true={showNewFormView}>
+                    <div class="table-container">
+                        <div slot="actions" class="slds-float--right slds-m-around--small">
+                            &nbsp; <lightning-button class="buttonColor" label="Submit" icon-position="right" icon-name="action:approval" variant="brand"
+                                onclick={handleSubmit}></lightning-button>
+                            
+                        </div>
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                            aria-label="Example default base table of Opportunities">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Name">A/C Holder Name </div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="A/C Number"> A/C Number</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="IFSC Code"> IFSC Code</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Bank Name"> Bank Name</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Branch Name"> Branch Name</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Account Type"> Account Type</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Start DDMMYY"> Start DDMMYY</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="END DDMMYY"> END DDMMYY</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Total Nos of Credit"> Total Nos of Credit</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Total Nos of Debit">Total Nos of Debit</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="AMB">AMB</div>
+                                    </th>
+        
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="AMC"> AMC</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="I/W Cheque Bounce">I/W Cheque Bounce</div>
+                                    </th>
+        
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="O/W Cheque Bounce"> O/W Cheque Bounce</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Total No. of EMI"> Total No. of EMI</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Total of EMI Amount">Total of EMI Amount</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Salary Confirm in Bank">Salary Confirm in Bank</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Uploaded Bank statement">Uploaded Bank statement</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Cart View">Cart View</div>
+                                    </th>
+                                </tr>
+        
+                            </thead>
+                            <tbody>
+        
+                                <template for:each={bankRecords} for:item="relatedRecord" for:index="index">
+                                    <tr key={relatedRecord.Id} class="slds-line-height_reset">
+        
+                                        <td data-label="Name" scope="row">
+                                            <div class="slds-truncate">
+        
+                                                <lightning-input type="text" variant="label-hidden" name="Account_Name__c"
+                                                    value={accName} onchange={handleChange}>
+                                                </lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Account_Number__c"
+                                                    onchange={handleChange} value={accNo}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="IFSC_Code__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Bank_Name__c"
+                                                    onchange={handleChange} value={bankName}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Branch_Name__c"
+                                                    onchange={handleChange} value={branchName}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Account_Type__c"
+                                                    onchange={handleChange} value={accType}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="date" variant="label-hidden"
+                                                    name="Statement_Start_Date__c" onchange={handleChange} value={stStartDate}>
+                                                </lightning-input>
+                                            </div>
+                                        </td>
+        
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="date" variant="label-hidden" name="Statement_End_Date__c"
+                                                    onchange={handleChange} value={stEndDate}></lightning-input>
+                                            </div>
+                                        </td>
+        
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="number" variant="label-hidden" name="Total_Credit__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="number" variant="label-hidden" name="Total_Debit__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate" onclick={showAMBSection}>
+                                                <lightning-input type="number" variant="label-hidden" name="inputForDataField"
+                                                    onchange={handleChange} value={test} onclick={showAMBSection}>>
+                                                </lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate" onclick={showAMCSection}>
+                                                <lightning-input type="number" variant="label-hidden" name="inputForDataField"
+                                                    onchange={handleChange} value={test} onclick={showAMCSection}>>
+                                                </lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Inward_Cheque_Bounce__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="text" variant="label-hidden" name="Outward_Cheque_Bounce__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="number" variant="label-hidden" name="No_of_Emi_Paid__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="number" variant="label-hidden" name="EMI_Amount__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-input type="number" variant="label-hidden" name="Total_Salary__c"
+                                                    onchange={handleChange} value={test}></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                View
+                                            </div>
+                                        </td>
+                                        <td data-label="">
+                                            <div class="slds-truncate">
+                                                <lightning-button variant="base" data-id={relatedRecord.fileID} label="View"
+                                                    title="Looks like a link" onclick={handlePreview}
+                                                    class="slds-m-left_x-small">
+                                                </lightning-button>
+                                            </div>
+        
+                                        </td>
+        
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <template if:true={showModal}>
+                            <lightning-card class="slds-align_absolute-center">
+                                <h1>
+                                    Do you want to add New BSA Details?
+                                    <div class="slds-align_absolute-center">
+                                        <lightning-icon class="slds-m-around_small" icon-name="action:approval" size="x-small"
+                                            alternative-text="" onclick={handleOkay}></lightning-icon>
+                                        <lightning-icon class="slds-m-around_small" icon-name="action:reject" size="x-small"
+                                            alternative-text="No" onclick={handleReject}>
+                                        </lightning-icon>
+                                    </div>
+                                </h1>
+                            </lightning-card>
+                        </template>
+                    </div>
+                </template>-->
+            </div>
+        </template>
+        <!--End-->
+
+        <!--Edit Form-->
+        <template if:true={showEditForm}>
+            <lightning-record-edit-form record-id={bankRecordId} object-api-name="Bank_Account_Records__c"
+                onsuccess={handleSuccess} onsubmit={handleEditSubmit} mode="readonly">
+                <lightning-messages></lightning-messages>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Account_Name__c"></lightning-input-field>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Account_Number__c"></lightning-input-field>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Bank_Name__c"></lightning-input-field>
+
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="IFSC_Code__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Branch_Name__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Account_Type__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Statement_Start_Date__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Statement_End_Date__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Total_Credit__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Total_Debit__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Inward_Cheque_Bounce__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Outward_Cheque_Bounce__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="No_of_Emi_Paid__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="EMI_Amount__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Total_Salary__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Total_Salary__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Average_Monthly_Balance__c"></lightning-input-field>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                        medium-device-size="12" large-device-size="6">
+                        <lightning-input-field field-name="Average_Monthly_Credit__c"></lightning-input-field>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+
+                <!--Buttons Section-->
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <lightning-button class="buttonColor" label="Back" icon-position="right" icon-name="action:back"
+                            variant="brand" onclick={handleBack}></lightning-button>
+                        <lightning-button class="buttonColor slds-m-left_small" label="Submit" icon-position="right"
+                            icon-name="action:approval" variant="brand" type="submit">
+                        </lightning-button>
+                    </div>
+                </lightning-layout>
+
+            </lightning-record-edit-form>
+        </template>
+        <!--End-->
+    </template>
+
+
+
+</template>

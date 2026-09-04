@@ -1,0 +1,53 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 15px !important; sans-serif; color :333;}
+            </style>
+        </head>
+        <body class="slds-scope">
+            <p style="text-align: center;">
+                Customer Request for Third Party Payment
+            </p>
+            <p>Date: {!todaysDate}</p>
+            <p>From: {!loan.Branch_Master__r.Account_Name__c}</p>
+            <p>{!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</p>
+            <p>To,</p>
+            <p>AU small Finance Bank Ltd.</p>
+            <p>Dear Sir,</p>
+            <p>Subject: Payment of loan availed for purchase of Vehicle
+                {!collateral.Make__c} {!collateral.Model__c} bearing Registration number {!collateral.Registration_Number__c} I had
+                approached you for financial facility to
+                purchase {!collateral.Make__c} {!collateral.Model__c} Vehicle 
+                registered under the name {!collateral.Current_Owner_Name__c}
+                The loan has been sanctioned under your used vehicle finance scheme: for
+                Rs. <apex:outputField value="{!loan.Total_Loan_Amount__c}"/> and thanks for the same.</p>
+            <p>I confirm having taken physical possession of the vehicle in good condition
+                with all Documents regarding vehicle. I also thank you for making the loan
+                payment to you used car dealer/seller {!dealerPayment.Beneficiary_Name__c} on
+                my behalf vide cheque/DD no ________________ dated ____________ and
+                as per my instruction only in consideration of the above, I herby undertake
+                to repay the monthly installments promptly on due dates for the subject loan
+                to you i.e. M/S AU Small Finance Bank Ltd. by means of post dated cheques
+                bearing nos. from ___________ to ______________ on
+                {!eSignDate} as per the loan agreement
+                entered with you. From today all liability of vehicle regarding tax, insurance,
+                accident, challan will be mine what so ever arise in future.</p>
+            <p>Thanking You,</p>
+            <p>Yours Truly,</p>
+            <p>{!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}</p>
+            <p>BORROWER</p>
+            <p>Name and sign</p>
+            <p style="font-weight:bold;">Enclosed:-</p>
+            <p>- ID of Third Party/Used Car Dealer</p>
+            <p>- Bank Pass Book/Cancelled Cheque of Third Party/Used Car Dealer</p>
+            <p>- Above 2 document must be self attested by Hirer, Third Party or Used Car Dealer</p>
+            <p style="font-weight:bold;">Confirmation by receiver</p>
+            <p>ID Taken________________________</p>
+            <p>Bank A/c No&nbsp;&nbsp;<span style="text-decoration:underline">{!dealerPayment.Account_Number__c}</span></p>
+            <p>Cheque Amt&nbsp;&nbsp;<span style="text-decoration:underline">Rs. <apex:outputField value="{!dealerPayment.Net_Amount__c}"/></span></p>
+            <p>Cheque No ______________________</p>
+            <p style="font-weight:bold;">Name and Sign</p>
+        </body>
+    </html>
+</apex:page>

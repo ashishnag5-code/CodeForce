@@ -1,0 +1,219 @@
+<template>
+	<c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+	<lightning-accordion allow-multiple-sections-open  active-section-name={activeSubSections}>
+		<template if:true={isQDE}>
+			<lightning-accordion-section name="A" label="Additional Details" allow-multiple-sections-open  class="accordClass" > 
+				<template if:true={isapplicantData}>                                          
+				<c-additional-financial-component screen={screenType} applicant-id = {currentApplicantId} onauemployee={addEventHandler} is-mobile={isMobile} spouse-name={spouseName}></c-additional-financial-component>         
+				</template>                      
+			 </lightning-accordion-section>
+			</template>
+
+		<lightning-accordion-section name="B" label="IV Profile" allow-multiple-sections-open class="accordClass"   >
+			<lightning-layout multiple-rows>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Type_Of_Employment__c" label="Type of Employment" data-name=""
+						disabled={istypeofEmpDisabled} class="validate" value={parentFinancialRecord.Type_Of_Employment__c}
+						options={employmentTypeOptions} required onchange={handleChange} read-only={readAlways}></lightning-combobox>
+				</lightning-layout-item>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+						read-only={readAlways} data-name="" class="validate"
+						value={parentFinancialRecord.Method_Of_Assesment__c} options={assesmentOptions} required
+						onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				<template lwc:if={isDDE}>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-combobox name="Sector__c" data-name="" label="Sector" class="validate "
+							value={parentFinancialRecord.Sector__c} options={sectorOptions} required
+							onchange={handleChange}></lightning-combobox>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-combobox name="Industry__c" data-name="" label="Industry" class="validate "
+							value={parentFinancialRecord.Industry__c} options={industryOptions} required
+							onchange={handleChange}></lightning-combobox>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-combobox name="Sub_Industry__c" data-name="" label="Sub Industry" class="validate "
+							value={parentFinancialRecord.Sub_Industry__c} options={subIndustryOptions} required
+							onchange={handleChange}></lightning-combobox>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-combobox name="Occupation__c" data-name="" label="Occupation" class="validate"
+							value={parentFinancialRecord.Occupation__c} options={occupationOptions} required
+							onchange={handleChange}></lightning-combobox>
+					</lightning-layout-item>
+				</template>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-input name="Company_Name__c" disabled={isCmpNameDisabled} label="Company/Business Name"
+						data-name=""  read-only={readAlways}	 value={parentFinancialRecord.Company_Name__c} type="text" 
+						onchange={handleChange} >
+					</lightning-input>
+				</lightning-layout-item>
+				<!--<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+                    <lightning-combobox name="Consider_Income_for_Eligibility__c" disabled={incomeElgibilityDisable}
+                        label="Consider Income for Eligibility" data-name="Consider_Income_for_Eligibility__c"
+                        class="validate" value={parentFinancialRecord.Consider_Income_for_Eligibility__c}
+                        options={incomeEligibilityOptions} required onchange={handleChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>-->
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Consider_Fleet_for_Eligibility__c" disabled={disableField}
+						label="Consider Fleet for Eligibility" data-name="Consider_Fleet_for_Eligibility__c"
+						class="validate" value={parentFinancialRecord.Consider_Fleet_for_Eligibility__c}
+						options={fleetEligibilityOptions} required onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				<template if:true={isfarmer}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Agri_Owned_By__c" disabled={disableField} label="Agri Owned By"
+						data-name="agri" class="validate" value={parentFinancialRecord.Agri_Owned_By__c}
+						required={isfarmer} options={agriOwnedByOptions} onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				</template>
+				<template if:true={isboolFamily}>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-input name="Agri_Owner_Name__c" disabled={disableField} label="Agri Owner Name"
+							data-name="" class="validate" value={parentFinancialRecord.Agri_Owner_Name__c} type="text"
+							required onchange={handleChange}>
+						</lightning-input>
+					</lightning-layout-item>
+				</template>
+				<template if:true={displayAgriPicklist}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+						<lightning-combobox name="Agri_Owned_By_Other__c" disabled={disableField}
+							label="Agri Owned By Other" data-name="Agri_Owned_By_Other__c" class=""
+							value={parentFinancialRecord.Agri_Owned_By_Other__c} options={agriOwnedByOtherOptions}
+							onchange={handleChange}>
+						</lightning-combobox>
+					<!--<template if:false={displayAgriPicklist}>
+						<lightning-input name="Agri_Owned_By_Other__c" disabled={disableField}
+							label="Agri Owned By Other" data-name="Agri_Owned_By_Other__c" class=""
+							value={parentFinancialRecord.Agri_Owned_By_Other__c} type="text" onchange={handleChange}>
+						</lightning-input>
+					</template>-->
+				</lightning-layout-item>
+				</template><!--class="validate"-->
+				<template if:true={displaylandFields}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Unit_Land_Area__c" disabled={disableField} label="Size of Land"
+						data-name="agri" class="validate" value={parentFinancialRecord.Unit_Land_Area__c}
+						options={landOptions} required={isfarmer} onchange={handleChange}>
+					</lightning-combobox>
+
+				</lightning-layout-item>
+
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-input name="Size_of_Agri_Land__c" disabled={disableField} label="Size of Agri Land"
+							data-name="agri"  class="validate" required={isfarmer} value={parentFinancialRecord.Size_of_Agri_Land__c} type="number"
+							 onchange={handleChange}>
+						</lightning-input>
+					</lightning-layout-item>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+						<lightning-input name="Agri_Land_in_Acres__c" disabled=true label="Agri Land in Acres"
+							data-name="" class="validate" value={parentFinancialRecord.Agri_Land_in_Acres__c} type="number"
+							 >
+						</lightning-input>
+					</lightning-layout-item>
+				</template>
+				<!--<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Customer_Segment__c" disabled={disableField} label="Customer Segment"
+						data-name="Customer_Segment__c" class="validate"
+						value={parentFinancialRecord.Customer_Segment__c} options={customerSegOptions}
+						onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>-->
+				<template if:true={isGradeApplicable}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Customer_Grade__c" disabled={disableField} label="Customer Grade"
+						data-name="Customer_Grade__c" class="validate" value={parentFinancialRecord.Customer_Grade__c}
+						options={customerGradeOptions} required onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				<template lwc:if={isSubGrade}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+					<lightning-combobox name="Sub_Grade__c" disabled={disableField} label="Sub Grade"
+						data-name="Sub_Grade__c" class="validate" value={parentFinancialRecord.Sub_Grade__c}
+						options={refinedsubGradeOptionsOptions} required onchange={handleChange}>
+					</lightning-combobox>
+				</lightning-layout-item>
+				</template>
+			</template>
+			<template if:true={showWorkExperienceField}>
+					<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+						padding="around-small">
+							<template if:true={isSalaried}>
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr> Total Work Experience</label>
+							</template>
+							<template if:false={isSalaried}>
+								<label class="slds-form-element__label">
+									<abbr class="slds-required" title="required">* </abbr>No. of years in Business
+								</label>
+							</template>
+							<lightning-combobox name="Total_Work_Experience__c" variant="label-hidden" class="validate"
+								data-name="Total_Work_Experience__c"
+								value={parentFinancialRecord.Total_Work_Experience__c} options={WorkOptions} required
+								onchange={handleChange}>
+							</lightning-combobox>
+					</lightning-layout-item>
+				</template>
+			<!--<template if:true={isapplicantData}>
+			<lightning-layout-item size="12" large-device-size="4" small-device-size="12" padding="around-small">
+                                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial' is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                            onbankstuploaded={handleBankStatementUploaded} applicant-id={currentApplicantId}
+                                            document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                            heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+                                            oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                                            applicant-record-id={currentApplicantId}
+                                            onenablefetchdetails={handleEnableFetchDetails}>
+                                        </c-bank-statement-upload-financials>
+                                    </lightning-layout-item>
+								</template>-->
+							</lightning-layout>
+		</lightning-accordion-section>
+		<lightning-accordion-section name="C" label="Upload Statement" allow-multiple-sections-open class="accordClass">
+			<lightning-layout multiple-rows>
+			<template if:true={isapplicantData}>
+				<lightning-layout-item size="12" large-device-size="4" small-device-size="12"
+					padding="around-small">
+					<c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+						is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+						onbankstuploaded={handleBankStatementUploaded} applicant-id={currentApplicantId}
+						document-type='Bank ITR Statement' read-attribute={disableUpload}
+						heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+						oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+						applicant-record-id={currentApplicantId} onenablefetchdetails={handleEnableFetchDetails}>
+					</c-bank-statement-upload-financials>
+				</lightning-layout-item>
+			</template>
+			</lightning-layout>
+		</lightning-accordion-section>
+	</lightning-accordion>
+
+
+
+	<!--<lightning-button class="slds-align_absolute-center buttonColor" variant="brand" label="Save"
+		onclick={handleSave}></lightning-button>-->
+		<div class="slds-align_absolute-center"> 
+		<lightning-icon icon-name="action:approval" size="x-small" alternative-text="Cancel" class="buttonColor"
+                            onclick={handleSave}></lightning-icon>
+		</div>
+                        
+
+	<!--<template lwc:if={isChildTemplates}>
+		<div class="slds-m-top--x-small">
+			<c-financial-child-components template-name={templateName} applicant-financial-id={applicantFinancialId}
+				loan-id={loanId} current-applicant-id={currentApplicantId}></c-financial-child-components>
+		</div>
+	</template>-->
+</template>

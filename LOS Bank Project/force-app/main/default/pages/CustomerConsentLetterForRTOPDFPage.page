@@ -1,0 +1,91 @@
+<apex:page renderAs="PDF" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+                body { font-family: 'Quicksand'; font-size : 16px !important; sans-serif; color :333;}
+                .container{
+                    margin: 0px 60px;
+                }
+              
+                .latter-heading h3{
+                    text-align: center;
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                
+        <div class="latter-heading">
+            <br/>
+            <h3 style="text-align:center">
+                Customer Consent Letter
+            </h3>
+            <p>To<br/>
+            M/s. AU Small Finance Bank.<br/>
+            {!loan.Branch_Master__r.Account_Name__c}</p>
+        </div>
+
+        <div class="sub-class">
+            <p>Dear Sir,</p>
+            <p><strong>Sub: </strong> Payment of Loan availed for purchase of vehicle
+                {!collateral.Make__c} {!collateral.Model__c} bearing Registration number {!collateral.Registration_Number__c}</p>
+        </div>
+            <br/>
+        <div class="main-content">
+            <p>I, {!applicant.Title__c} {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c} had approached you for availing financial facility of Rs.
+            <apex:outputField value="{!loan.Total_Loan_Amount__c}"/> to purchase {!collateral.Make__c} {!collateral.Model__c} vehicle {!collateral.Registration_Number__c} registered
+            under R.T.O. {!collateral.Rto_Code__c} in the name of {!collateral.Current_Owner_Name__c} presently under
+            possession of {!collateral.HPN_With_Financiers_Name__c}
+            
+            </p>
+            <p>My loan application has been approved and the loan has been sanctioned for Rs.
+            {!loan.Total_Loan_Amount__c} by AU Small Finance Bank Limited.
+            </p>
+
+            <p>I hereby confirming that I have checked all the Original documents related to this
+                Vehicle and vehicle is in good condition.
+            </p>
+            <p>
+                I agree and undertake that I shall be responsible to transfer the registration
+                certificate (RC) and vehicle insurance in my name and ensure that the
+                endorsement of hypothecation of AU Small Finance Bank Limited is recorded in
+                the RC within 30 days and all pending/future taxes in respect of the vehicle shall
+                be paid by me.
+            </p>
+            <p>I am also thankful to you for making the payment of loan amount
+                to {!dealerPayment.Beneficiary_Name__c} on my behalf as per my instruction,
+                in consideration of {!collateral.Make__c} {!collateral.Model__c} agreeing to sell the vehicle to me .
+            </p>
+            <p>I hereby undertake to repay the monthly instalments to AU Small Finance Bank
+                Limited promptly on due dates for the said loan Through NACH/Standing
+                Instruction or any other electronic Mode (bearing nos. 
+                    <apex:variable value="{!1}" var="rowNum"/>
+                    <apex:repeat value="{!chequeNumbers}" var="eachPDC">
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(eachPDC.pdcChequeNumberFrom))}">
+                            from {!eachPDC.pdcChequeNumberFrom} to {!eachPDC.pdcChequeNumberTo}<apex:outputPanel rendered="{!rowNum < chequeNumbers.size}">,</apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!NOT(ISBLANK(eachPDC.spdcChequeNumberFrom))}">
+                            from {!eachPDC.spdcChequeNumberFrom} to {!eachPDC.spdcChequeNumberTo}<apex:outputPanel rendered="{!rowNum < chequeNumbers.size}">,</apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                    </apex:repeat>
+                ) as per the terms of loan agreement entered with you.
+            </p>
+            <p>It is again reiterated that all liabilities pertaining to the vehicles including tax,
+                Insurance, accident, damage, Challan (past, present and future) will be borne by
+                me.
+            </p>
+             <br/>
+             <p>
+                 Thanking You,<br/>
+                {!applicant.First_Name__c} {!applicant.Middle_Name__c} {!applicant.Last_Name__c}<br/>
+                Borrower Name/Sign   
+            </p>
+
+        </div>
+            </div>
+        </body>
+    </html>
+    
+</apex:page>

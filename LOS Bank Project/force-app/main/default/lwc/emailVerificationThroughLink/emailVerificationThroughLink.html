@@ -1,0 +1,56 @@
+<template>
+    <template if:true={isApplicantEmailId}>
+        <template if:true={isloading}>
+            <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template>
+        <div class="slds-is-relative ">
+            <label title="For salaried member FI can be waived if email verified." class="slds-form-element__label">Email</label>           
+            <div class="buttonIn">
+                <lightning-input type="email" data-id="emailInput" name="Email__c"
+                    class="validate input" value={emailId} variant="label-hidden"
+                    onchange={handleChangePhoneNumber} max-length="10" pattern="[6-9]{1}[0-9]{9}" disabled              
+                    message-when-pattern-mismatch="Please enter a valid phone number">
+                </lightning-input>
+    
+                <template if:true={boolSendOtp}>
+                    <lightning-button variant="base" label="SEND OTP" disabled={boolCheckMobileNumber}
+                        title="Looks like a link" onclick={handleSendOTP} class="button"></lightning-button>
+                </template>
+                <template if:true={boolResendOtp}>
+                    <lightning-button variant="base" label="RESEND OTP" title="Looks like a link"
+                        onclick={handleResendOTP} disabled={boolCheckMobileNumber} class="button">
+                    </lightning-button>
+                </template>
+                <template if:true={isVerified}>
+                    <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                        title="Mobile"></lightning-icon>
+                </template>
+            </div>
+        </div>
+    
+        <div class="slds-m-top_medium">
+            <template if:true={isEnterOtp}>
+                <div class="slds-is-relative">
+    
+                    <label class="slds-form-element__label">
+                        <abbr class="slds-required" title="required">* </abbr>Enter OTP</label>
+                    <div class="buttonIn">
+                        <lightning-input type="text" max-length="6" pattern="[0-9]{6}" class="validate checkValidity"
+                            placeholder="Enter OTP here" value={enterOTPValue} variant="label-hidden"
+                            onchange={handleChangeOtp} message-when-pattern-mismatch="Please enter a valid OTP."
+                            label="Enter OTP">
+                        </lightning-input>
+                        <lightning-button variant="base" label="VERIFY" title="Looks like a link"
+                            onclick={handleVerify} disabled={boolVerify} class="button"></lightning-button>
+    
+                    </div>
+                </div>
+                <div class="slds-align_absolute-center slds-m-top_small">
+                    <template if:true={boolRequestOtp}>
+                        Request OTP in&nbsp;<b>{increse1Second}</b>s
+                    </template>
+                </div>
+            </template>
+        </div>
+    </template>
+</template>

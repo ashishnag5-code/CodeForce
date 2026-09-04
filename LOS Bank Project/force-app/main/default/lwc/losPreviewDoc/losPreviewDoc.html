@@ -1,0 +1,39 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 01-12-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template >
+        
+    <template if:true={url}>
+        <lightning-card  variant="Narrow"  title="Document Preview" icon-name="doctype:image">
+        <template if:true={showSpinner}>
+            <div class="slds-is-relative">
+               <lightning-spinner variant="brand" alternative-text="Loading"></lightning-spinner>
+            </div>
+        </template>
+    <div class="slds" style="background-color: white;">
+        <div class="container">
+            <div class="slds-grid slds-var-m-top_medium slds-wrap">
+                <div class="slds-col_padded slds-size_1-of-1">
+                    <template if:true={showSpinner}>
+                        <div class="slds-is-relative">
+                           <lightning-spinner variant="brand" alternative-text="Loading"></lightning-spinner>
+                        </div>
+                    </template>
+                        <template if:true={isFileTypePDF}>
+                            <iframe src={url} style={pdfHeight}></iframe>
+                        </template>
+                        <template if:false={isFileTypePDF}>
+                            <img src={url} />
+                        </template>
+                </div>          
+            </div>   
+        </div>
+    </div><br/>
+</lightning-card>
+    </template>
+        
+</template>

@@ -1,0 +1,61 @@
+<template>
+    <template if:true={isShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+        <!-- modal header start -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideModalBox}>
+                <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">REJECT</h2>
+            </header>
+
+            <!-- modal body start -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <template if:true={showPickListComponent}>
+                    
+                    <!-- <template if:true={isLoading}>
+                        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                    </template> -->
+                    <c-custom-spinner
+                        show-spinner={isLoading}
+                        record-id={recordId}
+                        spinner-image={spinnerImage}
+                        >
+                    </c-custom-spinner>
+
+
+                    <c-depended-pick-list-l-w-c  object-api-name = {applicationRecord.apiName}
+                                                 object-record-type-id = {applicationRecord.recordTypeId}
+                                                 controller-field-api-name = "Rejection_Reason__c"
+                                                 controller-field-label = "Rejection Reason"
+                                                 dependent-field-api-name = "Rejection_Sub_Reason__c"
+                                                 dependent-field-label = "Rejection Sub Reason"
+                                                 onchildmethod = {handlePicklistSelection}>
+                    </c-depended-pick-list-l-w-c>
+                    <div>
+                        <lightning-textarea name="OtherReasons" 
+                                            label="Other Reason" 
+                                            data-id="otherReason" 
+                                            onchange={handleTextAreaChange}>
+                        </lightning-textarea>
+                    </div>
+                </template>
+                
+            </div>
+
+            <!-- modal footer start-->
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={hideModalBox}>Cancel</button>
+                <button class="slds-button slds-button_neutral" onclick={handleReject}>Reject</button>
+            </footer>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+</template>

@@ -1,0 +1,40 @@
+<template>
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+    <lightning-card>
+        <h1 slot="title">
+            <lightning-icon icon-name="standard:file" class="slds-m-around_small" size="small"></lightning-icon>
+            {cpvSectionLabel}
+        </h1>
+        <div>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="12" padding="around-small" small-device-size="12" large-device-size="6">
+                    <lightning-combobox name="Applicant__c" options={applicantOptions} 
+                    value={selectedApplicant} label="Select Applicant"
+                    onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <template if:true={showDocumentSection}>
+                        <lightning-combobox data-index={index}
+                        label="Select Document Type" name="DocumentType" value={selectedDocument}
+                        placeholder="Select Document type" options={documentOptions}
+                        onchange={handleSelectedDocumentChange}>
+                        </lightning-combobox>
+                        
+                        <template for:each={selectedDocumentsList} for:item="val">
+                            <lightning-pill key={val.val} label={val.val} name={val.val}
+                                onremove={handleRemove}>
+                                <lightning-icon icon-name="standard:account" alternative-text="Account"></lightning-icon>
+                            </lightning-pill>
+                        </template>
+                    </template>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+        <template for:each={selectedDocumentsList} for:item="val">
+            <c-cpv-waiver-documents-child applicant-id={selectedApplicant} loan-app-id={recordId} key={val.val} type={val.val} removed-record={removedRecord}></c-cpv-waiver-documents-child>
+        </template>
+    </lightning-card>
+    
+</template>

@@ -1,0 +1,390 @@
+<apex:page showHeader="false" sidebar="false" standardController="Loan_Application__c" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false"
+            
+    
+    extensions="VahanPdfController" contentType="{!renderedContentType}" renderAs="{!renderingService}">
+    <html>
+        <head>
+            
+            <style>
+                body{
+                border:1px;
+                border-block-start: 2px;
+                border-block-start-color: rgb(222, 222, 222);
+                border-block-end-style: solid; 
+                }
+                .pbSubheader{
+                background-color: #7944a0;
+                font-size: medium;
+                color:white;
+                
+                }
+                .pbSubheader h3{
+                padding-bottom: 10px;
+                padding-left: 10px;
+                font-size: 14px;
+                }
+                
+                .offencestyle{
+                background-color: #f3f3f3 !important;
+                font-size: medium;
+                color:black;
+                padding-bottom: 10px;
+                padding-left: 10px;
+                padding-top: 10px;
+                padding-right: 10px;
+                width:100%;
+                }
+                .redLine {
+                display: block;
+                margin-top: 0.5em;
+                margin-bottom: 0.5em;
+                margin-left: auto;
+                margin-right: auto;
+                border: 1px solid #7944a0;
+                width: 100%;
+                }
+                
+            </style>
+        </head>
+        <body>
+            <apex:outputPanel rendered="{!Error == ''}">
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Metadata" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Amount Before Payment" for="amountBeforePayment"/>
+                                <apex:outputText label="Amount Before Payment" value="{!metadataMap["amountBeforePayment"]}" id="amountBeforePayment"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Amount After Payment" for="amountAfterPayment"/>
+                                <apex:outputText label="Amount After Payment" value="{!metadataMap["amountAfterPayment"]}" id="amountAfterPayment"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Search By" for="searchBy"/>
+                                <apex:outputText label="Search By" value="{!metadataMap["searchBy"]}" id="searchBy"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="User" for="user"/>
+                                <apex:outputText label="User" value="{!metadataMap["user"]}" id="user"/> 
+                            </apex:pageBlockSectionItem>
+                            
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>        
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="PDF Download" columns="1">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Pdf Url" for="amountBeforePayment"/>
+                                <apex:outputText >
+                                    <apex:outputLink value="{!pdfLink}">Download Vaahaan Report</apex:outputLink>
+                                    
+                                </apex:outputText>
+                                
+                                
+                                
+                            </apex:pageBlockSectionItem>
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>     
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Noc Cc Details" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Office Code" for="officeCode"/>
+                                <apex:outputText label="Office Code" value="{!noccMap["officeCode"]}" id="officeCode"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Details" for="details"/>
+                                <apex:outputText label="Details" value="{!noccMap["details"]}" id="details"/> 
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>    
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Owner Details" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Father's Name" for="fathersName"/>
+                                <apex:outputText label="Father's Name" value="{!ownerMap["fathersName"]}" id="fathersName"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Present Address" for="presentAddress"/>
+                                <apex:outputText label="Present Address" value="{!ownerMap["presentAddress"]}" id="presentAddress"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Owner's Name" for="ownersName"/>
+                                <apex:outputText label="Owner's Name" value="{!ownerMap["ownersName"]}" id="ownersName"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Permanent  Address" for="permanentAddress"/>
+                                <apex:outputText label="Permanent  Address" value="{!ownerMap["permanentAddress"]}" id="permanentAddress"/> 
+                            </apex:pageBlockSectionItem>
+                            
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Vehicle Details" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Body Type" for="bodyType"/>
+                                <apex:outputText label="Body Type" value="{!vehicleMap["bodyType"]}" id="bodyType"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Horse Power" for="horsePower"/>
+                                <apex:outputText label="Horse Power" value="{!vehicleMap["horsePower"]}" id="horsePower"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Color" for="color"/>
+                                <apex:outputText label="Color" value="{!vehicleMap["color"]}" id="color"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Registration Date" for="registrationDt"/>
+                                <apex:outputText label="Registration Date" value="{!vehicleMap["registrationDt"]}" id="registrationDt"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Fuel" for="fuel"/>
+                                <apex:outputText label="Fuel" value="{!vehicleMap["fuel"]}" id="fuel"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Purchase Date" for="purchaseDt"/>
+                                <apex:outputText label="Purchase Date" value="{!vehicleMap["purchaseDt"]}" id="purchaseDt"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="No Of Cylinders" for="noOfCylinders"/>
+                                <apex:outputText label="No Of Cylinders" value="{!vehicleMap["noOfCylinders"]}" id="noOfCylinders"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Fitness Upto" for="fitnessUpto"/>
+                                <apex:outputText label="Fitness Upto" value="{!vehicleMap["fitnessUpto"]}" id="fitnessUpto"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Manufacturer" for="manufacturer"/>
+                                <apex:outputText label="Manufacturer" value="{!vehicleMap["manufacturer"]}" id="manufacturer"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Cubic Cap" for="cubicCap"/>
+                                <apex:outputText label="Cubic Cap" value="{!vehicleMap["cubicCap"]}" id="cubicCap"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Seating Cap" for="seatingCap"/>
+                                <apex:outputText label="Seating Cap" value="{!vehicleMap["seatingCap"]}" id="seatingCap"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Vehicle Class" for="vehicleClass"/>
+                                <apex:outputText label="Vehicle Class" value="{!vehicleMap["vehicleClass"]}" id="vehicleClass"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Maker Model" for="makerModel"/>
+                                <apex:outputText label="Maker Model" value="{!vehicleMap["makerModel"]}" id="makerModel"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Pan Gir No" for="panGirNo"/>
+                                <apex:outputText label="Pan Gir No" value="{!vehicleMap["panGirNo"]}" id="panGirNo"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Owner Sr No" for="ownerSrNo"/>
+                                <apex:outputText label="Owner Sr No" value="{!vehicleMap["ownerSrNo"]}" id="ownerSrNo"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Sale Amount" for="saleAmount"/>
+                                <apex:outputText label="Sale Amount" value="{!vehicleMap["saleAmount"]}" id="saleAmount"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Engine No" for="engineNo"/>
+                                <apex:outputText label="Engine No" value="{!vehicleMap["engineNo"]}" id="engineNo"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Gvw" for="gvw"/>
+                                <apex:outputText label="Gvw" value="{!vehicleMap["gvw"]}" id="gvw"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Standing Cap" for="standingCap"/>
+                                <apex:outputText label="Standing Cap" value="{!vehicleMap["standingCap"]}" id="standingCap"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Wheelbase" for="wheelbase"/>
+                                <apex:outputText label="Wheelbase" value="{!vehicleMap["wheelbase"]}" id="wheelbase"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Registration No" for="registrationNo"/>
+                                <apex:outputText label="Registration No" value="{!vehicleMap["registrationNo"]}" id="registrationNo"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Chassis No" for="chassisNo"/>
+                                <apex:outputText label="Chassis No" value="{!vehicleMap["chassisNo"]}" id="chassisNo"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Dealer" for="dealer"/>
+                                <apex:outputText label="Dealer" value="{!vehicleMap["dealer"]}" id="dealer"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Wt Unladen" for="wtUnladen"/>
+                                <apex:outputText label="Wt Unladen" value="{!vehicleMap["wtUnladen"]}" id="wtUnladen"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Black List Details" for="blackListDetails"/>
+                                <apex:outputText label="Black List Details" value="{!vehicleMap["blackListDetails"]}" id="blackListDetails"/> 
+                            </apex:pageBlockSectionItem>
+                            
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>
+                
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Financer's Details" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Address" for="address"/>
+                                <apex:outputText label="Address" value="{!financeMap["address"]}" id="address"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Financer's Name" for="financersName"/>
+                                <apex:outputText label="Financer's Name" value="{!financeMap["financersName"]}" id="financersName"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="With Effect From" for="withEffectFrom"/>
+                                <apex:outputText label="With Effect From" value="{!financeMap["withEffectFrom"]}" id="withEffectFrom"/> 
+                            </apex:pageBlockSectionItem>
+                            
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>        
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        <apex:pageBlockSection title="Insurance Details" columns="2">
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Company" for="company"/>
+                                <apex:outputText label="Company" value="{!insuranceMap["company"]}" id="company"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Validity" for="validity"/>
+                                <apex:outputText label="Validity" value="{!insuranceMap["validity"]}" id="validity"/> 
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                <apex:outputLabel value="Type" for="type"/>
+                                <apex:outputText label="Type" value="{!insuranceMap["type"]}" id="type"/> 
+                            </apex:pageBlockSectionItem>
+                            
+                            
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>        
+                
+                <div style='{!pageBlockSectionCSS}'>
+                    <apex:pageBlock >
+                        
+                        <apex:pageBlockSection title="Challan Details" columns="1">
+                            <apex:repeat value="{!challanMapList}" var="challan">
+                                <apex:pageBlockSection columns="2">
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Total Amount" for="totalAmount"/>
+                                        <apex:outputText label="Total Amount" value="{!challan.ChallanMap["totalAmount"]}" id="totalAmount"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Violator Name" for="violatorName"/>
+                                        <apex:outputText label="Violator Name" value="{!challan.ChallanMap["violatorName"]}" id="violatorName"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Challan No" for="challanNo"/>
+                                        <apex:outputText label="Challan No" value="{!challan.ChallanMap["challanNo"]}" id="challanNo"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Dl Rc Number" for="dlRcNumber"/>
+                                        <apex:outputText label="Dl Rc Numbe" value="{!challan.ChallanMap["dlRcNumber"]}" id="dlRcNumber"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Payment Source" for="paymentSource"/>
+                                        <apex:outputText label="Payment Source" value="{!IF(challan.ChallanMap["paymentSource"] != null,challan.ChallanMap["paymentSource"],'')}" id="paymentSource"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Payment Date And Time" for="paymentDateAndTime"/>
+                                        <apex:outputText label="Payment Date And Time" value="{!challan.ChallanMap["paymentDateAndTime"]}" id="paymentDateAndTime"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="State" for="state"/>
+                                        <apex:outputText label="State" value="{!challan.ChallanMap["state"]}" id="state"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Challan Date" for="challanDate"/>
+                                        <apex:outputText label="Challan Date" value="{!challan.ChallanMap["challanDate"]}" id="challanDate"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Transaction Id" for="transactionId"/>
+                                        <apex:outputText label="Transaction Id" value="{!challan.ChallanMap["transactionId"]}" id="transactionId"/> 
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                                        <apex:outputLabel value="Status" for="status"/>
+                                        <apex:outputText label="Status" value="{!challan.ChallanMap["status"]}" id="status"/> 
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                                <br/><br/>
+                                
+                                
+                                
+                                <apex:pageBlockSection showHeader="false" >
+                                   <!--<apex:repeat value="{!challan.OffenceWrapperList}" var="off">
+<apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+<apex:outputLabel value="Penalty" for="penalty"/>
+<apex:outputText label="Penalty" value="{!off.OffenceMap["penalty"]}" id="penalty"/> 
+</apex:pageBlockSectionItem>
+<apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+<apex:outputLabel value="Offence Name" for="offenceName"/>
+<apex:outputText label="Offence Name" value="{!off.OffenceMap["offenceName"]}" id="offenceName"/> 
+</apex:pageBlockSectionItem>
+</apex:repeat>--> 
+                                    
+                                </apex:pageBlockSection> 
+                                
+                                <table style="{!tableStyle}">
+                                    <tr style="{!tableRowStyle}">
+                                        <th colspan="2" style="{!tableHeadDataStyle}">Offence Details</th>
+                                        
+                                        
+                                    </tr>
+                                    <tr style="{!tableRowStyle}">
+                                        <th style="{!tableHeadDataStyle} width:10% !important">Penalty</th>
+                                        <th style="{!tableHeadDataStyle} width:15% !important">Offence Name</th>
+                                        
+                                    </tr>
+                                    <apex:repeat value="{!challan.OffenceWrapperList}" var="off">
+                                        <tr style="{!tableRowStyle}">
+                                            <td style="{!tableDataStyle}">{!off.OffenceMap["penalty"]}</td>
+                                            <td style="{!tableDataStyle}">{!off.OffenceMap["offenceName"]}</td>
+                                            
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                                <br/>
+                                <div class="redLine">
+                                    
+                                </div>
+                                <br/>
+                            </apex:repeat>
+                        </apex:pageBlockSection>    
+                    </apex:pageBlock>
+                </div>        
+                
+                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!Error != ''}">
+                <apex:pageMessages />
+            </apex:outputPanel>
+            
+        </body>
+    </html>
+    
+    
+</apex:page>

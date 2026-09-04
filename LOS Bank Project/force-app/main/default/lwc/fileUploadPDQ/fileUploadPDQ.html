@@ -1,0 +1,45 @@
+<template>
+    <template if:true={displayUpload}>
+        <lightning-file-upload
+            required={item.isMandatory__c}
+            name={item.QualifiedApiName}
+            class="as topPad slds-m-bottom_small"
+            record-id={recordId}
+            onuploadfinished={handleUploadFinished}
+            multiple>
+        </lightning-file-upload>
+    </template>
+    <div class="slds-m-bottom_xx-small"></div>
+
+    <template if:true={showfiles}>
+        <template for:each={relatedFiles} for:item="file">
+            <a key={file.documentId} name={file.mimeType} value={file.downloadURL} onclick={previewFile}>{file.name}</a>  <br key={file.documentId}/>
+        </template>
+    </template>
+
+    <template if:true={showPreview}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" style="text-align: center;"
+                    id="modal-content-id-1">
+                    <template if:true={isFileTypePDF}>
+                        <iframe src={fileURL} height="640px" width="100%"></iframe>
+                    </template>
+                    <template if:true={isFileTypeImage}>
+                        <img src={fileURL} />
+                    </template>
+                    <template if:true={isNonPreviewableFile}>
+                        Can Not Preview This File
+                    </template>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

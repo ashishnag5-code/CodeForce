@@ -1,0 +1,68 @@
+<template>
+
+    <div if:true={isLoaded} class="slds-is-relative">
+        <lightning-spinner alternative-text="Loading..." variant="brand">
+        </lightning-spinner>
+    </div>
+
+
+    <lightning-card>
+        <div slot="actions">
+            <!--  <lightning-button label="New"  icon-position="right" icon-name="action:new" onclick={addNewRow}>
+            </lightning-button>
+            &nbsp; 
+           <lightning-button label="Remove"  icon-position="right" icon-name="action:delete" onclick={removeRow}>
+            </lightning-button>-->
+
+        </div>
+        <h1 slot="title">
+            <span style="color: rgb(100, 0, 134)">
+                <lightning-icon class="slds-p-around_small slds-current-color" icon-name="utility:money" size="medium">
+                </lightning-icon>
+            </span>&nbsp;
+            BSA Credit Details
+        </h1>
+
+        <!--Generic Applicant Selection a016s000003bSJ7AAM-->
+        <c-applicant-selection record-val={recordId} onselection={handleChange} label-text={labelVal}>
+        </c-applicant-selection>
+
+        <template if:true={showTable}>
+           <!-- <c-bank-statement-upload-financials loan-app-id={recordId} parent-name='financial'
+            onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId}
+            document-type='Bank Account Statement'
+            heading-value="Upload Bank Statement"
+            applicant-record-id={applicantId}
+            oncartcallbackmonthlyincome={handleCallBackRefresh}
+            onenablefetchdetails={handleEnableFetchDetails}>
+            </c-bank-statement-upload-financials>-->
+
+            <c-bsa-child-component bank-account-records={bankRecords} applicant-id={applicantId} loan-id={recordId}
+                onrefresh={handleRefresh} onshowamb={handleShowAmb} onshowamc={handleShowAmc}></c-bsa-child-component>
+        </template>
+
+        <!-- AMB Section -->
+        <template if:true={showAmb}>
+            <template lwc:if={ambRecordsPresent}>
+                <c-amb-details-component bank-account-records={ambRecord} onbackaction={handleshowTable}
+                    applicant-id={applicantId} onrefresh={handleRefresh}>
+                </c-amb-details-component>
+            </template>
+            <template lwc:else>
+                <p> No AMB Record Present for this Record</p>
+             </template>
+        </template>
+        <!-- END  AMB Section -->
+
+        <!-- AMC Section -->
+        <template if:true={showAmc}>
+            <template if:true={amcRecordsPresent}>
+                <c-amc-details-component bank-account-records={amcRecord} onbackaction={handleshowTable}
+                    applicant-id={applicantId} onrefresh={handleRefresh}>
+                </c-amc-details-component>
+            </template>
+        </template>
+        <!-- END  AMC Section -->
+    </lightning-card>
+
+</template>

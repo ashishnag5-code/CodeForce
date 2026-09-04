@@ -1,0 +1,35 @@
+<template>
+
+    <template if:true={loadComponents}>
+        <template if:true={displayCardView}>
+            <c-cif-creation-component loan-id={loanAppId} oncifexposurecomplete={handleCIFCreationEvent}></c-cif-creation-component>
+    
+            <template if:true={showLanCreation}>
+                <div class="slds-p-top_small">
+                    <c-lan-number-creation-component ondisplayloandetails={showLoanDetailsCmp} loan-id={loanAppId} loan-type={loanType}></c-lan-number-creation-component>
+                </div>
+            </template>
+        </template>
+        <template if:false={displayCardView}>
+            <div class="slds-box slds-m-bottom_small">
+                <c-ops-stage-loan-details loan-app={loanApp} loan-app-record-type={loanAppRecordType} emi-dates={stateMappings}></c-ops-stage-loan-details>
+            </div>
+            <div class="slds-box slds-m-bottom_small">
+                <template if:true={showTranche}>
+                    <c-tranche-parent bool-from-c-i-n-l-a-n-cmp={boolFromCINLANCmp} loan-app={loanApp}></c-tranche-parent>
+                </template>
+            </div>
+            <div class="slds-box slds-m-bottom_small">
+                <c-charges record-id={loanAppId}></c-charges>
+            </div>
+            <div class="slds-box slds-m-bottom_small">
+                <c-related-payment-favourings-component record-id={loanAppId}></c-related-payment-favourings-component>
+            </div>
+            <p style="color:blue">
+                <lightning-icon icon-name="utility:back" size="medium" onclick={returnToPreviousPage}></lightning-icon>&nbsp;&nbsp;Previous Page
+            </p>
+        </template>
+    </template>
+    
+    
+</template>

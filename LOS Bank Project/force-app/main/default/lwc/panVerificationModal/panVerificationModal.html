@@ -1,0 +1,45 @@
+<template>
+
+    <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+    <span class="slds-m-left_small">
+        <div style="padding:0.5rem;background:#6D3078">
+            <div class="slds-text-color_inverse">{applicant.RecordType.Name}_ {applicant.First_Name__c}
+                {applicant.Last_Name__c}</div>
+        </div>
+    </span>
+    <div class="slds-grid slds-gutters_x-small slds-m-around_small">
+        <div class="slds-col slds-large-size_1-of-2 slds-small-size--2-of-3 slds-medium-size--1-of-2 ">
+            <span>
+                <lightning-input type="text" required="true" variant="label-hidden" label="Enter PAN"
+                onchange={handleChange} class="validate" value={applicant.PAN__c} pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                length="10" name="PAN__c" message-when-pattern-mismatch="Enter valid Pan number"></lightning-input>
+            </span>
+        </div>
+        <div class="slds-col slds-large-size_1-of-2 slds-small-size--1-of-3 slds-medium-size--1-of-2">
+            <span>
+                <div class="slds-is-relative">
+                    <template if:false={docVerified}>
+                        <lightning-button type="neutral" label="Verify" onclick={verifyPAN} disabled={disableVerifyPanButton}>
+                        </lightning-button>
+                    </template>
+                    <template if:true={docVerified}>
+                        <lightning-icon size="small" variant="success" icon-name="utility:success"></lightning-icon>
+                    </template>
+                </div>
+            </span>
+        </div>
+
+        
+    </div>
+    <template if:true={showPANDetails}>
+        <c-generic-data-display onback={cancel} display-type={dispType}
+            identifier-documents={identifierDocuments} onverified={verifyPANDetails} pan-response={response}>
+        </c-generic-data-display>
+    </template>
+
+    
+    
+    
+
+</template>

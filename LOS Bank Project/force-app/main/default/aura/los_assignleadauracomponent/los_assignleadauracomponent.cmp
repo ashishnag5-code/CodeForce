@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+                access="global" >  
+    <!-- c:assignLeadFromRecord  recordId="{!v.recordId}" showassignbtn="false" lounchflow="false" directlaunch="true" oncustomclose="{!c.closeCurrentComponent}"></c:assignLeadFromRecord -->
+    
+    <lightning:navigation aura:id="navService"/>
+    <c:leadAssignmentComponent objectApiName="Loan_Application__c" 
+                               oncustomclose="{!c.closeCurrentComponent}" 
+                               recordId="{!v.recordId}" renderAssignMeButton="true">
+        
+    </c:leadAssignmentComponent>
+    
+    
+</aura:component>

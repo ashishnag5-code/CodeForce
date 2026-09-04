@@ -1,0 +1,84 @@
+<template>
+    <div if:true={isloading}>
+        <lightning-spinner alternative-text="Loading...">
+        </lightning-spinner>
+    </div>
+
+    <lightning-layout>
+        <template if:false={showUdyamData}>
+        <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+            <div class="slds-card__body slds-card__body_inner">
+                <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                        <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-var-p-horizontal_small slds-var-p-bottom_small"
+                            data-record-name="ViewMoreInformation">
+                            <article class="slds-box">
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-media__body">
+                                            <h2 class="slds-card__header-title">Udyam Verification
+                                            </h2>
+                                        </div>
+                                        <div class="slds-no-flex">
+                                            <template if:false={isVerified}>
+                                                <lightning-button  style="display:flex;" type="neutral"
+                                                name="Udyam__c" label="Verify" onclick={handleVerify}>
+                                                </lightning-button>
+                                            </template>
+                                            <template if:true={isVerified}>
+                                                <template if:true={showSuccessIcon}>
+                                                    <lightning-icon size="small" variant="success"
+                                                    icon-name="utility:success"></lightning-icon>
+                                                </template>
+                                                <template if:false={showSuccessIcon}>
+                                                    <lightning-button style="display:flex;" type="neutral"
+                                                    name="Uyam_Cert__c" label="Fetch Certificate" onclick={handleFetchCertificate}></lightning-button><!--R2-662-->
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </header>
+                                </div>
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-form-element">
+                                        <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                            <div class="slds-size_1-of-1">
+                                                <div class="slds-form-element__control">
+                                                    <div class="slds-form-element__static">
+                                                        <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr>Udyam</label>
+                                                        <div class="buttonIn">
+                                                            <lightning-input type="text" label="Udyam" class="input"
+                                                                value={documentCheckListRecord.Document_Number__c} variant="label-hidden"
+                                                                name="Udyam__c" disabled="true">
+                                                            </lightning-input>
+                                                            <lightning-button-icon class="button" icon-name="utility:upload"
+                                                                alternative-text="upload" title="Upload">
+                                                            </lightning-button-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <template if:true={displayCertificate}>
+                                        <lightning-button variant="base" label={udyamCertificate.Title}
+                                                name={udyamCertificate.Id} 
+                                                title="Document Name" onclick={handlePreviewClick}
+                                                class="linkClass slds-size_2-of-3 slds-col slds-cell-wrap slds-truncate">
+                                        </lightning-button>
+                                    </template>
+                                    
+                                </div>
+                            </article>
+                        </li>
+                </ul>
+            </div>
+        </lightning-layout-item>
+    </template>
+        <template if:true={showUdyamData}>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12">
+                <c-generic-data-display onverified={handleIdentifierVerification} identifier-documents={identifierDocuments} onback={showDetails} display-type={dispType} pan-response={response}>
+                </c-generic-data-display>
+             </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

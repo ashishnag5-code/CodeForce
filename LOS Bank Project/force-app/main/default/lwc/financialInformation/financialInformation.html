@@ -1,0 +1,74 @@
+<template>
+    <div class="slds-m-top--small">
+        <!--<div if:true={isLoaded} class="slds-is-relative">
+            <lightning-spinner alternative-text="Loading..." variant="brand">
+            </lightning-spinner>
+        </div>-->
+        <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+        <lightning-card>
+            <h1 slot="title">
+                <span style="color: rgb(100, 0, 134)">
+                    <lightning-icon class="slds-p-around_small slds-current-color" icon-name="action:adjust_value"
+                        size="medium"></lightning-icon>
+                </span>&nbsp;
+                {screenHeading}
+            </h1>
+        </lightning-card>
+
+        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+            <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                <lightning-combobox name="Member" label="Choose Applicant from Drop down" value={applicantId}
+                    options={mdetailsOptions} required onchange={handleChange} padding="around-small">
+                </lightning-combobox>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <!--Generic Applicant Selection
+        <c-applicant-selection record-val={recordVal} onselection={handleChange} label-text={labelVal}></c-applicant-selection>-->
+
+        <br>
+        <template if:true={showViewForm}>
+            <template for:each={itemList} for:item="item" for:index="index">
+                <template if:true={isTractor}>
+                    <c-r2_-land-details key={item.id} loan-id={recordVal} access-key={accesskey} applicant-types={applicantTypes}  onnext={nextFromTractorTemp}
+                    applicants-data={applicantsData} memberid={applicantId} onhideincome={handleButtons} spinner-image={spinnerImage}
+                    inside-record-page={insideRecordPage}>
+                    </c-r2_-land-details>
+                </template>
+                <template if:true={isTwo_FourWheeler}>
+                    <c-financial-view-component key={item.id} loan-id={recordVal} access-key={accesskey} applicant-types={applicantTypes} 
+                        applicants-data={applicantsData} memberid={applicantId} onhideincome={handleButtons} spinner-image={spinnerImage}>
+                    </c-financial-view-component>
+                </template>
+                <!-- Calling Financial View Child Component
+                <c-financial-view-component key={item.id} loan-id={recordVal} access-key={accesskey} applicant-types={applicantTypes} 
+                    applicants-data={applicantsData} memberid={applicantId} onhideincome={handleButtons} spinner-image={spinnerImage}>
+                </c-financial-view-component>--> <!--Commenting for now as recordtypes not visible-->
+                <template if:true={isCV}>
+                    <c-financial-view-template-commercial key={item.id} loan-id={recordVal} access-key={accesskey} applicant-types={applicantTypes} 
+                    applicants-data={applicantsData} memberid={applicantId} onhideincome={handleButtons} spinner-image={spinnerImage} inside-record-page={insideRecordPage}>
+                    </c-financial-view-template-commercial>
+                </template>
+                <!--End-->
+                <lightning-layout key={item.id} multiple-rows class="slds-p-bottom_small">
+                    <template if:false={disableButtons}>
+                        <div class="button-container-inner slds-hide slds-align_absolute-center slds-var-m-top_medium">
+                            Add More Income<lightning-icon icon-name="action:new" size="x-small" alternative-text=""
+                                access-key={item.id} id={index} class="slds-m-left_small" onclick={addNewRow}>
+                            </lightning-icon>
+
+                            &nbsp; Cancel Income <lightning-icon icon-name="action:delete" size="x-small"
+                                alternative-text="" access-key={item.id} id={index} class="slds-m-left_small"
+                                onclick={removeRow}></lightning-icon>
+                        </div>
+                    </template>
+                </lightning-layout>
+            </template>
+        </template>
+
+
+        
+    </div>
+
+</template>

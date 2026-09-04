@@ -1,0 +1,99 @@
+<apex:component >
+    <apex:attribute name="lstFleet" description="Fleet Details" type="Fleet__c[]"/>
+    <apex:attribute name="bankAccounts" description="Bank Account Details" type="Bank_Account_Records__c[]"/>
+
+    <table>
+        <tr width="100%">
+            <td colspan="3">
+                <!-- EXISTING LOAN DETAILS TABLE -->
+                <p class="subHeadingStyles">F. EXISTING LOAN DETAILS</p>
+                <table width="100%" cellpadding="2" cellspacing="2">
+                    <tr style="text-align: center;">
+                        <th style="background-color: white" width="5%">S.No.</th>
+                        <th style="background-color: white" width="25%">Accounts No.</th>
+                        <th style="background-color: white" width="15%">Name of Institution</th>
+                        <th style="background-color: white" width="15%">Account / Facility Type</th>
+                        <th style="background-color: white" width="10%">Tenure</th>
+                        <th style="background-color: white" width="15%">EMI Amount (INR)</th>
+                        <th style="background-color: white" width="15%">Facility Amount (INR)</th>
+                    </tr>
+                    <apex:outputText rendered="{!bankAccounts.size > 0}">
+                        <apex:variable value="{!1}" var="fleetSno" />
+                        <apex:repeat var="loan" value="{!bankAccounts}">
+                            <tr style="background-color: white">
+                                <th style="background-color: white; text-align: center">{!fleetSno}</th>
+                                <td>{!loan.Account_Number__c}</td>
+                                <td>{!loan.Name_of_the_Financier__c}</td>
+                                <td>{!loan.Type_of_Loan__c}</td>
+                                <td>{!loan.Tenure__c}</td>
+                                <td>{!loan.EMI_Amount__c}</td>
+                                <td>{!loan.Loan_Amount__c}</td>
+                            </tr>
+                            <apex:variable value="{!fleetSno+1}" var="fleetSno" />
+                        </apex:repeat>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!bankAccounts.size == 0}">
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">1</th>
+                            <td/><td/><td/><td/><td/><td/>
+                        </tr>
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">2</th>
+                            <td/><td/><td/><td/><td/><td/>
+                        </tr>
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">3</th>
+                            <td/><td/><td/><td/><td/><td/><td/>
+                        </tr>
+                    </apex:outputText>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <!-- DETAILS OF VEHICLE OWNED IN THE FAMILY -->
+                <p class="subHeadingStyles">G. DETAILS OF VEHCILE OWNED IN THE FAMILY</p>
+                <table width="100%" cellpadding="2" cellspacing="2">
+                    <tr style="text-align: center;">
+                        <th style="background-color: white" width="5%">S.No.</th>
+                        <th style="background-color: white" width="20%">Vehicle No.</th>
+                        <th style="background-color: white" width="10%">Model</th>
+                        <th style="background-color: white" width="15%">Owner</th>
+                        <th style="background-color: white" width="20%">Relationship with Key Person</th>
+                        <th style="background-color: white" width="15%">Free / Finance</th>
+                        <th style="background-color: white" width="25%">Name of Finance Institution</th>
+                    </tr>
+                    <apex:outputText rendered="{!lstFleet.size > 0}">
+                        <apex:variable value="{!1}" var="fleetSno" />
+                        <apex:repeat var="fleet" value="{!lstFleet}">
+                            <tr style="background-color: white">
+                                <th style="background-color: white; text-align: center">{!fleetSno}</th>
+                                <td>{!fleet.Vehicle_Number__c}</td>
+                                <td>{!fleet.Vehicle_Make_Model__c}</td>
+                                <td></td>
+                                <td>{!fleet.Relationship_with_borrower__c}</td>
+                                <td>{!fleet.HPN_Status__c}</td>
+                                <td>{!fleet.Financial_Institution_Name__c}</td>
+                            </tr>
+                            <apex:variable value="{!fleetSno+1}" var="fleetSno" />
+                        </apex:repeat>
+                    </apex:outputText>
+                    <apex:outputText rendered="{!lstFleet.size == 0}">
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">1</th>
+                            <td/><td/><td/><td/><td/><td/>
+                        </tr>
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">2</th>
+                            <td/><td/><td/><td/><td/><td/>
+                        </tr>
+                        <tr style="background-color: white">
+                            <th style="background-color: white; text-align: center">3</th>
+                            <td/><td/><td/><td/><td/><td/>
+                        </tr>
+                    </apex:outputText>
+                </table>
+            </td>
+        </tr>
+    </table>
+</apex:component>

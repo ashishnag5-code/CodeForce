@@ -1,0 +1,620 @@
+<template>
+
+    <template if:true={isMobile}>
+        <lightning-accordion allow-multiple-sections-open>
+            <lightning-accordion-section name="K" label="VIABILITY OF HARVESTER" class="accordClass">
+                <span slot="actions">
+                    <template if:false={isEdit}>
+                        <lightning-icon icon-name="action:edit" onclick={handleOnEditClick} size="x-small"></lightning-icon>
+                    </template>
+                    
+                </span>
+                  <!-- Added in R2-->
+                <template if:true={isDelete}>
+                    <template if:false={isEdit}>
+                        <span slot="actions">
+                            <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                                alternative-text="" access-key={index} class="slds-m-right_small slds-m-left--small"
+                                onclick={handleDeleteRow}></lightning-icon>
+                        </span>
+                    </template>
+                </template>
+                <div class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <lightning-accordion-section name="A" label="INCOME PART" class="accordClass">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide"
+                                    data-id="No_of_Acres_land_harvest_in_a_year__c">
+                                    <lightning-input class="validate" type="number"
+                                        name="No_of_Acres_land_harvest_in_a_year__c"
+                                        value={viabilitySheetData.No_of_Acres_land_harvest_in_a_year__c}
+                                        onchange={handleChange} data-name="No_of_Acres_land_harvest_in_a_year__c"
+                                        label="No of Acres land harvest in a year"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Hours_taken_form_01_acre_land__c">
+                                    <lightning-input class="validate" type="number"
+                                        name="Hours_taken_form_01_acre_land__c"
+                                        data-name="Hours_taken_form_01_acre_land__c"
+                                        value={viabilitySheetData.Hours_taken_form_01_acre_land__c}
+                                        onchange={handleChange} label="Hours taken from 01 acre land"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Rate_hour__c">
+                                    <lightning-input type="number" name="Rate_hour__c"
+                                        value={viabilitySheetData.Rate_hour__c} data-name="Rate_hour__c"
+                                        onchange={handleChange} label="Rate per Hour">
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide"
+                                    data-id="Approx_No_of_hours_run_in_a_year__c">
+                                    <lightning-input type="number" name="Approx_No_of_hours_run_in_a_year__c"
+                                        data-name="Approx_No_of_hours_run_in_a_year__c"
+                                        value={viabilitySheetData.Approx_No_of_hours_run_in_a_year__c} disabled
+                                        onchange={handleChange}
+                                        label="Approx No of hours run in a year"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Total_Income__c">
+                                    <lightning-input type="number" name="Total_Income__c" data-name="Total_Income__c"
+                                        value={viabilitySheetData.Total_Income__c} disabled onchange={handleChange}
+                                        label="Total Income"></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+
+                        <lightning-accordion-section name="B" label="EXPENSES PART(1)" class="accordClass">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide"
+                                    data-id="Per_Hr_Diesel_consumption_in_ltr__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Per_Hr_Diesel_consumption_in_ltr__c"
+                                        label="Per Hr Diesel consumption (in ltr)"
+                                        name="Per_Hr_Diesel_consumption_in_ltr__c"
+                                        value={viabilitySheetData.Per_Hr_Diesel_consumption_in_ltr__c}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Diesel_cost_per_Ltr__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Diesel_cost_per_Ltr__c" label="Diesel cost per Ltr"
+                                        name="Diesel_cost_per_Ltr__c" value={viabilitySheetData.Diesel_cost_per_Ltr__c}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Diesel_cost_per_Hr__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Diesel_cost_per_Hr__c" label="Diesel cost per Hr"
+                                        value={viabilitySheetData.Diesel_cost_per_Hr__c} disabled
+                                        name="Diesel_cost_per_Hr__c"></lightning-input> </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Total_Diesel_Exp_per_Year__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Total_Diesel_Exp_per_Year__c" label="Total Diesel Exp per Year"
+                                        disabled value={viabilitySheetData.Total_Diesel_Exp_per_Year__c}
+                                        name="Total_Diesel_Exp_per_Year__c"></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+
+                        <lightning-accordion-section name="C" label="EXPENSES PART(2)" class="accordClass">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Driver_Helper_salary__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Driver_Helper_salary__c" label="Driver + Helper salary"
+                                        name="Driver_Helper_salary__c"
+                                        value={viabilitySheetData.Driver_Helper_salary__c}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Insurance_cost_per_yr__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Insurance_cost_per_yr__c" label="Insurance cost per yr"
+                                        name="Insurance_cost_per_yr__c"
+                                        value={viabilitySheetData.Insurance_cost_per_yr__c}></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Yearly_Maintenance_Cost__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Yearly_Maintenance_Cost__c" label="Yearly Maintenance Cost"
+                                        value={viabilitySheetData.Yearly_Maintenance_Cost__c}
+                                        name="Yearly_Maintenance_Cost__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Broker_Commission__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Broker_Commission__c" label="Broker Commission"
+                                        value={viabilitySheetData.Broker_Commission__c}
+                                        name="Broker_Commission__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Any_Other_Expense__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Any_Other_Expense__c" label="Other Expenses"
+                                        value={viabilitySheetData.Any_Other_Expense__c}
+                                        name="Any_Other_Expense__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Total_Expenses__c">
+                                    <lightning-input type="number" onchange={handleChange} label="Total Other Expenses"
+                                        value={viabilitySheetData.Total_Expenses__c} disabled
+                                        name="Total_Expenses__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Final_expenses__c">
+                                    <lightning-input type="number" onchange={handleChange} data-name="Final_expenses__c"
+                                        label="Final expenses" value={viabilitySheetData.Final_expenses__c} disabled
+                                        name="Final_expenses__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Total_Net_Income__c">
+                                    <lightning-input type="number" onchange={handleChange}
+                                        data-name="Total_Net_Income__c" label="Net Income" disabled
+                                        value={viabilitySheetData.Total_Net_Income__c}
+                                        name="Total_Net_Income__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Yearly_EMI_of_Proposed_loan__c">
+                                    <lightning-input type="number" onchange={handleChange} disabled
+                                        label="Yearly EMI of Proposed loan" data-name="Yearly_EMI_of_Proposed_loan__c"
+                                        value={viabilitySheetData.Yearly_EMI_of_Proposed_loan__c}
+                                        name="Yearly_EMI_of_Proposed_loan__c"></lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="12" large-device-size="6" small-device-size="12"
+                                    padding="around-small" class="slds-hide" data-id="Net_Surplus__c">
+                                    <lightning-input type="number" onchange={handleChange} data-name="Net_Surplus__c"
+                                        label="Net Surplus" disabled value={viabilitySheetData.Net_Surplus__c}
+                                        name="Net_Surplus__c"></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                    <template if:true={isEdit}>
+                        <lightning-layout multiple-rows class="slds-p-bottom_small">
+                            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                <!--<lightning-icon icon-name="action:reject" onclick={handleBack}
+                                    class="slds-var-m-around_small" size="x-small"></lightning-icon>-->
+                                <lightning-icon icon-name="action:approval" onclick={handleSubmit} size="x-small"></lightning-icon>
+                            </div>
+                        </lightning-layout>
+                    </template>
+                    
+                </div>
+            </lightning-accordion-section>
+        </lightning-accordion>
+
+    </template>
+
+
+    <template if:false={isMobile}>
+        <article class="slds-box">
+            <lightning-accordion allow-multiple-sections-open active-section-name="">
+                <lightning-accordion-section name="A" label="VIABILITY SHEET HARVESTER" class="accordClass">
+                    <span slot="actions">
+                        <template if:false={isEdit}>
+                            <lightning-icon icon-name="action:edit" onclick={handleOnEditClick} size="x-small"></lightning-icon>
+                        </template>
+                    </span>
+                    <!-- Added in R2-->
+                    <template if:true={isDelete}>
+                        <template if:false={isEdit}>
+                            <span slot="actions">
+                                <lightning-icon title="Delete Other Income Detail" icon-name="action:delete" size="x-small"
+                                    alternative-text="" access-key={index} class="slds-m-right_small slds-m-left--small"
+                                    onclick={handleDeleteRow}></lightning-icon>
+                            </span>
+                        </template>
+                    </template>
+
+
+                    <lightning-layout multiple-rows="true" class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="10" padding="horizontal-medium">
+                            <lightning-accordion allow-multiple-sections-open active-section-name="B">
+                                <lightning-accordion-section name="B" label="INCOME PART">
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                        style="table-layout:fixed;">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text
+                                                            value="No of Acres land harvest in a year"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="No_of_Acres_land_harvest_in_a_year__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input class="validate" type="number"
+                                                            name="No_of_Acres_land_harvest_in_a_year__c"
+                                                            value={viabilitySheetData.No_of_Acres_land_harvest_in_a_year__c}
+                                                            onchange={handleChange}
+                                                            data-name="No_of_Acres_land_harvest_in_a_year__c"
+                                                            label="No of Acres land harvest in a year"
+                                                            variant="label-hidden"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Hours taken from 01 acre land"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Hours_taken_form_01_acre_land__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input class="validate" type="number"
+                                                            name="Hours_taken_form_01_acre_land__c"
+                                                            data-name="Hours_taken_form_01_acre_land__c"
+                                                            value={viabilitySheetData.Hours_taken_form_01_acre_land__c}
+                                                            onchange={handleChange}
+                                                            label="Hours taken from 01 acre land"
+                                                            variant="label-hidden"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Rate per Hour"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Rate_hour__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" name="Rate_hour__c"
+                                                            value={viabilitySheetData.Rate_hour__c}
+                                                            data-name="Rate_hour__c" onchange={handleChange}
+                                                            label="Rate per Hour"
+                                                            variant="label-hidden"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text
+                                                            value="Approx No of hours run in a year"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Approx_No_of_hours_run_in_a_year__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number"
+                                                            name="Approx_No_of_hours_run_in_a_year__c"
+                                                            data-name="Approx_No_of_hours_run_in_a_year__c"
+                                                            value={viabilitySheetData.Approx_No_of_hours_run_in_a_year__c}
+                                                            disabled variant="label-hidden" onchange={handleChange}
+                                                            label="Approx No of hours run in a year"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Total Income"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Total_Income__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" name="Total_Income__c"
+                                                            data-name="Total_Income__c"
+                                                            value={viabilitySheetData.Total_Income__c} disabled
+                                                            variant="label-hidden" onchange={handleChange}
+                                                            label="Total Income"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+
+                    <lightning-layout multiple-rows="true" class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="10" padding="horizontal-medium">
+                            <lightning-accordion allow-multiple-sections-open active-section-name="C">
+                                <lightning-accordion-section name="C" label="EXPENSES PART(1)">
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                        style="table-layout:fixed;">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text
+                                                            value="Per Hr Diesel consumption (in ltr)"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Per_Hr_Diesel_consumption_in_ltr__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Per_Hr_Diesel_consumption_in_ltr__c"
+                                                            label="Per Hr Diesel consumption (in ltr)"
+                                                            variant="label-hidden"
+                                                            name="Per_Hr_Diesel_consumption_in_ltr__c"
+                                                            value={viabilitySheetData.Per_Hr_Diesel_consumption_in_ltr__c}></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Diesel cost per Ltr"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Diesel_cost_per_Ltr__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Diesel_cost_per_Ltr__c"
+                                                            label="Diesel cost per Ltr" variant="label-hidden"
+                                                            name="Diesel_cost_per_Ltr__c"
+                                                            value={viabilitySheetData.Diesel_cost_per_Ltr__c}></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Diesel cost per Hr"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Diesel_cost_per_Hr__c">
+                                                    <lightning-input type="number" onchange={handleChange}
+                                                        data-name="Diesel_cost_per_Hr__c" label="Diesel cost per Hr"
+                                                        variant="label-hidden" disabled
+                                                        value={viabilitySheetData.Diesel_cost_per_Hr__c}
+                                                        name="Diesel_cost_per_Hr__c"></lightning-input>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Total Diesel Exp per Year"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Total_Diesel_Exp_per_Year__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Total_Diesel_Exp_per_Year__c"
+                                                            label="Total Diesel Exp per Year" disabled
+                                                            variant="label-hidden"
+                                                            value={viabilitySheetData.Total_Diesel_Exp_per_Year__c}
+                                                            name="Total_Diesel_Exp_per_Year__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <lightning-layout multiple-rows="true" class="slds-var-m-top_medium slds-var-m-bottom_medium">
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="10" padding="horizontal-medium">
+                            <lightning-accordion allow-multiple-sections-open active-section-name="C">
+                                <lightning-accordion-section name="C" label="EXPENSES PART(2)">
+                                    <table
+                                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                        style="table-layout:fixed;">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Driver + Helper salary"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Driver_Helper_salary__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Driver_Helper_salary__c"
+                                                            label="Driver + Helper salary" variant="label-hidden"
+                                                            name="Driver_Helper_salary__c"
+                                                            value={viabilitySheetData.Driver_Helper_salary__c}></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Insurance cost per yr"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Insurance_cost_per_yr__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Insurance_cost_per_yr__c"
+                                                            label="Insurance cost per yr" variant="label-hidden"
+                                                            name="Insurance_cost_per_yr__c"
+                                                            value={viabilitySheetData.Insurance_cost_per_yr__c}></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Yearly Maintenance Cost"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Yearly_Maintenance_Cost__c">
+                                                    <lightning-input type="number" onchange={handleChange}
+                                                        data-name="Yearly_Maintenance_Cost__c"
+                                                        label="Yearly Maintenance Cost" variant="label-hidden"
+                                                        value={viabilitySheetData.Yearly_Maintenance_Cost__c}
+                                                        name="Yearly_Maintenance_Cost__c"></lightning-input>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Broker Commission"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Broker_Commission__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Broker_Commission__c" label="Broker Commission"
+                                                            variant="label-hidden"
+                                                            value={viabilitySheetData.Broker_Commission__c}
+                                                            name="Broker_Commission__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Other Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Any_Other_Expense__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Any_Other_Expense__c" label="Other Expenses"
+                                                            variant="label-hidden"
+                                                            value={viabilitySheetData.Any_Other_Expense__c}
+                                                            name="Any_Other_Expense__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Total Other Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Total_Expenses__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            label="Total Other Expenses" variant="label-hidden"
+                                                            value={viabilitySheetData.Total_Expenses__c} disabled
+                                                            name="Total_Expenses__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Final Expenses"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Final_expenses__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Final_expenses__c" label="Final expenses"
+                                                            variant="label-hidden" disabled
+                                                            value={viabilitySheetData.Final_expenses__c}
+                                                            name="Final_expenses__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Net Income"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Total_Net_Income__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                            data-name="Total_Net_Income__c" label="Net Income" disabled
+                                                            variant="label-hidden"
+                                                            value={viabilitySheetData.Total_Net_Income__c}
+                                                            name="Total_Net_Income__c"></lightning-input>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Yearly EMI of Proposed loan"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Yearly_EMI_of_Proposed_loan__c">
+                                                    <div class="slds-truncate">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                        data-name="Yearly_EMI_of_Proposed_loan__c" disabled
+                                                            label="Yearly EMI of Proposed loan" variant="label-hidden"
+                                                            value={viabilitySheetData.Yearly_EMI_of_Proposed_loan__c}
+                                                            name="Yearly_EMI_of_Proposed_loan__c"></lightning-input>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="slds-line-height_reset">
+                                                <th class="" scope="col" style="width:50%">
+                                                    <div class="slds-truncate">
+                                                        <lightning-formatted-text value="Net Surplus"
+                                                            class="slds-text-body_small"></lightning-formatted-text>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Net_Surplus__c">
+                                                    <lightning-input type="number" onchange={handleChange}
+                                                        data-name="Net_Surplus__c" label="Net Surplus" disabled
+                                                        variant="label-hidden" value={viabilitySheetData.Net_Surplus__c}
+                                                        name="Net_Surplus__c"></lightning-input>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </lightning-accordion-section>
+                            </lightning-accordion>
+
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" large-device-size="1" padding="horizontal-medium">
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <template if:true={isEdit}>
+                        <lightning-layout multiple-rows class="slds-p-bottom_small">
+                            <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                <!--<lightning-button label="Back" variant="brand" onclick={handleBack}
+                                    class="slds-var-m-around_small"></lightning-button>-->
+                                <lightning-button label="Save" variant="brand" onclick={handleSubmit}
+                                    class="slds-var-m-around_small"></lightning-button>
+                            </div>
+                        </lightning-layout>
+                    </template>
+                    
+
+                </lightning-accordion-section>
+
+            </lightning-accordion>
+
+        </article>
+
+
+    </template>
+
+</template>

@@ -1,0 +1,1533 @@
+<template>
+    <lightning-card> 
+        <!--Spinner Part-->
+        <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+        <!--End-->
+        <!-- Existing Details, New Form,Summary Details and FOIR Details Section-->
+        <template if:true={showViewForm}>
+                <!--Existing Financials-->
+                <template if:true={showExistingdetails}>
+                    <article class="slds-card slds-card_boundary">
+                        <div class="slds-card__body slds-card__body_inner">
+                            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                                <template for:each={financialsData} for:item="relatedRecord">
+                                    <li class="slds-size_1-of-1 slds-medium-size_3-of-6 slds-p-horizontal_small slds-p-bottom_small"
+                                        key={relatedRecord.Id} data-id={relatedRecord.Id}
+                                        data-record-name="ViewMoreInformation">
+                                        <article class="slds-box">
+                                            <div class="slds-card__header slds-grid">
+                                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                                    <div class="slds-media__figure">
+                                                        <lightning-icon icon-name=action:adjust_value size="small">
+                                                        </lightning-icon>
+                                                    </div>
+                                                    <div class="slds-media__body">
+                                                        <h2 class="slds-card__header-title">
+                                                            <a href="#" class="slds-card__header-link slds-truncate"
+                                                                title={relatedRecord.Name}>{relatedRecord.Applicant_Name__c}</a>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="slds-no-flex">
+                                                        <lightning-icon icon-name=action:edit size="x-small"
+                                                            data-id={relatedRecord.Id}
+                                                            data-record-name={relatedRecord.Type_Of_Employment__c}
+                                                            alternative-text={relatedRecord.Method_Of_Assesment__c}
+                                                            title={relatedRecord.Id} onclick={handleRowAction}>
+                                                        </lightning-icon>
+                                                    </div>
+                                                </header>
+                                            </div>
+                                            <c-financial-applicant-card-view related-record={relatedRecord} strentity-type={strentityType} ></c-financial-applicant-card-view>
+                                        </article>
+                                    </li>
+                                </template>
+                            </ul>
+                            <!--End -->
+                        </div>
+                    </article>
+
+                </template>
+                <!--End-->
+             <!--New Details-->
+                <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+                    <template if:true={isNewDetails}>  
+                            <template if:true={isMobile}>
+                                <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                                    active-section-name={activeSubSections}>
+                                    <template if:false={isDDE}>
+                                        <lightning-accordion-section name="B" label="Additional Details" class="accordClass">                                           
+                                            <c-additional-financial-component screen="New" applicant-id = {applicantId} onauemployee={addEventHandler} is-mobile={isMobile} spouse-name={spouseName}></c-additional-financial-component>                               
+                                        </lightning-accordion-section>
+                                    </template>
+
+
+                                    <lightning-accordion-section name="C" label="Employment Details">
+        
+                                        <!-- Two Wheeler Specific Section-->
+                                        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                                <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                    large-device-size="6">
+                                                    <div class="component" data-id="Type_Of_Employment__c">
+                                                        <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                                                            data-name="" read-only={readAlways} class="validate"
+                                                            value={employmentValue} options={employmentOptions} required
+                                                            onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                    </div>     
+                                                    <template if:true={showDDEDependentFields}>                       
+                                                    <div class="component " data-id="Sector__c">
+                                                        <lightning-combobox name="Sector__c" label="Sector" data-name=""
+                                                            read-only={readAttribute} class="validate" value={sectorValue}
+                                                            options={sectorOptions} required onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                    </div>
+                                                    <div class="component " data-id="Industry__c">
+                                                        <lightning-combobox name="Industry__c" label="Industry" data-name=""
+                                                            read-only={readAttribute} class="validate" value={industryValue}
+                                                            options={industryOptions} required onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                    </div>
+                                                    <div class="component " data-id="Sub_Industry__c">
+                                                        <lightning-combobox name="Sub_Industry__c" label="Industry Subtype"
+                                                            data-name="" read-only={readAttribute} class="validate"
+                                                            value={subIndustryValue} options={subIndustryOptions} required
+                                                            onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                    </div>
+
+                                                    <div class="component " data-id="Occupation__c">
+                                                        <lightning-combobox name="Occupation__c" label="Occupation" data-name=""
+                                                            read-only={readAttribute} class="validate" value={occupationValue}
+                                                            options={occupationOptions} required onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                    </div>        
+                                                    </template>
+                                                </lightning-layout-item>
+                                               
+                                            </lightning-layout>
+
+                                       
+                                       
+                                        <!--End-->
+                                        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                            <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                large-device-size="6">
+                                                                                      
+                                                <div class="component " data-id="Method_Of_Assesment__c">
+                                                    <lightning-combobox name="Method_Of_Assesment__c"
+                                                        label="Method of assessment" read-only={readAlways} data-name=""
+                                                        class="validate" value={assesmentVal} options={assesmentOptions}
+                                                        required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                                <div class="component " data-id="Company_Name__c">
+                                                    <template if:true={isAuemployee}>
+                                                        <lightning-input type="text" onchange={handleChange} disabled="true"
+                                                            read-only={isCompanyReadOnly} value={cmpValue}
+                                                            label="Company/Business Name" name="Company_Name__c">
+                                                        </lightning-input>
+                                                    </template>
+                                                    <template if:false={isAuemployee}>
+                                                        <template if:true={isSalaried}>
+                                                        <template if:false={isCompanyRequired}>
+                                                            <template if:false ={isCompanyReadOnly}>
+                                                            <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                                read-only={isCompanyReadOnly} record-type-name="Company"
+                                                                dependent-field-api="Company_Name__c"
+                                                                dependent-picklist-value={companyOptionsValue}
+                                                                fieldapi="Company_Name__c" object-name="Generic Master"
+                                                                s-object-api-name="Generic_Master__c" default-record-id=""
+                                                                onlookupselect={handleLookupSelect}>
+                                                            </c-generic-custom-lookup>
+                                                        </template>
+                                                        </template>
+        
+                                                        <template if:true={isCompanyRequired}>
+                                                          
+                                                            <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                                class="validate" read-only={isCompanyReadOnly}
+                                                                record-type-name="Company"
+                                                                dependent-picklist-value={companyOptionsValue}
+                                                                fieldapi="Company_Name__c" object-name="Generic Master"
+                                                                s-object-api-name="Generic_Master__c"
+                                                                required={isCompanyRequired}
+                                                                onlookupselect={handleLookupSelect}>
+                                                            </c-generic-custom-lookup>
+        
+                                                        </template>
+                                                        </template>
+                                                        <template if:false={isSalaried}>
+                                                            <lightning-input type="text" onchange={handleChange} label="Company/Business Name" value={cmpValue} name="Company_Name__c"></lightning-input>
+                                                        </template>
+
+                                                    </template>
+                                                </div>
+                                                <template if:true={isCompanyOther}>
+                                                    <div class="component " data-id="Company_Others__c">
+                                                        <lightning-input type="text" 
+                                                                    label="Company name" 
+                                                                    value={cmpValue}
+                                                                    onchange={handleInputCompanyName}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </template>
+                                            </lightning-layout-item>
+        
+                                            <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                large-device-size="6" class="slds-p-left--xxx-small">
+        
+                                                <div class="component " data-id="Consider_Income_for_Eligibility__c">
+                                                    <lightning-combobox name="Consider_Income_for_Eligibility__c"
+                                                        read-only={readAttribute} label="Consider Income for Eligibility"  disabled={incomeElgibilityDisable}
+                                                        class="validate" required data-name="" value={elgibityVal}
+                                                        options={elgibilityOptions} onchange={handleChange}>
+        
+                                                    </lightning-combobox>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-accordion-section>
+        
+                                    <lightning-accordion-section name="D" label="Monthly Income">
+                                      
+                                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+                                            onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId}
+                                            document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                            heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+                                            oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                                            applicant-record-id={applicantId} onenablefetchdetails={handleEnableFetchDetails}>
+                                        </c-bank-statement-upload-financials>
+                                       
+                                        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                            <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                large-device-size="6">
+        
+                                                <div class="component " data-id="Monthly_Income__c">
+                                                    <div class="buttonIn">
+                                                        <lightning-input type="number" onchange={handleChange}
+                                                        required class="validclss" label="Documented Monthly Income"
+                                                        read-only={readAttribute} step="1" value={monthlyVal} disabled={unEmployedDisableCheck}
+                                                        name="Monthly_Income__c">
+                                                    </lightning-input>
+                                                    <template if:true={docVerified}>
+                                                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                                                title="Mobile"></lightning-icon>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                                <div class="component" data-id="Monthly_Obligation__c">
+                                                    <lightning-input type="number" onchange={handleChange}
+                                                        label="Monthly Obligation" read-only={readAttribute} step="0.01" disabled={unEmployedDisableCheck}
+                                                        required class="validclss1"
+                                                        value={inputMonthlyObligation} name="Monthly_Obligation__c">
+                                                    </lightning-input>
+                                                </div>
+                                                <div class="component " data-id="Other_Income__c">
+                                                    <lightning-input type="number" onchange={handleChange} label="Assessed Monthly Income" disabled={unEmployedDisableCheck}
+                                                        step="0.01" read-only={readAttribute} value={otherIncomeTotal}
+                                                        name="Other_Income__c">
+                                                    </lightning-input>
+                                                </div>
+                                                <!--3131-->
+                                                <template if:true={isDDE}>
+                                                    <div class="component" data-id="Verified_Income__c">
+                                                        <lightning-input type="number" onchange={handleChange} label="Total Verified Income"
+                                                            step="0.01" read-only={readAttribute} value={verifiedIncomeTotal}
+                                                            name="Verified_Income__c">
+                                                        </lightning-input>
+                                                    </div>
+                                                </template>
+                                                <template if:true={showWorkExperienceField}>
+                                                    <div class="component">
+                                                         <template if:true={isSalaried}>
+                                                                        <label class="slds-form-element__label">
+                                                                            <abbr class="slds-required" title="required">* </abbr>  Total Work Experience</label>
+                                                                        </template>
+                                                                        <template if:false={isSalaried}>
+                                                                            <label class="slds-form-element__label">
+                                                                                <abbr class="slds-required" title="required">* </abbr>  No. of years in Business
+                                                                            </label>
+                                                                        </template>
+                                                                        <lightning-combobox name="Total_Work_Experience__c" variant="label-hidden" required
+                                                                        read-only={readAttribute} class="validate" value={totalWorkExperience}
+                                                                        options={workExperienceOptions} onchange={handleChange}>
+                                                           </lightning-combobox>
+                                                    </div>
+                                                  </template>
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </lightning-accordion-section>
+        
+                                </lightning-accordion>
+                            </template>
+                            <template if:false={isMobile}>
+                          <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                            active-section-name={activeSubSections}>
+                            <template if:false={isDDE}>
+                            <lightning-accordion-section name="B" label="Additional Details" class="accordClass">
+                               
+                                <c-additional-financial-component screen="New" spouse-name={spouseName} applicant-id = {applicantId} onauemployee={addEventHandler} is-mobile={isMobile}></c-additional-financial-component>
+                            
+                                
+                            </lightning-accordion-section>
+                        </template>
+                           
+                            <lightning-accordion-section name="C" label="Employment Details" class="accordClass" >
+                                <template lwc:if={showDDEDependentFields}>
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Type_Of_Employment__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                              <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Type_Of_Employment__c"  label="Type of Employment"
+                                                        data-name="" read-only={readAlways} class="validate"
+                                                        value={employmentValue} options={employmentOptions} required
+                                                        onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>                                    
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Sector__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Sector__c" data-name="" label ="Sector" disable=false
+                                                        read-only={readAttribute} class="validate " value={sectorValue}
+                                                        options={sectorOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                      </span>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Industry__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto" >
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static">
+                                                        <lightning-combobox name="Industry__c"  data-name="" label ="Industry" data-id="dependentCombobox"
+                                                        read-only={readAttribute} class="validate" value={industryValue}
+                                                        options={industryOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                    </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Sub_Industry__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto" >
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static">
+                                                        <lightning-combobox name="Sub_Industry__c" label="Industry Subtype"
+                                                        data-name="" read-only={readAttribute} class="validate"
+                                                        value={subIndustryValue} options={subIndustryOptions} required
+                                                        onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                    </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>                                    
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Occupation__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                               <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Occupation__c"  data-name="" label="Occupation"
+                                                        read-only={readAttribute} class="validate" value={occupationValue}
+                                                        options={occupationOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Method_Of_Assesment__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+                                                     read-only={readAlways} data-name=""
+                                                    class="validate" value={assesmentVal} options={assesmentOptions}
+                                                    required onchange={handleChange}>
+                                                </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </div>
+                                </template>
+                                <template lwc:else>
+                                    <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                        <div class="slds-col slds-size_1-of-3 " data-id="Type_Of_Employment__c">
+                                            <span>
+                                                <lightning-layout-item flexibility="auto">
+                                                  <div class="slds-form-element__control slds-p-around--xx-small">
+                                                        <span class="slds-form-element__static"> 
+                                                            <lightning-combobox name="Type_Of_Employment__c"  label="Type of Employment"
+                                                            data-name="" read-only={readAlways} class="validate"
+                                                            value={employmentValue} options={employmentOptions} required
+                                                            onchange={handleChange}>
+                                                        </lightning-combobox>
+                                                     </span>
+                                                    </div>
+                                                </lightning-layout-item>
+                                            </span>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-3 " data-id="Method_Of_Assesment__c">
+                                            <span>
+                                                <lightning-layout-item flexibility="auto">
+                                                    <div class="slds-form-element__control slds-p-around--xx-small">
+                                                        <span class="slds-form-element__static"> 
+                                                            <lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+                                                         read-only={readAlways} data-name=""
+                                                        class="validate" value={assesmentVal} options={assesmentOptions}
+                                                        required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                     </span>
+                                                    </div>
+                                                </lightning-layout-item>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </template>
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                  <div class="slds-col slds-size_1-of-3 " data-id="Company_Name__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                          <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static"> 
+                                                    <template if:true={isAuemployee}>
+                                                        <lightning-input type="text" onchange={handleChange} disabled="true" label="Company/Business Name"
+                                                            read-only={isCompanyReadOnly} value={cmpValue}
+                                                            name="Company_Name__c">
+                                                        </lightning-input>
+                                                    </template>
+                                                    <template if:false={isAuemployee}>
+                                                        <template if:true={isSalaried}>
+                                                        <template if:false={isCompanyRequired}>
+                                                            <template if:false ={isCompanyReadOnly}>
+                                                            <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                                read-only={isCompanyReadOnly} record-type-name="Company"
+                                                                dependent-field-api="Company_Name__c"
+                                                                dependent-picklist-value={companyOptionsValue}
+                                                                fieldapi="Company_Name__c" object-name="Generic Master"
+                                                                s-object-api-name="Generic_Master__c" default-record-id=""
+                                                                onlookupselect={handleLookupSelect}>
+                                                            </c-generic-custom-lookup>
+                                                            </template>
+                                                        </template>
+        
+                                                        <template if:true={isCompanyRequired}>
+                                                           
+                                                            <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                                class="validate" read-only={isCompanyReadOnly}
+                                                                record-type-name="Company"
+                                                                dependent-picklist-value={companyOptionsValue}
+                                                                fieldapi="Company_Name__c" object-name="Generic Master"
+                                                                s-object-api-name="Generic_Master__c"
+                                                                required={isCompanyRequired}
+                                                                onlookupselect={handleLookupSelect}>
+                                                            </c-generic-custom-lookup>
+    
+                                                        </template>
+                                                        </template>
+
+                                                        <template if:false={isSalaried}>
+                                                            <lightning-input type="text" onchange={handleChange} label="Company/Business Name" value={cmpValue} name="Company_Name__c"></lightning-input>
+                                                        </template>
+                                                        
+                                                    </template>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+                                <template if:true={isCompanyOther}>
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Company_Others__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-input type="text" 
+                                                            label="Company name" 
+                                                            value={othCompName}
+                                                            onchange={handleInputCompanyName}>
+                                                        </lightning-input>
+                                                    </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </template>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Consider_Income_for_Eligibility__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-combobox name="Consider_Income_for_Eligibility__c" label="Consider Income for Eligibility"
+                                                read-only={readAttribute}   disabled={incomeElgibilityDisable}
+                                                class="validate" required data-name="" value={elgibityVal}
+                                                options={elgibilityOptions} onchange={handleChange}>
+                                                </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+                                <template if:true={showWorkExperienceField}>
+                                    <div class="slds-col slds-size_1-of-3">
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <template if:true={isSalaried}>
+                                                        <label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>  Total Work Experience</label>
+                                                        </template>
+                                                        <template if:false={isSalaried}>
+                                                            <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr> No. of years in Business
+                                                            </label>
+                                                        </template>
+                                                        <lightning-combobox name="Total_Work_Experience__c" variant="label-hidden" 
+                                                        read-only={readAttribute} class="validate" value={totalWorkExperience}
+                                                        options={workExperienceOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                    </div>
+                                  </template>
+                          </div>
+                         </lightning-accordion-section>
+                            <lightning-accordion-section name="D" label="Monthly Income" class="accordClass">
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small"  data-id="Other_Income__c">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-input type="number" onchange={handleChange} label="Assessed Monthly Income" disabled={unEmployedDisableCheck}
+                                                        step="0.01" read-only={readAttribute} value={otherIncomeTotal}
+                                                         name="Other_Income__c">
+                                                        </lightning-input>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of4">
+                                        <span>
+                                            
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small"  data-id="Monthly_Income__c">
+                                                    <span class="slds-form-element__static"> 
+                                                        <div class="buttonIn">
+                                                        <lightning-input type="number" onchange={handleChange} disabled={unEmployedDisableCheck}
+                                                        required class="validclss" label="Documented Monthly Income"
+                                                        read-only={readAttribute} step="1" value={monthlyVal}
+                                                        name="Monthly_Income__c">
+                                                    </lightning-input>
+                                                    <template if:true={docVerified}>
+                                                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                                                title="Mobile"></lightning-icon>
+                                                        </template>
+                                                    </div>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                    <!--added for 3131-->
+                                    <template if:true={isDDE}>
+                                        <div class="slds-col slds-size_1-of-4">
+                                            <span>
+                                                <lightning-layout-item flexibility="auto">
+                                                    <div class="slds-form-element__control slds-p-around--xx-small"  data-id="Verified_Income__c">
+                                                        <span class="slds-form-element__static"> 
+                                                            <lightning-input type="number" onchange={handleChange} label="Total Verified Income"
+                                                            step="0.01" read-only={readAttribute} value={verifiedIncomeTotal}
+                                                            name="Verified_Income__c">
+                                                            </lightning-input>
+                                                    </span>
+                                                    </div>
+                                                </lightning-layout-item>
+                                            </span>
+                                        </div>
+                                    </template>
+                                    <!--3131-->
+                                    <div class="slds-col slds-size_1-of-4">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small"  data-id="Monthly_Obligation__c">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-input type="number" onchange={handleChange} disabled={unEmployedDisableCheck}
+                                                label="Monthly Obligation" read-only={readAttribute} step="0.01"
+                                                required class="validclss1"
+                                                value={inputMonthlyObligation} name="Monthly_Obligation__c">
+                                            </lightning-input>
+                                                </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+
+                                    </div>
+                                </div>
+                                <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                    <div class="slds-col slds-size_1-of-3">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+                                                        onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId} 
+                                                        document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                                        heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+                                                        oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                                                        applicant-record-id={applicantId} onenablefetchdetails={handleEnableFetchDetails}>
+                                                    </c-bank-statement-upload-financials>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                      <!--  </template>-->
+
+                        
+                        </lightning-accordion>
+                    </template>
+
+                        <!-- View Template Button-->
+                        <template if:false={showIndividualSave}>
+                            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                    &nbsp; <lightning-button label="View Template" title="View Template"
+                                        onclick={renderFinanceTemplate}
+                                        class="buttonClass disabled-submit-button slds-m-left_x-small"></lightning-button>
+                                </div>
+                            </lightning-layout>
+                        </template>
+
+                        <!-- Show Save button if the Product is Two Wheeler and Loan Amount is less than 5 lacs-->
+                        <template if:true={showIndividualSave}>
+                            <template if:false={readAttribute}>
+                                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                    <div
+                                        class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                                         <!-- <lightning-button label="Save Income"  class="buttonClass disabled-submit-button" variant="brand" name='save'
+                                            onclick={handleIndividualSave}></lightning-button> -->
+                                        <lightning-button label="Save Income"  class="buttonClass disabled-submit-button" variant="brand" name='save'
+                                            onclick={validateAddress}></lightning-button>
+                                    </div>
+                                </lightning-layout>
+                            </template>
+                        </template>
+                         </template>
+                </div>
+                <!--End-->
+            <!--Summary Details-->
+            <template if:true={showSummary}>
+                <c-financial-summary-screen applicants-summary-data={applicantsSummaryData}></c-financial-summary-screen>
+            </template>
+            <!--End -->
+            <!--FOIR Details-->
+                <c-foir-finance-component record-val={loanId}></c-foir-finance-component>
+
+            <!--End-->
+        </template>
+        <!--End-->
+        <!--Render New Form Child Templates-->
+        <template if:true={showChildTemplates}>
+            <!-- Salary Template-->
+            <template if:true={renderSalaryTemplate}>
+             <c-salary-finance-component loan-app-id={loanId} document-type='Bank ITR Statement' is-mobile={isMobile} onhome={navigateToHome}
+                    spinner-image={spinnerImage} company-default={companyDefaultId} company-default-name={companyOptionsValue}
+                    onaveragemonthlysalary={displayAverageMonthSalary} existing-details={salariedData}
+                    cart-monthly-income-data={cartMonthlyIncomeData} financial-id={applicantFinancialId}
+                    applicant-id={applicantId} onsalarysubmit={handleSubmit} onsalaryupdate={handleUpdate} cart-data-fetched={docVerified} original-doc-verified-value={cartDataFetchInitialValue}>
+                </c-salary-finance-component>
+            </template>
+            <!-- Assessed No Document Template-->
+            <template if:true={renderAssessedNoDocTemplate}>
+                <c-assessed-parent-component financial-id={applicantFinancialId}   loan-app-id={loanId}  is-mobile={isMobile} onhome={navigateToHome}
+                spinner-image={spinnerImage}  applicant-id={applicantId}
+                onassesesnodocsubmit={handleSubmit} onassessedupdate={handleUpdate}></c-assessed-parent-component>
+            </template>
+            <!--With Audited Template-->
+            <template if:true={renderDocAuditedTemplate}>
+                <c-document-audited-component set-read-only={setReadOnly} oncalculatemonthlyincome={handleCalculations} loan-app-id={loanId}  is-mobile={isMobile} onhome={navigateToHome}
+                    spinner-image={spinnerImage} financial-id={applicantFinancialId} applicant-id={applicantId}
+                    ondocauditedsubmit={handleSubmit} onauditedupdate={handleUpdate}>
+                </c-document-audited-component>
+            </template>
+            <!-- Without Audited Template-->
+            <template if:true={renderWithoutDocAuditedTemplate}>
+                <c-document-without-audited-component financial-id={applicantFinancialId} applicant-id={applicantId} loan-app-id={loanId}  is-mobile={isMobile} onhome={navigateToHome}
+                    spinner-image={spinnerImage} onwithoutdocauditedsubmit={handleSubmit}
+                    onwithoutdocauditedupdate={handleUpdate}>
+                </c-document-without-audited-component>
+            </template>
+            <!-- Farmers Template-->
+            <template if:true={renderFarmerTemplate}>
+                <c-farmer-financial-component initial-record={intialRecord} loan-app-id={loanId}  is-mobile={isMobile}
+                    oncalculatemonthlyincome={handleCalculations} financial-id={applicantFinancialId}
+                    spinner-image={spinnerImage} applicant-id={applicantId} onfarmerevent={handleSubmit}
+                    onhome={navigateToHome}>
+                </c-farmer-financial-component>
+            </template>
+            <template if:true={showModal}>
+                <lightning-card class="slds-align_absolute-center" >
+                    <h1>
+                        Do you want to add Other Income Details?
+                        <div class="slds-align_absolute-center slds-m-around--small">
+                            <lightning-button label="Cancel" variant="brand" title="Close Other Income Detail"  onclick={handleReject} 
+                            class="slds-m-left_x-small buttonClass disabled-submit-button">
+                        </lightning-button>
+                        <lightning-button label="Add Other Income"  class=" slds-m-left_x-small  buttonClass disabled-submit-button" variant="brand" 
+                        onclick={handleOkay}></lightning-button>
+                        </div>
+                    </h1>
+                </lightning-card>
+            </template>
+            <template if:true={showOtherIncomeSection}>
+                <c-other-income-component onhome={handleReject} oncalculatemonthlyincome={handleCalculations} loan-id={loanId}
+                    spinner-image={spinnerImage} financial-id={applicantFinancialId} applicant-id={applicantId}>
+                </c-other-income-component>
+            </template>
+        </template>
+        <!--End-->
+        <!--Edit Financials Part-->
+        <template if:true={editFinancials}>
+            <div class="slds-var-p-around_large slds-border_bottom slds-border_right slds-border_left slds-border_top">
+                <lightning-accordion allow-multiple-sections-open class="example-accordion"
+                active-section-name={activeSubSections}>
+                <template if:true={isMobile}>
+                    <template if:false={isDDE}> 
+                     <lightning-accordion-section name="B" label="Additional Details" class="accordClass" >
+                            <c-additional-financial-component screen="Edit" applicant-id = {applicantId} onauemployee={addEventHandler} is-mobile={isMobile}></c-additional-financial-component>
+                        </lightning-accordion-section>
+                     </template> 
+            
+                    <lightning-accordion-section name="C" label="Financial Edit Details" class="accordClass" >
+                        <template for:each={onclickParentFinancialData} for:item="item" for:index="index">
+                            <div key={item.Id} class="slds-box">
+                                <lightning-record-edit-form key={item.Id} record-id={item.Id}
+                                    object-api-name="Applicant_Financials_Details__c" onsuccess={handleSuccess}
+                                     mode="readonly">
+                                    <!-- DDE Fields Specific Section-->
+                                    <template if:true={showDDEDependentFields}>
+                                        <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                                            <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                large-device-size="6">
+                                                <div class="component " data-id="Type_Of_Employment__c">
+                                                    <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                                                        data-name="" read-only={readAlways} class="validate"
+                                                        value={employmentEditVal} options={employmentOptions} required
+                                                        onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                                <div class="component " data-id="Sector__c">
+                                                    <lightning-combobox name="Sector__c" label="Sector" data-name=""
+                                                        read-only={readAttribute} class="validate" value={sectorEditValue}
+                                                        options={sectorOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                                <div class="component " data-id="Industry__c">
+                                                    <lightning-combobox name="Industry__c" label="Industry" data-name=""
+                                                        read-only={readAttribute} class="validate" value={industryEditValue}
+                                                        options={industryOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+                                            </lightning-layout-item>
+        
+                                            <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                                                large-device-size="6">
+                                                <div class="component " data-id="Sub_Industry__c">
+                                                    <lightning-combobox name="Sub_Industry__c" label="Industry Subtype"
+                                                        data-name="" read-only={readAttribute} class="validate"
+                                                        value={subIndustryEditValue} options={subIndustryOptions} required
+                                                        onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+        
+                                                <div class="component " data-id="Occupation__c">
+                                                    <lightning-combobox name="Occupation__c" label="Occupation" data-name=""
+                                                        read-only={readAttribute} class="validate" value={occupationEditValue}
+                                                        options={occupationOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                </div>
+        
+                                            </lightning-layout-item>
+                                        </lightning-layout>
+                                    </template>
+                                    <!--End-->
+                                    <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                        <template if:false={showDDEDependentFields}> <!--3 Oct-->
+                                            <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                            medium-device-size="12" large-device-size="6">
+                                            <div class="component " data-id="Type_Of_Employment__c">
+                                                <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                                                    data-name="" read-only={readAlways} class="validate"
+                                                    value={employmentEditVal} options={employmentOptions} required
+                                                    onchange={handleChange}>
+                                                </lightning-combobox>
+                                            </div>
+                                            </lightning-layout-item>
+                                        </template>
+                                        <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                            medium-device-size="12" large-device-size="6">
+                                            
+                                                <lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+                                                    read-only={readAlways} data-name="" class="validate"
+                                                    value={assesmentEditVal} options={assesmentOptions} required
+                                                    onchange={handleChange}>
+                                                </lightning-combobox>
+                                        </lightning-layout-item>
+                                        <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                            medium-device-size="12" large-device-size="6">
+                                                <lightning-combobox name="Consider_Income_for_Eligibility__c"
+                                                    disabled={incomeElgibilityDisable} label="Consider Income for Eligibility"
+                                                    data-name="" class="validate" value={elgibityVal}
+                                                    options={elgibilityOptions} required onchange={handleChange}>
+                                                </lightning-combobox>
+                                        </lightning-layout-item>
+                                        <template if:true={showWorkExperienceField}>
+                                           <lightning-layout-item flexibility="auto" size="12" small-device-size="12" padding="around-small"
+                                           medium-device-size="12" large-device-size="6">
+                                                        <span class="slds-form-element__static"> 
+                                                                <template if:true={isSalaried}>
+                                                                <label class="slds-form-element__label">
+                                                                    <abbr class="slds-required" title="required">* </abbr>  Total Work Experience</label>
+                                                                </template>
+                                                                <template if:false={isSalaried}>
+                                                                    <label class="slds-form-element__label">
+                                                                        <abbr class="slds-required" title="required">* </abbr> No. of years in Business
+                                                                    </label>
+                                                                </template>
+                                                                <lightning-combobox name="Total_Work_Experience__c" variant="label-hidden"
+                                                                read-only={readAttribute} class="validate" value={totalWorkExperience}
+                                                                options={workExperienceOptions} required onchange={handleChange}>
+                                                            </lightning-combobox>
+                                                         </span>
+                                                    </lightning-layout-item>
+                                          </template>
+                                    </lightning-layout>
+                                </lightning-record-edit-form>
+                                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                        medium-device-size="12" large-device-size="6">
+                                        <template if:true={isSalaried}>
+                                            <template if:false={isAuemployee}>
+                                        <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                            record-type-name="Company" read-only={isCompanyReadOnly}
+                                            dependent-picklist-value={companyOptionsValue} fieldapi="Company_Name__c"
+                                            object-name="Generic Master" default-record-id={companyDefaultId}
+                                            s-object-api-name="Generic_Master__c" required={isCompanyRequired}
+                                            onlookupselect={handleLookupSelect}> </c-generic-custom-lookup>
+                                        </template>
+                                        <template if:true={isAuemployee}>
+                                            <lightning-input type="text" onchange={handleChange} disabled="true"
+                                                read-only={isCompanyReadOnly} value={cmpValue}
+                                                label="Company/Business Name" name="Company_Name__c">
+                                            </lightning-input>
+                                        </template>
+                                        </template>
+                                        <template if:false={isSalaried}>
+                                            <template if:false={isAuemployee}>
+                                            <lightning-input type="text" 
+                                                            label="Company name" 
+                                                            value={othCompName}
+                                                            onchange={handleInputCompanyName}>
+                                                        </lightning-input>
+                                                        </template>
+                                        </template>
+                                        
+                                    </lightning-layout-item>
+                                    <template if:true={isSalaried}>
+                                    <template if:true={isCompanyOther}>
+                                        <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                            medium-device-size="12" large-device-size="6">
+                                            <lightning-input type="text" 
+                                                            label="Company name" 
+                                                            value={othCompName}
+                                                            onchange={handleInputCompanyName}>
+                                                        </lightning-input>
+                                        </lightning-layout-item>
+                                    </template>
+                                    </template>
+                                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                    medium-device-size="12" large-device-size="12">
+                                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial' is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                            onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId}
+                                            document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                            heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+                                            oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                                            applicant-record-id={applicantId}
+                                            onenablefetchdetails={handleEnableFetchDetails}>
+                                        </c-bank-statement-upload-financials>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                        medium-device-size="12" large-device-size="6">
+                                       <div class="buttonIn">
+                                        <lightning-input label="Documented Monthly Income" type="number" required class="validate" value={monthlyEditIncome} name='Monthly_Income__c' disabled={monthlyIncomeCheck} onchange={handleEditChange}></lightning-input>
+                                    <template if:true={docVerified}>
+                                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                                title="Mobile"></lightning-icon>
+                                        </template>
+                                    </div>
+                                        
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                        medium-device-size="12" large-device-size="6">
+                                        <template if:true={isDDE}>
+                                            <lightning-helptext content={obligationHelpText}></lightning-helptext>
+                                        </template>
+                                        <lightning-input label="Monthly Obligation" required class="validate" type="number" value={monthlyObligationEditIncome} 
+                                        name='Monthly_Obligation__c' disabled={unEmployedDisableCheck} onchange={handleEditChange}></lightning-input>
+                                       
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                        medium-device-size="12" large-device-size="6">
+                                        <lightning-input label="Assessed Monthly Income" type="number" value={otherEditIncome} name='Other_Income__c' read-only={otherIncomeReadOnly}
+                                         disabled={monthlyIncomeCheck} onchange={handleEditChange}></lightning-input>
+                                        
+                                    </lightning-layout-item>
+                                    <!--3131--> 
+                                    <template if:true={isDDE}>
+                                        <lightning-layout-item size="12" small-device-size="12" padding="around-small"
+                                            medium-device-size="12" large-device-size="6">
+                                            <lightning-input label="Total Verified Income" type="number" value={verifiedEditIncome} name='Verified_Income__c' 
+                                            onchange={handleEditChange} disabled></lightning-input>
+                                            
+                                        </lightning-layout-item>
+                                    </template>
+                                </lightning-layout>
+                                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium" key={item.Id}>
+                                        <lightning-button label="Back" onclick={handleCancel}
+                                        class="buttonClass disabled-submit-button"></lightning-button>
+                                        <template if:false={showIndividualSave}>
+                                            <lightning-button label="View Template" title="View Template" onclick ={validaOfficeAddress}
+                                                 class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                                            <!-- <lightning-button label="View Template" title="View Template" onclick={validaOfficeAddress} onclick={handleEditSubmit}
+                                                 class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button> -->
+                                        </template>
+                                        <template if:true={showIndividualSave}>
+                                            <lightning-button label="Save Income"  class="buttonClass disabled-submit-button slds-m-left_small" variant="brand" name='save'
+                                            onclick={validaOfficeAddress}></lightning-button>
+                                            <!-- <lightning-button label="Save Income"  class="buttonClass disabled-submit-button slds-m-left_small" variant="brand" name='save'
+                                            onclick={handleEditSubmit}></lightning-button> -->
+                                        </template>
+                                    </div>
+                                </lightning-layout>
+                            </div>
+                        </template>
+                    </lightning-accordion-section>
+                </template>
+                <template if:false={isMobile}>
+                     <template if:false={isDDE}> 
+                     
+                        <lightning-accordion-section name="B" label="Additional Details" class="accordClass" >
+                           
+                            <c-additional-financial-component screen="Edit" applicant-id = {applicantId} onauemployee={addEventHandler} is-mobile={isMobile}></c-additional-financial-component>
+                        
+                        </lightning-accordion-section>
+
+                     </template> 
+
+                <lightning-accordion-section name="C" label="Financial Edit Details" class="accordClass" >
+                    <template lwc:if={showDDEDependentFields}>
+                    <template for:each={onclickParentFinancialData} for:item="item" for:index="index">
+                        <lightning-record-edit-form key={item.Id} record-id={item.Id}
+                        object-api-name="Applicant_Financials_Details__c" onsuccess={handleSuccess}
+                         mode="readonly">
+
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 " data-id="Type_Of_Employment__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                                                            data-name="" read-only={readAlways} class="validate"
+                                                            value={employmentEditVal} options={employmentOptions} required
+                                                            onchange={handleChange}>
+                                                        </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>                                
+                                <div class="slds-col slds-size_1-of-3" data-id="Sector__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-combobox name="Sector__c" label="Sector" data-name=""
+                                                    read-only={readAttribute} class="validate" value={sectorEditValue}
+                                                    options={sectorOptions} required onchange={handleChange}>
+                                                </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-3 " data-id="Industry__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-combobox name="Industry__c" label="Industry" data-name=""
+                                                    read-only={readAttribute} class="validate" value={industryEditValue}
+                                                    options={industryOptions} required onchange={handleChange}>
+                                                </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+
+
+                            </div>
+
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 " data-id="Sub_Industry__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-combobox name="Sub_Industry__c" label="Industry Subtype"
+                                                    data-name="" read-only={readAttribute} class="validate"
+                                                    value={subIndustryEditValue} options={subIndustryOptions} required
+                                                    onchange={handleChange}>
+                                                </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>                                
+                                <div class="slds-col slds-size_1-of-3 " data-id="Occupation__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-combobox name="Occupation__c" label="Occupation" data-name=""
+                                                    read-only={readAttribute} class="validate" value={occupationEditValue}
+                                                    options={occupationOptions} required onchange={handleChange}>
+                                                </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                                
+
+
+                                <div class="slds-col slds-size_1-of-3 " data-id="Method_Of_Assesment__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+                                                            read-only={readAlways} data-name="" class="validate"
+                                                            value={assesmentEditVal} options={assesmentOptions} required
+                                                            onchange={handleChange}>
+                                                        </lightning-combobox>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                                </div>
+                            </lightning-record-edit-form>
+                     </template>
+                     <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                            <div class="slds-col slds-size_1-of-3 " data-id="Company_Name__c">
+                                <span>
+                                    <lightning-layout-item flexibility="auto">
+                                        <div class="slds-form-element__control slds-p-around--xx-small ">
+                                            <span class="slds-form-element__static"> 
+                                                <template if:true={isSalaried}>
+                                                    <template if:true={isAuemployee}>
+                                                        <lightning-input type="text" onchange={handleChange} disabled="true"
+                                                            read-only={isCompanyReadOnly} value={cmpValue}
+                                                            label="Company/Business Name" name="Company_Name__c">
+                                                        </lightning-input>
+                                                    </template>
+                                                    <template if:false={isAuemployee}>
+                                               
+                                                <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                record-type-name="Company" read-only={isCompanyReadOnly}
+                                                dependent-picklist-value={companyOptionsValue} fieldapi="Company_Name__c"
+                                                object-name="Generic Master" default-record-id={companyDefaultId}
+                                                s-object-api-name="Generic_Master__c" required={isCompanyRequired}
+                                                onlookupselect={handleLookupSelect}> </c-generic-custom-lookup>
+                                                </template>
+                                                   
+                                                </template>
+                                                <template if:false={isSalaried}>
+                                                    <template if:false={isAuemployee}>
+                                                    <lightning-input type="text" 
+                                                    label="Company name" 
+                                                    value={othCompName}
+                                                    onchange={handleInputCompanyName}>
+                                                </lightning-input>
+                                                </template>
+                                                </template>
+                                         </span>
+                                        </div>
+                                    </lightning-layout-item>
+                              </span>
+                            </div>
+                            <template if:false={isAuemployee}>
+                            <template if:true={isCompanyOther}>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Company_Others__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-input type="text" 
+                                                        label="Company name" 
+                                                        value={othCompName}
+                                                        onchange={handleInputCompanyName}>
+                                                    </lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                </span>
+                                </div>
+                            </template>
+                            </template>
+                            <template if:true={isDDE}>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Monthly_Income__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <div class="buttonIn">
+                                                    <lightning-input label="Documented Monthly Income" required class="validate" type="number" value={monthlyEditIncome} name='Monthly_Income__c' onchange={handleEditChange} disabled={monthlyIncomeCheck}></lightning-input>
+                                                    <template if:true={docVerified}>
+                                                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                                                title="Mobile"></lightning-icon>
+                                                        </template>
+                                                    </div>
+                                            </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                </span>
+                                </div>
+                            </template>
+                            <div class="slds-col slds-size_1-of-3 " data-id="Monthly_Obligation__c">
+                                <span>
+                                    <lightning-layout-item flexibility="auto">
+                                        <div class="slds-form-element__control slds-p-around--xx-small ">
+                                            <span class="slds-form-element__static"> 
+                                                <template if:true={isDDE}>
+                                    <lightning-helptext content={obligationHelpText}></lightning-helptext>
+                                </template>
+                                <lightning-input label="Monthly Obligation" type="number" class="validate" required value={monthlyObligationEditIncome} name='Monthly_Obligation__c' onchange={handleEditChange} disabled={unEmployedDisableCheck}></lightning-input>
+                               
+                                         </span>
+                                        </div>
+                                    </lightning-layout-item>
+                              </span>
+                            </div>
+                        </div>
+
+                        <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                             <div class="slds-col slds-size_1-of-3 " data-id="Other_Income__c">
+                                <span>
+                                    <lightning-layout-item flexibility="auto">
+                                        <div class="slds-form-element__control slds-p-around--xx-small ">
+                                            <span class="slds-form-element__static"> 
+                                                <lightning-input label="Assessed Monthly Income" type="number" value={otherEditIncome} name='Other_Income__c'  onchange={handleEditChange} disabled={monthlyIncomeCheck} read-only={otherIncomeReadOnly}></lightning-input>
+                                         </span>
+                                        </div>
+                                    </lightning-layout-item>
+                              </span>
+                            </div>
+                            <template if:true={isDDE}>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Verified_Income__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-input label="Total Verified Income" type="number" value={verifiedEditIncome} name='Verified_Income__c' 
+                                                    onchange={handleEditChange} disabled></lightning-input>
+                                                </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                    </span>
+                                </div>
+                            </template>
+                        </div>
+                        <!--3131-->
+                        <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                            
+
+                            <div class="slds-col slds-size_1-of-3 " data-id="Consider_Income_for_Eligibility__c">
+                                <span>
+                                    <lightning-layout-item flexibility="auto">
+                                        <div class="slds-form-element__control slds-p-around--xx-small ">
+                                            <span class="slds-form-element__static"> 
+                                              
+                                                    <lightning-combobox name="Consider_Income_for_Eligibility__c"
+                                                        disabled={incomeElgibilityDisable} label="Consider Income for Eligibility"
+                                                        data-name="" class="validate" value={elgibityVal}
+                                                        options={elgibilityOptions} required onchange={handleChange}>
+                                                    </lightning-combobox>
+                                                
+                                         </span>
+                                        </div>
+                                    </lightning-layout-item>
+                              </span>
+                            </div>
+
+                            <div class="slds-col slds-size_1-of-3 " >
+                                    <template if:true={showWorkExperienceField}>
+                                            <lightning-layout-item flexibility="auto">
+                                                 <span class="slds-form-element__static"> 
+                                                         <template if:true={isSalaried}>
+                                                         <label class="slds-form-element__label">
+                                                            <abbr class="slds-required" title="required">* </abbr>  Total Work Experience</label>
+                                                         </template>
+                                                         <template if:false={isSalaried}>
+                                                             <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr> No. of years in Business
+                                                             </label>
+                                                         </template>
+                                                         <lightning-combobox name="Total_Work_Experience__c" variant="label-hidden"
+                                                         read-only={readAttribute} class="validate" value={totalWorkExperience}
+                                                         options={workExperienceOptions} required onchange={handleChange}>
+                                                     </lightning-combobox>
+                                                  </span>
+                                             </lightning-layout-item>
+                                   </template>
+                                </div>
+                        </div>
+                        <!--ended 3131-->
+                        <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                                
+                                 <span>
+                                    <lightning-layout-item flexibility="auto">
+                                        <div class="slds-form-element__control slds-p-around--xx-small ">
+                                           <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+                                                onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId}
+                                                document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                                heading-value="Upload Bank Statement" ondeleteremoveverified={deleteContentDocument}
+                                                oncartcallbackmonthlyincome={handleCartMonthlyIncome}
+                                                applicant-record-id={applicantId}
+                                                onenablefetchdetails={handleEnableFetchDetails}>
+                                            </c-bank-statement-upload-financials>
+                                        </div>
+                                    </lightning-layout-item>
+                              </span>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <template for:each={onclickParentFinancialData} for:item="item" for:index="index">
+                            <lightning-record-edit-form key={item.Id} record-id={item.Id}
+                            object-api-name="Applicant_Financials_Details__c" onsuccess={handleSuccess}
+                             mode="readonly">
+
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;">
+                                <div class="slds-col slds-size_1-of-3 " data-id="Type_Of_Employment__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                    <span class="slds-form-element__static"> 
+                                                         <lightning-combobox name="Type_Of_Employment__c" label="Type of Employment"
+                                                                data-name="" read-only={readAlways} class="validate"
+                                                                value={employmentEditVal} options={employmentOptions} required
+                                                                onchange={handleChange}>
+                                                            </lightning-combobox>
+                                          </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                      </span>
+                                    </div>
+    
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Method_Of_Assesment__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-combobox name="Method_Of_Assesment__c" label="Method of assessment"
+                                                                read-only={readAlways} data-name="" class="validate"
+                                                                value={assesmentEditVal} options={assesmentOptions} required
+                                                                onchange={handleChange}>
+                                                            </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                      </span>
+                                    </div>
+
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Consider_Income_for_Eligibility__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                    <span class="slds-form-element__static"> 
+                                                       
+                                                            <lightning-combobox name="Consider_Income_for_Eligibility__c"
+                                                                disabled={incomeElgibilityDisable} label="Consider Income for Eligibility"
+                                                                data-name="" class="validate" value={elgibityVal}
+                                                                options={elgibilityOptions} required onchange={handleChange}>
+                                                            </lightning-combobox>
+                                                 </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                      </span>
+                                    </div>
+                                    </div>
+                              </lightning-record-edit-form>
+                         </template>
+                         <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Company_Name__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <template if:true={isSalaried}>
+                                                        <template if:true={isAuemployee}>
+                                                            <lightning-input type="text" onchange={handleChange} disabled="true"
+                                                                read-only={isCompanyReadOnly} value={cmpValue}
+                                                                label="Company/Business Name" name="Company_Name__c">
+                                                            </lightning-input>
+                                                        </template>
+                                                        <template if:false={isAuemployee}>
+                                                   
+                                                    <c-generic-custom-lookup name="Company_Name__c" label="Company/Business Name" is-disabled={isCompanyReadOnly} parent-component-name="financialViewComponent"
+                                                    record-type-name="Company" read-only={isCompanyReadOnly}
+                                                    dependent-picklist-value={companyOptionsValue} fieldapi="Company_Name__c"
+                                                    object-name="Generic Master" default-record-id={companyDefaultId}
+                                                    s-object-api-name="Generic_Master__c" required={isCompanyRequired}
+                                                    onlookupselect={handleLookupSelect}> </c-generic-custom-lookup>
+                                                    </template>
+                                                       
+                                                    </template>
+                                                    <template if:false={isSalaried}>
+                                                        <template if:false={isAuemployee}>
+                                                        <lightning-input type="text" 
+                                                        label="Company name" 
+                                                        value={othCompName}
+                                                        onchange={handleInputCompanyName}></lightning-input>
+                                                        </template>
+                                                    
+                                                    </template>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                                <template if:false={isAuemployee}>
+                                <template if:true={isCompanyOther}>
+                                    <div class="slds-col slds-size_1-of-3 " data-id="Company_Others__c">
+                                        <span>
+                                            <lightning-layout-item flexibility="auto">
+                                                <div class="slds-form-element__control slds-p-around--xx-small">
+                                                    <span class="slds-form-element__static"> 
+                                                        <lightning-input type="text" 
+                                                            label="Company name" 
+                                                            value={othCompName}
+                                                            onchange={handleInputCompanyName}>
+                                                        </lightning-input>
+                                                </span>
+                                                </div>
+                                            </lightning-layout-item>
+                                        </span>
+                                    </div>
+                                </template>
+                                </template>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Monthly_Income__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <div class="buttonIn">
+                                                        <lightning-input label="Documented Monthly Income" required class="validate" type="number" value={monthlyEditIncome} name='Monthly_Income__c' onchange={handleEditChange} disabled={monthlyIncomeCheck}></lightning-input>
+                                                    <template if:true={docVerified}>
+                                                            <lightning-icon size="small" variant="success" class="button" icon-name="utility:success"
+                                                                title="Mobile"></lightning-icon>
+                                                        </template>
+                                                    </div>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 " data-id="Monthly_Obligation__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <template if:true={isDDE}>
+                                        <lightning-helptext content={obligationHelpText}></lightning-helptext>
+                                    </template>
+                                    <lightning-input label="Monthly Obligation" type="number" required  class="validate" value={monthlyObligationEditIncome} name='Monthly_Obligation__c' onchange={handleEditChange} disabled={unEmployedDisableCheck}></lightning-input>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                            </div>
+    
+                            <div class="slds-grid slds-wrap" style="word-wrap: break-word;" key={item.Id}>
+                                 <div class="slds-col slds-size_1-of-3 " data-id="Other_Income__c">
+                                    <span>
+                                        <lightning-layout-item flexibility="auto">
+                                            <div class="slds-form-element__control slds-p-around--xx-small ">
+                                                <span class="slds-form-element__static"> 
+                                                    <lightning-input label="Assessed Monthly Income" type="number" value={otherEditIncome} name='Other_Income__c'  onchange={handleEditChange} disabled={monthlyIncomeCheck}></lightning-input>
+                                             </span>
+                                            </div>
+                                        </lightning-layout-item>
+                                  </span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-3 ">
+                                    <template if:true={showWorkExperienceField}>
+                                        <lightning-layout-item flexibility="auto">
+                                                     <span class="slds-form-element__static"> 
+                                                             <template if:true={isSalaried}>
+                                                             <label class="slds-form-element__label">
+                                                                <abbr class="slds-required" title="required">* </abbr> Total Work Experience</label>
+                                                             </template>
+                                                             <template if:false={isSalaried}>
+                                                                 <label class="slds-form-element__label">
+                                                                    <abbr class="slds-required" title="required">* </abbr>No. of years in Business
+                                                                 </label>
+                                                             </template>
+                                                             <lightning-combobox name="Total_Work_Experience__c" variant="label-hidden"
+                                                             read-only={readAttribute} class="validate" value={totalWorkExperience}
+                                                             options={workExperienceOptions} required onchange={handleChange}>
+                                                         </lightning-combobox>
+                                                      </span>
+                                                 </lightning-layout-item>
+                                       </template>
+                                </div>
+                               <!-- Updated-->
+                            <lightning-layout-item flexibility="auto"  key={item.Id}>
+                                <div class="slds-form-element__control slds-p-around--xx-small ">
+                                    <span class="slds-form-element__static"> 
+                                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+                                        onbankstuploaded={handleBankStatementUploaded} applicant-id={applicantId}
+                                        document-type='Bank ITR Statement' read-attribute={disableUpload}
+                                        heading-value="Upload Bank Statement"
+                                        oncartcallbackmonthlyincome={handleCartMonthlyIncome} ondeleteremoveverified={deleteContentDocument}
+                                        applicant-record-id={applicantId}
+                                        onenablefetchdetails={handleEnableFetchDetails}>
+                                    </c-bank-statement-upload-financials>
+                                 </span>
+                                </div>
+                            </lightning-layout-item>
+                            </div>
+                    </template>
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium" key={item.Id}>
+                            <lightning-button label="Back" onclick={handleCancel}
+                            class="buttonClass disabled-submit-button"></lightning-button>
+                            <template if:false={showIndividualSave}>
+                                
+                                <lightning-button label="View Template" title="View Template" onclick={validaOfficeAddress} 
+                                     class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                                
+                            </template>
+                            <template if:true={showIndividualSave}>
+                                <lightning-button label="Save Income"  class="buttonClass disabled-submit-button slds-m-left_small" variant="brand" name='save'
+                                onclick={validaOfficeAddress}></lightning-button>
+                                <!-- <lightning-button label="Save Income"  class="buttonClass disabled-submit-button slds-m-left_small" variant="brand" name='save'
+                                onclick={handleEditSubmit}></lightning-button> handleEditSubmit -->
+                            </template>
+                        </div>
+                    </lightning-accordion-section>
+                </template>
+                </lightning-accordion>
+            </div>
+        </template>
+        <!--End -->
+        <!--Render Edit Form Child Templates-->
+        <template if:true={showEditViewChildTemplates}>
+           
+            <template if:true={renderSalaryTemplate}>
+                <c-salary-finance-component cart-monthly-income-data={cartMonthlyIncomeData} loan-app-id={loanId}
+                    spinner-image={spinnerImage} document-type='Bank ITR Statement'
+                    oncalculatemonthlyincome={handleCalculations} onhome={navigateToHome}
+                    onshoweditview={handleShowEditView} existing-details={salariedData}
+                    financial-id={applicantFinancialId} applicant-id={applicantId} onsalarysubmit={handleSubmit} onotherincome={handleOtherIncomeInsertion}
+                    onsalaryupdate={handleUpdate} fetch-details={populateData} cart-data-fetched={docVerified} original-doc-verified-value={cartDataFetchInitialValue}>
+                </c-salary-finance-component>
+            </template>
+           
+            <template if:true={renderAssessed}>
+               <c-assessed-parent-component financial-id={applicantFinancialId} onhome={navigateToHome}  loan-app-id={loanId}  onotherincome={handleOtherIncomeInsertion}
+               spinner-image={spinnerImage} existing-details={assessedData} applicant-id={applicantId}
+               onassesesnodocsubmit={handleSubmit} onassessedupdate={handleUpdate}></c-assessed-parent-component>
+            </template>
+           
+            <!--Doc Audited Edit Template-->
+            <template if:true={renderDocAuditedTemplate}>
+                <c-document-audited-component set-read-only={setReadOnly} onhome={navigateToHome} onotherincome={handleOtherIncomeInsertion}
+                    spinner-image={spinnerImage} existing-details={auditedData} loan-app-id={loanId}
+                    oncalculatemonthlyincome={handleCalculations} financial-id={applicantFinancialId}
+                    applicant-id={applicantId} ondocauditedsubmit={handleSubmit} onauditedupdate={handleUpdate}>
+                </c-document-audited-component>
+            </template>
+            <!--End-->
+            <!--Doc Without Audited Edit Template-->
+            <template if:true={renderWithoutDocAuditedTemplate}>
+                <c-document-without-audited-component financial-id={applicantFinancialId} onhome={navigateToHome} onotherincome={handleOtherIncomeInsertion}
+                    spinner-image={spinnerImage} existing-details={withoutauditedData} applicant-id={applicantId} loan-app-id={loanId}
+                    onwithoutdocauditedsubmit={handleSubmit} onwithoutdocauditedupdate={handleUpdate}>
+                </c-document-without-audited-component>
+            </template>
+            <!--End-->
+            <template if:true={renderFarmerTemplate}>
+                <c-farmer-financial-component initial-record={intialRecord} dairy-records={dairy} rcl-records={rcl} onotherincome={handleOtherIncomeInsertion}
+                    spinner-image={spinnerImage} own-land-records={ownland} commercial-records={commercial} loan-app-id={loanId} 
+                    oncalculatemonthlyincome={handleCalculations} financial-id={applicantFinancialId}
+                    applicant-id={applicantId} onfarmerevent={handleSubmit} onhome={navigateToHome}>
+                </c-farmer-financial-component>
+            </template>
+            <!--Jul8-->
+            <template if:true={showModal}>
+                <lightning-card class="slds-align_absolute-center" >
+                    <h1>
+                        Do you want to add Other Income Details?
+                        <div class="slds-align_absolute-center slds-m-around--small">
+                            <lightning-button label="Cancel" variant="brand" title="Close Other Income Detail"  onclick={handleReject} 
+                            class="slds-m-left_x-small buttonClass disabled-submit-button">
+                        </lightning-button>
+                        <lightning-button label="Add Other Income"  class=" slds-m-left_x-small  buttonClass disabled-submit-button" variant="brand" 
+                        onclick={handleOkay}></lightning-button>
+                        </div>
+                    </h1>
+                </lightning-card>
+            </template>
+            <template if:true={showOtherIncomeSection}>
+                <c-other-income-component onhome={handleReject} oncalculatemonthlyincome={handleCalculations} loan-id={loanId}
+                    spinner-image={spinnerImage} financial-id={applicantFinancialId} applicant-id={applicantId}>
+                </c-other-income-component>
+            </template>
+            <template if:true={renderOtherTemplate}>
+                <c-other-income-component other-income-records={other} onhome={navigateToHome} loan-id={loanId}
+                    spinner-image={spinnerImage} financial-id={applicantFinancialId} applicant-id={applicantId}>
+                </c-other-income-component>
+            </template>
+            <!--End-->
+        </template>
+    </lightning-card>
+</template>

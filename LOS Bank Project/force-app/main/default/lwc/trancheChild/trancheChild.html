@@ -1,0 +1,91 @@
+<template>
+
+    <template if:false={addTranche}>
+        <article class="slds-box">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <template if:true={isRecordSaved}>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="custom:custom9" size="small"></lightning-icon>
+                        </div>
+                    </template>
+                    <template if:false={isRecordSaved}>
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:warning" variant="warning" size="small"></lightning-icon>
+                        </div>
+                    </template>
+                    
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a class="slds-card__header-link slds-truncate"
+                                title={trancheRecord.Name} data-id={trancheRecord.Tranche_Number__c}
+                                onclick={navigateToAppRecordPage}>{trancheRecord.Name}</a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning-icon icon-name="action:edit" size="x-small" onclick={handleRowAction}></lightning-icon>
+                        <lightning-icon icon-name="action:delete" size="x-small" variant="success"
+                                    onclick={deleteTranche} class="slds-m-around_medium"></lightning-icon>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-form-element">
+                    <span class="slds-form-element__label">Tranche Number</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{trancheRecord.Tranche_Number__c}</div>
+                    </div>
+                    <span class="slds-form-element__label">Partial Payment Condition</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{trancheRecord.Partial_Payment_Condition__c}</div>
+                    </div>
+                    <span class="slds-form-element__label">Disbursement Amount</span>
+                    <div class="slds-form-element__control">
+                        <div class="slds-form-element__static">{trancheRecord.Disbursement_Amount__c}</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </template>
+    
+
+    <template if:true={addTranche}>
+        <lightning-card title="Tranche" icon-name="custom:custom9">
+            <span slot="actions">
+                <lightning-icon icon-name="action:reject" size="x-small" onclick={handleReject}></lightning-icon>
+            </span>
+            <lightning-layout multiple-rows>
+                <lightning-layout-item data-id="Tranche_Number__c" class="component slds-hide" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <lightning-input onchange={handleChange}
+                        required
+                        type="Number" 
+                        label="Tranche Number"
+                        name="Tranche_Number__c"
+                        value={trancheRecord.Tranche_Number__c}
+                        disabled></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item data-id="Partial_Payment_Condition__c" class="component slds-hide" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <lightning-input onchange={handleChange} type="text" 
+                        required
+                        label="Partial Payment Condition"
+                        name="Partial_Payment_Condition__c"
+                        value={trancheRecord.Partial_Payment_Condition__c}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item data-id="Disbursement_Amount__c" class="component slds-hide" padding="around-small" size="12" small-device-size="12" large-device-size="6">
+                    <lightning-input onchange={handleChange} type="Number" 
+                        required
+                        label="Disbursement_Amount__c"
+                        name="Disbursement_Amount__c"
+                        value={trancheRecord.Disbursement_Amount__c}></lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>  
+            <div class="slds-align_absolute-center">
+                <lightning-icon icon-name="action:approval" size="x-small" variant="success"
+                                    onclick={saveTranche} class="slds-m-around_medium"></lightning-icon>
+                <lightning-icon icon-name="action:delete" size="x-small" variant="success"
+                                    onclick={deleteTranche} class="slds-m-around_medium"></lightning-icon>
+            </div>  
+        </lightning-card>
+    </template>
+    
+</template>

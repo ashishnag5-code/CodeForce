@@ -1,0 +1,42 @@
+<template>
+
+    <lightning-card>
+        <!-- KYC Options Screen starts-->
+    <!--    <template if:true={KYCSelection}>
+            <lightning-card title="KYC" icon-name="standard:lead">
+                <template if:true={isloading}>
+                    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+                </template>
+                <c-custom-spinner show-spinner={isLoading} spinner-image={spinnerImage}></c-custom-spinner>
+
+            <label class="slds-form-element__label slds-m-left_small">Click on one of the below KYC options:</label>
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={aadhaarIcon} width="50%" height="50%" onclick={selectKYCType} class="imageCss"
+                        data-id="Aadhaar">
+                </lightning-layout-item>
+
+                <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-p-horizontal_small slds-m-bottom_small" flexibility="auto">
+                    <img src={ckycIcon} width="35%" height="35%" onclick={selectKYCType} class="imageCss"
+                        data-id="CKYC">
+                </lightning-layout-item>
+            </lightning-layout>
+            </lightning-card>
+        </template>
+        KYC Options Screen ends
+        
+        
+        <template if:true={selectedKYC}>
+        <c-los-sub-k-y-c-component onkycselection={showKYCOptions} applicant={applicant}
+            onupdateapplicant={updateApplicantRecord} ongetapplicanttype={getApplicantTypeName}></c-los-sub-k-y-c-component>
+        </template>  -->
+        <template if:true={loadCmp}>
+             <c-los-sub-k-y-c-component onkycselection={showKYCOptions} applicant={applicant} spinner-image={spinnerImage} onconsentchange={handleconsent}
+                onupdateapplicant={updateApplicantRecord} ongetapplicanttype={getApplicantTypeName} onfireupagain={validationCheck}>
+            </c-los-sub-k-y-c-component>
+        </template>
+
+    </lightning-card>
+</template>

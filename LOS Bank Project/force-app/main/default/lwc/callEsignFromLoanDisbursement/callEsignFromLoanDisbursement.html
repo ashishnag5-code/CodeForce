@@ -1,0 +1,20 @@
+<template>
+    <!--<lightning-modal-header label="Initiate E-Sign"></lightning-modal-header>-->
+    <lightning-modal-body> 
+        <div class="slds-col slds-align_absolute-center" data-id="EsignButton" >
+            <span>
+                <lightning-avatar src={generateEsign} size="large"
+                    onclick={handleSignDeskEsign}></lightning-avatar>
+            </span>
+            <br />
+            <span>
+                Generate Esign
+            </span>
+        </div>
+        <c-generate-esign-component record-id={loanid} onreturntosummary={handleReturnToSummary} 
+        ongenerateesignclick={handleGenerateEsignClick} esign-type="Addendum Document"></c-generate-esign-component>    
+    </lightning-modal-body>
+    <!--<lightning-modal-footer>
+        <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+    </lightning-modal-footer>-->
+</template>

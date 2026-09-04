@@ -1,0 +1,95 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-07-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <template if:true={isloading}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+    <template if:true={isMobile}>
+        <template if:true={ocrNeeded}>
+            <template if:false={isapplicantPage}>
+                <template if:false={isdocmanager}>
+                    <lightning-layout class="slds-align_absolute-center">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-var-p-horizontal_small slds-var-m-around_xx-small slds-var-p-around_xx-small slds-align_absolute-center" flexibility="auto">
+                            <lightning-button variant="brand" label="Do OCR" title="ocrbutton" onclick={doOCR} class="buttonClass slds-var-m-left_x-small slds-align_absolute-center"></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                <template if:true={showOCRButtonDocManager}>
+                    <lightning-layout class="slds-align_absolute-center">
+                        <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                        class="slds-var-p-horizontal_small slds-var-m-around_xx-small slds-var-p-around_xx-small slds-align_absolute-center" flexibility="auto">
+                            <lightning-button variant="brand" label="Do OCR" title="ocrbutton" onclick={doOCR} class="buttonClass slds-var-m-left_x-small slds-align_absolute-center"></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+            </template>
+       </template>
+    </template>
+    <template if:false={showOCRButton}>
+        
+        <template if:true={showDocumentUpload}>
+            <template if:true={isMobile}>
+      
+                <lightning-layout>
+                    <lightning-layout-item size="12" small-device-size="12" large-device-size="6"
+                    class="slds-var-p-horizontal_small slds-var-m-around_xx-small slds-var-p-around_xx-small" flexibility="auto">
+                        <template if:true={isdocmanager}>
+   
+                            <template if:false={showOCRButtonDocManager}>
+                                <lightning-button variant="brand" class="buttonClass" label="Upload Files" data-id="openBridgeButton" title="uploadbutton" onclick={handleClickUpload}></lightning-button>
+                            </template>
+                        </template>
+                        <template if:false={isdocmanager}>
+         
+                            <template if:false={isapplicantPage}>
+                                <lightning-icon size="small" icon-name="utility:upload"  alternative-text="Upload" title="Upload" onclick={handleClickUpload}></lightning-icon>
+                                <!--<lightning-button variant="brand" label="Upload Document" title="uploadbutton" onclick={openBridegAppParent}></lightning-button>-->
+                            </template>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+            <!--<div class="slds-var-m-top_large">
+                <c-los-k-y-c-consent type="OTP" onsetconsent={updateConsent} consent={consent}></c-los-k-y-c-consent>
+            </div>-->
+            </template>
+            <template if:false={isMobile}>
+                <template if:true={notSupportedInDesktop}>
+                    <!--<lightning-messages class="slds-hide" data-id='errorMessage'>
+                    </lightning-messages>-->
+                    <h1><div class="slds-hide slds-required" data-id='errorMessage'></div></h1>
+                </template>
+                <template if:false={notSupportedInDesktop}>
+                    <c-los-file-upload-generic doc-name={docName} ocr-needed={ocrNeeded} onsuccesshandler ={handleSuccess} multiple-upload={multipleUpload}
+                        record-id={docRecordId} loan-id={loanId} applicant-id={applicantId} max-file-size={maxFileSize} collateral-id={collateralId}
+                            show-password-input={showPasswordInput} hidefiledetails={hidefiledetails} system-generated={systemGenerated}
+                                amount-needed={amountRequired} cart-callout-required={cartCalloutRequired} e-sign={eSign}
+                                doc-full-name={docFullName} isdocmanager={isdocmanager}
+                                kyc-uploaded-doc={kycDocUploaded}></c-los-file-upload-generic>
+                </template>
+            </template>
+        </template>
+    </template>
+    <template if:true={showSummaryCart}>
+        <template if:true={cartCalloutRequired}>
+            <lightning-input type="password" 
+                                label="Password" 
+                                onchange={handlePasswordChange}
+                                value={password}></lightning-input>
+        </template>
+        <template if:true={amountRequired}>
+            <lightning-layout-item size="12" small-device-size="12" large-device-size="6">
+                <lightning-input label="Amount" type="number" required formatter="decimal" onchange={handleChange} data-id="amountValue"></lightning-input>
+            </lightning-layout-item>
+        </template>
+        <div class="slds-align_absolute-center">
+            <lightning-button label="Submit File" size="x-small" class="buttonClass slds-var-m-around_small" icon-name="action:approval" onclick={submitToCart}></lightning-button>
+        </div>
+    </template>
+    
+</template>

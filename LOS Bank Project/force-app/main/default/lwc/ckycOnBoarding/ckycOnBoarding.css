@@ -1,0 +1,31 @@
+.searchButton {
+    margin-top: 1.73rem;
+}
+
+.backgroundComp {
+    height: 100;
+}
+
+.actionItem {
+    --slds-c-button-brand-color-background: rgb(243, 116, 53) !important;
+}
+
+.warningColor {
+    background-color: rgb(288, 180, 0);
+}
+
+.successColor {
+    color: rgb(40, 211, 139);
+}
+
+.headingColor {
+    color: rgb(61, 61, 61);
+}
+
+.bodyTextColor {
+    color:rgb(86, 86, 86);
+}
+
+.errorColor {
+    color: rgb(236, 99, 94);
+}

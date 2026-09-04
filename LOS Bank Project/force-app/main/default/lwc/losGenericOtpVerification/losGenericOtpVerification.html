@@ -1,0 +1,61 @@
+<template>
+   <!-- modal start -->
+   <template if:true={isShowModal}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+         aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+         <div class="slds-modal__container">
+            <!-- modal header start -->
+               <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                  onclick={hideModalBox}>
+                  <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+                  </lightning-icon>
+                  <span class="slds-assistive-text">Close</span>
+               </button>
+
+            <!-- modal body start -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+               <lightning-layout multiple-rows="true" class="slds-align_absolute-center "  >
+                  <lightning-layout-item size="12"  small-device-size="12" medium-device-size="4" large-device-size="5" padding="around-small" >
+
+                     <div class="slds-p-top_x-large  slds-p-bottom_x-large slds-p-around_x-small">
+                        <div class="slds-form-element">
+                            <label class="slds-align_absolute-center slds-form-element__label font-family" for="form-element-01">ENTER OTP</label>
+                            <div class="slds-form-element__control">
+
+                    
+                  </br>
+                     <lightning-input type="password" variant="label-hidden" name="otpField" label="ENTER OTP" placeholder="Enter OTP here"
+                  onchange={handleOTPVerify} max-length="6" pattern="[0-9]{6}" class="OTP-MobileNumber input-border"
+                  message-when-pattern-mismatch="Please enter a valid OTP."></lightning-input>
+                            </div>
+                        </div>
+                     </div>
+               <div class=" term slds-text-title font-family slds-align_absolute-center  slds-p-top_x-small ">
+                  Did not receive it?
+               </div>
+            </br>
+               <div class="term slds-text-title font-family slds-align_absolute-center ">
+                  <template if:false={boolResendOtp}>
+                     Request OTP in&nbsp;<b>{increse1Second}</b>s
+                  </template>
+                  <template if:true={boolResendOtp}>
+                     <a onclick={handleResendOTP}>Resend OTP</a>
+                  </template>
+               </div>
+
+               <!--Verify Button-->
+                  <lightning-button class="verify-button slds-align_absolute-center font-family" variant="brand"
+                     disabled={boolIsDisableVerifyButton} onclick={handleOTPVerification} label="VERIFY NOW">
+                  </lightning-button>
+                  <!-- <button class="slds-button_brand slds-align_absolute-center font-family " disabled={TRUE} onclick={handleVerification} >VERIFY NOW</button> -->
+               
+               </lightning-layout-item>
+               </lightning-layout>
+            </div>
+         </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+   <!-- modal end -->
+
+</template>

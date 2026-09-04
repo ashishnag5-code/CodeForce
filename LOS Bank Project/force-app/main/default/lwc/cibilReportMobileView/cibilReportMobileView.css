@@ -1,0 +1,10 @@
+.customHeaderStyles {
+    --lwc-spacingMedium: 0.1rem;
+    --slds-c-modal-header-spacing-block-start: 0.1rem;
+    --sds-c-modal-header-spacing-block-start: 0.1rem;
+}
+
+.slds-modal__container{
+    width: 70% !important;
+    max-width: 70% !important;
+}

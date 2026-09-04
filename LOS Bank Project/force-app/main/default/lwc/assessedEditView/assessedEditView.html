@@ -1,0 +1,187 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open class="example-accordion">
+        <lightning-accordion-section name="A" label="ASSESSED NO DOCUMENT" class="accordClass">
+        <lightning-record-edit-form key={instance.Id} record-id={instance.Id} class="slds-m-around--small"
+            object-api-name="Applicant_Financials_Details__c" onsuccess={handleSuccess} onsubmit={handleEditSubmit}
+            mode="readonly">
+            <lightning-accordion-section name="C" label="Income Verification Member Details">
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Monthly_Turnover__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Monthly_Turnover__c" disabled={readonly}>
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Monthly Turnover</label>
+                                <lightning-input-field field-name="Monthly_Turnover__c" variant="label-hidden"
+                                    name="Monthly_Turnover__c" onchange={handleChange} disabled={readonly}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Annual_Turnover__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Annual_Turnover__c" disabled={readonly}>
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Annual Turnover</label>
+                                <lightning-input type="number" name="Annual_Turnover__c" value={annualTurnover}
+                                    read-only={readAttributee} variant="label-hidden" step="0.01"
+                                    onchange={handleChange} disabled></lightning-input>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Monthly_Expense__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Monthly_Expense__c" disabled={readonly}>
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Monthly Expense</label>
+                                <lightning-input-field field-name="Monthly_Expense__c" variant="label-hidden"
+                                    name="Monthly_Expense__c" onchange={handleChange} disabled={readonly}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Annual_Expense__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Annual_Expense__c" disabled={readonly}>
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Annual Expense</label>
+                                <lightning-input type="number" name="Annual_Expense__c" value={annualExpense}
+                                    read-only={readAttributee} variant="label-hidden" step="0.01"
+                                    onchange={handleChange} disabled></lightning-input>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Company_Name__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Company_Name__c" name="Company_Name__c">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Company</label>
+                                <lightning-input-field field-name="Company_Name__c" name="Company_Name__c"
+                                    onchange={handleChange} variant="label-hidden" disabled={readonly}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-accordion-section>
+
+            <lightning-accordion-section name="D" label="Net Profit">
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Monthly_Net_Profit__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Monthly_Net_Profit__c">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Monthly</label>&nbsp;
+
+                                <lightning-formatted-number value={monthlyNetProfit} format-style="decimal">
+                                </lightning-formatted-number>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Annual_Net_Profit__c">
+                            <template if:true={readonly}>
+                                <lightning-output-field field-name="Annual_Net_Profit__c">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Annually </label>&nbsp;
+                                <lightning-formatted-number value={annualNetProfit} format-style="decimal">
+                                </lightning-formatted-number>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+
+
+                </lightning-layout>
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <c-bank-statement-upload-financials loan-app-id={loanId} parent-name='financial'
+                            showonly-itr=true applicant-id={applicantId} document-type='Bank ITR Statement'
+                            read-attribute={disableUpload} heading-value="Upload Bank Statement"
+                            applicant-record-id={applicantId}
+                            onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-accordion-section>
+
+            <!-- <lightning-layout multiple-rows class="slds-p-bottom_small">
+                        <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                          
+                            <template if:false={readonly}>
+                                <lightning-icon icon-name="action:approval" size="x-small" alternative-text="Save"
+                                    type="submit" class="slds-m-left_small"></lightning-icon>
+                            </template>
+                        </div>
+                    </lightning-layout>-->
+            <lightning-layout multiple-rows class="slds-p-bottom_small">
+                <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                    <template if:false={isR2}>
+                        <lightning-button label="Back" key={instance.Id} size="x-small" alternative-text="Cancel"
+                            class="buttonClass disabled-submit-button slds-m-left_x-small" onclick={redirectHome}>
+                        </lightning-button>
+                    </template>
+
+                    <template lwc:if={readonly}>
+                        <lightning-button label="Edit" key={instance.Id} data-id={instance.Id}
+                            data-record-name={instance.Id} alternative-text={instance.Id} title={instance.Id}
+                            class="buttonClass disabled-submit-button slds-m-left_x-small" onclick={handleRowAction}>
+                        </lightning-button>
+                         <!-- Added in R2-->
+                         <template if:true={isDelete}>
+                            <lightning-button label="Delete" title="Delete" key={instance.Id} data-id={instance.Id} data-record-name={instance.Id}
+                                alternative-text={instance.Id} onclick={handleDeleteRow}
+                                class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                        </template>
+                        <!--End-->
+
+                    </template>
+
+                    <template lwc:else>
+                        <lightning-button label="Submit" type="submit"
+                            class="buttonClass disabled-submit-button slds-m-left_x-small"></lightning-button>
+                        <lightning-button label="Cancel" key={instance.Id} size="x-small" alternative-text="Cancel"
+                            class="buttonClass disabled-submit-button slds-m-left_x-small"
+                            onclick={handleEditCancel}></lightning-button>
+                    </template>
+
+
+                </div>
+            </lightning-layout>
+
+        </lightning-record-edit-form>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

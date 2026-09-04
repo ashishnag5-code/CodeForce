@@ -1,0 +1,510 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-10-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+    <!-- <div class="slds-form-element" onmouseleave={handleToggleResult} data-source="lookupContainer"> -->
+    <div class="slds-form-element" onmouseleave={handleToggleResult} data-source="lookupContainer">
+        <div class="slds-combobox_container slds-has-selection">
+            <template if:false={hideInputLabel}>
+                <template if:true={isRequired}>
+                    <label class="slds-form-element__label" for="combobox-id-1">
+                            <abbr class="slds-required" title="required">* </abbr>
+                        {label}</label>
+                </template>
+                <template if:false={isRequired}>
+                    <label class="slds-form-element__label" for="combobox-id-1">{label}</label>
+                </template>
+            </template>
+            <div class="lookupInputContainer slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                    <div class="searchBoxWrapper slds-show">
+                        <!--Lookup Input Field-->
+                        <lightning-input type="search" data-source="searchInputField" onclick={handleToggleResult}
+                            onchange={handleKeyChangeValue} is-loading={isSearchLoading} value={searchKey}
+                            variant="label-hidden" placeholder={placeholder} disabled={isDisabled}></lightning-input>
+                    </div>
+                    <!--Lookup Selected record pill container start-->
+                    <div class="pillDiv slds-hide">
+                        
+                        <template if:true={isPurchaseCityLookup}>    
+                            <input type="text" dataset-name="Purchase_City__c" id="combobox-id-1" title={selectedRecord.Purchase_City__c}
+                                   value={selectedRecord.Purchase_City__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />                                                                                                        
+                        </template>   
+                        <template if:true={isSourcingNameLookup}>                         
+                            <input type="text" dataset-name="Source_Name__c" id="combobox-id-8" title={selectedRecord.Name}
+                                   value={selectedRecord.Name}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />                                                                                                        
+                        </template>                     
+                        <template if:true={isCompanyLookup}>
+                            <input type="text" id="combobox-id-3" title={selectedRecord.Company_Name__c}
+                                value={selectedRecord.Company_Name__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:true={isBankMasterLookup}>
+                            <input type="text" id="combobox-id-4" title={selectedRecord.Bank_Name__c}
+                                value={selectedRecord.Bank_Name__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:true={isDealerStateLookup}>
+                            <input type="text" dataset-name="Purchase_State__c" id="combobox-id-5" title={selectedRecord.Purchase_State__c}
+                                value={selectedRecord.Purchase_State__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:true={isDealerNameLookup}>
+                            <input type="text" dataset-name="Account_Name__c" id="combobox-id-6" title={selectedRecord.Name}
+                                value={selectedRecord.Name}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:true={isOutletNameLookup}>
+                            <input type="text" dataset-name="Outlet_Name__c" id="combobox-id-7" title={selectedRecord.Outlet_Name__c}
+                                value={selectedRecord.Outlet_Name__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:true={isFinancialInstituteLookup}>
+                            <input type="text" id="combobox-id-13" title={selectedRecord.Bank_Name__c}
+                                value={selectedRecord.Bank_Name__c}
+                                class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                        </template>
+                        <template if:false={isPurchaseCityLookup}>
+                            <template if:false={isSourcingNameLookup}>  
+                            <template if:false={isCompanyLookup}>
+                                <template if:false={isBankMasterLookup}>
+                                    <template if:false={isDealerStateLookup}>
+                                        <template if:false={isDealerNameLookup}>
+                                            <template if:false={isOutletNameLookup}>
+                                                <template if:false={isFinancialInstituteLookup}>
+                                                <span class="slds-icon_container slds-combobox__input-entity-icon">
+                                                    <lightning-icon icon-name={iconName} size="x-small" alternative-text="icon">
+                                                    </lightning-icon>
+                                                </span>
+                                                <input type="text" id="combobox-id-2" title={selectedRecord.Name}
+                                                    value={selectedRecord.Name} dataset-name={recordTypeName}
+                                                    class="slds-input slds-combobox__input slds-combobox__input-value" readonly />
+                                                </template>    
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                            </template>
+                            </template>
+                        </template>
+                        <button if:false={isDealerDetail} class="slds-button slds-button_icon slds-input__icon slds-input__icon_right slds-button slds-button_icon"
+                        title="Remove selected option" disabled={isDisabled}>
+                        <lightning-icon icon-name="utility:close" size="x-small" alternative-text="close icon"
+                            onclick={handleRemove}></lightning-icon>
+                    </button>
+                    <button if:true={isDealerDetail} class="slds-button slds-button_icon slds-input__icon slds-input__icon_right slds-button slds-button_icon"
+                        title="Remove selected option">
+                        <lightning-icon icon-name="utility:close" size="x-small" alternative-text="close icon"
+                            onclick={handleRemove}></lightning-icon>
+                    </button>
+                    </div>                  
+                </div>
+                <!-- lookup search result part start-->
+                <div style="margin-top:0px" id="listbox-id-5"
+                    class="slds-dropdown slds-dropdown_length-with-icon-5 slds-dropdown_fluid" role="listbox">
+                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                        <template for:each={lstResult} for:item="obj">
+                            <li key={obj.Id} role="presentation" class="slds-listbox__item">
+                                <div data-recid={obj.Id} onclick={handelSelectedRecord}
+                                    class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                    role="option">
+
+                                    <template if:true={isPurchaseCityLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                        <span
+                                            class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Purchase_City__c}</span>
+                                        </span>
+                                    </template>
+
+                                    
+                                    <template if:true={isCompanyLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Company_Name__c}</span>
+                                            </span>
+                                     </template>
+                                     <template if:true={isBankMasterLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Bank_Name__c}</span>
+                                            </span>
+                                     </template>
+                                     <template if:true={isFinancialInstituteLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Bank_Name__c}</span>
+                                            </span>
+                                     </template>
+                                     <template if:true={isDealerStateLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Purchase_State__c}</span>
+                                            </span>
+                                     </template>
+                                     <template if:true={isDealerNameLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Name}</span>
+                                            </span>
+                                     </template>
+                                     <template if:true={isOutletNameLookup}>
+                                        <span style="pointer-events: none;" class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Name}</span>
+                                            </span>
+                                     </template>
+                                    <template if:false={isPurchaseCityLookup}>
+                                        <template if:false={isCompanyLookup}>
+                                            <template if:false={isBankMasterLookup}>
+                                                <template if:false={isDealerStateLookup}>
+                                                    <template if:false={isDealerNameLookup}>
+                                                        <template if:false={isOutletNameLookup}>
+                                                            <template if:false={isFinancialInstituteLookup}>
+                                                                <span style="pointer-events: none;"
+                                                                    class="slds-media__figure slds-listbox__option-icon">
+                                                                    <span class="slds-icon_container">
+                                                                        <lightning-icon icon-name={iconName} size="small"
+                                                                            alternative-text="icon"></lightning-icon>
+                                                                    </span>
+                                                                </span>
+                                                                <span style="pointer-events: none;" class="slds-media__body">
+                                                                    <span
+                                                                        class="slds-listbox__option-text slds-listbox__option-text_entity">{obj.Name}</span>
+                                                                </span>
+                                                            </template>
+                                                        </template>
+                                                    </template>
+                                               </template>
+                                            </template>
+                                        </template>
+                                    </template>
+
+                                </div>
+                            </li>
+                        </template>
+                        <!--ERROR msg, if there is no records..-->
+                        <template if:false={hasRecords}>
+                            <li class="slds-listbox__item" style="text-align: center; font-weight: bold;">No Records
+                                Found....</li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+            <template if:true={customErrorMessage}>
+                <div class="slds-form-element__help validateErrorColor" id="form-error-01">{customErrorMessage}</div>
+            </template>           
+        </div>
+    </div>
+    <!-- 
+    Code by CafeForce 
+    Website: http://www.cafeforce.com 
+    DO NOT REMOVE THIS HEADER/FOOTER FOR FREE CODE USAGE 
+-->
+
+    <!--No working version start -->
+    <!--<template if:true={required}><span class="slds-required">*</span></template><label class="slds-form-element__label" for="combobox-id-22" id="combobox-label-id-131">{fieldLabel}</label>
+        <template if:true={isValueSelected}>
+            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                <span class="slds-icon_container slds-combobox__input-entity-icon">
+                    <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="xx-small"></lightning-icon>
+                </span>
+                <button type="button" class="slds-input_faux slds-combobox__input slds-combobox__input-value" aria-labelledby="combobox-label-id-135" aria-controls="listbox-unique-id-03" aria-expanded="false" aria-haspopup="listbox">
+                    <span class="slds-truncate">
+                        <template if:true={required}><span class="slds-required">* </span></template>{selectedName}
+                    </span>
+                </button>
+                <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove Selection">
+                    <lightning-icon icon-name="utility:close" size="x-small" onclick={handleRemovePill}></lightning-icon>
+                </button>
+            </div>
+        </template>
+        <template if:false={isValueSelected}>
+            <div aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                <div class="slds-form-element__control ">
+                    <div class="slds-form-element_control">
+                        <div id="listbox-id-11" class="slds-dropdown slds-dropdown_fluid" role="listbox">
+                            <ul >
+                                <li>
+                                    
+                                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                                        <input type="text" 
+                                            value={searchTerm} 
+                                            class="slds-input search-input-class"
+                                            onblur={handleBlur} 
+                                            onkeyup={handleChange}
+                                            onchange={handleChange}
+                                            onclick={handleFocus}
+                                            role="textbox"
+                                            placeholder={searchPlaceholder}/>
+                                            <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                                <lightning-icon icon-name="utility:search" size="x-small" onclick={handleRemovePill}></lightning-icon>
+                                            </span>
+                                        </div>
+                                </li>
+                            </ul>
+                            <template if:true={showResult}>
+                                <ul class="slds-listbox slds-listbox_vertical slds-dropdown_length-5 customClass" tabindex="0"
+                                role="presentation">
+                                    <template for:each={records} for:item="record">
+                                        <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation" data-name={record.Name} class="slds-listbox__item">
+                                            <div id={record.Id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                <span class="slds-media__figure slds-listbox__option-icon">
+                                                    <span class="slds-icon_container">
+                                                        <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="small"></lightning-icon>
+                                                    </span>
+                                                </span>
+                                                <span class="slds-media__body">
+                                                    <span class="slds-listbox__option-text slds-listbox__option-text_entity" title={record.Name}>{record.Name}</span>
+                                                </span>
+                                            </div>
+                                        </li>
+                                    </template>
+                                </ul>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>-->
+
+    <!-- no workin version end-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                    <template if:true={isValueSelected}>
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                            <span class="slds-icon_container slds-combobox__input-entity-icon">
+                                <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="xx-small"></lightning-icon>
+                            </span>
+                            <button type="button" class="slds-input_faux slds-combobox__input slds-combobox__input-value" aria-labelledby="combobox-label-id-135" aria-controls="listbox-unique-id-03" aria-expanded="false" aria-haspopup="listbox">
+                                <span class="slds-truncate">
+                                    <template if:true={required}><span class="slds-required">* </span></template>{selectedName}
+                                </span>
+                            </button>
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove Selection">
+                                <lightning-icon icon-name="utility:close" size="x-small" onclick={handleRemovePill}></lightning-icon>
+                            </button>
+                        </div>
+                    </template>
+                    <template if:false={isValueSelected}>
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                            <lightning-input    type="text" 
+                                                id="input1" 
+                                                value={searchTerm} 
+                                                label={fieldLabel}
+                                                class={inputClass}  
+                                                onfocus={handleFocus} 
+                                                onblur={handleBlur} 
+                                                onchange={onChange}
+                                                variant="label-hidden" 
+                                                autocomplete="off" 
+                                                is-loading={isSearchLoading}
+                                                role="combobox"
+                                                placeholder={searchPlaceholder}>
+                            </lightning-input>
+                            <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+                                <lightning-icon icon-name="utility:search" size="x-small" onclick={handleRemovePill}></lightning-icon>
+                            </span>
+                        </div>
+                        <div class="slds-form-element__help"><span class="slds-required">Complete this field.</span></div>
+                    </template>
+                </div>
+            </div>
+            <template if:false={isValueSelected}>
+                <template if:true={showResult}>
+                    <div id="listbox-id-14" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <template for:each={records} for:item="record">
+                                <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation" data-name={record.Name} class="slds-listbox__item">
+                                    <div id={record.Id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                            <span class="slds-icon_container">
+                                                <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="small"></lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity" title={record.Name}>{record.Name}</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </template>
+        </div>-->
+    <!--</div>-->
+
+
+
+    <!--<div class="slds-form-element">
+        <template if:false={hideFieldLabel}>
+            <label class="slds-form-element__label" for="combobox-id-16" id="combobox-label-id-137">{fieldLabel}</label>
+        </template>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                    <template if:true={isValueSelected}>
+                        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                            
+                            <button type="button" class="slds-input_faux slds-combobox__input slds-combobox__input-value" aria-labelledby="combobox-label-id-135 combobox-id-18-selected-value" id="combobox-id-18-selected-value" aria-controls="listbox-unique-id-03" aria-expanded="false"
+                            aria-haspopup="listbox">
+                                <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="xx-small"></lightning-icon>
+                                <span class="slds-truncate slds-p-left-small" id="combobox-value-id-94">{selectedName}</span>
+                            </button>
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove Selection">
+                                <lightning-icon icon-name="utility:close" size="x-small" onclick={handleRemovePill}></lightning-icon>
+                            </button>
+                        </div>
+                    </template>
+                    <template if:false={isValueSelected}>
+                        <lightning-input    type="search" 
+                                            id="input" 
+                                            value={searchTerm} 
+                                            label={fieldLabel}
+                                            class={inputClass}  
+                                            onclick={handleClick} 
+                                            onblur={onBlur} 
+                                            onchange={onChange}
+                                            variant="label-hidden" 
+                                            autocomplete="off" 
+                                            is-loading={isSearchLoading}
+                                            role="combobox"
+                                            placeholder={searchPlaceholder}>
+                        </lightning-input>-->
+    <!--<lightning-input type="text" 
+                                        id="combobox-id-16" 
+                                        value={searchTerm} 
+                                        label={fieldLabel} 
+                                        onclick={handleClick} 
+                                        onblur={onBlur} 
+                                        onchange={onChange}
+                                        variant="label-hidden" 
+                                        autocomplete="off" 
+                                        role="combobox"
+                                        class="slds-input slds-combobox__input slds-has-focus"
+                                        aria-autocomplete="list"
+                                        aria-haspopup="listbox"
+                                        placeholder={searchPlaceholder}>
+                        </lightning-input>-->
+    <!--<div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template for:each={records} for:item="record">
+                                    <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation" data-name={record.Name}>
+                                        <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                                            <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="small"></lightning-icon>
+                                            <span class="slds-truncate">{record.Name}</span>
+                                        </span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </template>-->
+
+
+
+
+
+
+    <!--<div id="listbox-id-12" class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid" role="listbox">
+                        <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                            <template for:each={records} for:item="record">
+                                <li key={record.Id} onclick={onSelect} data-id={record.Id} data-name={record.Name} role="presentation" class="slds-listbox__item">
+                                    <div aria-selected="false" id={record.Id} class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-has-focus" role="option">
+                                        <span class="slds-media__figure slds-listbox__option-icon">
+                                            <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="small"></lightning-icon>
+                                        </span>
+                                        <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                                            <span class="slds-truncate">{record.Name}</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>-->
+    <!--</div>
+            </div>
+        </div>
+    </div>-->
+
+
+
+
+    <!--<div>
+        <div class="slds-form-element">
+            <div class="slds-form-element__control">
+                <div class="slds-combobox_container">
+                    <div id="box" class={boxClass} aria-expanded="true" aria-haspopup="listbox" role="combobox">
+                        <template if:false={hideFieldLabel}>
+                            <span class="slds-form-element__label slds-no-flex">{fieldLabel}</span>
+                        </template>
+                        <div class="slds-input-has-icon slds-input-has-icon_right" role="none">
+                            <template if:true={isValueSelected}>
+                                <div >
+                                    <lightning-pill class="slds-input" label={selectedName} name={selectedName} onremove={handleRemovePill} href={href}>
+                                        <lightning-icon icon-name={iconName} alternative-text="acc" ></lightning-icon>
+                                    </lightning-pill>
+                                </div>
+                            </template>
+                            <template if:false={isValueSelected}>
+                                <div class="slds-p-top_none">
+                                    <template if:true={showIcon}>
+                                        <span class="slds-icon_container slds-combobox__input-entity-icon">
+                                            <lightning-icon icon-name={iconName} alternative-text="acc" size="x-small" ></lightning-icon>
+                                        </span>
+                                    </template>
+                                    <lightning-input    type="search" 
+                                                        id="input" 
+                                                        value={searchTerm} 
+                                                        label={fieldLabel}
+                                                        class={inputClass}  
+                                                        onclick={handleClick} 
+                                                        onblur={onBlur} 
+                                                        onchange={onChange}
+                                                        variant="label-hidden" 
+                                                        autocomplete="off" 
+                                                        placeholder={searchPlaceholder}>
+                                    </lightning-input>
+                                </div>
+                            </template>
+                        </div>
+                        <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template for:each={records} for:item="record">
+                                    <li key={record.Id} onclick={onSelect} data-id={record.Id} role="presentation" data-name={record.Name}>
+                                        <span class="slds-lookup__item-action slds-lookup__item-action--label" role="option">
+                                            <lightning-icon class="slds-icon slds-icon--small slds-icon-text-default" icon-name={iconName} alternative-text={objName} size="small"></lightning-icon>
+                                            <span class="slds-truncate">{record.Name}</span>
+                                        </span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+</template>

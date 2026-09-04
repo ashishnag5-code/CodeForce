@@ -1,0 +1,7 @@
+<aura:component implements="force:appHostable" access="global">
+    
+    <c:leadAssignmentComponent renderAssignMeButton="true">
+        
+    </c:leadAssignmentComponent>
+	
+</aura:component>

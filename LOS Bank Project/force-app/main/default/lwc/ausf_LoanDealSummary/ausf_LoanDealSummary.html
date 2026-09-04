@@ -1,0 +1,124 @@
+<template>
+    <article class="slds-card slds-card_boundary">
+        <div class="slds-card__header slds-grid ">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name=standard:user size="medium"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Deal Summary</span>
+                        <!--<a href="#" class="slds-card__header-link slds-truncate" title="Address">
+                                    <span>Addresses ({recordCount})</span>
+                                </a>-->
+                    </h2>
+                </div>
+                <div class="slds-no-flex">
+                </div>
+            </header>
+        </div>
+
+
+        
+        <div class="slds-card__body slds-card__body_inner">
+            <ul class="slds-grid slds-wrap slds-grid_pull-padded">
+                <li class="slds-size_1-of-1 slds-medium-size_3-of-3 slds-p-horizontal_small slds-p-bottom_small"
+                     onclick={viewMoreHandler}
+                     data-record-name="ViewMoreInformation">
+                     <article class="slds-box">
+                        <div class="slds-card__body slds-card__body_inner">
+                            <!--c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner-->
+
+                            <div class="slds-grid slds-gutters slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="slds-form-element slds-hide" data-id="Loan_Type">
+                                        <label class="slds-form-element__label"><strong>Loan Type</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.loanType}
+                                        </div> 
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Sourcing_Channel">
+                                        <label class="slds-form-element__label"><strong>Sourcing Channel</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.sourcingChannel}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Loan_Amount">
+                                        <label class="slds-form-element__label"><strong>Loan Amount/ LTV/ Tenure/ IRR</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.loanAmount}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Model">
+                                        <label class="slds-form-element__label"><strong>Make/ Model/ Variant</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.model}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Scheme">
+                                        <label class="slds-form-element__label"><strong>Scheme</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.scheme}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Preapproved">
+                                        <label class="slds-form-element__label"><strong>Preapproved</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            <lightning-input type="checkbox" checked={applicationDealSummaryWrapper.preapproved} disabled="true"></lightning-input>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <span class="slds-form-element slds-hide" data-id="Vehicle_Usage">
+                                        <label class="slds-form-element__label"><strong>Vehicle Usage</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.vehicleType}
+                                        </div> 
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Customer_Type">
+                                        <label class="slds-form-element__label"><strong>Customer Type</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.customerType}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Dealer_Name">
+                                        <label class="slds-form-element__label"><strong>Dealer Name and TA/ NTA</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.dealerName}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Method_Of_Assessment">
+                                        <label class="slds-form-element__label"><strong>Method of Assessment</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.methodOfAssessment}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Campaign">
+                                        <label class="slds-form-element__label"><strong>Campaign</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.campaign}
+                                        </div>
+                                    </span>
+                                    <span class="slds-form-element slds-hide" data-id="Manufacturing_Year">
+                                        <label class="slds-form-element__label"><strong>Manufacturing Year</strong></label>
+                                        <div class="slds-form-element__control" style="margin-top:0.6%;">
+                                            {applicationDealSummaryWrapper.manufacturingYear}
+                                        </div>
+                                    </span>
+                                    
+                                </div>
+        
+                            </div>
+                        </div>
+                    </article>
+                </li>
+
+                    
+                
+                    
+            </ul>
+            <!--End -->
+        </div>
+    </article>
+    
+</template>

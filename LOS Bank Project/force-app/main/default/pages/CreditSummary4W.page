@@ -1,0 +1,86 @@
+<apex:page controller="CAMReportVFPageController" readOnly="true" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false">
+    <!-- Begin Default Content REMOVE THIS -->
+    
+    <html>
+        <head>
+            
+            <style>
+                body{
+                border:1px;
+                border-block-start: 2px;
+                border-block-start-color: rgb(222, 222, 222);
+                border-block-end-style: solid; 
+                }
+                .pbSubheader{
+                background-color: rgb(109,48,120);
+                font-size: medium;
+                
+                }
+                .pbSubheader h3{
+                padding-top: 10px;
+                padding-bottom: 10px;
+                font-size: 14px;
+                }
+                
+            </style>
+        </head>
+        <body>
+            <input type="hidden" name="currentvfpage" value="{!$CurrentPage.Name}"/>
+            <apex:pageBlock title="">
+                <div style="display: {!IF(productDetails=='Four Wheeler', 'inline', 'none')};">
+                   
+                    <c:CaseSummary loanApp="{!loan}" applicantDetails="{!applicant}"
+                                   productDetailsValue="{!productDetails}" subPageValue="{!subPage}" RODetails="{!RO}" subProductValue="{!subProduct}" vahaanValue="{!vahaanPdf}" valuationDetails="{!valuation}" ltvValue="{!caseDealSummaryLTV}"></c:CaseSummary>
+                </div>
+
+                <div style="display: {!IF(productDetails=='Two Wheeler', 'inline', 'none')};">
+                    <!--<c:ApplicantProfile applicantList="{!applicants}" addressRecords="{!addressList}"
+productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" financialRecord="{!financial}"></c:ApplicantProfile>
+<c:OtherParameter RODetails="{!RO}" productRTMapping="{!productRT}" productDetailsValue="{!productDetails}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}"></c:OtherParameter>-->
+                    <!-- SFAU-5000 - AQB value to be populated -->
+                    <c:ApplicantDetails2W cartRecs="{!cartRecords}" applicantList="{!applicants}" loanApp="{!loan}" applicantDetails="{!applicant}" applicantIdList="{!applicantIds}" addressRecords="{!addressList}" RODetails="{!RO}" financialRecord="{!financial}" collateralDetails="{!collateral}"></c:ApplicantDetails2W>
+                    
+                </div>
+                <div style="display: {!IF(productDetails=='Four Wheeler' && subPage=='Credit', 'none', 'inline')};">
+                    <c:VerificationDetails productRTMapping="{!productRT}" addressRecords="{!addressList}" cpvDetailsForApp="{!cpvDetails}" loanApp="{!loan}" applicantList="{!applicants}" factorDetails="{!factor}"  productDetailsValue="{!productDetails}" applicantIdList="{!applicantIds}" subPageValue="{!subPage}" ></c:VerificationDetails>
+                </div>
+                <div style="display: {!IF(productDetails=='Four Wheeler', 'inline', 'none')};">
+                    <c:CustomerDetails addressRecords="{!addressList}" productDetailsValue="{!productDetails}" subProductValue="{!subProduct}" collateralDetails="{!collateral}" fieldInvestigationRecordDetails="{!fiStatusRecords}" applicantList="{!applicants}" applicantIdList="{!applicantIds}" loanApp="{!loan}" subPageValue="{!subPage}" bureauScore="{!bureauScore}"></c:CustomerDetails>
+                </div>
+                <div style="display: {!IF(productDetails=='Four Wheeler' && subPage=='Credit', 'none', 'inline')};">
+                    <c:FIStatus applicantList="{!applicants}" fieldInvestigationRecordDetails="{!fiStatusRecords}" loanApp="{!loan}" factorDetails="{!factor}"></c:FIStatus>
+                </div>
+                
+                <div style="display: {!IF(productDetails=='Four Wheeler' && subPage!='Credit', 'inline', 'none')};">
+                    
+                    <c:VehicleDetails productDetailsValue="{!productDetails}" productRTMapping="{!productRT}" vahaanValue="{!vahaanPdf}" applicantDetails="{!applicant}" collateralDetails="{!collateral}" loanApp="{!loan}" subPageValue="{!subPage}"></c:VehicleDetails>
+                    <c:IncomeProfile loanApp="{!loan}" applicantList="{!applicants}" financialRecord="{!financial}"></c:IncomeProfile>
+                </div>
+                <c:Deviations deviationRecordDetails="{!deviationRecords}"></c:Deviations>
+                <div style="display: {!IF(productDetails=='Four Wheeler' && subPage=='Credit', 'none', 'inline')};">
+                    <c:TeleVerificationRemarks tvrRecordDetails="{!tvrRecords}"></c:TeleVerificationRemarks>
+                </div>
+                <c:SanctionCondition sanctionConditionRecords="{!sanctionConditions}" productDetailsValue="{!productDetails}" subPageValue="{!subPage}" subProductValue="{!subProduct}"></c:SanctionCondition>
+                <c:ApprovalFlow loanApp="{!loan}" collateralDetails="{!collateral}" loanAppApproverRecordDetails="{!loanAppApprovalRecords}" productDetailsValue="{!productDetails}"></c:ApprovalFlow>
+                
+                <!--c:SummaryRemarks loanApp="{!loan}"></c:SummaryRemarks-->
+                <!--<c:AccountsFD cbsRecordsDetailsFD="{!cbsRecordsFD}"></c:AccountsFD>
+<c:BankingDetails cartRecordsDetails="{!cartRecords}" sentFromDetail="{!sentFromVF}"></c:BankingDetails>
+<c:FleetDetails fleetRecordsList="{!fleetRecords}"></c:FleetDetails>
+<c:ExposureDetails loanApp="{!loan}" exposureCBSAccountRecords="{!cbsRecords}"></c:ExposureDetails>
+<c:ExposureDetailsForApplicant applicantDetail="{!applicant}" loanApp="{!loan}" exposureDetailsForAppBankRecords="{!applicantExposure}"></c:ExposureDetailsForApplicant>
+<c:CibilSummary cibilRecordsDetails="{!cibilRecords}"></c:CibilSummary>
+<c:Query ></c:Query>
+-->
+                <div style="display: {!IF(productDetails=='Four Wheeler' && subPage=='Credit', 'inline', 'none')};">
+                    <c:QuerySummary queryRecords="{!queries}"></c:QuerySummary>
+                </div>
+            </apex:pageBlock>  
+        </body>
+    </html>
+    
+    
+    
+    
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

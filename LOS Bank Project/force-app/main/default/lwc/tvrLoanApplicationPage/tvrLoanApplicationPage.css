@@ -1,0 +1,9 @@
+lightning-button.button {
+	--sds-c-button-brand-color-background: #F37435;
+    --slds-c-button-brand-color-border:#F37435;
+   /* --sds-c-button-text-color: #f4f7f9;*/
+}
+.header {
+    background:  #6D3078;
+   padding:0.5rem;
+}

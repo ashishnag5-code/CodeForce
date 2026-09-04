@@ -1,0 +1,16 @@
+<template>
+    <lightning-accordion active-section-name="A">
+        <lightning-accordion-section name="A" label={sectionTitle}>
+            <template for:each={collateralList} for:item="col">
+                <div class="slds-grid slds-wrap slds-var-p-around_xx-small" key={col.label}>
+                    <div class="slds-size_1-of-2">
+                        <b><label class="slds-form-element__label">{col.label}</label></b>
+                    </div>
+                    <div class="slds-size_1-of-2">
+                        {col.value}
+                    </div>
+                </div>
+            </template>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

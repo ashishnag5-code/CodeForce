@@ -1,0 +1,105 @@
+<apex:page renderAs="pdf" controller="CustomerRequestLetterDeferralController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    <html>
+        <head>
+            <style type="text/CSS">
+
+                body { font-family: 'Quicksand', sans-serif !important; font-size : 13px !important; sans-serif; color :333;}
+                .sub-class{
+                    text-align: justify;
+                }
+                .main-content{
+                //text-align: justify;
+                }
+                .latter-heading h3{
+                	text-align: center;
+                	border: 1px solid gray;
+                	padding: 10px;
+                }
+            </style>
+        </head>
+        <div style="margin-bottom : 12%">
+            <img src="{!URLFOR($Resource.AUBankLogoSanction)}" height="100" width="150" align = "left"/>
+            <!--apex:image url="{!URLFOR($Resource.AUBankLogoSanction)}" style="margin-left : 17%; text-align:right;" height="100" width="150"></apex:image-->
+        </div>
+        <body class="slds-scope">
+            <div class="container">
+                
+                <div class="latter-heading">
+                    <br/>
+                    <h3>
+                        CONSENT LETTER TO DEBIT BANK ACCOUNT 
+                    </h3>
+                    <p>
+                        Date {!createdDate}
+                    </p>
+                    <p>To, </p> 
+                    <p>Branch Manager,</p>
+                    <p>AU Small Finance Bank Limited</p>
+                    <p> {!loan.Branch_Master__r.Account_Name__c} </p>
+                </div>
+                
+                <div class="sub-class">
+                    
+                    <p>Subject: To Deposit EMI &amp; Other Charges of Loan A/c No. {!loan.Application_Id__c} 
+                  By Repayment mode SI/ACH/Cheques/Cash.</p>
+                </div>
+                <div class="main-content">
+                    <p>Sir/Madam,</p>
+                    <p>I/We, {!loan.Repayment_By__c} am/are related to Mr./Ms. {!loan.Primary_Applicant__r.First_Name__c} {!loan.Primary_Applicant__r.Last_Name__c} (“Borrower”) as {!relationWithApplicant}.  
+                        (relation) who has/have availed Loan of Rs. {!loan.Total_Loan_Amount__c}. 
+                        from AU Small Finance Bank Limited in the form of {!productDetails.MasterLabel}, 
+                        and a linked Loan (if any){!loan.Application_Id__c} of Rs {!loan.Total_Loan_Amount__c}/-. 
+                    </p>
+                    <p>Due to some reasons, Borrower/s is/are facing issues to repay the Loan EMI through exiting Bank A/C. 
+                        Thus I/We hereby, request to you please accept standing instruction in my Bank A/c no. {!loan.Repayment_Account_Number__c}. 
+                        to debit monthly installments under the aforesaid Loan, as per the terms and conditions of the Loan Agreement executed for the Loan.
+                    </p>
+                    
+                    <p style="text-decoration:underline;">My Details are as below: 
+                    </p>
+                    <p>
+                        Name: {!loan.Primary_Applicant__r.First_Name__c} {!loan.Primary_Applicant__r.Last_Name__c} <br/>
+                        Address: {!currentAddress} <br/>
+                        Mobile No. {!loan.Primary_Applicant__r.Mobile_Number__c} <br/>
+                        Bank Name: {!loan.Repayment_Bank_Name__c}<br/> Branch: {!loan.Branch__c} <br/>
+                        Bank Account no. {!loan.Repayment_Account_Number__c} <br/> Code: {!loan.IFSC_Code__c }<br/>
+
+                    </p>
+                    <p>
+                        I/We hereby give my/our consent to AU Small Finance Bank Limited to accept the repayment in above Loan account from me/us by Standing Instruction. 
+                        Also request you to please adjust the amount received from my/our bank through standing instruction in my/our account in the above said loan account.
+                    </p>
+                    <p>
+                        I/We shall not claim any, no objection / no dues certificate, from AU Small Finance Bank Limited after the repayment of debt
+                    </p>
+                    
+                    <p>
+                       That the governing law, in case of any dispute in respect of the Loan Agreement, would be the laws of India and the place of jurisdiction will be Jaipur. 
+                        I/We confirm that the repayment of the Loan is being done by the Borrower through standing instructions in my/our bank account which is due on {!loan.Repayment_Start_Date__c}.
+                        
+                    </p>
+                    <p>
+                        All disputes arising between the AU Small Finance Bank Limited and me/us which cannot be mutually resolved, 
+                        shall settled as per the provisions of Arbitration and Conciliation Act, 1996 and shall be referred to the sole arbitrator to be appointed by the AU Small Finance Bank Limited. 
+                        The decision of such an arbitrator shall be binding on me/us. The seat of arbitration shall be in Jaipur and the cost of arbitration shall be borne by me/us. 
+
+                    </p>
+                    <p style="text-align: right;">
+                        Witness – AU Branch ABM/BM 
+                    </p>  
+                    <p>
+                        ABM/BM 
+                    </p>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width: 33%">(Signature of Third Party) </td>
+                            <td style="width: 33%;text-align: center;">(Signature of Borrower)</td>
+                            <td style="width: 34%;text-align: right;">(Signature of ABM or BM)</td>
+                        </tr>
+                    </table>  
+                </div>
+            </div>
+        </body>
+    </html>
+    
+</apex:page>

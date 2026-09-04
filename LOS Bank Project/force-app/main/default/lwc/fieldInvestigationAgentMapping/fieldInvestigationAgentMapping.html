@@ -1,0 +1,249 @@
+<template>
+    <c-common-toast></c-common-toast>
+    <!-- lightning button for open modal window -->
+    <template if:true={isRenderPermissionSetCOmplete}>
+        <template if:true={showReassign}>
+            <lightning-button variant="brand" label={getButtonLabel} onclick={openModal} class="slds-m-left_x-small buttonColor" disabled = {enableDisableActionButton}>
+            </lightning-button>
+        </template>`
+    </template>
+   
+    <!--Use template if:true to display/hide popup based on isModalOpen value-->
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container" style={containerStyle}>
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate header">{getHeaderLabel}
+                    </h2>
+                    <template if:true={isfirstPage}>
+                        <template if:true={isMobile}>
+                            <lightning-button label="Select All" onclick={handleSelectAll}
+                                class="slds-float_left slds-m-left_x-small"></lightning-button>
+                        </template>
+                    </template>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <template if:true={isfirstPage}>
+                        <template if:true={isMobile}>
+                            <template if:true={isReTrigger}>
+                                <template for:each={addressRecords} for:item="addressRec">
+                                    <lightning-layout key={addressRec.addressRecId} class="slds-p-bottom_xxx-small">
+                                        <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                                            <lightning-card icon-name="standard:today">
+                                                <h1 slot="title"><a>{addressRec.applicantName}</a></h1>
+                                                <div slot="actions">
+                                                    <a> <lightning-input type="checkbox-button" id={addressRec.addressRecId}
+                                                                         data-key={addressRec.addressRecId} data-id={addressRec.addressRecId} checked={addressRec.checked} 
+                                                                         name="input1"
+                                                                         onchange={handleMobileAddressSelect}></lightning-input>
+                                                    </a>
+                                                </div>
+                                                
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Applicant 
+                                                                Name</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {addressRec.applicantName}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Applicant
+                                                                Type</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {addressRec.applicantType}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Address
+                                                                Type</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {addressRec.addressType}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Address</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {addressRec.address}
+                                                    </div>
+                                                </div>
+                                                
+                                            </lightning-card>
+    
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                            </template>
+                            <template if:false={isReTrigger}>
+                                <template for:each={FIRecords} for:item="fiRecd">
+                                    <lightning-layout key={fiRecd.Id}>
+                                        <lightning-layout-item flexibility="auto" class="slds-card_boundary">
+                                            <lightning-card icon-name="standard:today">
+                                                <h1 slot="title"><a>{fiRecd.Name}</a></h1>
+                                                <div slot="actions">
+                                                    <a> <lightning-input type="checkbox-button" id={fiRecd.Id}
+                                                            data-key={fiRecd.Id} data-id="checked" name="input1"
+                                                            onchange={handleSelect}></lightning-input>
+                                                    </a>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Application
+                                                                Name</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Loan_Application__r.Name}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Applicant
+                                                                Type</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Applicant_Type__c}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Zip Code</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Pincode}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Owner Name</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Owner.Name}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Status</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Status__c}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">Type Of
+                                                                Address</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.Type_of_address__c}
+                                                    </div>
+                                                </div>
+                                                <div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+                                                    <div class="slds-size_1-of-2">
+                                                        <b><label class="slds-form-element__label">FI Agent</label></b>
+                                                    </div>
+                                                    <div class="slds-size_1-of-2">
+                                                        {fiRecd.FI_Agent__c}
+                                                    </div>
+                                                </div>
+                                            </lightning-card>
+    
+                                        </lightning-layout-item>
+                                    </lightning-layout>
+                                </template>
+
+                            </template>
+
+                        </template>
+                    </template>
+
+                    <article class="slds-card">
+                        <template if:false={isLoaded}>
+                            <lightning-spinner alternative-text="Loading..." variant="brand" size="small">
+                            </lightning-spinner>
+                        </template>
+
+                        <template if:true={isfirstPage}>
+                            <template if:false={isMobile}>
+                                <template if:true={isReTrigger}>
+                                    <lightning-datatable key-field="Id"
+                                                         onrowselection={handleTableRowSelection}
+                                                         columns={dataTableColumns}
+                                                         data={addressRecords}
+                                                         class="slds-cell-wrap slds-max-medium-table_stacked-horizontal slds-no-cell-focus">
+                                    </lightning-datatable>
+
+                                </template>
+                                <template if:false={isReTrigger}>
+                                    <lightning-datatable onrowselection={handleDataTable} oncellchange={handleDataTable}
+                                                         class="slds-cell-wrap slds-max-medium-table_stacked-horizontal slds-no-cell-focus"
+                                                         data={FIRecords} 
+                                                         columns={columns} 
+                                                         key-field="Id" draft-values={draftValues}>
+                                    </lightning-datatable>
+
+                                </template>
+
+                                
+                               
+
+                            </template>
+
+                        </template>
+                        <template if:false={isfirstPage}>
+
+                            <lightning-record-edit-form object-api-name="Field_Investigation__c"
+                                onsuccess={handleSuccess} record-id={fiRecordId} onload={handleOnLoad}>
+                                <div class="slds-grid">
+                                    <lightning-input-field field-name='FI_Agent__c'
+                                        onchange={handleUserId}></lightning-input-field>
+                                </div>
+                            </lightning-record-edit-form>
+                        </template>
+                    </article>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <template if:false={isfirstPage}>
+                        <template if:false={handleAssignButton}>
+                            <lightning-button disabled={handleAssignButton} label="Assign" onclick={assignFiAgent}
+                                class="slds-float_left slds-m-left_x-small"></lightning-button>
+                        </template>
+                        <template if:false={gethandleAssignToMeButton}>
+                            <lightning-button disabled={gethandleAssignToMeButton} label="Assign to Me"
+                                onclick={assignToCM} class="slds-m-left_x-small"></lightning-button>
+                        </template>
+                    </template>
+                    <template if:true={isfirstPage}>
+                        <template if:false={isReTrigger}>
+                            <lightning-button disabled={handleNextButton} variant="brand" data-id="next" label="Next"
+                                onclick={handleNextPrevious}></lightning-button>
+                        </template>
+                        <template if:true={isReTrigger}>
+                            <lightning-button disabled={handleNextButton} variant="brand" data-id="reTrigger"
+                                label="Re-Trigger" onclick={handleReTrigger}></lightning-button>
+                        </template>
+                    </template>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+</template>

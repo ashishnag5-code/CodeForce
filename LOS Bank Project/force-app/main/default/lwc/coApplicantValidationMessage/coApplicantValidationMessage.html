@@ -1,0 +1,10 @@
+<template>
+    <template if:true={validationMessage}>
+        <div class="slds-p-bottom_small">
+            <div class="slds-p-around_small slds-box">
+                <lightning-icon icon-name={iconName} size="small" variant={iconVariant}></lightning-icon>
+                <lightning-formatted-text value={validationMessage} class={classAttributes}></lightning-formatted-text>
+            </div>
+        </div>
+    </template>
+</template>

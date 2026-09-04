@@ -1,0 +1,49 @@
+<template>
+    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+    <template if:true={isOptionElectricityBill}>
+        <lightning-accordion-section name="Electricity bill" label="Electricity Bill Details">
+            <c-electricity-bill-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Electricity Bill' applicant={applicant} is-edit-restricted={isEditRestricted}></c-electricity-bill-verification>    
+        </lightning-accordion-section>            
+    </template>
+    <template if:true={isOptionWaterBill}>
+        <lightning-accordion-section name="Water Bill" label="Water Bill Details">
+            <c-water-bill-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Water Bill' applicant={applicant} is-edit-restricted={isEditRestricted}></c-water-bill-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionInsurancePremiumReceipt}>
+        <lightning-accordion-section name="Insurance Premuim Receipt" label="Insurance Premium Receipt Details">
+            <c-insurance-premium-receipt-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Insurance Premium Receipt' applicant={applicant} is-edit-restricted={isEditRestricted}></c-insurance-premium-receipt-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionBankStatement}>
+        <lightning-accordion-section name="Bank Statement" label="Bank Statement Details">
+            <c-bank-statement-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Bank Statement' applicant={applicant} is-edit-restricted={isEditRestricted}></c-bank-statement-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionHousetaxReceipt}>
+        <lightning-accordion-section name="House Tax Receipt" label="House Tax Receipt Details">
+            <c-house-tax-receipt-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload House Tax Receipt' applicant={applicant} is-edit-restricted={isEditRestricted}></c-house-tax-receipt-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionMobileBill}>
+        <lightning-accordion-section name="Mobile Bill" label="Mobile Bill Details">
+            <c-mobile-bill-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Mobile Bill' applicant={applicant} is-edit-restricted={isEditRestricted}></c-mobile-bill-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionGasBill}>
+        <lightning-accordion-section name="Gas bill" label="Gas Bill Details">
+            <c-gas-bill-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Gas Bill' applicant={applicant} is-edit-restricted={isEditRestricted}></c-gas-bill-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionPNGBill}>
+        <lightning-accordion-section name="PNG bill" label="PNG Bill Details">
+            <c-png-bill-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload PNG Bill' applicant={applicant} is-edit-restricted={isEditRestricted}></c-png-bill-verification>
+        </lightning-accordion-section>
+    </template>
+    <template if:true={isOptionPassbook}>
+        <lightning-accordion-section name="Passbook" label="Passbook Details">
+            <c-passbook-verification applicant-id={applicantId} loan-app-id={loanAppId} heading-value='Upload Passbook' applicant={applicant} is-edit-restricted={isEditRestricted}></c-passbook-verification>
+        </lightning-accordion-section>
+    </template>
+</lightning-accordion>
+</template>

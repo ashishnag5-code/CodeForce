@@ -1,0 +1,7 @@
+:host{
+    --slds-c-accordion-summary-color-background : #6D3078; 
+    --slds-c-accordion-heading-text-color : #FFF2F0;
+}
+.wrapped-content{
+    overflow-wrap: break-word;
+}

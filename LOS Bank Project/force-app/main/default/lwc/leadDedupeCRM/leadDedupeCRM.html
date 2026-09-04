@@ -1,0 +1,211 @@
+<template>
+	<!--<div class="slds-is-relative">-->
+	<!--<c-custom-spinner show-spinner={isLoading}></c-custom-spinner>-->
+	<c-common-toast></c-common-toast>
+	<c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+	<lightning-accordion allow-multiple-sections-open="true" active-section-name={activeSections}>
+		<lightning-accordion-section name="A" label="Full Match" if:true={isFullMatchApplicable}>
+
+			<template if:false={boolNorecordsFull}>
+				<div class="slds-text-heading_small slds-m-bottom_x-small"><b>Lead In Progress With Same KYC</b></div>
+			</template>
+			<template if:true={boolNorecordsFull}>
+				No results Found
+			</template>
+			<template if:false={viewMoreFull}>
+				<template if:true={applicantsFull}>
+					<template for:each={applicantsFull} for:item="objapplicant">
+						<lightning-layout key={objapplicant.applicant.Id}>
+							<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+								<lightning-card onclick={viewMoreHandler} data-id={objapplicant.applicant.Id}
+									data-card="full">
+									<div slot="actions">
+										<template if:true={objapplicant.boolIsSelected}>
+											<lightning-icon icon-name="action:approval" class="slds-float_right"
+												size="xx-small" alternative-text="Approved"
+												title="Approved"></lightning-icon>
+										</template>
+									</div>
+									<h1 slot="title">
+										<lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+										<a class="slds-var-p-left_x-small">{objapplicant.applicant.Loan__r.Name}</a>
+									</h1>
+
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Product</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Loan__r.Product__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Application Number</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Loan__r.Loan_Number__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Name</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Customer_Name__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Type</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Customer_Type__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Mobile
+													Number</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Mobile_Number__c}
+										</div>
+									</div>
+								</lightning-card>
+							</lightning-layout-item>
+						</lightning-layout>
+						<div class="slds-var-p-bottom_x-small" key={objapplicant.applicant.Id}></div>
+					</template>
+				</template>
+				<div class="slds-var-m-vertical_medium">
+					<c-lead-dedupe-pagination records={totalApplicantsFull} record-size="6" onpaginate={updateApplicantsHandler}></c-lead-dedupe-pagination>
+				</div>
+			</template>
+			<template if:true={viewMoreFull}>
+				<c-lead-Dedupe-C-R-M-_details onviewall={viewLessHandler} applicant-record={applicantRecord} 
+				applicant-input={applicantInput} bool-is-n-p-a={boolIsNPA} spinner-image={spinnerImage}></c-lead-Dedupe-C-R-M-_details>
+			</template>
+		</lightning-accordion-section>
+		<lightning-accordion-section name="B" label="Partial Match" if:true={isPartialMatchApplicable}>
+			<template if:false={boolNorecordsPartial}>
+				<div class="slds-m-around_small" if:true={showDedupeRemarksSection}>
+					<div class="slds-grid slds-gutters">
+						<div class="slds-col">
+							<lightning-textarea  disabled={isROLeadDisable} variant="label-stacked" label="RO Lead Dedupe Remarks"
+								value={ROLeadDedupeRemarks} onchange={handleChangeRoDedupeRemarks} class={hideROLead}> </lightning-textarea>
+						</div>
+						<div class="slds-col">
+							<lightning-textarea variant="label-stacked" label="Credit Lead Depude Remarks"
+							value={CreditLeadDedupeRemarks} onchange={handleChangeCreditDedupeRemarks} required={isRequiredCreditLead} class={hideCreditLead}> </lightning-textarea>
+						</div>
+					</div>
+					<div class="button-container-inner slds-align_absolute-center slds-m-top_small slds-m-left_xx-small">
+						<lightning-button variant="brand" label="Save" onclick={handleSave} class={hideRemarksSaveButton}></lightning-button>
+					</div>
+					<!-- <template if:true={isBaseCredit}>
+						<div class="slds-grid slds-gutters">
+							<div class="slds-col">
+								<lightning-textarea required variant="label-stacked" label="RO Remarks"
+								value={RORemarks} onchange={handleChangeRoRemarks}> </lightning-textarea>
+							</div>
+							<div class="slds-col">
+								<lightning-textarea  required variant="label-stacked" label="Credit Manager Remarks"
+								value={CreditManagerRemarks} onchange={handleChangeCreditManagerRemarks}> </lightning-textarea>
+							</div>
+						</div>
+					</template> -->					
+				</div>
+			</template>
+			<template if:false={boolNorecordsPartial}>
+				<div class="slds-text-heading_small slds-m-bottom_x-small"><b>Lead In Progress With Same Phone
+						number</b></div>
+			</template>
+			<template if:true={boolNorecordsPartial}>
+				No results are Found
+			</template>
+
+			<template if:false={viewMorePartial}>
+				<template if:true={applicantsPartial}>
+					<template for:each={applicantsPartial} for:item="objapplicant">
+						<lightning-layout key={objapplicant.applicant.Id}>
+							<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+								<lightning-card onclick={viewMoreHandler} data-id={objapplicant.applicant.Id}
+									data-card="partial">
+									<div slot="actions">
+										<template if:true={objapplicant.boolIsSelected}>
+											<lightning-icon icon-name="action:approval" class="slds-float_right"
+												size="xx-small" alternative-text="Approved"
+												title="Approved"></lightning-icon>
+										</template>
+									</div>
+									<h1 slot="title">
+										<lightning-icon icon-name="standard:account" size="small"></lightning-icon>
+										<a class="slds-var-p-left_x-small">{objapplicant.applicant.Loan__r.Name}</a>
+									</h1>
+
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Product</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Loan__r.Product__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Application Number</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Loan__r.Loan_Number__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Name</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Customer_Name__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Type</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Customer_Type__c}
+										</div>
+									</div>
+									<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+										<div class="slds-size_1-of-2">
+											<b><label class="slds-form-element__label">Customer Mobile
+													Number</label></b>
+										</div>
+										<div class="slds-size_1-of-2">
+											{objapplicant.applicant.Mobile_Number__c}
+										</div>
+									</div>
+								</lightning-card>
+							</lightning-layout-item>
+						</lightning-layout>
+						<div class="slds-var-p-bottom_x-small" key={objapplicant.applicant.Id}></div>
+					</template>
+				</template>
+				<div class="slds-var-m-vertical_medium">
+					<c-lead-dedupe-pagination records={totalApplicantsPartial} record-size="6"
+						onpaginate={updateApplicantsHandler}></c-lead-dedupe-pagination>
+				</div>
+			</template>
+
+			<template if:true={viewMorePartial}>
+				<c-lead-Dedupe-C-R-M-_details onviewall={viewLessHandler} applicant-record={applicantRecord} applicable-dedupe-actions={applicableDedupeActions}
+					applicant-input={applicantInput} bool-is-n-p-a={boolIsNPA}></c-lead-Dedupe-C-R-M-_details>
+			</template>
+		</lightning-accordion-section>
+		<lightning-accordion-section name="C" label="Existing Leads of Other Products" if:true={isExistingLeadsApplicable}>
+			<c-lead-Dedupe-C-R-M-Int applicant-input={applicantInput} bool-is-from-wizard={boolIsFromWizard}
+				spinner-image={spinnerImage}></c-lead-Dedupe-C-R-M-Int>
+		</lightning-accordion-section>
+	</lightning-accordion>
+	<!--</div>-->
+</template>

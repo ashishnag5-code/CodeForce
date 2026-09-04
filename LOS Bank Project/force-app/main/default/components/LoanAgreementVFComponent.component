@@ -1,0 +1,466 @@
+<apex:component controller="LoanAgreementDocumentController">
+
+<apex:attribute name="recordIdVal" description="This is the value for the component."
+    type="String" required="true" assignTo="{!recordId}"/>
+
+    {!recordId}
+    <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                AU SMALL FINANCE BANK LIMITED ("AUSFB") - Sanction Letter
+                
+            </div>
+            <br/>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Ref No	 : _______________
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Date	 : _______________
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Kind Attn: Mr. ___________
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Subject  : Sanction of _____________ loan from AU Small Finance Bank Limited for an amount of ₹ _________/- only.
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Dear Sir/Madam,
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                We thank you for choosing AU SMALL FINANCE BANK LIMITED ("<b>AUSFB</b>" <i>which expression shall include our successors, transferers, novatees and assigns</i>) as your financial partner and look forward to an enduring relationship with you.
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                With reference to your loan application (“Application”), we are pleased to extend to you the captioned loan for an amount detailed below subject to terms and conditions set out in this letter (“<b>Sanction Letter</b>”) and execution of the loan documents between you, i.e. the “<b>Borrower</b>” and AUSFB and submission of other required documents detailed below.
+            </div>
+            <br/>
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                TERMS OF SANCTION/KEY FACT STATEMENT (KFS)
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                This Sanction Letter/KFS shall be read, understood, and construed in conjunction with the terms contained here-in and those as contained in the Agreement for Loan cum Hypothecation and the Loan Application made and signed by the Borrower/Co-Borrower/Guarantor named herein:
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <table style="border: 0.1em solid black; border-collapse: collapse;">
+                    <tr>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Sr. No.</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Particulars</th>
+                        <th style="padding: 0.5em; border: 0.1em solid black;">Details/Description</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">1.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Application</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Application Form No:<br/>
+                            Application Form Date:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">3.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Borrower</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Name :<br/>
+                            Other Details: As per Application
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">4.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Repayment Account</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Account Holder Name:<br/>
+                            Account No:<br/>
+                            Bank Name:<br/>
+                            IFSC:<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">5.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Lender</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Name: AU SMALL FINANCE BANK LIMITED<br/>
+                            Branch: _____________________________
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">6.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Guarantor (if any)</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Name :<br/>
+                            Fathers/Husbands Name :<br/>
+                            Complete Address :<br/>
+                            PAN :<br/>
+                            Mobile No :<br/> 
+                            Email ID :<br/>
+                            Office Address :<br/>
+                            GSTIN :
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">7.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Purpose of Loan</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">8.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Loan Details</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            (a) Product Type: Loan on Asset<br/>
+                            (b) Type of Loan : [  ] New Asset [  ] Old Asset [  ] Cash On Wheels<br/>
+                            (c) Loan Amount: Rs. ________/- (Rupees ______________ Only)<br/>
+                            (d) Total Interest (including Broken period interest): Rs. ________/- (Rupees ______________ Only)<br/>
+                            (e) Total payable (a+b): Rs. ________/- (Rupees ______________ Only)<br/>
+                            (f) Tenure (in Months) : _________<br/>
+                            (g) Net Disbursement : Rs. ________/- (Rupees ______________ Only) (Amount disbursed after deducting the charges/amount as mentioned in Item 9 below, from the Loan Amount) [8(a)-9(d)]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">9.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Deductions in Loan Amount (if Any)</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            (a) Processing Fee: Rs. ________/- (Rupees ______________ Only) (Non-refundable)<br/>
+                            (b) Insurance premium: Rs. ________/- (Rupees ______________ Only)<br/>
+                            (c) Other Charges<br/>
+                            &nbsp;&nbsp;(i) CIBIL CHARGES: Rs. ________/- (Rupees ______________ Only)<br/>
+                            &nbsp;&nbsp;(ii) STAMP DUTY:      Rs. ________/- (Rupees ______________ Only)<br/>
+                            &nbsp;&nbsp;(iii) Others ________:  Rs. ________/- (Rupees ______________ Only)<br/>
+                            (d) Total Deductions (a+b+c): Rs. ________/- (Rupees ______________ Only)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">10.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Interest Rate (“ROI”) / Annual Percentage Rate (APR)</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                        (a) Interest Type: [   ] Fixed [   ] Floating.
+                        (b) Annualized interest rate___________%.
+                        (c) Periodicity of Interest Compounding: per annum 
+                        (d) Method of computation of Interest rate : Monthly Reducing.
+                        <b><i>Default Interest Rate : ____ % per month on the amounts outstanding and due for payment from Borrower.</i></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">11.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Repayment Details</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                        (a) EMI Amount : Rs. _______________
+                        (b) Total Number of EMI's: 
+                        (c) EMI Start Date: 
+                        (d) EMI Due Date:  ____day of every Calendar Month
+                        (e) EMI Frequency: Monthly
+                        (f) Moratorium: of _______ months/days starting from _______ and continuing till date of First EMI as mentioned above. (if applicable).
+                        <b><i>*EMI amount mentioned above is considering full loan amount utilization</i></b><br/>
+                        <b><i>**Detailed Loan Repayment Schedule covering EMI dates with bifurcation of principal and interest component will be shared in Welcome Letter which will be shared post creation of loan account.</i></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">12.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">As contained in Table A (Schedule of Charges) below</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">13.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Loan Disbursement Details</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">As per the Disbursement Request Form (“DRF”) or any other instruction given by the Borrower.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">14.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Mode of Disbursement</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">The Lender shall make disbursements via any electronic mode of transfer viz. NEFT, IMPS, RTGS into the designated account provided by the Borrower or as per DRF.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">15.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Penal Interest</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Delay in payment of EMI shall attract penal interest at the rate of ____% per month on the Outstanding Amounts, from the respective due date until the date of receipt.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">16.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Cooling off Period/Free look out period</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Within ___3__ days from the date of disbursement.<br/>
+                            (During this period the Applicant/Borrower shall not be charged any penalty on the prepayment of the loan amount. However, the Applicant/Borrower shall be liable to pay proportionate interest for the number of days for which the amount is utilized by the Applicant/Borrower within Cooling Off Period).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">17.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Lending Service Partner (“LSP”) (if Applicable)</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Name of LSP :<br/>
+                            Retained partner for:<br/>
+                            [  ] Sourcing of the Loan of the Applicant/Borrower.<br/>
+                            [  ] For servicing and/or recovery of the Loan.<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">18.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Nodal Grievance Redressal Officer</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Name:<br/>
+                            Designation:<br/>
+                            Address:<br/>
+                            Phone number:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">19.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Details of Assets</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Make:<br/>
+                            Model:<br/>
+                            Engine No:<br/>
+                            Chassis No:<br/>
+                            Reg No.<br/>
+                            <b><i>*In case of Loan on New Asset details will be as per Annexure- "AD"</i></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">20.</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">Mode of Security or charge creation and Priority of Charge</td>
+                        <td style="padding: 0.5em; border: 0.1em solid black;">
+                            Security/charge creation: Hypothecation of Asset<br/>
+                            First and Exclusive charge by way of Hypothecation of Asset in favour of the Bank
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                TABLE- A (Schedule of Charges)
+            </div> 
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <table style="border: 0.1em solid black; border-collapse: collapse; width:100%">
+                    <tr>
+                        <th style="width:50%; padding: 0.5em; border: 0.1em solid black;">Type of Charge</th>
+                        <th style="width:50%; padding: 0.5em; border: 0.1em solid black;">Amount</th>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                **** <i>All fees/charges to be paid shall be exclusive of all applicable taxes including goods and services tax.</i>
+            </div>
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                <b>MOST IMPORTANT TERMS AND CONDITIONS (“MITC”)</b>
+            </div> 
+            <div style="text-align:left;font-weight:bold;font-size:small;font-family:Arial; padding: 0.1em">
+                <apex:outputText escape="false" value="{!mitcContent}" ></apex:outputText>
+            </div> 
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                AU SMALL FINANCE BANK LIMITED- LOAN CUM HYPOTHECATION AGREEMENT
+            </div><br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial; padding: 0.1em">
+                <apex:outputText escape="false" value="{!loanCumHypoContent}" ></apex:outputText>
+            </div> 
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                FIRST PART
+            </div> 
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Date of Execution			:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Place of Execution		:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Loan Application Number		:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Borrower Name			: 
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Borrower Mobile Number		:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Borrower Address		:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Borrower Type			:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Co-Borrower Name		: 
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Co-Borrower Mobile Number	:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Co-Borrower Address		:
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Co-Borrower Type		:
+            </div>
+            <br/>
+            <div style="text-align:center;font-weight:bold;font-size:small;font-family:Arial;border-bottom:0.1em solid black; padding: 0.1em">
+                SECOND PART
+            </div> 
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Loan Details
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <table style="width:100%">
+                    <tr>
+                        <td style="padding: 0.5em; width:20% !important">Loan sanction by AUSFB</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75% !important">Rs. __________________/- (In words Rupees ____________________________)</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Annualized rate of Interest</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">____ % per annum</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Type of Interest Rate</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">[  ] Fixed   [  ] Floating</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Processing fee</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Rs. __________________/-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Loan tenure (in Months)</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">EMI Amount</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Rs. ___________________/-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">First EMI Date #</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Mode of Repayment</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Total Deductions in Loan</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Rs. ___________________/-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Net Disbursement</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Rs. ___________________/-</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Other Charges</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">As may be prescribed by AUSFB from time to time</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Broken Period Interest (P-EMI)</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">The interest charged for the number of day(s) which is / are over and abovethe period of thirty (30) days from the date of Disbursement of the Loan to 
+                            till the date of EMI commencement. Depending on the type of loan (product variant) availed, it will either get deducted from your loan amount or would   
+                            be included in your first EMI.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Broken Period Interest (P-EMI)</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">The interest charged for the number of day(s) which is / are over and above</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Details of Repayment Bank</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:20%">a) Name of Bank</td>
+                        <td style="padding: 0.5em; width:1%">:</td>
+
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%"></td>
+                        <td style="padding: 0.5em; width:5%"></td>
+                        <td style="padding: 0.5em; width:20%">b) Bank A/c Number</td>
+                        <td style="padding: 0.5em; width:1%">:</td>
+
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Details of Disbursement</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">As per the Disbursement request Form/Other Instruction given by Borrower.</td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                Fees and Charges levied by AUSFB
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <table>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Stamp Duty</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Calculated as per the state laws and deducted/payable upfront.</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Part-Payment Charges</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">____ % per annum</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Type of Interest Rate</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Fore-closure Charges</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Loan tenure (in Months)</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Penal Interest</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">@ ____ % on the amounts outstanding/EMI shall attract penal interest at the rate of 
+                            ____% per month on the Outstanding Amounts, from the respective due date until 
+                            the date of receipt.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5em; width:20%">Cheque Bouncing Charges</td>
+                        <td style="padding: 0.5em; width:5%">:</td>
+                        <td style="padding: 0.5em; width:75%">Rs. _______/- per instrument per instance plus applicable taxes as on date.</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <b># This amount may vary basis date of disbursement and applicability of Broken Period Interest/ Pre-EMI Interest.</b>
+            </div>
+            <br/>
+            <div style="text-align:center;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <b>THIRD PART</b>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:outputText escape="false" value="{!thirdPartContent}" ></apex:outputText>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:repeat value="{!loanAgreementContentsName}" var="key">
+                    <br/>
+                    <apex:outputText escape="false" value="{!loanAgreementContents[key].Letter_Content__c}" ></apex:outputText>
+                </apex:repeat>
+            </div>
+            <br/>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <b>DECLARATION</b>
+            </div>
+            <div style="text-align:left;font-weight:normal;font-size:small;font-family:Arial;padding: 0.1em">
+                <apex:outputText escape="false" value="{!declarationContent}" ></apex:outputText>
+            </div>
+</apex:component>

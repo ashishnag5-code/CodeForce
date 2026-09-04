@@ -1,0 +1,65 @@
+<template>
+    <!--ul class="slds-timeline">
+        <template for:each={lineItems} for:item="each">
+            <c-application-tracker-entries key={each.stageName} step-label={each.stageName} icon-name={each.iconName} owner-details={each.ownerList} step-status={each.statusOfActivity}></c-application-tracker-entries>
+        </template>
+    </ul-->
+    <div class="slds-modal__content slds-app-launcher__content slds-p-around_medium" id="modal-content-id-1">
+        <div class="slds-section slds-is-open">
+            <div aria-hidden="false" class="slds-section__content" id="appsContent">
+                <div class="slds-assistive-text" id="drag-live-region" aria-live="assertive"></div>
+                <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                    <template for:each={lineItems} for:item="each">
+                        <li key={each.stageName} class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-1">
+                            <div class="slds-app-launcher__tile slds-text-link_reset slds-is-draggable">
+                                <div class="slds-app-launcher__tile-figure">
+                                    <span class="slds-avatar slds-avatar_large">
+                                        <img style="height:auto;width:auto" alt="Image on T.O." src={each.iconURL}/>
+                                    </span>
+                                    <div class="slds-m-top_xxx-small">
+                                        <span class="slds-assistive-text">{each.stageName}</span>
+                                    </div>
+                                </div>
+                                <div class="slds-app-launcher__tile-body slds-clearfix">
+                                    <div class="slds-float_left">
+                                        <a href="#">{each.stageName}</a>
+                                        <ul>
+                                            <template for:each={each.ownerList} for:item="eachOwner">
+                                                <li key={eachOwner.ownerName}>
+                                                    <template if:true={eachOwner.ownerName}>
+                                                        {eachOwner.ownerName} from <lightning-formatted-date-time value={eachOwner.startDateTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                                                        <template if:true={eachOwner.endDateTime}> to <lightning-formatted-date-time value={eachOwner.endDateTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time></template>
+                                                    </template>
+                                                    <template if:false={eachOwner.ownerName}>
+                                                        <template if:true={eachOwner.startDateTime}>
+                                                            <lightning-formatted-date-time value={eachOwner.startDateTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                                                            <template if:true={eachOwner.endDateTime}> to <lightning-formatted-date-time value={eachOwner.endDateTime} year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit"></lightning-formatted-date-time></template>
+                                                        </template>
+                                                    </template>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right slds-hide"
+                                            role="tooltip" style="position:absolute;top:80px;right:30px">
+                                            <div class="slds-popover__body"></div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-float_right">
+                                        <div class="slds-app-launcher__tile-figure">
+                                            <span class="slds-avatar">
+                                                <lightning-icon icon-name={each.iconName} alternative-text={each.statusOfActivity}></lightning-icon>
+                                            </span>
+                                            <div class="slds-m-top_xxx-small">
+                                                <span class="slds-assistive-text">{each.statusOfActivity}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,16 @@
+<template>
+    <div style="text-align: right; margin-left:10px; margin-bottom:10px;">
+        <lightning-button class="slds-m-around_small buttonColor" label="Send Back To Credit" onclick={sendBackToCredit}
+                            title="Send Back To Credit">
+        </lightning-button>
+    </div>
+    <div>
+        <lightning-datatable columns={columns} 
+                                data={tableData} 
+                                key-field="id"
+                                onrowselection={onRowSelection}
+                                class="slds-cell-wrap slds-max-medium-table_stacked-horizontal slds-no-cell-focus">
+        </lightning-datatable>
+    </div>
+    
+</template>

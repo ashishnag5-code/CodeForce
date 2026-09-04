@@ -1,0 +1,165 @@
+<template>
+    <!--<div class="slds-float--right" key={instance.Id}>
+        <template if:true={readonly}>
+            <lightning-icon icon-name=action:edit size="x-small" key={instance.Id} data-id={instance.Id}
+                data-record-name={instance.Id} alternative-text={instance.Id} title={instance.Id}
+                onclick={handleRowAction}>
+            </lightning-icon>
+        </template>
+        <template if:false={readonly}>
+            <lightning-icon icon-name="action:reject" key={instance.Id} size="x-small" alternative-text="Cancel"
+                onclick={handleEditCancel}></lightning-icon>
+        </template>
+    </div>-->
+    <lightning-accordion allow-multiple-sections-open>
+        <lightning-accordion-section name="A" label="DOCUMENTED WITHOUT AUDITED FINANCIAL" class="accordClass">
+            <lightning-record-edit-form key={instance.Id} record-id={instance.Id}
+                object-api-name="Applicant_Financials_Details__c" onsuccess={handleSuccess} onsubmit={handleEditSubmit}
+                mode="readonly">
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Annual_Net_Profit__c">
+                            <template if:true={readonly}>
+                                <label class="slds-form-element__label">
+                                    Net Profit As Per ITR (₹)
+                                </label>
+                                <lightning-output-field field-name="Annual_Net_Profit__c" disabled={readonly}
+                                    variant="label-hidden">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Net Profit As Per ITR (₹)
+                                </label>
+                                <lightning-input-field field-name="Annual_Net_Profit__c" variant="label-hidden"
+                                    name="Annual_Net_Profit__c" onchange={handleChange} max-length="10" step="0.01"
+                                    disabled={readonly}>
+                                </lightning-input-field>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Monthly_Net_Profit__c">
+                            <template if:true={readonly}>
+                                <label class="slds-form-element__label">
+                                    Monthly
+                                </label>
+                                <lightning-output-field field-name="Monthly_Net_Profit__c" disabled={readonly}
+                                    variant="label-hidden">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Monthly
+                                </label>
+                                <lightning-input type="number" name="Monthly_Net_Profit__c" value={monthlyNetProfit}
+                                    variant="label-hidden" label="Monthly" step="0.01" onchange={handleChange} disabled>
+                                </lightning-input>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Year__c">
+                            <template if:true={readonly}>
+                                <label class="slds-form-element__label">
+                                    Assessment Year
+                                </label>
+                                <lightning-output-field field-name="Year__c" disabled={readonly} variant="label-hidden">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <label class="slds-form-element__label">
+                                    Assessment Year
+                                </label>
+                                <lightning-combobox name="Year__c" label="Assessment Year" data-name="" class="validate"
+                                    variant="label-hidden" read-only={readAttribute} value={yearValue}
+                                    options={yearOptions} onchange={handleChange}>
+                                </lightning-combobox>
+                                <!-- <lightning-input-field field-name="Year__c" name="Year__c" disabled={readonly} class="validate"  read-only={readAttribute} 
+                                onchange={handleChange} variant="label-hidden"></lightning-input-field>-->
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12" large-device-size="6"
+                        class="slds-p-around--xxx-small">
+                        <div class="component slds-hide" data-id="Filing_Date__c">
+                            <template if:true={readonly}>
+                                <label class="slds-form-element__label">
+                                    Filing Date
+                                </label>
+                                <lightning-output-field field-name="Filing_Date__c" disabled={readonly}
+                                    variant="label-hidden">
+                                </lightning-output-field>
+                            </template>
+                            <template if:false={readonly}>
+                                <!--<label class="slds-form-element__label">
+                                Filing Date
+                            </label>
+                            <lightning-input-field field-name="Filing_Date__c" name="Filing_Date__c" disabled={readonly} max={maxDate}
+                                onchange={handleChange} variant="label-hidden">
+                            </lightning-input-field>-->
+                                <lightning-input type="date" name="Filing_Date__c" label="Filing Date"
+                                    value={filingValue} max={maxDate} read-only={readAttribute}
+                                    onchange={handleChange}></lightning-input>
+                            </template>
+
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows class="slds-p-bottom_small slds-p-left--xxx-small">
+                    <lightning-layout-item padding="around-small" size="12" small-device-size="12"
+                        large-device-size="6">
+                        <c-bank-statement-upload-financials parent-name='financial' showonly-itr=true
+                            applicant-id={applicantId} document-type='ITR Statement' read-attribute={disableUpload}
+                            heading-value="Upload Bank Statement" applicant-record-id={applicantId}
+                            onenablefetchdetails={handleEnableFetchDetails}></c-bank-statement-upload-financials>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+
+                <!--Buttons Section-->
+                <lightning-layout multiple-rows class="slds-p-bottom_small">
+                    <div class="button-container-inner slds-align_absolute-center slds-var-m-top_medium">
+                        <template if:false={isR2}>
+                            <lightning-button label="Back" key={instance.Id} size="x-small" alternative-text="Cancel"
+                                class="buttonClass disabled-submit-button slds-m-left_x-small" onclick={redirectHome}>
+                            </lightning-button>
+                        </template>
+
+                        <template lwc:if={readonly}>
+                            <lightning-button label="Edit" key={instance.Id} data-id={instance.Id}
+                                data-record-name={instance.Id} alternative-text={instance.Id} title={instance.Id}
+                                class="buttonClass disabled-submit-button slds-m-left_x-small"
+                                onclick={handleRowAction}> </lightning-button>
+                             <!-- Added in R2-->
+                             <template if:true={isDelete}>
+                                <lightning-button label="Delete" title="Delete" key={instance.Id} data-id={instance.Id}
+                                    data-record-name={instance.Id} alternative-text={instance.Id} onclick={handleDeleteRow}
+                                    class="slds-m-left_x-small buttonClass disabled-submit-button"></lightning-button>
+                            </template>
+                            <!--End-->
+                        </template>
+
+                        <template lwc:else>
+                            <lightning-button label="Submit" type="submit"
+                                class="buttonClass disabled-submit-button slds-m-left_x-small"></lightning-button>
+                            <lightning-button label="Cancel" key={instance.Id} size="x-small" alternative-text="Cancel"
+                                class="buttonClass disabled-submit-button slds-m-left_x-small"
+                                onclick={handleEditCancel}></lightning-button>
+                        </template>
+
+
+                    </div>
+                </lightning-layout>
+
+                <!--End-->
+            </lightning-record-edit-form>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

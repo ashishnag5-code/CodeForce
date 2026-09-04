@@ -1,0 +1,555 @@
+<apex:component controller="CAMReportChildComponentsController">
+    <apex:attribute name="collateralDetails" description="This is the value for the component." type="Collateral__c"
+        required="true" assignTo="{!collateral}" />
+    <apex:attribute name="applicantDetails" description="This is the value for the component." type="Applicant__c"
+        required="true" assignTo="{!applicant}" />
+    <apex:attribute name="loanApp" description="This is the value for the component." type="Loan_Application__c"
+        required="true" assignTo="{!loan}" />
+    <apex:attribute name="productDetailsValue" description="This is the value for the component." type="String"
+        required="true" assignTo="{!productDetails}" />
+    <apex:attribute name="subPageValue" description="This is the value for the component." type="String"
+        assignTo="{!subPage}" />
+    <apex:attribute name="productRTMapping" description="This is the value for the component." type="ProductRTMap__mdt"
+        required="true" assignTo="{!productRT}" />
+    <apex:attribute name="valuvationDetails" description="This is the value for the component." type="Valuation__c"
+        required="false" assignTo="{!valuation}" />
+    <apex:attribute name="vahaanValue" description="This is the value for the component." type="String"
+        assignTo="{!vahaanPdf}" />
+    <apex:attribute name="subProductValue" description="This is the value for the component." type="String"
+        assignTo="{!subProduct}" />
+
+    <div style='{!pageBlockSectionCSS}'>
+        <apex:pageBlockSection title="Vehicle and Finance Details" columns="3">
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Vehicle No." for="Vehicle_Number__c" />
+                <apex:outputPanel >
+                    {!collateral.Vehicle_Number__c} &nbsp;&nbsp;
+                    <apex:outputLink value="{!vahaanPdf}" target="_blank" rendered="{!IF(vahaanPdf!=null,true,false)}">
+                        View Vaahaan Report</apex:outputLink>
+                    <apex:outputText value="Vahaan Report - Not Available" rendered="{!IF(vahaanPdf==null,true,false)}">
+                    </apex:outputText>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Valuation Amount" for="Valuation_Amount__c" />
+                <apex:outputText value="{!collateral.Valuation_Amount__c}" id="Valuation_Amount__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Valuation Done by" for="Valuer_Name_Code__c" />
+                <apex:outputText value="{!valuations.Valuer_Name_Code__c}" id="Valuer_Name_Code__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Engine No." for="Engine_Number__c" />
+                <apex:outputText value="{!collateral.Engine_Number__c}" id="Engine_Number__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Vehicle Cost" for="Vehicle_Cost__c" />
+                <apex:outputText value="{!collateral.Vehicle_Cost__c}" id="Vehicle_Cost__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Valuer Name (If selected Others)" for="Coordinate_for_valuation_POC__c" />
+                <apex:outputText value="{!valuations.Coordinate_for_valuation_POC__c}"
+                    id="Coordinate_for_valuation_POC__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Chassis no." for="Chasis_Number__c" />
+                <apex:outputText value="{!collateral.Chasis_Number__c}" id="Chasis_Number__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Final Vehicle Cost" for="Final_Cost__c" />
+                <apex:outputText value="{!collateral.Final_Cost__c}" id="Final_Cost__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Valuation Remarks" for="Final_remarks__c" />
+                <apex:outputText value="{!valuations.Final_remarks__c}" id="Final_remarks__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Make" for="Make__c" />
+                <apex:outputText value="{!collateral.Make__c}" id="Make__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Ex Showroom Price" for="Ex_Showroom_Price__c" />
+                <apex:outputText value="{!collateral.Ex_Showroom_Price__c}" id="Ex_Showroom_Price__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="IDV (Insurance declared Value)" for="IDV__c" />
+                <apex:outputText value="{!collateral.IDV__c}" id="IDV__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Tenure" for="Tenure__c" />
+                <apex:outputText value="{!loan.Tenure__c} months" id="Tenure__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Collateral Type" for="Collateral_Type__c" />
+                <apex:outputpanel >
+                    <apex:outputText value="{!collateral.Collateral_Type__c}" id="Collateral_Type__c" /> /
+                    <apex:form >
+                        <apex:commandLink reRender="None" value="View"
+                            onclick="return openWindow('{!loan.Id}','{!prod}','{!factor}');"></apex:commandLink>
+                    </apex:form>
+                </apex:outputpanel>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Model" for="Model__c" />
+                <apex:outputText value="{!collateral.Model__c}" id="Model__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Discount / Subsidy" for="Discount__c" />
+                <apex:outputText value="{!collateral.Discount__c}" id="Discount__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Loan amount (Exc. LS + Insurance)" for="Total_Loan_Amount__c" />
+                <apex:outputText value="{!loan.Total_Loan_Amount__c}" id="Total_Loan_Amount__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="First EMI Date" for="EMIDate" />
+                <apex:outputText value="{0,date,yyyy-MM-dd}">
+                    <apex:param value="{!loan.First_EMI_Date__c}" />
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Collateral Name" for="Collateral_Name__c" />
+                <apex:outputText value="{!collateral.Collateral_Name__c}" id="Collateral_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Variant" for="Variant__c" />
+                <apex:outputText value="{!IF(collateral.MMV_Master__c!=null,collateral.MMV_Master__r.Name,'')}" id="Variant__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="NOD Price" for="Net_of_Discount_Price__c" />
+                <apex:outputText value="{!collateral.Net_of_Discount_Price__c}" id="Net_of_Discount_Price__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Loan amount (Inc. LS + Insurance)" for="LA_Inc_LS_Ins__c" />
+                <apex:outputText value="{!ROUND(loanAmountIncLsAndInsurance,0)}" id="LA_Inc_LS_Ins__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="EMI Pattern" for="EMI_Frequency__c" />
+                <apex:outputText value="{!loan.Emi_Frequency__c}" id="EMI_Frequency__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="SVSH/SVOH/NA " for="SVSH_SVOH__c" />
+                <apex:outputText value="{!collateral.SVSH_SVOH__c}" id="SVSH_SVOH__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Vehicle Category" for="Vehicle_Category__c" />
+                <apex:outputText value="{!collateral.Vehicle_Category__c}" id="Vehicle_Category__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="LTV offered % On Vehicle Cost" for="LTV_offered_On_road__c" />
+                <apex:outputText value="{!collateral.LTV_offered_On_road__c}" id="LTV_offered_On_road__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="BT Details" for="BT_Type__c" />
+                <apex:outputText value="{!loan.BT_Type__c}" id="BT_Type__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="MFG Year" for="Manufacture_Year__c" />
+                <apex:outputText value="{!LEFT(collateral.Manufacture_year_month__c,4)}" id="Manufacture_Year__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Insurance" for="Insurance__c" />
+                <apex:outputText value="{!collateral.Insurance__c}" id="Insurance__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Installment Type" for="Schedule_Type__c" />
+                <apex:outputText value="{!loan.Schedule_Type__c}" id="Schedule_Type__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Fuel Type" for="Fuel_Type__c" />
+                <apex:outputText value="{!collateral.Fuel_Type__c}" id="Fuel_Type__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="RTO" for="RTO_Tax_Value__c" />
+                <apex:outputText value="{!collateral.RTO_Taxes__c}" id="RTO_Taxes__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="LTV offered % On Final Vehicle Cost" for="LTV_offered_On_final_cost__c" />
+                <apex:outputText value="{!collateral.LTV_offered_On_final_cost__c}" id="LTV_offered_On_final_cost__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Moratorium Days" for="Moratorium_Days__c" />
+                <apex:outputText value="" id="Moratorium_Days__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="BT Amount" for="BT_Amount__c" />
+                <apex:outputText value="" id="BT_Amount__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Dealer Name and Code" for="dealerNameAndCode" />
+                <apex:outputText value="{!dealerNameAndCode}" id="dealerNameAndCode" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="On Road Price" for="On_Road_Price__c" />
+                <apex:outputText value="{!collateral.On_Road_Price__c}" id="On_Road_Price__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Rate / IRR" for="ROI__c" />
+                <apex:outputText value="{!loan.ROI__c}" id="ROI__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="MFG Year" for="Manufacture_Year__c" />
+                <apex:outputText value="{!LEFT(collateral.Manufacture_year_month__c,4)}" id="Manufacture_Year__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="LTV as per policy (%)" for="Approved_LTV__c" />
+                <apex:outputText value="{!collateral.Approved_LTV__c}" id="Approved_LTV__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Sourcing Channel" for="Sourcing_channel__c" />
+                <apex:outputText value="{!loan.Sourcing_channel__c}" id="Sourcing_channel__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Dealer Class" for="Dealer_Class__c" />
+                <apex:outputText value="{!loan.Dealer_Master__r.Dealer_Class__c}" id="Dealer_Class__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Total Charges (Inc. loan suraksha)" for="Total_Charges__c" />
+                <apex:outputText value="{!loan.Total_Charges__c}" id="Total_Charges__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="EMI Amount" for="EMI__c" />
+                <apex:outputText value="{!ROUND(loan.EMI__c,0)}" id="EMI__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Registration date" for="Registration_Date__c" />
+                <apex:outputText value="{0, date, MMM d','  yyyy}">
+                    <apex:param value="{!collateral.Registration_Date__c}" />
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="Customer Grade" for="Original_Vehicle_Usage__c" />
+                <apex:outputText value="{!loan.Customer_Grade__c}" id="Original_Vehicle_Usage__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="Sourcing Channel Name" for="Sourcing_channel_Name__c" />
+                <apex:outputText value="{!loan.Sourcing_Channel_Name__r.Account_Name__c}"
+                    id="Sourcing_channel_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Purchase State" for="Dealer_State__c" />
+                {!loan.Dealer_Master__r.Purchase_State__c}
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='New'}" dataStyle="{!cellData}"
+                labelStyle="{!labelData}">
+                <apex:outputLabel value="Loan amount (Exc. LS)" for="Loan_Amount__c" />
+                <apex:outputText value="{!loan.Loan_Amount__c}" id="Loan_Amount__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="LTV Ex Showroom" for="LTV_offered_Ex_showroom__c" />
+                <apex:outputText value="{!collateral.LTV_offered_Ex_showroom__c}" id="LTV_offered_Ex_showroom__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Registration City " for="Registration_City__c" />
+                <apex:outputText value="{!collateral.Registration_City__c}" id="Registration_City__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Tenure" for="Tenure__c" />
+                <apex:outputText value="{!loan.Tenure__c} months" id="Tenure__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Dealer Name" for="dealerNameAndCode" />
+                <apex:outputText value="{!dealerNameAndCode}" id="dealerNameAndCode" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Purchase City" for="Purchase_City__c" />
+                <apex:outputText value="{!loan.Purchase_City__c}" id="Purchase_City__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="LS (Finance amount)" for="LS_Value__c" />
+                <apex:outputText value="{!collateral.LS_Value__c}" id="LS_Value__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="LTV On Road" for="LTV_offered_On_road__c" />
+                <!--<apex:outputText value="{!(collateral.LTV_offered_On_road__c * 100)}" id="LTV_offered_On_road__c" />-->
+                <apex:outputText value="{!collateral.LTV_offered_On_road__c}" id="LTV_offered_On_road__c" /><!--R2-2838-->
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Current Owner Name " for="Current_Owner_Name__c" />
+                <apex:outputText value="{!collateral.Current_Owner_Name__c}" id="Current_Owner_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="IRR" for="ROI__c" />
+                <apex:outputText value="{!loan.ROI__c}" id="ROI__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="Purchase City" for="Purchase_City__c" />
+                <apex:outputText value="{!loan.Purchase_City__c}" id="Purchase_City__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Customer Grade" for="Original_Vehicle_Usage__c" />
+                <apex:outputText value="{!loan.Customer_Grade__c}" id="Original_Vehicle_Usage__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Customer Equity" for="Customer_equity__c" />
+                <apex:outputText value="{!collateral.Customer_equity__c}" id="Customer_equity__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="LTV as per policy" for="Approved_LTV__c" />
+                <apex:outputText value="{!collateral.Approved_LTV__c}" id="Approved_LTV__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Owner Serial number" for="Owner_Serial_number__c" />
+                <apex:outputText value="{!collateral.Owner_Serial_number__c}" id="Owner_Serial_number__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="EMI Amount" for="EMI__c" />
+                <apex:outputText value="{!loan.EMI__c}" id="EMI__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="Purchase State" for="Dealer_State__c" />
+                {!loan.Dealer_Master__r.Purchase_State__c}
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Customer Sub Grade" for="Customer_Grade__c" />
+                <apex:outputText value="{!loan.Customer_Grade__c}" id="Customer_Grade__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Delivery Status" for="Delivery_Status__c" />
+                <apex:outputText value="{!collateral.Vehicle_Delivery__c}" id="Delivery_Status__c" />
+            </apex:pageBlockSectionItem><!--R2-2834-->
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Vehicle Category" for="Vehicle_Category__c" />
+                <apex:outputText value="{!collateral.Vehicle_Category__c}" id="Vehicle_Category__c" />
+            </apex:pageBlockSectionItem>
+
+            <!--Used/COW-->
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="HPN With (Financiers Name)" for="HPN_With_Financiers_Name__c" />
+                <apex:outputText value="{!collateral.HPN_With_Financiers_Name__c}" id="HPN_With_Financiers_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="EMI Pattern" for="EMI_Frequency__c" />
+                <apex:outputText value="{!loan.Emi_Frequency__c}" id="EMI_Frequency__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}"
+                dataStyle="{!cellData}" labelStyle="{!labelData}">
+                <apex:outputLabel value="Blacklisted / Challan as per Vahan" for="Blacklist_Details__c" />
+                <apex:outputPanel >
+                    {!collateral.Blacklist_Details__c} /
+                    <apex:outputPanel rendered="{!IF(collateral.Challan_Info__c==true,true,false)}">
+                        Yes
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!IF(collateral.Challan_Info__c==false,true,false)}">
+                        No
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+
+            <!--New-->
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Sourcing Channel" for="Sourcing_channel__c" />
+                <apex:outputText value="{!loan.Sourcing_channel__c}" id="Sourcing_channel__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Date of Delivery" for="Date_of_Delivery__c" />
+                    <apex:outputText value="{0,date,yyyy-MM-dd}" rendered="{!collateral.Vehicle_Delivery__c=='Yes'}">
+                        <apex:param value="{!collateral.Date_of_Delivery__c}" />
+                    </apex:outputText>
+            </apex:pageBlockSectionItem><!--R2-2834-->
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Tar Report" for="Tar_Report__c" />
+                <apex:outputText value="{!IF(collateral.TAR_Status__c=='Submitted','Yes','No')}" id="Tar_Report__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="Sourcing Channel Name" for="Sourcing_channel_Name__c" />
+                <apex:outputText value="{!loan.Sourcing_Channel_Name__r.Account_Name__c}"
+                    id="Sourcing_channel_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='New'}">
+                <apex:outputLabel value="HMR Reading" for="Hours_Meter_Reading__c" />
+                <apex:outputText value="{!collateral.Hours_Meter_Reading__c}" id="Hours_Meter_Reading__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="" for="" />
+                <apex:outputText value="" id="blankCell1" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="Installment Type" for="Schedule_Name__c" />
+                <apex:outputText value="{!loan.Schedule_Type__c}" id="Schedule_Name__c" />
+            </apex:pageBlockSectionItem>
+
+            <apex:pageBlockSectionItem dataStyle="{!cellData}" labelStyle="{!labelData}"
+                rendered="{!subProduct=='Cash on Wheels' || subProduct=='Used' || isAgriLoan || isBusinessLoan || isPersonalLoan}">
+                <apex:outputLabel value="" for="" />
+                <apex:outputText value="" id="blankCell2" />
+            </apex:pageBlockSectionItem>
+
+        </apex:pageBlockSection>
+    </div>
+</apex:component>

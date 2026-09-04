@@ -1,0 +1,102 @@
+<!--
+  @description       : 
+  @author            : Harshit Goyal | Salesforce
+  @group             : 
+  @last modified on  : 02-21-2023
+  @last modified by  : Harshit Goyal | Salesforce
+-->
+<template>
+            <!--<lightning-card icon-name="standard:account" class="slds-card_boundary slds-p-around_small slds-m-around_large my-card" title="Applicant KYC Details">-->
+                <lightning-card icon-name="standard:account" class="slds-card_boundary slds-p-around_small slds-m-around_large my-card" title={displayType}>
+
+                <template if:false={displayVerificationButtons}>
+                    <div class="slds-m-around_small slds-m-bottom_large back">
+                        <a onclick={handleBack} class="slds-float--right slds-m-right_small">Back</a>
+                    </div>
+                </template>
+                
+                <template for:each={dataValues} for:item="data">
+                   <!-- <div class="slds-grid slds-wrap slds-p-around_xx-small" key={data.key}>
+                        <div class="slds-size_1-of-2" data-name={data.name}>
+                            <b>{data.key}</b>
+                        </div>
+                        <div class="slds-size_1-of-2">
+                            {data.value}
+                        </div>
+                    </div>-->
+
+                    <template if:true={data.show}>
+                        <div class="slds-grid slds-wrap slds-p-around_xx-small divComp" key={data.label}>
+                            <div class="slds-size_1-of-2">
+                                <b>{data.label}</b>
+                            </div>
+                            <div class="slds-size_1-of-2">
+                                <template if:false={data.imageCont}>
+                                    {data.value}
+                                </template>                              
+                                <template if:true={data.imageCont}>
+                                    <img src={data.imageCont} alternative-text="Image"></img>
+                                </template> 
+                            </div>
+                        </div>
+                    </template>
+                </template>
+                <template if:true={showScore}>
+                    <div class="slds-grid slds-wrap slds-p-around_xx-small divComp">
+                        <div class="slds-size_1-of-2 slds-p-top_small">
+                            <b>{defaultMatch}</b>
+                        </div>
+                        <template if:true={noMatch}>
+                            <div class="slds-size_1-of-2" data-id="matchResponse">
+                                {defaultLabelForMatch}
+                                <!--{defaultMatch} is in Progress-->
+                                <!--<lightning-icon class="slds-m-around_small" size="x-small" icon-name="utility:spinner" data-id="cpvSpinner"></lightning-icon>-->
+                            </div>
+                        </template>
+                        <template if:false={noMatch}>
+                            <template if:true={goodMatch}>
+                                <div class="slds-size_1-of-2">
+                                    <div data-id="progressRing" class="slds-progress-ring slds-progress-ring_large">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={matchScore}>
+                                            <svg viewBox="-1 -1 2 2">
+                                            <circle class="slds-progress-ring__path" id="slds-progress-ring-path-40" cx="0" cy="0" r="1"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="slds-progress-ring__content">{matchScore}</div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template if:false={goodMatch}>
+                                <div class="slds-size_1-of-2">
+                                    <div data-id="progressRing" class="slds-progress-ring slds-progress-ring_large slds-progress-ring_warning">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={matchScore}>
+                                            <svg viewBox="-1 -1 2 2">
+                                            <circle class="slds-progress-ring__path" id="slds-progress-ring-path-41" cx="0" cy="0" r="1"></circle>
+                                            </svg>
+                                        </div>
+                                        <div class="slds-progress-ring__content">{matchScore}</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        
+                        
+                    </div>
+                </template>
+
+                <!--<template if:true={cpvDocuments}>-->
+                <template if:true={displayVerificationButtons}>
+                    <div class="slds-align_absolute-center">
+                        <lightning-icon class="slds-m-around_small" size="x-small" variant="brand" onclick={handleNotVerified}
+                        icon-name="action:reject"></lightning-icon>
+                        <lightning-icon class="slds-m-around_small" size="x-small" variant="brand" onclick={handleVerified}
+                        icon-name="action:approval"></lightning-icon>
+                        <!--<lightning-input name='cpvDocVerified' type="checkbox" label="Verified" onclick={handleChange} value={isVerified} checked={isVerified}></lightning-input>
+                        <lightning-button class="slds-m-around_small"  variant="brand" onclick={handleVerified} label="Submit"></lightning-button>-->
+                    </div>
+                </template>
+               <!-- <div class="slds-align_absolute-center">
+					<lightning-button onclick={handleBack} label="Back"></lightning-button>
+				</div>-->
+            </lightning-card>
+</template>

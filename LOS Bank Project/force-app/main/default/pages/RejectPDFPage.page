@@ -1,0 +1,83 @@
+<apex:page renderAs="pdf" controller="RejectPDFController" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+ <html>
+  <head>
+    <style type="text/css">
+      .textCSS {
+        font-family: 'Quicksand', sans-serif; font-size : 12px;
+        font-weight: lighter;
+        color: rgb(51, 48, 48);
+      }
+      .marginBottom{
+        margin-bottom: 3%;
+      }
+      .endTextCSS {
+        font-family: 'Quicksand', sans-serif; font-size : 14px;
+        font-weight: bolder;
+        color: rgb(51, 48, 48);
+      }
+      body{font-family: 'Quicksand', sans-serif; font-size : 12px;font-weight: lighter; color: rgb(51, 48, 48);}
+    </style>
+  </head>
+  <div style="margin-bottom : 16%">
+    <img src="{!URLFOR($Resource.AURejectPdfLogo)}" height="100" width="150" align = "right"/>
+  </div>
+  <body style="slds-scope">
+    <div style="text-align:right; margin-right : 2%; margin-bottom :3.25% !important;" class="textCSS marginBottom">
+      <b>Date : {!PDFWrapperData.currentDate}</b>
+    </div>
+
+    <div class="textCSS marginBottom">
+      <div style="margin-bottom:1%"><b>Dear {!PDFWrapperData.applicantName}</b></div>
+      <div style="margin-bottom:1%"><b>{!PDFWrapperData.currentAddress} </b></div>
+      <div style="margin-bottom:1%"><b>{!PDFWrapperData.currentAddressCity}</b></div>
+      <div style="margin-bottom:1%"><b>{!PDFWrapperData.currentAddressState}</b></div>
+    </div>
+
+    <div class = "textCSS marginBottom" style ="margin-bottom: 4% !important;">
+      Subject : Rejection of Loan Application Form No. {!PDFWrapperData.loanNumber}
+    </div>
+
+    <div class = "textCSS marginBottom" style ="margin-bottom: 4% !important;">
+      Dear Sir/Madam,
+    </div>
+
+    <div class="textCSS marginBottom">
+      Thank you for your interest / application for financial assistance (“the said credit facility”) specified in the application.
+      We have examined your application, basis the following criteria (does not necessarily imply your adverse
+      creditworthiness).:
+    </div>
+
+    <div class="textCSS marginBottom">
+      <span style="background-color: #FFFF00">Rejection reason- {!PDFWrapperData.rejectionReason}</span>
+    </div>
+
+    <div class="textCSS marginBottom">
+      Based on the information provided by you and our consideration of the same vis-à-vis the above highlighted criteria,
+      we regret to inform you that we are unable to offer you the said credit facility since the application submitted does not
+      meet required criteria.
+      For further details, you may call us on 180012001200.
+    </div>
+
+    <div class="textCSS marginBottom" style="margin-bottom:5%;">
+      We take this opportunity to thank you for your interest in availing AU Bank credit facilities and hope that we could be
+      of service to you in the future.
+    </div>
+
+    <!--div style="margin-bottom:5%;">
+      <apex:repeat value="{!objGenericMaster}" var="staticRecord" id="repeatedVal">
+          <apex:outputText escape="false" value="{!staticRecord.Letter_Content__c}" ></apex:outputText>
+
+        </apex:repeat>
+    </div-->
+
+
+    <div class="endTextCSS">
+      Your AU Bank Team
+    </div>
+    
+    <div class="endTextCSS" style = "text-align: center !important; margin-top:6%;">
+      (This is a Computer-Generated letter hence does not require signature.)
+    </div>
+  </body>
+ </html>
+</apex:page>

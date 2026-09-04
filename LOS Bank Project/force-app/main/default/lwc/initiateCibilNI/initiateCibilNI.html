@@ -1,0 +1,42 @@
+<template>
+    <lightning-quick-action-panel header="Cibil call">
+        <template lwc:if={isNoRecords}>
+            There are no eligible records to initiate Cibil
+        </template>
+        <template lwc:else>
+            <div class="slds-align_absolute-center">
+                <lightning-combobox
+                    name="filter"
+                    label="Please Select an Applicant"
+                    value={selectedValue}
+                    options={listOfApplicants}
+                    onchange={handlePicklistChange}
+                    placeholder="Select Applicant">
+                </lightning-combobox>
+                <br>
+                </div>
+                <br>
+                <div class="slds-align_absolute-center">
+                <template lwc:if={isAppSelected}>
+                    <lightning-button
+                        variant="neutral"
+                        label="Initiate Cibil"
+                        onclick={initiateCibil}
+                    ></lightning-button>
+                </template>
+            </div>
+            <br>
+            <br>
+        </template>
+        <template if:true={showLoadingSpinner}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template> 
+        <div slot="footer">
+            <lightning-button
+                variant="neutral"
+                label="Cancel"
+                onclick={handleClose}
+            ></lightning-button>
+        </div>
+    </lightning-quick-action-panel>
+</template>

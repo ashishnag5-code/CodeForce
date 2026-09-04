@@ -1,0 +1,106 @@
+<template>
+	<c-custom-spinner spinner-image={spinnerImage} show-spinner={isLoading}></c-custom-spinner>
+	<lightning-layout>
+		<lightning-layout-item flexibility="auto" class="slds-card_boundary">
+			<lightning-card icon-name="standard:account" >
+				<h1 slot="title"><a>{applicantRecord.strApplicationNumber}</a></h1>
+				<div slot="actions">
+					<a><lightning-icon icon-name="utility:back" onclick={viewAllRecords} class="slds-float_right" size="small" alternative-text="Close" title="Close"></lightning-icon></a>
+				</div>
+				<div slot="footer" class="slds-align_absolute-center">
+					<template if:true={isMobile}>
+						<figure>
+							<div class="slds-align_absolute-center">
+								<lightning-icon icon-name="action:clone" onclick={markSelected} size="x-small" alternative-text="Copy" title="Copy"></lightning-icon>
+							</div>
+							<figcaption class="slds-align_absolute-center slds-text-body_small slds-var-p-top_xx-small slds-text-color_weak">Copy To Application</figcaption>
+						</figure>
+					</template>
+					<template if:false={isMobile}>
+						<lightning-button onclick={markSelected} data-id={applicantRecord.strApplicationNumber} label="Copy To Application" slot="actions"></lightning-button>
+					</template>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Product</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strProductName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Name</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCustomerName}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Type</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCustomerType}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Customer Mobile Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strCustomerMobileNumber}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">KYC (Match Parameter)</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strKYCMatchParameter}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Application status</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strApplicationstatus}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Date</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strLeadCreationDate}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">RO Name _ Code</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strRONameCode}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">RO Mobile Number</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strROMobileNumber}
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap slds-var-p-around_xx-small">
+					<div class="slds-size_1-of-2">
+						<b><label class="slds-form-element__label">Branch Name _Code</label></b>
+					</div>
+					<div class="slds-size_1-of-2">
+						{applicantRecord.strBranchCode}
+					</div>
+				</div>
+			</lightning-card>
+		</lightning-layout-item>
+	</lightning-layout>
+</template>
